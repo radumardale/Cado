@@ -1,0 +1,10 @@
+{
+    "index": {
+      "meta": {
+        "title": "Index page",
+        "description": "Index page description"
+      },
+      "title": "Hello world!",
+      "about": "Go to the about page"
+    }
+  }
