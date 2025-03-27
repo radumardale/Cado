@@ -53,7 +53,7 @@ export default function CatalogSidebar({priceState, categoriesState, ocasionsSta
           (categoriesState.categories.length > 0 || ocasionsState.ocasions.length > 0 || productContentState.productContent.length > 0 || priceState.price[0] !== 0 || priceState.price[1] !== 5000) &&
             <ActiveFilters
               resetAllFilters={() => {
-                priceState.setPrice([0, 100]);
+                priceState.setPrice([0, 5000]);
                 categoriesState.setCategories([]);
                 ocasionsState.setOcasions([]);
                 productContentState.setProductContent([]);
@@ -77,7 +77,7 @@ export default function CatalogSidebar({priceState, categoriesState, ocasionsSta
 
               price={priceState.price}
               resetPrice={() => {
-                priceState.setPrice([0, 100]);
+                priceState.setPrice([0, 5000]);
               }}
             />
           }
