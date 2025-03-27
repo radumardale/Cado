@@ -50,7 +50,7 @@ export default function CatalogSidebar({priceState, categoriesState, ocasionsSta
       <LayoutGroup>
         <AnimatePresence>
         {
-          (categoriesState.categories.length > 0 || ocasionsState.ocasions.length > 0 || productContentState.productContent.length > 0 || priceState.price[0] !== 0 || priceState.price[1] !== 100) &&
+          (categoriesState.categories.length > 0 || ocasionsState.ocasions.length > 0 || productContentState.productContent.length > 0 || priceState.price[0] !== 0 || priceState.price[1] !== 5000) &&
             <ActiveFilters
               resetAllFilters={() => {
                 priceState.setPrice([0, 100]);
