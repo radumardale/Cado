@@ -1,9 +1,13 @@
+/* eslint-disable  @typescript-eslint/no-explicit-any */
+
 import type { Metadata } from "next";
 import {routing} from '@/i18n/routing';
 import {notFound} from 'next/navigation';
 import "./globals.css";
 import { getMessages, setRequestLocale } from "next-intl/server";
 import { NextIntlClientProvider } from "next-intl";
+import TrpcProvider from "../_trpc/TrpcProvider";
+import SmoothScroll from "@/components/providers/SmoothScroll";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -34,9 +38,13 @@ export default async function RootLayout({
 
   return (
     <html lang={locale}>
-      <body>
+      <body className="grid grid-cols-full gap-x-6">
         <NextIntlClientProvider messages={messages}>
-          {children}
+          <TrpcProvider>
+            <SmoothScroll>
+              {children}
+            </SmoothScroll>
+          </TrpcProvider>
         </NextIntlClientProvider>
       </body>
     </html>

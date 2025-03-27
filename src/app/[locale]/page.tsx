@@ -1,8 +1,9 @@
+
 import { useTranslations } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { use } from "react";
 
-export async function generateMetadata({params}: {params: Promise<{locale: string}>;}) {
+export async function generateMetadata() {
   const t = await getTranslations('index.meta');
  
   return {

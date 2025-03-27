@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { prisma } from "@/lib/prisma";
 import { compare } from "bcrypt";
 import type {
     GetServerSidePropsContext,
@@ -10,6 +9,8 @@ import CredentialsProvider from "next-auth/providers/credentials"
 import { getServerSession } from "next-auth"
 import { NextAuthOptions } from "next-auth";
 import { JWT } from "next-auth/jwt";
+import connectMongo from "./connect-mongo";
+import { User } from "@/models/user/user";
 
 export const authOptions: NextAuthOptions = {
     session: {
@@ -27,13 +28,11 @@ export const authOptions: NextAuthOptions = {
                 password: { label: "password", type: "password", required: true }
             },
             async authorize (credentials) {
+                await connectMongo();
+
                 let user = null;
                 try {
-                    user = await prisma.user.findFirst({
-                        where: {
-                            username: credentials?.username,
-                        },
-                    });
+                    user = await User.findOne({username: credentials?.username});
                 } catch (e) {
                     if (e) {
                         return null;
