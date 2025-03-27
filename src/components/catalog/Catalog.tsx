@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import CatalogSidebar from "./sidebar/CatalogSidebar";
 import ProductsGrid from "./productsGrid/ProductsGrid";
 import { trpc } from "@/app/_trpc/client";
