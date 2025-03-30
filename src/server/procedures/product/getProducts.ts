@@ -59,6 +59,7 @@ export const getProductsProcedure = publicProcedure
       const products = await query
         .limit(productsLimit)
         .skip(input.chunk * productsLimit)
+        .select("_id title description price images set_description")
         .lean();
 
       if (!products) {

@@ -7,6 +7,7 @@ import { ProductContent } from "@/lib/enums/ProductContent";
 export interface ProductInterface {
     title: ProductInfo,
     description: ProductInfo,
+    set_description: ProductInfo,
     price: number,
     categories: Categories[],
     ocasions: Ocasions[],

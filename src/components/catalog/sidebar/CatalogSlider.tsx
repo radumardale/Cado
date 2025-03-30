@@ -1,12 +1,18 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { DualRangeSlider } from '../../ui/slider'
 
 interface CatalogSliderProps {
+    price: number[],
     setPrice: (v: number[]) => void,
 }
 
-export default function CatalogSlider({setPrice}: CatalogSliderProps) {
+export default function CatalogSlider({setPrice, price}: CatalogSliderProps) {
   const [currPrice, setCurrPrice] = useState([0, 5000]);
+
+  useEffect(() => {
+    setCurrPrice(price);
+  }, [price])
+
   return (
     <div className='pb-4'>
         <div className='flex justify-between mb-3'>

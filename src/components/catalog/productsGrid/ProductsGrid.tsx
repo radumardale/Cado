@@ -27,7 +27,7 @@ export default function ProductsGrid({products, loading, setSortBy}: ProductsGri
       }, [gridLayout, loading])
 
   return (
-    <motion.div className='col-start-4 col-span-10 grid grid-cols-12 mt-12 gap-6 h-fit pb-8'>
+    <motion.div className='col-start-4 col-span-10 2xl:col-span-12 grid grid-cols-12 mt-12 gap-6 h-fit'>
         <Controls gridLayout={gridLayout} setGridLayout={setGridLayout} setSortBy={setSortBy} />
         <div ref={scope} className='col-span-full grid grid-cols-12 gap-6'>
             {

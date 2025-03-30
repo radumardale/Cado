@@ -46,7 +46,7 @@ export default function CatalogSidebar({priceState, categoriesState, ocasionsSta
   }, [productContentState.productContent, productContentState.setProductContent]);
 
   return (
-    <div data-lenis-prevent className="col-start-1 col-span-3 h-[calc(100vh-5rem)] overflow-y-scroll mt-12 sticky top-20 pr-4">
+    <div data-lenis-prevent className="scroll-bar-custom col-start-1 col-span-3 h-[calc(100vh-13rem)] overflow-y-scroll mt-12 sticky top-[9rem] pr-4">
       <LayoutGroup>
         <AnimatePresence>
         {
@@ -98,7 +98,7 @@ export default function CatalogSidebar({priceState, categoriesState, ocasionsSta
           />
         </Accordion>
         <Accordion title="Preț (MDL)">
-          <CatalogSlider setPrice={priceState.setPrice} />
+          <CatalogSlider price={priceState.price} setPrice={priceState.setPrice} />
         </Accordion>
         <Accordion title="Conținut" last>
           <CheckboxList 

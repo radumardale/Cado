@@ -31,7 +31,7 @@ export default function Catalog() {
     const products = data?.products || [];
 
     return (
-        <>
+        <div className="relative col-span-full grid grid-cols-full gap-x-6 mb-24">
             <CatalogSidebar                 
                 categoriesState={{
                     categories,
@@ -55,7 +55,7 @@ export default function Catalog() {
                 loading={isLoading}
                 setSortBy={setSortBy}
             />
-        </>
+        </div>
     );
 }
 

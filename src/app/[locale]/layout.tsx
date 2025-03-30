@@ -38,14 +38,16 @@ export default async function RootLayout({
 
   return (
     <html lang={locale}>
-      <body className="grid grid-cols-full gap-x-6">
-        <NextIntlClientProvider messages={messages}>
-          <TrpcProvider>
-            <SmoothScroll>
-              {children}
-            </SmoothScroll>
-          </TrpcProvider>
-        </NextIntlClientProvider>
+      <body className="scroll-bar-custom">
+        <div className="grid grid-cols-full gap-x-6 px-16 max-w-3xl mx-auto">
+          <NextIntlClientProvider messages={messages}>
+            <TrpcProvider>
+              <SmoothScroll>
+                {children} 
+              </SmoothScroll>
+            </TrpcProvider>
+          </NextIntlClientProvider>
+        </div>
       </body>
     </html>
   );

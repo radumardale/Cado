@@ -16,6 +16,10 @@ const ProductSchema = new mongoose.Schema<ProductInterface>({
     type: ProductInfoSchema,
     required: true,
   },
+  set_description: {
+    type: ProductInfoSchema,
+    required: false
+  },
   price: {
     type: Number,
     required: true,
@@ -46,11 +50,14 @@ const ProductSchema = new mongoose.Schema<ProductInterface>({
   sale: {
     type: SaleSchema,
     required: true,
-  },
+  }
 });
 
 // Index for title.ro and title.ru
 ProductSchema.index({ "title.ro": 1, "title.ru": 1 });
+ProductSchema.index({ "categories": 1 });
+ProductSchema.index({ "ocasions": 1 });
+ProductSchema.index({ "product_content": 1 });
 
 const Product = mongoose.models.Product || mongoose.model<ProductInterface>("Product", ProductSchema);
 

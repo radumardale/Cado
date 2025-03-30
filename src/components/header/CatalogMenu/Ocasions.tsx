@@ -1,4 +1,4 @@
-import { Link } from '@/i18n/navigation'
+import CustomLink from '@/components/CustomLink'
 import { OcasionsArr } from '@/lib/enums/Ocasions'
 import { useTranslations } from 'next-intl'
 
@@ -9,7 +9,7 @@ export default function Ocasions() {
         <p className='font-manrope font-semibold'>Ocazie</p>
         {
           OcasionsArr.map(ocasion => {
-            return <Link key={ocasion} href="#">{t(ocasion)}</Link>
+            return <CustomLink key={ocasion} href="#" value={t(ocasion)} />
           })
         }
     </div>
