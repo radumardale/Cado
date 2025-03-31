@@ -20,15 +20,12 @@ export default function ListProductCard({product}: ProductCardInterface) {
             <p className='font-manrope font-semibold text-2xl'>{product.title[locale]}</p>
             <div>
                 <p className='font-manrope font-semibold mb-4 mt-8'>Descriere</p>
-                <p className='text-darkgray mb-6'>Setul cadou „Christmas Fairytale” este o alegere excelentă pentru cei dragi, familie, prieteni sau parteneri de afaceri.
-
-Este ideal pentru a crea amintiri speciale de Crăciun și a oferi un sentiment unic de bucurie și recunoștință. De asemenea, este perfect pentru companii care doresc să impresioneze partenerii sau echipa.</p>
-
+                <p className='text-black mb-6'>Setul cadou „Christmas Fairytale” este o alegere excelentă pentru cei dragi, familie, prieteni sau parteneri de afaceri.Este ideal pentru a crea amintiri speciale de Crăciun și a oferi un sentiment unic de bucurie și recunoștință. De asemenea, este perfect pentru companii care doresc să impresioneze partenerii sau echipa.</p>
                 {
                   product.price < 2000 &&
                   <>
                     <p className='font-manrope font-semibold mb-4'>Cadoul include</p>
-                    <p className='text-darkgray'>Vin 750 ml / șampanie <br/>
+                    <p className='text-black'>Vin 750 ml / șampanie <br/>
                         Fructe uscate în ciocolată <br/>
                         Ciocolată neagră - 100 g, decorată <br/>
                         Lampă de veghe „Carte” <br/>

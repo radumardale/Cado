@@ -2,22 +2,27 @@ import Image from 'next/image'
 import React from 'react'
 import { motion } from 'motion/react'
 import { easeInOutCubic } from '@/lib/utils'
+import { carousellDirection } from './Hero'
 
 interface ImageSlideInterface {
     src: string,
     slide: number,
     nextSlide: number,
-    index: number
+    index: number,
+    direction: carousellDirection
 }
 
-export default function ImageSlide({src, slide, nextSlide, index}: ImageSlideInterface) {
+export default function ImageSlide({src, slide, nextSlide, index, direction}: ImageSlideInterface) {
 
     const slideVariants = {
         initial: {
-            clipPath: "inset(0px 0% 0px 0px)"
+            clipPath: direction === carousellDirection.FORWARD ? "inset(0px 0% 0px 0px)" : "inset(0px 0% 0px 0%)",
+            transition: {
+                duration: 0
+            }
         },
         animate: {
-            clipPath: "inset(0px 100% 0px 0px)"
+            clipPath: direction === carousellDirection.FORWARD  ? "inset(0px 100% 0px 0px)" : "inset(0px 0px 0px 100%)"
         },
       }
 

@@ -1,7 +1,10 @@
 
 import Footer from "@/components/footer/Footer";
 import Header from "@/components/header/Header";
+import CategoriesGrid from "@/components/home/categories/CategoriesGrid";
+import Collaboration from "@/components/home/collaboration/Collaboration";
 import Hero from "@/components/home/hero/Hero";
+import Recommendations from "@/components/home/recommendations/Recommendations";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { use } from "react";
 
@@ -22,6 +25,9 @@ export default function Home({params}: {params: Promise<{locale: string}>;}) {
     <div className="grid grid-cols-full gap-x-6 col-span-full">
         <Header />
         <Hero />
+        <CategoriesGrid />
+        <Recommendations />
+        <Collaboration />
         <Footer />
     </div>
   );

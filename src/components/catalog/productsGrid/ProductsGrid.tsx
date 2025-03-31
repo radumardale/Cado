@@ -33,7 +33,7 @@ export default function ProductsGrid({products, loading, setSortBy}: ProductsGri
             {
                 loading ? 
                 (
-                    <LoadingGrid gridLayout={gridLayout}/> 
+                    <LoadingGrid gridLayout={gridLayout} length={4}/> 
                 ) : (
                     products.map((product, index) => {
                         return (

@@ -3,13 +3,34 @@
       "home": "Principală"
     },
     "tags": {
-      "FOR_HIM": "Pentru El",
-      "FOR_HER": "Pentru Ea",
-      "FOR_KIDS": "Pentru Copii",
-      "ACCESSORIES": "Accesorii",
-      "FLOWERS_AND_BALLOONS": "Flori & Baloane",
-      "GIFT_SET": "Seturi cadou",
-      "ALL_PRODUCTS": "Toate produsele"
+      "FOR_HIM": {
+      "title": "Pentru El",
+      "description": "Cadouri care adaugă stil și confort locuinței, de la obiecte decorative la accesorii practice."
+      },
+      "FOR_HER": {
+      "title": "Pentru Ea",
+      "description": "Seturi pentru momente de relaxare și distracție, de la jocuri interactive la experiențe captivante."
+      },
+      "FOR_KIDS": {
+      "title": "Pentru Copii",
+      "description": "Selecții rafinate de delicii și băuturi premium, potrivite pentru orice ocazie."
+      },
+      "ACCESSORIES": {
+      "title": "Accesorii",
+      "description": "Seturi ideale pentru exploratori, cu accesorii esențiale pentru confort și organizare în călătorii."
+      },
+      "FLOWERS_AND_BALLOONS": {
+      "title": "Flori & Baloane",
+      "description": "Seturi funcționale pentru productivitate și organizare, perfecte pentru spațiul de lucru."
+      },
+      "GIFT_SET": {
+      "title": "Seturi cadou",
+      "description": "Seturi atent alese pentru a impresiona și încânta."
+      },
+      "ALL_PRODUCTS": {
+      "title": "Toate produsele",
+      "description": "Descoperă întreaga noastră gamă de produse."
+      }
     },
     "ocasions": {
       "WELCOME_KIT": "Welcome Kit",

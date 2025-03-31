@@ -1,16 +1,18 @@
-import React from 'react'
+'use client'
+
 import { Skeleton } from '@/components/ui/skeleton'
 
 interface LoadingGridInterface {
-    gridLayout: boolean
+    gridLayout: boolean,
+    length: number
 }
 
-export default function LoadingGrid({gridLayout}: LoadingGridInterface) {
+export default function LoadingGrid({gridLayout, length}: LoadingGridInterface) {
 
   return (
     <>
         {
-            Array.from({ length: 4 }).map((_, index) => {
+            Array.from({ length: length }).map((_, index) => {
                 return (
                     gridLayout ? <CardSkeleton key={index} /> : <ListSkeleton key={index}/>
                 )

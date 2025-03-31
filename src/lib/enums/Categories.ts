@@ -1,6 +1,6 @@
 export enum Categories {
-    FOR_HIM = "FOR_HIM",
     FOR_HER = "FOR_HER",
+    FOR_HIM = "FOR_HIM",
     FOR_KIDS = "FOR_KIDS",
     ACCESSORIES = "ACCESSORIES",
     FLOWERS_AND_BALLOONS = "FLOWERS_AND_BALLOONS",
