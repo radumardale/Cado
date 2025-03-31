@@ -81,9 +81,7 @@ export default function Header() {
                         <CatalogMenu setIsCatalogMenuActive={setIsCatalogMenuActive}/>
                 </motion.div>
         </div>
-        <div className='mt-4 flex'>
-            <Breadcrums />
-        </div>
+        <Breadcrums />
     </>
   )
 }

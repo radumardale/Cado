@@ -12,7 +12,7 @@ export default function Breadcrums() {
     const pathNames = paths.split('/').filter( path => !LangOptionsArr.includes(path) && path.length > 0 );
 
     return (
-        <>
+        <div className={`mt-4 flex ${pathNames.length > 0 ? "" : "hidden"}`}>
             {
                 pathNames.length > 0 &&
                 <div className='flex gap-2'>
@@ -32,6 +32,6 @@ export default function Breadcrums() {
                     }
                 </div>
             }
-        </>
+        </div>
     )
 }

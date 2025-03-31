@@ -1,6 +1,7 @@
 
 import Footer from "@/components/footer/Footer";
 import Header from "@/components/header/Header";
+import Hero from "@/components/home/hero/Hero";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { use } from "react";
 
@@ -20,6 +21,7 @@ export default function Home({params}: {params: Promise<{locale: string}>;}) {
   return (
     <div className="grid grid-cols-full gap-x-6 col-span-full">
         <Header />
+        <Hero />
         <Footer />
     </div>
   );
