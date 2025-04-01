@@ -3,8 +3,10 @@ import Footer from "@/components/footer/Footer";
 import Header from "@/components/header/Header";
 import CategoriesGrid from "@/components/home/categories/CategoriesGrid";
 import Collaboration from "@/components/home/collaboration/Collaboration";
+import Faq from "@/components/home/faq/Faq";
 import Hero from "@/components/home/hero/Hero";
 import Recommendations from "@/components/home/recommendations/Recommendations";
+import Reviews from "@/components/home/reviews/Reviews";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { use } from "react";
 
@@ -28,6 +30,8 @@ export default function Home({params}: {params: Promise<{locale: string}>;}) {
         <CategoriesGrid />
         <Recommendations />
         <Collaboration />
+        <Reviews />
+        <Faq />
         <Footer />
     </div>
   );
