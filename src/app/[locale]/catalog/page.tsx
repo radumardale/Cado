@@ -14,7 +14,7 @@ export async function generateMetadata() {
   };
 }
 
-export default function Home({params}: {params: Promise<{locale: string}>;}) {
+export default function CatalogPage({params}: {params: Promise<{locale: string}>;}) {
   const {locale} = use(params);
   setRequestLocale(locale);
 

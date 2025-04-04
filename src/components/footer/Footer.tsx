@@ -32,10 +32,10 @@ export default function Footer() {
             <div className='col-start-7 col-span-2'>
                 <p className='text-white font-manrope text-2xl font-semibold mb-6'>Navigare</p>
                 <CustomLink href="/" className="text-white block mb-4" value="Acasă"/>
-                <CustomLink href="/" className="text-white block mb-4" value="Catalog"/>
-                <CustomLink href="/" className="text-white block mb-4" value="Despre Noi"/>
-                <CustomLink href="/" className="text-white block mb-4" value="Blog"/>
-                <CustomLink href="/" className="text-white block mb-4" value="Contacte"/>
+                <CustomLink href="/catalog" className="text-white block mb-4" value="Catalog"/>
+                <CustomLink href="/about-us" className="text-white block mb-4" value="Despre Noi"/>
+                <CustomLink href="/blog" className="text-white block mb-4" value="Blog"/>
+                <CustomLink href="/contacts" className="text-white block mb-4" value="Contacte"/>
             </div>
 
             <div className='col-span-2'>
@@ -80,11 +80,11 @@ export default function Footer() {
                 </button>
             </div>
         </div>
-        <Image src="/footer/ribbon-screen.png" alt="footer ribbon" width={1920} height={326} className='col-span-full'/>
+        <Image src="/footer/ribbon-screen.png" alt="footer ribbon" width={1920} height={326} className='col-span-full w-full'/>
         <div className="col-start-2 col-span-13 flex justify-between items-center h-12 border-t border-lightgray px-15">
             <div className='flex'>
                 <p className='text-white mr-6'>© 2025 “TOP GIFTS & EVENTS” S.R.L.</p>
-                <Link href="#" className='text-white'>Termeni & Condiții</Link>
+                <Link href="/terms" className='text-white'>Termeni & Condiții</Link>
             </div>
             <div className="flex items-center gap-2 group">
               <span className="text-white">by Studio Modvis</span>

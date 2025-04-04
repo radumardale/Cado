@@ -15,7 +15,7 @@ interface CategoriesCardInterface {
 
 export default function CategoriesCard({index, title, description, side, rowHover, setRowHover, image}: CategoriesCardInterface) {
   return (
-    <div className={`bg-blue-2 h-80 rounded-2xl relative transition-all duration-400 cursor-pointer overflow-hidden ${side === rowHover ? "lg:w-6/11 2xl:w-7/13" : rowHover === CategoriesRowHover.NONE ? "lg:w-5/11 2xl:w-6/13" : "lg:w-4/11 2xl:w-5/13"}`} onMouseEnter={() => {setRowHover(side)}} onMouseLeave={() => {setRowHover(CategoriesRowHover.NONE)}}>
+    <div className={`bg-blue-2 h-80 rounded-2xl relative transition-all duration-400 cursor-pointer overflow-hidden ${side === rowHover ? "w-7/13" : rowHover === CategoriesRowHover.NONE ? "w-6/13" : "w-5/13"}`} onMouseEnter={() => {setRowHover(side)}} onMouseLeave={() => {setRowHover(CategoriesRowHover.NONE)}}>
         {image.length > 0 && 
             <>
                 <Image src={image} alt={title} className='absolute left-0 top-0 w-full h-full object-cover' width={702} height={320} />

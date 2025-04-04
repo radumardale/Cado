@@ -1,6 +1,7 @@
 'use client'
 
 import { Link } from '@/i18n/navigation'
+import { Pathnames } from '@/i18n/routing';
 import { LangOptionsArr } from '@/lib/enums/LangOptions';
 import { useTranslations } from 'next-intl'
 import { usePathname } from 'next/navigation'
@@ -20,7 +21,7 @@ export default function Breadcrums() {
                     {pathNames.length > 0 && <span className='text-gray font-semibold font-manrope'>/</span>}
                     {
                         pathNames.length > 0 && pathNames.map( (link, index) => {
-                            const href = `/${pathNames.slice(0, index + 1).join('/')}`;
+                            const href = `/${pathNames.slice(0, index + 1).join('/')}` as Pathnames;
                             const itemLink = link[0].toUpperCase() + link.slice(1, link.length);
                             return (
                                 <Fragment key={index}>

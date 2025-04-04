@@ -39,7 +39,7 @@ export default async function RootLayout({
   return (
     <html lang={locale}>
       <body className="scroll-bar-custom">
-        <div className="grid grid-cols-full gap-x-6 px-16 max-w-3xl mx-auto">
+        <div className="grid grid-cols-15 gap-x-6 px-16 max-w-3xl mx-auto relative">
           <NextIntlClientProvider messages={messages}>
             <TrpcProvider>
               <SmoothScroll>

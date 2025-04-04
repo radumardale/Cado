@@ -59,8 +59,8 @@ export default function LogoCarousel() {
     <>
         <TextCarousel slide={steps[steps.length - 1].value} />
 
-        <div className='flex justify-center col-span-full h-30 mb-12'>
-            <div className="relative" style={{width: `calc(${(steps.length - 1) * 1.5}rem + 7.5rem)`}}>
+        <div className='flex justify-center col-span-full h-34 mb-12'>
+            <div className="relative" style={{width: `calc(${(steps.length - 1) * 1.5}rem + 8.5rem)`}}>
                 {
                     steps.map( (obj, index) => {
                         return (
@@ -69,13 +69,13 @@ export default function LogoCarousel() {
                                     isSlideInitialized ? (
                                         isMovingForward ? (
                                             obj.value === steps.length - 3 ? {
-                                                x: [null, `${7.5 * 1.3}rem`, `${obj.value * 1.5}rem`],
+                                                x: [null, `${8.5 * 1.3}rem`, `${obj.value * 1.5}rem`],
                                             } : {
                                                 x: [`${(obj.value - 1) * 1.5}rem`, `${(obj.value - 1) * 1.5}rem`, `${obj.value * 1.5}rem`],
                                             }
                                         ) : ( 
                                                 obj.value === 2 ? {
-                                                    x: [null, `${7.5 * 1.3 + (obj.value - 1) * 1.5}rem`, `${(steps.length - 1) * 1.5}rem`],
+                                                    x: [null, `${8.5 * 1.3 + (obj.value - 1) * 1.5}rem`, `${(steps.length - 1) * 1.5}rem`],
                                                 } : {
                                                     x: [`${(obj.value + 1) * 1.5}rem`, `${(obj.value + 1) * 1.5}rem`, `${obj.value * 1.5}rem`],
                                                 }
@@ -94,7 +94,7 @@ export default function LogoCarousel() {
                                     duration: 0.8,
                                     ease: easeInOutCubic,
                                 }} 
-                                className={`size-30 rounded-2xl overflow-hidden absolute transition-[z-index] delay-300`}
+                                className={`size-34 rounded-2xl overflow-hidden absolute transition-[z-index] delay-300`}
                             >
                                 <Image src={obj.src} alt='asf' width={120} height={120} className='h-full w-full object-cover' />
                             </motion.div>

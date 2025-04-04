@@ -17,7 +17,7 @@ interface TitlesCarouselInterface {
 
 export default function TitlesCarousel({slide, isAnimationPlaying, moveItemsBackward, moveItemsForward}: TitlesCarouselInterface) {
   return (
-    <div className='flex justify-center lg:col-start-5 2xl:col-start-6 col-span-5 mb-42'>
+    <div className='flex justify-center col-start-6 col-span-5 mb-42'>
         <div className="w-40 h-11 relative flex justify-center">
             <button className='cursor-pointer disabled:pointer-events-none top-1/2 -translate-y-1/2 -translate-full absolute -left-8' disabled={isAnimationPlaying} onClick={moveItemsBackward}>
                 <ArrowLeft className='size-8'/>
@@ -26,6 +26,7 @@ export default function TitlesCarousel({slide, isAnimationPlaying, moveItemsBack
                 texts.map((text, index) => {
                     return(
                         <motion.div 
+                            initial={false}
                             key={index} 
                             animate={index === slide ? {opacity: 1, transition: {delay: 0.4, duration: 0.8, ease:easeInOutCubic}} : {opacity: 0, transition: {duration: 0.4, ease:easeInOutCubic}}} 
                             className='absolute'

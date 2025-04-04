@@ -1,10 +1,10 @@
 'use client'
 
 import { trpc } from '@/app/_trpc/client';
+import SeeMoreButton from '@/components/buttons/SeeMoreButton';
 import LoadingGrid from '@/components/catalog/productsGrid/LoadingGrid';
 import ProductCard from '@/components/catalog/productsGrid/ProductCard';
 import { ProductInterface } from '@/models/product/types/productInterface';
-import { ArrowRight } from 'lucide-react';
 import React from 'react'
 
 export default function Recommendations() {
@@ -21,12 +21,7 @@ export default function Recommendations() {
                     ))
                 }
             </div>
-            <div className='col-span-full flex justify-center mb-42'>
-                <button className='cursor-pointer bg-blue-2 rounded-3xl h-12 px-6 text-white font-manrope font-semibold flex items-center gap-2'>
-                    <span>Vezi mai multe</span>
-                    <ArrowRight className='size-6'/>
-                </button>
-            </div>
+           <SeeMoreButton className='mb-42' />
         </>
     )
 }

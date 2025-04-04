@@ -1,7 +1,6 @@
 'use client'
 
 import Image from 'next/image'
-import Link from 'next/link'
 import React, { useEffect, useRef, useState } from 'react'
 import { Globe, Search, ShoppingBag } from 'lucide-react';
 import { COLORS } from '@/lib/colors/colors';
@@ -12,8 +11,13 @@ import { motion } from "motion/react"
 import { easeInOutCubic } from '@/lib/utils';
 import Breadcrums from '../Breadcrums';
 import CustomLink from '../CustomLink';
+import { Link } from '@/i18n/navigation';
 
-export default function Header() {
+interface HeaderProps {
+    breadcrumbs?: boolean
+}
+
+export default function Header({breadcrumbs = false}: HeaderProps) {
     const [isCatalogButtonActive, setCatalogButtonActive] = useState(false);
     const [isCatalogMenuActive, setIsCatalogMenuActive] = useState(false);
     const [isCatalogMenuOpen, setIsCatalogMenuOpen] = useState(false);
@@ -60,19 +64,19 @@ export default function Header() {
                                 <Image src="/logo/logo-white.svg" width={228} height={56} alt='logo' className='h-14'/>
                                 <div className='flex gap-8 items-center absolute left-1/2 -translate-x-1/2'>
                                     <CatalogMenuButton isCatalogMenuOpen={isCatalogMenuOpen} setCatalogButtonActive={setCatalogButtonActive} />
-                                    <CustomLink className='text-black font-semibold font-manrope h-5' href="#" value='Despre Noi'/>
-                                    <CustomLink className='text-black font-semibold font-manrope h-5' href="#" value='Blog'/>
-                                    <CustomLink className='text-black font-semibold font-manrope h-5' href="#" value='FAQ'/>
-                                    <CustomLink className='text-black font-semibold font-manrope h-5' href="#" value='Contacte'/>
+                                    <CustomLink className='text-black font-semibold font-manrope h-5' href="/" value='Acasă'/>
+                                    <CustomLink className='text-black font-semibold font-manrope h-5' href="/about-us" value='Despre Noi'/>
+                                    <CustomLink className='text-black font-semibold font-manrope h-5' href="/blog" value='Blog'/>
+                                    <CustomLink className='text-black font-semibold font-manrope h-5' href="/contacts" value='Contacte'/>
                                 </div>
                                 <div className="flex gap-4 items-center">
-                                    <Link href="#">
+                                    <Link href="/">
                                         <Search color={COLORS.black} className='size-6' strokeWidth={1.25}/>
                                     </Link>
-                                    <Link href="#">
+                                    <Link href="/">
                                         <Globe color={COLORS.black} className='size-6' strokeWidth={1.25}/>
                                     </Link> 
-                                    <Link href="#">
+                                    <Link href="/">
                                         <ShoppingBag color={COLORS.black} className='size-6' strokeWidth={1.25}/>
                                     </Link>
                                 </div>
@@ -81,7 +85,9 @@ export default function Header() {
                         <CatalogMenu setIsCatalogMenuActive={setIsCatalogMenuActive}/>
                 </motion.div>
         </div>
-        <Breadcrums />
+        {
+            breadcrumbs && <Breadcrums />
+        }
     </>
   )
 }

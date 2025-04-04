@@ -1,6 +1,7 @@
 
 import Footer from "@/components/footer/Footer";
 import Header from "@/components/header/Header";
+import Blog from "@/components/home/blog/Blog";
 import CategoriesGrid from "@/components/home/categories/CategoriesGrid";
 import Collaboration from "@/components/home/collaboration/Collaboration";
 import Faq from "@/components/home/faq/Faq";
@@ -24,15 +25,16 @@ export default function Home({params}: {params: Promise<{locale: string}>;}) {
   setRequestLocale(locale);
 
   return (
-    <div className="grid grid-cols-full gap-x-6 col-span-full">
+    <>
         <Header />
         <Hero />
         <CategoriesGrid />
         <Recommendations />
         <Collaboration />
         <Reviews />
+        <Blog />
         <Faq />
         <Footer />
-    </div>
+    </>
   );
 }

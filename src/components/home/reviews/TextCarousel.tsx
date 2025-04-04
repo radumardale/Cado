@@ -13,14 +13,15 @@ interface TextCarouselInterface {
 
 export default function TextCarousel({slide}: TextCarouselInterface) {
   return (
-    <motion.div layout className='mb-12 grid grid-cols-9 col-span-9 lg:col-start-3 2xl:col-start-4 relative h-36'>
+    <motion.div layout className='mb-12 grid grid-cols-9 col-span-9 col-start-4 relative h-36'>
         {
             texts.map((text, index) => {
                 return(
                     <motion.p 
+                        initial={false}
                         key={index} 
                         animate={index === slide ? {opacity: 1, transition: {delay: 0.4, duration: 0.8, ease:easeInOutCubic}} : {opacity: 0, transition: {duration: 0.4, ease:easeInOutCubic}}} 
-                        className='text-2xl italic text-center absolute w-full'>&quot;{text}&quot;
+                        className='text-2xl italic text-center absolute w-full self-center'>&quot;{text}&quot;
                     </motion.p>
                 )
             })

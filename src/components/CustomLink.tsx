@@ -1,12 +1,13 @@
 'use client'
 
 import { Link } from '@/i18n/navigation'
+import { Pathnames } from '@/i18n/routing'
 import { easeInOutCubic } from '@/lib/utils'
 import { motion } from 'motion/react'
 import { useState } from 'react'
 
 interface CustomLinkInterface {
-    href: string,
+    href: Pathnames,
     className?: string,
     value: string
 }

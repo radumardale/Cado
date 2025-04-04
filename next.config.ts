@@ -3,8 +3,11 @@ import createNextIntlPlugin from 'next-intl/plugin';
 
 const nextConfig: NextConfig = {
   images: {
-    domains: [
-      'd3le09nbvee0zx.cloudfront.net'  // Add CloudFront domain
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'd3le09nbvee0zx.cloudfront.net',
+      }
     ],
   },
 };

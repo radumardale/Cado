@@ -62,12 +62,70 @@
       "PACKAGING_CUSTOM_BAG": "Ambalaj - pungă personalizată",
       "PACKAGING_CUSTOM_DESIGN": "Ambalaj - design individual"
     },
+    "blog_tags": {
+      "RECOMMENDATIONS": "Recomandări",
+      "NEWS": "Noutăți",
+      "EXPERIENCES": "Experiențe"
+    },
+    "terms_sections": {
+      "TERMS_AND_CONDITIONS": "Termeni & Condiții",
+      "CONFIDENTIALITY": "Politica de Confidenţialitate",
+      "PAYMENT_AND_SECURITY": "Plată & Securitate",
+      "ORDERS": "Comenzi",
+      "RETURN": "Returnarea & Schimb",
+      "DELIVERY": "Livrare & Transport",
+      "SUPPORT": "Suport"
+    },
     "index": {
       "meta": {
         "title": "Index page",
         "description": "Index page description"
       },
       "title": "Hello world!",
-      "about": "Go to the about page"
-    }
+      "about": "Go to the about page",
+      "faq": {
+        "0": {
+          "title": "Cum pot comanda un cadou și ce opțiuni de personalizare există?",
+          "description": "Acceptăm plăți cu card bancar, plăți electronice și transfer bancar. Toate tranzacțiile sunt procesate în siguranță, iar datele dvs. sunt protejate."
+        },
+        "1": {
+          "title": "Ce metode de plată acceptați și cum este asigurată securitatea?",
+          "description": "Acceptăm plăți cu card bancar, plăți electronice și transfer bancar. Toate tranzacțiile sunt procesate în siguranță, iar datele dvs. sunt protejate."
+        },
+        "2": {
+          "title": "Cum se face livrarea și cât durează?",
+          "description": "Acceptăm plăți cu card bancar, plăți electronice și transfer bancar. Toate tranzacțiile sunt procesate în siguranță, iar datele dvs. sunt protejate."
+        },
+        "3": {
+          "title": "Ce opțiuni există pentru comenzi corporate sau în cantități mari?",
+          "description": "Acceptăm plăți cu card bancar, plăți electronice și transfer bancar. Toate tranzacțiile sunt procesate în siguranță, iar datele dvs. sunt protejate."
+        },
+        "4": {
+          "title": "Pot returna produsele sau vedea cadourile înainte de achiziție?",
+          "description": "Acceptăm plăți cu card bancar, plăți electronice și transfer bancar. Toate tranzacțiile sunt procesate în siguranță, iar datele dvs. sunt protejate."
+        }
+      }
+    },
+    "maps": {
+      "0": {
+        "full_city": "Chișinău, Moldova",
+        "city": "Chișinău",
+        "address": "Adresa: Moldova, Chișinău, <br></br> str. Alecu Russo 15, of. 59",
+        "work_hours": "Ore de lucru: Luni-Vineri 9:00 - 16:00",
+        "phone": "Telefon: +373 69 645 153 | +373 69 645 153",
+        "email_support": "E-mail suport: info@cado.md",
+        "email_orders": "E-mail comenzi: order@cado.md",
+        "additional_info": "Informație suplimentară: <br></br> <br></br> Oficiul nostru din Sankt Petersburg se află în Centrul de Afaceri 'Dominat. Modern', care este situat la 1,6 km de stația de metrou Ladojskaia (15-20 minute de mers pe jos) <br></br> <br></br> SRL 'Atributika' OGRN 1147847156676 Adresa de facto/poștală: 195027, or. Sankt Petersburg, str. Magnitogorskaia, 30, lit.B, of. 410"
+      },
+      "1": {
+        "full_city": "Brașov, România",
+        "city": "Brașov",
+        "address": "Adresa: România, Brașov, <br></br> str. Ceferiștilor 65",
+        "work_hours": "Ore de lucru: Luni-Vineri 9:00 - 16:00",
+        "phone": "Telefon: +40 774 075 088",
+        "email_support": "E-mail suport: info@cado.md",
+        "email_orders": "E-mail comenzi: order@cado.md",
+        "additional_info": "Informație suplimentară: <br></br> <br></br> Oficiul nostru din Sankt Petersburg se află în Centrul de Afaceri \"Dominat. Modern\", care este situat la 1,6 km de stația de metrou Ladojskaia (15-20 minute de mers pe jos) <br></br> <br></br> SRL \"Atributika\" OGRN 1147847156676 Adresa de facto/poștală: 195027, or. Sankt Petersburg, str. Magnitogorskaia, 30, lit.B, of. 410"
+      }
+    } 
   }

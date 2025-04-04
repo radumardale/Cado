@@ -1,0 +1,131 @@
+{
+  "pathnames": {
+    "home": "Principală"
+  },
+  "tags": {
+    "FOR_HIM": {
+    "title": "Pentru El",
+    "description": "Cadouri care adaugă stil și confort locuinței, de la obiecte decorative la accesorii practice."
+    },
+    "FOR_HER": {
+    "title": "Pentru Ea",
+    "description": "Seturi pentru momente de relaxare și distracție, de la jocuri interactive la experiențe captivante."
+    },
+    "FOR_KIDS": {
+    "title": "Pentru Copii",
+    "description": "Selecții rafinate de delicii și băuturi premium, potrivite pentru orice ocazie."
+    },
+    "ACCESSORIES": {
+    "title": "Accesorii",
+    "description": "Seturi ideale pentru exploratori, cu accesorii esențiale pentru confort și organizare în călătorii."
+    },
+    "FLOWERS_AND_BALLOONS": {
+    "title": "Flori & Baloane",
+    "description": "Seturi funcționale pentru productivitate și organizare, perfecte pentru spațiul de lucru."
+    },
+    "GIFT_SET": {
+    "title": "Seturi cadou",
+    "description": "Seturi atent alese pentru a impresiona și încânta."
+    },
+    "ALL_PRODUCTS": {
+    "title": "Toate produsele",
+    "description": "Descoperă întreaga noastră gamă de produse."
+    }
+  },
+  "ocasions": {
+    "WELCOME_KIT": "Welcome Kit",
+    "MARCH_8": "8 martie",
+    "FEBRUARY_23": "23 februarie",
+    "CHRISTMAS_GIFTS": "Cadouri de Crăciun",
+    "EASTER_GIFTS": "Cadouri de Paște",
+    "FOR_HOME_AND_OFFICE": "Pentru casă și oficiu",
+    "FOR_TEAM": "Pentru echipă",
+    "OTHERS": "Altele"
+  },
+  "product_content": {
+    "ACCESSORIES_FOR_DRINKS": "Accesorii pentru băuturi",
+    "ACCESSORIES_FOR_TEA_COFFEE": "Accesorii pentru ceai/cafea",
+    "FOR_OFFICE": "Pentru birou",
+    "FOR_HOME": "Pentru casă",
+    "GAMES": "Jocuri",
+    "TOYS": "Jucării",
+    "STATIONERY_ITEMS": "Articole de papetărie",
+    "COFFEE_TEA": "Cafea/ceai",
+    "MUG_THERMOS_BOTTLE_FOR_WATER": "Cană/cană termos/sticlă pentru apă",
+    "HONEY_JAM_CARAMEL_PEANUT_BUTTER": "Miere/dulceață/caramelă/pastă de arahide",
+    "NUTS_DRY_FRUITS_SPICES": "Nuci/fructe uscate/condimente",
+    "CHOCOLATE_BISCUITS_CANDY": "Ciocolată/biscuiți/bomboane",
+    "FIRECRACKER": "Petardă",
+    "PACKAGING_CRAFT_BOX": "Ambalaj - cutie craft",
+    "PACKAGING_CARDBOARD_BOX_DESIGN": "Ambalaj - cutie din carton caserat/design",
+    "PACKAGING_WOODEN": "Ambalaj - din lemn",
+    "PACKAGING_CUSTOM_BAG": "Ambalaj - pungă personalizată",
+    "PACKAGING_CUSTOM_DESIGN": "Ambalaj - design individual"
+  },
+  "blog_tags": {
+    "RECOMMENDATIONS": "Recomandări",
+    "NEWS": "Noutăți",
+    "EXPERIENCES": "Experiențe"
+  },
+  "terms_sections": {
+    "TERMS_AND_CONDITIONS": "Termeni & Condiții",
+    "CONFIDENTIALITY": "Politica de Confidenţialitate",
+    "PAYMENT_AND_SECURITY": "Plată & Securitate",
+    "ORDERS": "Comenzi",
+    "RETURN": "Returnarea & Schimb",
+    "DELIVERY": "Livrare & Transport",
+    "SUPPORT": "Suport"
+  },
+  "index": {
+    "meta": {
+      "title": "Index page",
+      "description": "Index page description"
+    },
+    "title": "Hello world!",
+    "about": "Go to the about page",
+    "faq": {
+      "0": {
+        "title": "Cum pot comanda un cadou și ce opțiuni de personalizare există?",
+        "description": "Acceptăm plăți cu card bancar, plăți electronice și transfer bancar. Toate tranzacțiile sunt procesate în siguranță, iar datele dvs. sunt protejate."
+      },
+      "1": {
+        "title": "Ce metode de plată acceptați și cum este asigurată securitatea?",
+        "description": "Acceptăm plăți cu card bancar, plăți electronice și transfer bancar. Toate tranzacțiile sunt procesate în siguranță, iar datele dvs. sunt protejate."
+      },
+      "2": {
+        "title": "Cum se face livrarea și cât durează?",
+        "description": "Acceptăm plăți cu card bancar, plăți electronice și transfer bancar. Toate tranzacțiile sunt procesate în siguranță, iar datele dvs. sunt protejate."
+      },
+      "3": {
+        "title": "Ce opțiuni există pentru comenzi corporate sau în cantități mari?",
+        "description": "Acceptăm plăți cu card bancar, plăți electronice și transfer bancar. Toate tranzacțiile sunt procesate în siguranță, iar datele dvs. sunt protejate."
+      },
+      "4": {
+        "title": "Pot returna produsele sau vedea cadourile înainte de achiziție?",
+        "description": "Acceptăm plăți cu card bancar, plăți electronice și transfer bancar. Toate tranzacțiile sunt procesate în siguranță, iar datele dvs. sunt protejate."
+      }
+    }
+  },
+  "maps": {
+    "0": {
+      "full_city": "Chișinău, Moldova",
+      "city": "Chișinău",
+      "address": "Adresa: Moldova, Chișinău, <br></br> str. Alecu Russo 15, of. 59",
+      "work_hours": "Ore de lucru: Luni-Vineri 9:00 - 16:00",
+      "phone": "Telefon: +373 69 645 153 | +373 69 645 153",
+      "email_support": "E-mail suport: info@cado.md",
+      "email_orders": "E-mail comenzi: order@cado.md",
+      "additional_info": "Informație suplimentară: <br></br> <br></br> Oficiul nostru din Sankt Petersburg se află în Centrul de Afaceri 'Dominat. Modern', care este situat la 1,6 km de stația de metrou Ladojskaia (15-20 minute de mers pe jos) <br></br> <br></br> SRL 'Atributika' OGRN 1147847156676 Adresa de facto/poștală: 195027, or. Sankt Petersburg, str. Magnitogorskaia, 30, lit.B, of. 410"
+    },
+    "1": {
+      "full_city": "Brașov, România",
+      "city": "Brașov",
+      "address": "Adresa: România, Brașov, <br></br> str. Ceferiștilor 65",
+      "work_hours": "Ore de lucru: Luni-Vineri 9:00 - 16:00",
+      "phone": "Telefon: +40 774 075 088",
+      "email_support": "E-mail suport: info@cado.md",
+      "email_orders": "E-mail comenzi: order@cado.md",
+      "additional_info": "Informație suplimentară: <br></br> <br></br> Oficiul nostru din Sankt Petersburg se află în Centrul de Afaceri \"Dominat. Modern\", care este situat la 1,6 km de stația de metrou Ladojskaia (15-20 minute de mers pe jos) <br></br> <br></br> SRL \"Atributika\" OGRN 1147847156676 Adresa de facto/poștală: 195027, or. Sankt Petersburg, str. Magnitogorskaia, 30, lit.B, of. 410"
+    }
+  } 
+}
