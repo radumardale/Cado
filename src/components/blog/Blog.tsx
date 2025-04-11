@@ -1,5 +1,5 @@
 import React from 'react'
-import BlogCarousel from './BlogCarousel'
+import BlogCarousel from '../home/blog/BlogCarousel'
 
 export default function Blog() {
   return (

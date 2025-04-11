@@ -1,43 +1,18 @@
 'use client'
 
-import { BlogTags } from '@/lib/enums/BlogTags'
 import React, { useRef } from 'react'
 import BlogCard from './BlogCard'
 import { Swiper, SwiperRef, SwiperSlide } from 'swiper/react';
 
 import 'swiper/css';
 import BlogTitle from './BlogTitle';
-
-const blogs = [
-    {
-        image: "/categories/ACCESSORIES.jpg",
-        tag: BlogTags.RECOMMENDATIONS,
-        title: "De ce cadourile corporate de la CADO sunt mai mult decât un set clasic?"
-    },
-    {
-        image: "/categories/FOR_HIM.jpg",
-        tag: BlogTags.NEWS,
-        title: "Christmas World 2025 unde dorințele devin realitate"
-    },
-    {
-        image: "/categories/FOR_HER.jpg",
-        tag: BlogTags.EXPERIENCES,
-        title: "Ce nu ar trebui să fie într-un cadou: ce excludem și nu vă recomandăm"
-    },
-    {
-        image: "/categories/FOR_KIDS.jpg",
-        tag: BlogTags.RECOMMENDATIONS,
-        title: "CADO: Povestea transformării și creșterii"
-    },
-     {
-        image: "/categories/ACCESSORIES.jpg",
-        tag: BlogTags.RECOMMENDATIONS,
-        title: "De ce cadourile corporate de la CADO sunt mai mult decât un set clasic?"
-    },
-]
+import { trpc } from '@/app/_trpc/client';
+import { useLocale } from 'next-intl';
 
 export default function BlogCarousel() {
+    const {data, isLoading} = trpc.blog.getLimitedBlogs.useQuery({limit: 6});
     const swiperRef = useRef<SwiperRef>(null);
+    const locale = useLocale();
 
     const goToNextSlide = () => {
         swiperRef.current?.swiper.slideNext();
@@ -51,7 +26,7 @@ export default function BlogCarousel() {
     <>
         <BlogTitle goToNextSlide={goToNextSlide} goToPreviousSlide={goToPreviousSlide}/>
         <div className='col-span-15 -mr-16 overflow-hidden mb-42'>
-            <div className='-mr-18 overflow-hidden rounded-tl-2xl mt-8'>
+            <div className='-mr-18 rounded-tl-2xl mt-8'>
                 <Swiper
                     ref={swiperRef}
                     slidesPerView={4}
@@ -62,11 +37,19 @@ export default function BlogCarousel() {
                         "--swiper-transition-timing-function": "cubic-bezier(0.65, 0, 0.35, 1)"
                     } as React.CSSProperties}
                 >
-                    {blogs.map((blog, index) => (
-                        <SwiperSlide key={index} className='pr-6'>
-                            <BlogCard src={blog.image} tag={blog.tag} title={blog.title}/>
-                        </SwiperSlide>
-                    ))}
+                    {
+                        isLoading || !data?.blogs ? 
+                        <>
+                        </>
+                        :
+                        <>
+                            {data.blogs.map((blog, index) => (
+                                <SwiperSlide key={index} className='pr-6 mb-1'>
+                                    <BlogCard src={blog.image} tag={blog.tag} title={blog.title[locale]}/>
+                                </SwiperSlide>
+                            ))}
+                        </>
+                    }
                 </Swiper>
             </div>
         </div>

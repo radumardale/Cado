@@ -6,6 +6,7 @@ import { updateProductProcedure } from "../product/updateProduct";
 import { deleteProductProcedure } from "../product/deleteProduct";
 import { getAllProductsProcedure } from "../product/getAllProducts";
 import { getRecProductsProcedure } from "../product/getRecProducts";
+import { getSimilarProducts } from "../product/getSimilarProducts";
 
 export const productRouter = router({
     getProducts: getProductsProcedure,
@@ -14,5 +15,6 @@ export const productRouter = router({
     createProduct: addProductProcedure,
     updateProduct: updateProductProcedure,
     deleteProduct: deleteProductProcedure,
-    getRecProduct: getRecProductsProcedure
+    getRecProduct: getRecProductsProcedure,
+    getSimilarProducts: getSimilarProducts
 });

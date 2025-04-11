@@ -1,0 +1,55 @@
+'use client'
+
+import { trpc } from '@/app/_trpc/client';
+import { getTagColor } from '@/lib/utils';
+import { useLocale, useTranslations } from 'next-intl'
+import Image from 'next/image';
+import React, { Fragment } from 'react'
+import BlogSectionSkeleton from './BlogSectionSkeleton';
+import { redirect } from 'next/navigation';
+
+interface BlogSectionInteface {
+    id: string
+}
+
+export default function BlogSection({id}: BlogSectionInteface) {
+    const locale = useLocale();
+    const t = useTranslations("blog_tags");
+    const {data, isLoading} = trpc.blog.getBlogById.useQuery({id: id});
+
+    if (isLoading) {
+        return <BlogSectionSkeleton />
+    }
+
+    if (!data?.blog) {
+        redirect('/blogs');
+    }
+
+  return (
+    <div className='col-span-7 col-start-5 mt-16 mb-42'>
+        <h1 className='font-manrope text-3xl leading-11 uppercase font-semibold mb-6'>{data.blog.title[locale]}</h1>
+        <div className="flex justify-between items-center mb-12">
+            <div className='h-12 flex items-center px-6 text-white w-fit rounded-3xl font-semibold' style={{backgroundColor: `var(${getTagColor(data.blog.tag)})`}} >{t(data.blog.tag)}</div>
+            <div className="flex gap-4">
+                <p className='font-manrope font-semibold'>{data.blog.reading_length} MIN. READ</p>
+                <p className='text-gray font-manrope font-semibold'>{new Date(data.blog.date).toLocaleDateString(locale, { day: '2-digit', month: '2-digit', year: 'numeric' }).replace(/\//g, '.')}</p>
+            </div>
+        </div>  
+        <Image src={data.blog.image} alt={data.blog.title[locale]} width={824} height={544} className='w-full aspect-[824/544] object-cover mb-4 rounded-2xl' />
+        <>
+            {
+                data.blog.sections.map((section, index) => {
+                    return (
+                        <Fragment key={index}>
+                            <h2 className='font-manrope text-[2rem] leading-9 uppercase font-semibold my-8'>{section.subtitle[locale]}</h2>
+                            <p className='leading-5 whitespace-pre-line'>
+                                {section.content[locale].replace(/\\n/g, '\n')}
+                            </p>
+                        </Fragment>
+                    )
+                })
+            }
+        </>
+    </div>
+  )
+}

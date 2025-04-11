@@ -5,6 +5,7 @@ import { Ocasions } from "@/lib/enums/Ocasions";
 import { ProductContent } from "@/lib/enums/ProductContent";
 
 export interface ProductInterface {
+    custom_id: string,
     title: ProductInfo,
     description: ProductInfo,
     set_description: ProductInfo,

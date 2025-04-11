@@ -13,11 +13,14 @@
   --lightgray: oklch(82.66% 0 0);
   --gray: oklch(66% 0 0);
   --darkgray: oklch(47.84% 0 0);
+  --darkblue: oklch(0.26 0.0318 258.31); /* #1a2433 */
   --blue1: oklch(82.11% 0.0291 270.36);
   --blue2: oklch(70.38% 0.0577 258.67);
   --blue3: oklch(60.72% 0.0738 260.72);
   --blue4: oklch(47.87% 0.0699 262.74);
   --blue5: oklch(0.35 0.0492 257.89);
+  --green: oklch(0.63 0.1371 151.34); /* #3a9f5c */
+  --red: oklch(0.66 0.2284 26.18); /* #ff3e3e */
   --background: oklch(95.51% 0 0);
   --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);
@@ -42,7 +45,6 @@
   --chart-3: oklch(0.398 0.07 227.392);
   --chart-4: oklch(0.828 0.189 84.429);
   --chart-5: oklch(0.769 0.188 70.08);
-  --radius: 0.625rem;
   --sidebar: oklch(0.985 0 0);
   --sidebar-foreground: oklch(0.145 0 0);
   --sidebar-primary: oklch(0.205 0 0);
@@ -55,6 +57,8 @@
 }
 
 @theme inline {
+  --color-green: var(--green);
+  --color-red: var(--red);
   --color-darkgray: var(--darkgray);
   --color-pureblack: var(--pureblack);
   --color-blue-1: var(--blue1);
@@ -62,6 +66,7 @@
   --color-blue-3: var(--blue3);
   --color-blue-4: var(--blue4);
   --color-blue-5: var(--blue5);
+  --color-darkblue: var(--darkblue);
   --color-gray: var(--gray);
   --color-white: var(--white);
   --color-lightgray: var(--lightgray);
@@ -90,10 +95,6 @@
   --color-chart-3: var(--chart-3);
   --color-chart-4: var(--chart-4);
   --color-chart-5: var(--chart-5);
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
   --color-sidebar: var(--sidebar);
   --color-sidebar-foreground: var(--sidebar-foreground);
   --color-sidebar-primary: var(--sidebar-primary);
@@ -138,6 +139,10 @@ html {
 }
 
 @media (min-width: 1024px) {
+  :root {
+    --current-rem: 14;
+  }
+
   html {
     font-size: 14px;
   }
@@ -152,6 +157,10 @@ html {
 }
 
 @media (min-width: 1636px) {
+  :root {
+    --current-rem: 16;
+  }
+
   html {
     font-size: 14px;
   }
@@ -166,6 +175,10 @@ html {
 }
 
 @media (min-width: 1900px) {
+  :root {
+    --current-rem: 16;
+  }
+
   html {
     font-size: 16px;
   }
@@ -173,4 +186,9 @@ html {
   input, textarea {
     font-size: 16px;
   }
+}
+
+body.carousel {
+  overflow: hidden;
+  margin-right: 10px;
 }

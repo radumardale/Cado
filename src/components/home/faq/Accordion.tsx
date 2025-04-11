@@ -26,7 +26,7 @@ export default function Accordion({title, children, last = false, open, setActiv
 
   return (
     <motion.div className={`h-15 overflow-hidden col-start-4 col-span-9 ${last ? "border-y border-lightgray" : "border-t border-lightgray"}`} transition={{ease: easeInOutCubic, duration: .4}} variants={accordionVariants} animate={open ? "open" : "close"} initial={false}>
-        <div className='h-15 flex items-center justify-between cursor-pointer mb-6' onClick={setActiveIndex}>
+        <div className='h-15 flex items-center justify-between cursor-pointer mb-2' onClick={setActiveIndex}>
             <p className='font-semibold font-manrope text-2xl'>{title}</p>
             <Plus color={COLORS.black} className={`size-5 transition duration-300 ${open ? "rotate-45" : ""}`} />
         </div>
@@ -36,3 +36,4 @@ export default function Accordion({title, children, last = false, open, setActiv
     </motion.div>
   )
 }
+

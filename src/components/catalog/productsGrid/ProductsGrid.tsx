@@ -7,15 +7,17 @@ import { motion, useAnimate } from 'motion/react'
 import { easeInOutCubic } from '@/lib/utils'
 import LoadingGrid from './LoadingGrid'
 import SortBy from '@/lib/enums/SortBy'
+import { Categories } from '@/lib/enums/Categories'
 
 interface ProductsGridProps {
     products: ProductInterface[],
     loading: boolean,
-    setSortBy: (v: SortBy) => void
-
+    setSortBy: (v: SortBy) => void,
+    sortBy: SortBy,
+    category: Categories | null
 }
 
-export default function ProductsGrid({products, loading, setSortBy}: ProductsGridProps) {
+export default function ProductsGrid({products, loading, setSortBy, sortBy, category}: ProductsGridProps) {
     const [gridLayout, setGridLayout] = useState(true);
     const [scope, animate] = useAnimate()
 
@@ -28,16 +30,16 @@ export default function ProductsGrid({products, loading, setSortBy}: ProductsGri
 
   return (
     <motion.div className='col-start-4 col-span-10 2xl:col-span-12 grid grid-cols-12 mt-12 gap-6 h-fit'>
-        <Controls gridLayout={gridLayout} setGridLayout={setGridLayout} setSortBy={setSortBy} />
+        <Controls gridLayout={gridLayout} setGridLayout={setGridLayout} setSortBy={setSortBy} sortBy={sortBy}/>
         <div ref={scope} className='col-span-full grid grid-cols-12 gap-6'>
             {
                 loading ? 
                 (
-                    <LoadingGrid gridLayout={gridLayout} length={4}/> 
+                    <LoadingGrid gridLayout={gridLayout} length={8}/> 
                 ) : (
                     products.map((product, index) => {
                         return (
-                            gridLayout ? <ProductCard key={index} product={product} /> : <ListProductCard key={index} product={product}/>
+                            gridLayout ? <ProductCard category={category} key={index} product={product} /> : <ListProductCard key={index} product={product}/>
                         )
                     })
                 )

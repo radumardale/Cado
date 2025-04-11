@@ -12,8 +12,10 @@ interface BlogCardInterface {
 export default function BlogCard({src, tag ,title}: BlogCardInterface) {
     const t = useTranslations("blog_tags");
   return (
-    <div className='cursor-pointer'>
-        <Image src={src} alt={title} width={460} height={460} className='w-full aspect-square rounded-2xl object-cover mb-4' />
+    <div className='cursor-pointer group'>
+        <div className='mb-4 overflow-hidden rounded-2xl relative before:content-[""] before:absolute before:left-0 before:top-0 before:w-full before:h-full before:bg-pureblack before:opacity-0 group-hover:before:opacity-25 before:rounded-2xl before:transition before:duration-300 before:z-10'>
+            <Image src={src} alt={title} width={460} height={460} className='w-full aspect-square object-cover transition-transform duration-300 ease-in-out group-hover:scale-105' />
+        </div>
         <div className='h-12 flex items-center px-6 text-white mb-4 w-fit rounded-3xl font-semibold' style={{backgroundColor: `var(${getTagColor(tag)})`}} >{t(tag)}</div>
         <p className='font-manrope text-2xl font-semibold leading-7'>{title}</p>
     </div>

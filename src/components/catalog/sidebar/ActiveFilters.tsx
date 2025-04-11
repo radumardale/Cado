@@ -3,21 +3,26 @@ import {ActiveFiltersButton} from './ActiveFiltersButton'
 import { motion } from 'motion/react'
 import { easeInOutCubic } from '@/lib/utils';
 import { Categories } from '@/lib/enums/Categories';
+import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 interface ActiveFiltersInterface {
     categories: Categories[],
-    updateCategories: (v: Categories) => void,
+    updateCategories: (value: Categories, searchParams: URLSearchParams, router: AppRouterInstance) => void,
     ocasions: string[],
-    updateOcasions: (v: string) => void,
+    updateOcasions: (value: string, searchParams: URLSearchParams, router: AppRouterInstance) => void,
     productContent: string[],
-    updateProductContent: (v: string) => void,
-    resetAllFilters: () => void,
+    updateProductContent: (value: string, searchParams: URLSearchParams, router: AppRouterInstance) => void,
+    resetAllFilters: (router: AppRouterInstance) => void,
     price: number[],
-    resetPrice: () => void
+    resetPrice: (searchParams: URLSearchParams, router: AppRouterInstance) => void
 }
 
 export default function ActiveFilters({categories, updateCategories, ocasions, updateOcasions, productContent, updateProductContent, resetAllFilters, price, resetPrice}: ActiveFiltersInterface) {
     const t = useTranslations("");
+    const router = useRouter();
+    const searchParams = useSearchParams();
+    
 
   return (
     <motion.div 
@@ -33,23 +38,22 @@ export default function ActiveFilters({categories, updateCategories, ocasions, u
             <div className='flex gap-2 max-w-full flex-wrap mb-4'>
                 {
                     categories.map((value, index) => {
-                        return (<ActiveFiltersButton key={index} title={t("tags." + value)} onClick={() => {updateCategories(value)}} />)
+                        return (<ActiveFiltersButton key={index} title={t("tags." + value + '.title')} onClick={() => {updateCategories(value, searchParams, router)}} />)
                     })
                 }
                 {
                     ocasions.map((value, index) => {
-                        return (<ActiveFiltersButton key={index} title={t("ocasions." + value)} onClick={() => {updateOcasions(value)}} />)
+                        return (<ActiveFiltersButton key={index} title={t("ocasions." + value)} onClick={() => {updateOcasions(value, searchParams, router)}} />)
                     })
                 }
                 {
                     productContent.map((value, index) => {
-                        return (<ActiveFiltersButton key={index} title={t("product_content." + value)} onClick={() => {updateProductContent(value)}} />)
+                        return (<ActiveFiltersButton key={index} title={t("product_content." + value)} onClick={() => {updateProductContent(value, searchParams, router)}} />)
                     })
                 }
-                {(price[0] !== 0 || price[1] !== 5000) && <ActiveFiltersButton title={`${price[0]} - ${price[1]} (MDL)`} onClick={resetPrice}/>}
-                <button className='text-gray underline cursor-pointer p-2' onClick={resetAllFilters}>Resetează</button>
+                {(price[0] !== 0 || price[1] !== 5000) && <ActiveFiltersButton title={`${price[0]} - ${price[1]} (MDL)`} onClick={() => {resetPrice(searchParams, router)}}/>}
+                <button className='text-gray underline cursor-pointer p-2' onClick={() => {resetAllFilters(router)}}>Resetează</button>
             </div>
     </motion.div>
   )
 }
-

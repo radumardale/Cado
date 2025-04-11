@@ -1,4 +1,5 @@
 
+import { trpc } from "@/app/_trpc/server";
 import Hero from "@/components/blog/Hero";
 import Footer from "@/components/footer/Footer";
 import Header from "@/components/header/Header";
@@ -19,6 +20,7 @@ export async function generateMetadata() {
 export default function AboutUs({params}: {params: Promise<{locale: string}>;}) {
   const {locale} = use(params);
   setRequestLocale(locale);
+  trpc.blog.getLimitedBlogs.prefetch({limit: 4});
 
   return (
     <>

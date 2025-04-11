@@ -5,13 +5,14 @@ import SortBy from '@/lib/enums/SortBy';
 import { z } from 'zod';
 
 export const getAllProductsRequestSchema = z.object({
-    chunk: z.number().min(0),
-    ocasions: z.array(z.nativeEnum(Ocasions)),
-    categories: z.array(z.nativeEnum(Categories)),
-    productContent: z.array(z.nativeEnum(ProductContent)),
+    limit: z.number().min(1).max(100).default(10),
+    cursor: z.number().nullish(),
+    category: z.nativeEnum(Categories).or(z.null()),
+    ocasions: z.array(z.nativeEnum(Ocasions)).optional(),
+    productContent: z.array(z.nativeEnum(ProductContent)).optional(),
     price: z.object({
-        min: z.number(),
-        max: z.number(),
+      min: z.number().min(0),
+      max: z.number().min(0)
     }),
-    sortBy: z.nativeEnum(SortBy).default(SortBy.RECOMMENDED)
-});
+    sortBy: z.nativeEnum(SortBy).default(SortBy.RECOMMENDED),
+  })

@@ -8,6 +8,11 @@ import { ProductContent } from "@/lib/enums/ProductContent";
 
 // Product Schema
 const ProductSchema = new mongoose.Schema<ProductInterface>({
+  custom_id: {
+    type: String,
+    required: true,
+    unique: true,
+  },
   title: {
     type: ProductInfoSchema,
     required: true,

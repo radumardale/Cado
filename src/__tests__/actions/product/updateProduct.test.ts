@@ -1,31 +1,50 @@
-import { test } from 'vitest'
-// import { updateProduct } from "@/actions/product/updateProduct";
-// import { updateProductResponseInterface } from "@/actions/product/updateProduct"
+import { appRouter } from "@/server";
+import { assert, test } from "vitest";
 
-test.skip("updateProduct", async () => {
-//     const res = await updateProduct({
-//         id: "67d2e7b5c48ac2acfdc647ce",
-//         data: {
-//             title: {
-//                 ro: "Produs de exemplu",
-//                 ru: "Пример продукта"
-//               },
-//               description: {
-//                 ro: "Descrierea produsului de exemplu",
-//                 ru: "Описание примера продукта"
-//               },
-//               price: 100.0,
-//               tags: ["FOR_HIM", "ACCESSORIES"],
-//               stock_availability: true,
-//               images: [],
-//               sale: {
-//                 active: true,
-//                 sale_price: 80.0
-//               }
-//         }
-//     });
-
-//     assert(res.success === true, res.error);
-
-//     expectTypeOf(res).toEqualTypeOf<updateProductResponseInterface>();
-})
+test.skip("update prices for all products", async () => {
+    // Create a tRPC caller
+    const caller = appRouter.createCaller({});
+    
+    // 1. Get all products
+    const productsResponse = await caller.products.getAllProducts();
+    
+    // Check if products were retrieved successfully
+    assert(productsResponse.success === true, "Failed to get products");
+    assert(productsResponse.products && productsResponse.products.length > 0, "No products found");
+    
+    // 2. Track success count
+    let successCount = 0;
+    
+    // 3. Update each product's price
+    for (const product of productsResponse.products) {
+        const productId = product._id.toString();
+        
+        const newPrice = product.price * 1.05;
+        
+        const updateRes = await caller.products.updateProduct({
+            id: productId,
+            data: { 
+                title: product.title,
+                description: product.description,
+                price: parseFloat(newPrice.toFixed(2)),
+                ocasions: product.ocasions,
+                categories: product.categories,
+                product_content: product.product_content,
+                stock_availability: product.stock_availability,
+                images: product.images,
+                sale: product.sale
+            }
+        });
+        
+        // Verify update was successful
+        if (updateRes.success) {
+            successCount++;
+        }
+    }
+    
+    // 4. Verify all products were updated successfully
+    assert(successCount === productsResponse.products.length, 
+        `Not all products were updated successfully: ${successCount}/${productsResponse.products.length}`);
+    
+    console.log(`Successfully updated prices for ${successCount} products`);
+});

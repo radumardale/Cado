@@ -34,7 +34,7 @@ export default function Footer() {
                 <CustomLink href="/" className="text-white block mb-4" value="Acasă"/>
                 <CustomLink href="/catalog" className="text-white block mb-4" value="Catalog"/>
                 <CustomLink href="/about-us" className="text-white block mb-4" value="Despre Noi"/>
-                <CustomLink href="/blog" className="text-white block mb-4" value="Blog"/>
+                <CustomLink href="/blogs" className="text-white block mb-4" value="Blog"/>
                 <CustomLink href="/contacts" className="text-white block mb-4" value="Contacte"/>
             </div>
 

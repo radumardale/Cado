@@ -17,9 +17,13 @@ export const routing = defineRouting({
       ru: '/about-us',
       ro: '/despre-noi',
     },
-    '/blog': {
+    '/blogs': {
       ru: "/blog",
       ro: '/noutati'
+    },
+    '/blog/[id]': {
+      ru: "/blog/[id]",
+      ro: "/noutate/[id]"
     },
     '/terms': {
       ru: "/terms",
@@ -28,8 +32,12 @@ export const routing = defineRouting({
     '/contacts': {
       ru: "/contacts",
       ro: "/contacte"
+    },
+  '/catalog/product/[id]': {
+      ru: '/catalog/product/[id]',
+      ro: '/catalog/produs/[id]',
     }
   }
 });
 
-export type Pathnames = "/" | "/catalog" | "/about-us" | "/blog" | "/terms" | "/contacts";
+export type Pathnames = "/" | "/catalog" | "/about-us" | "/blogs" | "/terms" | "/contacts";

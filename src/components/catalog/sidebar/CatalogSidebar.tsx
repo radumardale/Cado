@@ -8,6 +8,8 @@ import ActiveFilters from './ActiveFilters'
 import { AnimatePresence, LayoutGroup } from 'motion/react'
 import { Categories } from '@/lib/enums/Categories'
 import { useCallback } from 'react'
+import { checkboxUpdateUrlParams, resetUrlParams, updateCategoriesParams } from '@/lib/utils'
+import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime'
 
 interface CatalogSidebarProps {
   productContentState: {
@@ -23,8 +25,8 @@ interface CatalogSidebarProps {
     setPrice: (v: number[]) => void,
   },
   categoriesState: {
-    categories: Categories[],
-    setCategories: (v: Categories[]) => void
+    category: Categories | null,
+    setCategory: (v: Categories | null) => void
   },
 }
 
@@ -50,40 +52,55 @@ export default function CatalogSidebar({priceState, categoriesState, ocasionsSta
       <LayoutGroup>
         <AnimatePresence>
         {
-          (categoriesState.categories.length > 0 || ocasionsState.ocasions.length > 0 || productContentState.productContent.length > 0 || priceState.price[0] !== 0 || priceState.price[1] !== 5000) &&
+          (categoriesState.category || ocasionsState.ocasions.length > 0 || productContentState.productContent.length > 0 || priceState.price[0] !== 0 || priceState.price[1] !== 5000) &&
             <ActiveFilters
-              resetAllFilters={() => {
+              resetAllFilters={(router: AppRouterInstance) => {
                 priceState.setPrice([0, 5000]);
-                categoriesState.setCategories([]);
+                categoriesState.setCategory(null);
                 ocasionsState.setOcasions([]);
                 productContentState.setProductContent([]);
+                resetUrlParams(router);
               }}
-              categories={categoriesState.categories}
-              updateCategories={(value: Categories) => {
-                categoriesState.setCategories(categoriesState.categories.filter(item => item !== value))
+              categories={categoriesState.category ? [categoriesState.category] : []}
+              updateCategories={(value: Categories, searchParams: URLSearchParams, router: AppRouterInstance) => {
+                categoriesState.setCategory(value === categoriesState.category ? null : value);
+                updateCategoriesParams(value === categoriesState.category ? [] : [value], searchParams, router);
               }}
         
               ocasions={ocasionsState.ocasions}
-              updateOcasions={(value: string) => {
-              ocasionsState.setOcasions(
-                ocasionsState.ocasions.filter(item => item !== value)
-              )
+              updateOcasions={(value: string, searchParams: URLSearchParams, router: AppRouterInstance) => {
+                ocasionsState.setOcasions(
+                  ocasionsState.ocasions.filter(item => item !== value)
+                )
+                checkboxUpdateUrlParams('ocasions', searchParams, router, ocasionsState.ocasions.filter(item => item !== value));
               }} 
         
               productContent={productContentState.productContent}
-              updateProductContent={(value: string) => {
+              updateProductContent={(value: string, searchParams: URLSearchParams, router: AppRouterInstance) => {
                 productContentState.setProductContent(productContentState.productContent.filter(item => item !== value))
+
+                checkboxUpdateUrlParams('product_content', searchParams, router, productContentState.productContent.filter(item => item !== value));
               }} 
 
               price={priceState.price}
-              resetPrice={() => {
+              resetPrice={(searchParams: URLSearchParams, router: AppRouterInstance) => {
                 priceState.setPrice([0, 5000]);
+
+                const params = new URLSearchParams(searchParams.toString());
+                params.delete('min_price');
+                params.delete('max_price');
+                
+                const newUrl = window.location.pathname + (params.toString() ? `?${params.toString()}` : '');
+                router.push(newUrl, {scroll: false});
               }}
             />
           }
         </AnimatePresence>
         <Accordion title="Categorie">
-          <CategoriesGrid categories={categoriesState.categories} setCategories={categoriesState.setCategories} />
+          <CategoriesGrid 
+            category={categoriesState.category} 
+            setCategory={(value: Categories | null) => categoriesState.setCategory(value === categoriesState.category ? null : value)} 
+          />
         </Accordion>
         <Accordion title="Ocazie">
           <CheckboxList 

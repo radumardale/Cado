@@ -22,7 +22,7 @@ export const getProductProcedure = publicProcedure
 
       await connectMongo();
       
-      const product = await Product.findById(input.id);
+      const product = await Product.findOne({custom_id: input.id});
 
       if (!product) {
         return {

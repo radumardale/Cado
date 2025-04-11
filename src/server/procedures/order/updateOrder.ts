@@ -17,7 +17,7 @@ export const updateOrderProcedure = publicProcedure
     try {
 
       const client = await Client.findOneAndUpdate(
-        { email: input.email }, 
+        { email: input.additional_info.user_data.email }, 
         {}, 
         { upsert: true, new: true }
       );

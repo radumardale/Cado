@@ -19,7 +19,7 @@ export const addOrderProcedure = publicProcedure
       await connectMongo();
 
       const client = await Client.findOneAndUpdate(
-        { email: input.email }, 
+        { email: input.additional_info.user_data.email }, 
         {}, 
         { upsert: true, new: true }
       );

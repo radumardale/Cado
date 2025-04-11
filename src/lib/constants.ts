@@ -1,4 +1,4 @@
-export const productsLimit = 20;
+export const productsLimit = 8;
 
 export const heroImages = [
     "/hero/hero1.jpg",

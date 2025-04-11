@@ -1,27 +1,20 @@
 import { assert, test } from 'vitest'
 // import { imageUploadResponseInterface, uploadImage } from '@/actions/image/uploadImage';
-import { image2 } from './testImage2'
 import { appRouter } from '@/server';
 import { image } from './testImage';
 
 test.skip("uploadImage", async () => {
     const caller = appRouter.createCaller({});
-    const productsRes = (await caller.products.getAllProducts());
+    const blogsRes = (await caller.blog.getLimitedBlogs({limit: 10}));
 
-    assert(productsRes.products != null, productsRes.error);
+    assert(blogsRes.blogs != null, blogsRes.error);
 
 
-    for (const product of productsRes.products) {
+    for (const blog of blogsRes.blogs) {
         await caller.image.updateImage({
-            id: product._id.toString(),
-            destination: 'PRODUCT',
+            id: blog._id.toString(),
+            destination: 'BLOG',
             image: image
-        })
-
-        await caller.image.updateImage({
-            id: product._id.toString(),
-            destination: 'PRODUCT',
-            image: image2
         })
     }
 
