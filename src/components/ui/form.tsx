@@ -147,7 +147,7 @@ function FormMessage({ className, ...props }: React.ComponentProps<"p">) {
     <p
       data-slot="form-message"
       id={formMessageId}
-      className={cn("text-white text-xs absolute top-0 right-6 -translate-y-full bg-red whitespace-nowrap px-1 rounded-t-xs font-normal", className)}
+      className={cn("animate-shake text-white text-xs absolute top-0 right-6 -translate-y-full bg-red whitespace-nowrap px-1 rounded-t-xs font-normal", className)}
       {...props}
     >
       {body}

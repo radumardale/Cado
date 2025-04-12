@@ -25,7 +25,7 @@ export default function CheckoutCart() {
                     {
                         items.map((item, index) => {
                             return (
-                                <div key={index} className='w-full flex gap-2'>
+                                <div key={index} className='w-full flex gap-4'>
                                     <Image src={item.product.images[0]} alt={item.product.title[locale]} width={129} height={164} className='w-32 aspect-[129/164] rounded-lg' />
                                     <div className='flex flex-col justify-between flex-1'>
                                         <div>
@@ -86,7 +86,7 @@ export default function CheckoutCart() {
             <p>Total:</p>
             <p className='font-semibold'>{mounted && items.reduce((acc, item) => acc + item.product.price, 0).toLocaleString()} MDL</p>
         </div>
-        <button className='h-12 w-full bg-blue-2 text-white rounded-3xl font-manrope font-semibold cursor-pointer border hover:opacity-75 transition duration-200' form="checkout-form">Continuă plata</button>
+        <button className='h-12 w-full bg-blue-2 text-white rounded-3xl font-manrope font-semibold cursor-pointer border hover:opacity-75 transition duration-300' form="checkout-form">Continuă plata</button>
 
     </div>
   )

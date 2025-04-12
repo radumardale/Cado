@@ -109,6 +109,15 @@
   --breakpoint-2xl: 1636px;
   --container-3xl: 2048px;
   --text-3xl: 2.5rem;
+  --animate-shake: shake 0.35s ease-in-out;
+
+  @keyframes shake {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    50% { transform: translateX(5px); }
+    75% { transform: translateX(-5px); }
+    100% { transform: translateX(0); }
+  }
 }
 
 @layer base {
@@ -191,4 +200,12 @@ html {
 body.carousel {
   overflow: hidden;
   margin-right: 10px;
+}
+
+.footer-link img {
+  filter: brightness(0) saturate(100%) invert(100%) sepia(100%) saturate(0%) hue-rotate(252deg) brightness(108%) contrast(96%);
+}
+
+.footer-link:hover img {
+  filter: none;
 }

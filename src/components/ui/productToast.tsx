@@ -1,5 +1,6 @@
 'use client';
 
+import { Link } from '@/i18n/navigation';
 import { X } from 'lucide-react';
 import Image from 'next/image';
 import React from 'react';
@@ -34,7 +35,9 @@ function ToastCustom(props: ToastProps) {
             <div className='font-manrope font-semibold py-2 px-4 border border-gray rounded-3xl w-fit'>{price} MDL</div>
         </div>
       </div>
-      <button className='h-12 w-full bg-blue-2 text-white rounded-3xl font-manrope font-semibold cursor-pointer border hover:opacity-75 transition duration-200'>Spre achitare</button>
+      <Link href="/checkout">
+        <button className='h-12 w-full bg-blue-2 text-white rounded-3xl font-manrope font-semibold cursor-pointer border hover:opacity-75 transition duration-300'>Spre achitare</button>
+      </Link>
     </div>
   );
 }

@@ -52,7 +52,9 @@ export default function ActiveFilters({categories, updateCategories, ocasions, u
                     })
                 }
                 {(price[0] !== 0 || price[1] !== 5000) && <ActiveFiltersButton title={`${price[0]} - ${price[1]} (MDL)`} onClick={() => {resetPrice(searchParams, router)}}/>}
-                <button className='text-gray underline cursor-pointer p-2' onClick={() => {resetAllFilters(router)}}>Resetează</button>
+                <button className='text-gray cursor-pointer p-2' onClick={() => {resetAllFilters(router)}}>
+                    <span className='relative after:contetn-[""] after:absolute after:left-0 after:bottom-0 after:w-0 after:h-[1px] after:bg-gray hover:after:w-full after:transition-all after:duration-300'>Resetează</span>
+                </button>
             </div>
     </motion.div>
   )

@@ -3,6 +3,7 @@
 import React, { useRef } from 'react'
 import BlogCard from './BlogCard'
 import { Swiper, SwiperRef, SwiperSlide } from 'swiper/react';
+import { Autoplay } from 'swiper/modules';
 
 import 'swiper/css';
 import BlogTitle from './BlogTitle';
@@ -28,6 +29,10 @@ export default function BlogCarousel() {
         <div className='col-span-15 -mr-16 overflow-hidden mb-42'>
             <div className='-mr-18 rounded-tl-2xl mt-8'>
                 <Swiper
+                    modules={[Autoplay]}
+                    autoplay={{
+                        delay: 5000,
+                    }}
                     ref={swiperRef}
                     slidesPerView={4}
                     loop={true}
@@ -45,7 +50,7 @@ export default function BlogCarousel() {
                         <>
                             {data.blogs.map((blog, index) => (
                                 <SwiperSlide key={index} className='pr-6 mb-1'>
-                                    <BlogCard src={blog.image} tag={blog.tag} title={blog.title[locale]}/>
+                                    <BlogCard id={blog._id} src={blog.image} tag={blog.tag} title={blog.title[locale]}/>
                                 </SwiperSlide>
                             ))}
                         </>

@@ -36,6 +36,10 @@ export const routing = defineRouting({
   '/catalog/product/[id]': {
       ru: '/catalog/product/[id]',
       ro: '/catalog/produs/[id]',
+    },
+    "/checkout": {
+      ru: "/checkout",
+      ro: "/achitare"
     }
   }
 });

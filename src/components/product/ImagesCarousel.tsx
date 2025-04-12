@@ -30,7 +30,7 @@ export default function ImagesCarousel({setCarouselOpen, product, locale, initia
             {
                 product.images.map((image, index) => {
                     return(
-                        <button key={index} onClick={() => {setActiveImage(index)}} className={`cursor-pointer relative after:content-[''] after:absolute after:w-full after:h-full after:rounded-lg after:bg-black after:top-0 after:left-0 after:transition after:duration-200 ${activeImage === index ? "after:opacity-0" : "after:opacity-50"}`}>
+                        <button key={index} onClick={() => {setActiveImage(index)}} className={`cursor-pointer relative after:content-[''] after:absolute after:w-full after:h-full after:rounded-lg after:bg-black after:top-0 after:left-0 after:transition after:duration-300 ${activeImage === index ? "after:opacity-0" : "after:opacity-50"}`}>
                             <Image src={image} alt={product.title[locale]} width={97} height={97} className='rounded-lg size-24 object-cover' />
                         </button>
                     )

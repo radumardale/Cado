@@ -6,6 +6,7 @@ import { ArrowUp } from 'lucide-react'
 import Image from 'next/image'
 import React from 'react'
 import CustomLink from '../CustomLink'
+import { default as NextLink } from 'next/link'
 
 export default function Footer() {
     const lenis = useLenis();
@@ -56,21 +57,21 @@ export default function Footer() {
             <div className='col-span-3'>
                 <p className='text-white font-manrope text-2xl font-semibold mb-6'>Urmărește-ne</p>
                 <div className="flex gap-4">
-                    <div className='bg-white size-8 flex justify-center items-center rounded-full'>
+                    <NextLink href="/" className='border border-white hover:bg-white size-8 flex justify-center items-center rounded-full footer-link'>
                         <Image src="/icons/instagram.svg" alt="instagram logo" width={16} height={16} className='size-4' />
-                    </div>
-                    <div className='bg-white size-8 flex justify-center items-center rounded-full'>
+                    </NextLink>
+                    <NextLink href="/" className='border border-white hover:bg-white size-8 flex justify-center items-center rounded-full footer-link'>
                         <Image src="/icons/facebook.svg" alt="facebook logo" width={16} height={16} className='size-4' />
-                    </div>
-                    <div className='bg-white size-8 flex justify-center items-center rounded-full'>
+                    </NextLink>
+                    <NextLink href="/" className='border border-white hover:bg-white size-8 flex justify-center items-center rounded-full footer-link'>
                         <Image src="/icons/tiktok.svg" alt="tiktok logo" width={16} height={16} className='size-4' />
-                    </div>
-                    <div className='bg-white size-8 flex justify-center items-center rounded-full'>
+                    </NextLink>
+                    <NextLink href="/" className='border border-white hover:bg-white size-8 flex justify-center items-center rounded-full footer-link'>
                         <Image src="/icons/pinterest.svg" alt="pinterest logo" width={16} height={16} className='size-4' />
-                    </div>
-                    <div className='bg-white size-8 flex justify-center items-center rounded-full'>
+                    </NextLink>
+                    <NextLink href="/" className='border border-white hover:bg-white size-8 flex justify-center items-center rounded-full footer-link'>
                         <Image src="/icons/linkedin.svg" alt="linkedin logo" width={16} height={16} className='size-4' />
-                    </div>
+                    </NextLink>
                 </div>
             </div>
 
@@ -88,7 +89,7 @@ export default function Footer() {
             </div>
             <div className="flex items-center gap-2 group">
               <span className="text-white">by Studio Modvis</span>
-              <Image src="/icons/modvis.svg" alt="studio-modvis" className="transition duration-200 group-hover:rotate-[360deg]" width={10} height={10}/>
+              <Image src="/icons/modvis.svg" alt="studio-modvis" className="transition duration-300 group-hover:rotate-[360deg]" width={10} height={10}/>
             </div>
         </div>
     </div>

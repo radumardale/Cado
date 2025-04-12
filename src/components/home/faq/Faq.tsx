@@ -27,7 +27,7 @@ export default function Faq() {
             })
         }
         <p className='col-span-full text-center mt-8'>Nu ai găsit răspunsul la întrebarea ta? Poți consulta oricând lista noastră cu informații esențiale aici:</p>
-        <SeeMoreButton className='mt-4 mb-24' />
+        <SeeMoreButton href='/terms' className='mt-4 mb-24' />
     </>
   )
 }

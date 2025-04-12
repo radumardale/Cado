@@ -32,7 +32,7 @@ export default function CheckoutForm() {
             delivery_method: DeliveryMethod.HOME_DELIVERY,
             additional_info: {
                 delivery_address: {
-                    city: "CHISINAU"
+                    region: "CHISINAU"
                 },
                 enitity_type: ClientEntity.Natural
             },
@@ -48,7 +48,7 @@ export default function CheckoutForm() {
     const entityType = form.watch("additional_info.enitity_type");
 
   return (
-    <div className='lg:col-span-7 2x:col-span-6 lg:col-start-2 2xl:col-start-3 grid grid-cols-6 gap-x-6 h-fit'>
+    <div className='lg:col-span-7 2xl:col-span-6 lg:col-start-2 2xl:col-start-3 grid grid-cols-6 gap-x-6 h-fit'>
         <Form {...form}>
             <form id="checkout-form" onSubmit={form.handleSubmit(onSubmit)} className='col-span-full grid grid-cols-6 gap-x-6 h-fit'>
                 <p className=' text-2xl font-semibold leading-7 mb-6 col-span-full font-manrope'>Metoda de expediere</p>
@@ -72,7 +72,7 @@ export default function CheckoutForm() {
                                         </FormControl>
                                         <label 
                                             htmlFor="home-delivery" 
-                                            className={`${field.value === DeliveryMethod.HOME_DELIVERY ? "bg-black text-white" : "bg-white"} transition duration-200 py-3 w-full flex gap-2 font-semibold justify-center items-center rounded-3xl border border-black cursor-pointer`}
+                                            className={`${field.value === DeliveryMethod.HOME_DELIVERY ? "bg-black text-white" : "bg-white"} transition duration-300 py-3 w-full flex gap-2 font-semibold justify-center items-center rounded-3xl border border-black cursor-pointer`}
                                         >
                                             <Truck strokeWidth={1.25} className='size-6' />
                                             <p className=' font-semibold'>Livrare domiciliu</p>
@@ -85,7 +85,7 @@ export default function CheckoutForm() {
                                         </FormControl>
                                         <label 
                                             htmlFor="pickup" 
-                                            className={`${field.value === DeliveryMethod.PICKUP ? "bg-black text-white" : "bg-white"} transition duration-200 py-3 flex gap-2 justify-center items-center font-semibold rounded-3xl border border-black cursor-pointer`}
+                                            className={`${field.value === DeliveryMethod.PICKUP ? "bg-black text-white" : "bg-white"} transition duration-300 py-3 flex gap-2 justify-center items-center font-semibold rounded-3xl border border-black cursor-pointer`}
                                         >
                                             <MapPin strokeWidth={1.25} className='size-6' />
                                             <p className=' font-semibold'>Ridicare personală</p>
@@ -98,8 +98,13 @@ export default function CheckoutForm() {
                     )}
                 />
 
-                <p className=' text-2xl font-semibold leading-7 mb-6 col-span-full mt-12'>Punct de ridicare</p>
-                <p className='col-span-full mb-12'>Ridicarea comenzii este posibilă pe <span className='font-semibold'>str. Alecu Russo 15, of. 59, Chișinău,  Luni-Vineri 9:00 - 16:00 </span> </p>
+                {
+                    deliveryMethod === DeliveryMethod.PICKUP && 
+                    <>
+                        <p className=' text-2xl font-semibold leading-7 mb-6 col-span-full mt-12'>Punct de ridicare</p>
+                        <p className='col-span-full'>Ridicarea comenzii este posibilă pe <span className='font-semibold'>str. Alecu Russo 15, of. 59, Chișinău,  Luni-Vineri 9:00 - 16:00 </span> </p>
+                    </>
+                }
 
                 <p className=' text-2xl font-semibold leading-7 mb-2 col-span-full mt-12 font-manrope'>Informație client</p>
                 <p className='col-span-full mb-6'>Adresa trebuie să fie în Republica Moldova.</p>
@@ -256,7 +261,7 @@ export default function CheckoutForm() {
                                     </FormControl>
                                     <label 
                                     htmlFor="entity-natural" 
-                                    className={`${field.value === ClientEntity.Natural ? "bg-black text-white" : "bg-white"} transition duration-200 py-3 w-full flex gap-2 font-semibold justify-center items-center rounded-3xl border border-black cursor-pointer`}
+                                    className={`${field.value === ClientEntity.Natural ? "bg-black text-white" : "bg-white"} transition duration-300 py-3 w-full flex gap-2 font-semibold justify-center items-center rounded-3xl border border-black cursor-pointer`}
                                     >
                                     <User strokeWidth={1.25} className='size-6' />
                                     <p className='font-semibold'>Persoană fizică</p>
@@ -269,7 +274,7 @@ export default function CheckoutForm() {
                                     </FormControl>
                                     <label 
                                     htmlFor="entity-legal" 
-                                    className={`${field.value === ClientEntity.Legal ? "bg-black text-white" : "bg-white"} transition duration-200 py-3 flex gap-2 justify-center items-center font-semibold rounded-3xl border border-black cursor-pointer`}
+                                    className={`${field.value === ClientEntity.Legal ? "bg-black text-white" : "bg-white"} transition duration-300 py-3 flex gap-2 justify-center items-center font-semibold rounded-3xl border border-black cursor-pointer`}
                                     >
                                     <BriefcaseBusiness strokeWidth={1.25} className='size-6' />
                                     <p className='font-semibold'>Persoană juridică</p>
@@ -530,7 +535,7 @@ export default function CheckoutForm() {
                                 </FormControl>
                                 <label 
                                 htmlFor="payment-card" 
-                                className={`${field.value === OrderPaymentMethod.Paynet ? "bg-black text-white" : "bg-white"} transition duration-200 py-3 w-full flex gap-2 font-semibold justify-center items-center rounded-3xl border border-black cursor-pointer`}
+                                className={`${field.value === OrderPaymentMethod.Paynet ? "bg-black text-white" : "bg-white"} transition duration-300 py-3 w-full flex gap-2 font-semibold justify-center items-center rounded-3xl border border-black cursor-pointer`}
                                 >
                                 <CreditCard strokeWidth={1.25} className='size-6' />
                                 <p className='font-semibold'>Achitare online</p>
@@ -543,7 +548,7 @@ export default function CheckoutForm() {
                                 </FormControl>
                                 <label 
                                 htmlFor="payment-cash" 
-                                className={`${field.value === OrderPaymentMethod.Cash ? "bg-black text-white" : "bg-white"} transition duration-200 py-3 flex gap-2 justify-center items-center font-semibold rounded-3xl border border-black cursor-pointer`}
+                                className={`${field.value === OrderPaymentMethod.Cash ? "bg-black text-white" : "bg-white"} transition duration-300 py-3 flex gap-2 justify-center items-center font-semibold rounded-3xl border border-black cursor-pointer`}
                                 >
                                 <BanknoteIcon strokeWidth={1.25} className='size-6' />
                                 <p className='font-semibold'>Achitare în numerar</p>

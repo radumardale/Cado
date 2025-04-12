@@ -1,3 +1,4 @@
+import { Link } from '@/i18n/navigation';
 import { CartInterface } from '@/lib/types/CartInterface';
 import { easeInOutCubic } from '@/lib/utils';
 import { Minus, Plus, ShoppingBag, X } from 'lucide-react';
@@ -49,7 +50,7 @@ export default function CartSidebar({items, locale, setSidebarOpen, setValue}: C
                         {
                             items.map((item, index) => {
                                 return (
-                                    <div key={index} className='w-full flex gap-2'>
+                                    <div key={index} className='w-full flex gap-4'>
                                         <Image src={item.product.images[0]} alt={item.product.title[locale]} width={129} height={164} className='w-32 aspect-[129/164] rounded-lg' />
                                         <div className='flex flex-col justify-between flex-1'>
                                             <div>
@@ -68,13 +69,14 @@ export default function CartSidebar({items, locale, setSidebarOpen, setValue}: C
                                                         }}
                                                     ><Minus strokeWidth={1.5} className='w-6' /></button>
 
-                                                    <span>{item.quantity}</span>
+                                                    <span className={`${item.quantity}`}>{item.quantity}</span>
 
                                                     <button 
                                                         disabled={item.quantity === item.product.stock_availability} 
                                                         onClick={() => {
                                                             const newItems = [...items];
                                                             newItems[index].quantity = Math.min(newItems[index].product.stock_availability, newItems[index].quantity + 1);
+                                                            console.log(newItems[index].product)
                                                             setValue(newItems);
                                                         }} 
                                                         className='cursor-pointer disabled:pointer-events-none disabled:text-gray'
@@ -82,7 +84,7 @@ export default function CartSidebar({items, locale, setSidebarOpen, setValue}: C
                                                 </div>
 
                                                 <button 
-                                                    className='text-gray underline cursor-pointer' 
+                                                    className='text-gray cursor-pointer relative after:contetn-[""] after:absolute after:left-0 after:bottom-0 after:w-0 after:h-[1px] after:bg-gray hover:after:w-full after:transition-all after:duration-300' 
                                                     onClick={() => {
                                                         const newItems = items.filter((_, i) => i !== index);
                                                         setValue(newItems);
@@ -106,7 +108,13 @@ export default function CartSidebar({items, locale, setSidebarOpen, setValue}: C
                     <p>Total:</p>
                     <p className='font-semibold'>{items.reduce((acc, item) => acc + item.product.price, 0).toLocaleString()} MDL</p>
                 </div>
-                <button className='h-12 w-full bg-blue-2 text-white rounded-3xl font-manrope font-semibold cursor-pointer border hover:opacity-75 transition duration-200'>{items.length > 0 ? "Spre achitare" : "Întoarce-te în magazin"}</button>
+                {
+                    items.length > 0 ?
+                    <Link href="/checkout">
+                        <button className='h-12 w-full bg-blue-2 text-white rounded-3xl font-manrope font-semibold cursor-pointer border hover:opacity-75 transition duration-300'>Spre achitare</button>
+                    </Link> :
+                    <button onClick={() => {setSidebarOpen(false)}} className='h-12 w-full bg-blue-2 text-white rounded-3xl font-manrope font-semibold cursor-pointer border hover:opacity-75 transition duration-300'>Întoarce-te în magazin</button>
+                }
             </div>
         </motion.div>
     </motion.div>

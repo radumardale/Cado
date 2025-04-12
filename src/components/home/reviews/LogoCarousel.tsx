@@ -4,7 +4,7 @@ import { reviewLogos } from '@/lib/constants';
 import { easeInOutCubic } from '@/lib/utils';
 import { motion } from 'motion/react'
 import Image from 'next/image';
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import TextCarousel from './TextCarousel';
 import TitlesCarousel from './TitlesCarousel';
 
@@ -18,8 +18,23 @@ export default function LogoCarousel() {
     const [isSlideInitialized, setSliderInitialized] = useState(false);
     const [isAnimationPlaying, setAnimationPlaying] = useState(false);
     const [isMovingForward, setIsMovingForward] = useState(true);
+    const intervalRef = useRef<NodeJS.Timeout>(null);
+
+    useEffect(() => {
+        // Initial interval setup
+        intervalRef.current = setInterval(moveItemsForward, 5000);
+    
+        // Cleanup
+        return () => {
+          if (intervalRef.current) {
+            clearInterval(intervalRef.current);
+          }
+        };
+      }, [isAnimationPlaying]);
 
     const moveItemsForward = () => {
+      if (isAnimationPlaying) return;
+
         setIsMovingForward(true);
         setSliderInitialized(true);
         setAnimationPlaying(true);
@@ -35,9 +50,17 @@ export default function LogoCarousel() {
             value: newValue > steps.length - 1 ? 0 : newValue
         };
         }));
+
+        if (intervalRef.current) {
+            clearInterval(intervalRef.current);
+          }
+
+      intervalRef.current = setInterval(moveItemsForward, 5000);
     };
     
     const moveItemsBackward = () => {
+      if (isAnimationPlaying) return;
+
         setIsMovingForward(false);
         setSliderInitialized(true);
         setAnimationPlaying(true);
@@ -53,6 +76,12 @@ export default function LogoCarousel() {
             value: newValue < 0 ? steps.length - 1 : newValue
         };
         }));
+
+        if (intervalRef.current) {
+            clearInterval(intervalRef.current);
+          }
+      intervalRef.current = setInterval(moveItemsForward, 5000);
+          
     };
 
   return (

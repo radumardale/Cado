@@ -26,7 +26,7 @@ export default function ProductCard({product, category}: ProductCardInterface) {
         </div>
         <Link href={{pathname: "/catalog/product/[id]", params: {id: product.custom_id}, query: category ? {category: category} : {}}} className='col-span-3 group cursor-pointer'>
             <p className='font-manrope font-semibold mb-2'>{product.title[locale]}</p>
-            <div className='font-manrope font-semibold py-2 px-4 border border-gray rounded-3xl w-fit'>{product.price} MDL</div>
+            <div className='font-manrope font-semibold py-2 px-4 border border-gray rounded-3xl w-fit'>{product.price.toLocaleString()} MDL</div>
         </Link>
     </div>
   )

@@ -4,12 +4,15 @@ import { ArrowRight } from 'lucide-react'
 import React, { useState } from 'react'
 import { motion } from "motion/react"
 import { easeInOutCubic } from '@/lib/utils';
+import { Link } from '@/i18n/navigation';
+import { Pathnames } from '@/i18n/routing';
 
 interface SeeMoreButtonInterface {
-    className?: string
+    className?: string,
+    href?: Pathnames
 }
 
-export default function SeeMoreButton({className}: SeeMoreButtonInterface) {
+export default function SeeMoreButton({className, href="/catalog"}: SeeMoreButtonInterface) {
     const [isButtonActive, setButtonActive] = useState(false);
 
     const buttonVariants = {
@@ -31,7 +34,7 @@ export default function SeeMoreButton({className}: SeeMoreButtonInterface) {
     }
 
   return (
-    <div className={`col-span-full flex justify-center ${className}`}>
+    <Link href={href} className={`col-span-full flex justify-center ${className}`}>
         <motion.button 
             initial={false}
             variants={buttonVariants} 
@@ -50,8 +53,8 @@ export default function SeeMoreButton({className}: SeeMoreButtonInterface) {
             >
                 Vezi mai multe
             </motion.span>
-            <ArrowRight className={`size-6 absolute z-20 right-3 top-1/2 -translate-y-1/2 transition duration-200 ${isButtonActive ? "" : "-rotate-45 delay-300"}`}/>
+            <ArrowRight className={`size-6 absolute z-20 right-3 top-1/2 -translate-y-1/2 transition duration-300 ${isButtonActive ? "" : "-rotate-45 delay-300"}`}/>
         </motion.button>
-    </div>
+    </Link>
   )
 }

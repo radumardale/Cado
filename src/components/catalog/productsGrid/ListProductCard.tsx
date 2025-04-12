@@ -1,8 +1,11 @@
 import { Link } from '@/i18n/navigation';
+import { CartInterface } from '@/lib/types/CartInterface';
+import { addToCart } from '@/lib/utils';
 import { ProductInterface } from '@/models/product/types/productInterface'
 import { useLocale } from 'next-intl';
 import Image from 'next/image'
 import React from 'react'
+import { useLocalStorage } from 'usehooks-ts';
 
 interface ProductCardInterface {
     product: ProductInterface
@@ -10,9 +13,10 @@ interface ProductCardInterface {
 
 export default function ListProductCard({product}: ProductCardInterface) {
     const locale = useLocale();
+    const [value, setValue] = useLocalStorage<CartInterface[]>("cart", []);
 
   return (
-    <Link href={{pathname: "/catalog/product/[id]", params: {id: product.custom_id}}} className='col-span-full grid grid-cols-10 gap-x-6 not-last:border-b not-last:border-gray not-last:pb-6'>
+    <div className='col-span-full grid grid-cols-10 gap-x-6 not-last:border-b not-last:border-gray not-last:pb-6'>
         <div className='relative col-span-3 group aspect-[339/425]'>
           <Image src={product.images[0]} width={798} height={1198} alt={product.title.ro} className='w-full h-full object-cover object-top rounded-2xl opacity-100 group-hover:opacity-0 z-10 transition duration-300'/>  
           <Image src={product.images[1]} width={798} height={1198} alt={product.title.ro} className='absolute left-0 top-0 h-full w-full object-cover object-top rounded-2xl transition duration-300 -z-10'/>  
@@ -40,10 +44,12 @@ export default function ListProductCard({product}: ProductCardInterface) {
             </div>
         </div>
         <div className='col-span-3 relative flex flex-col items-end justify-end gap-2'>
-            <button className='h-12 w-full bg-blue-2 text-white rounded-3xl font-manrope font-semibold cursor-pointer border'>Adaugă în coș</button>
-            <button className='h-12 w-full border border-black rounded-3xl font-manrope font-semibold cursor-pointer'>Vezi produsul</button>
-            <div className='absolute top-0 right-0 font-manrope font-semibold py-2 px-4 border border-gray rounded-3xl w-fit'>{product.price} MDL</div>
+            <button onClick={() => {addToCart(product, 1, value, setValue, locale)}} className='h-12 w-full bg-blue-2 text-white rounded-3xl font-manrope font-semibold cursor-pointer border'>Adaugă în coș</button>
+            <Link href={{pathname: "/catalog/product/[id]", params: {id: product.custom_id}}} className='w-full'>
+              <button className='h-12 w-full border border-black rounded-3xl font-manrope font-semibold cursor-pointer'>Vezi produsul</button>
+            </Link>
+            <div className='absolute top-0 right-0 font-manrope font-semibold py-2 px-4 border border-gray rounded-3xl w-fit'>{product.price.toLocaleString()} MDL</div>
         </div>
-    </Link>
+    </div>
   )
 }

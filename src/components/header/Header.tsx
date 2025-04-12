@@ -62,7 +62,7 @@ export default function Header({category, breadcrumbs = false, productInfo}: Hea
         <div className='col-span-full -mr-16 -ml-16 sticky top-0 h-20 z-50'>
                 <motion.div 
                     className='grid grid-cols-full gap-x-6 col-span-full bg-white overflow-hidden top-0 h-20' 
-                    transition={{ ease: easeInOutCubic, duration: .4 }} 
+                    transition={{ ease: easeInOutCubic, duration: .55 }} 
                     variants={headerVariants}
                     animate={isCatalogMenuOpen ? "open" : "close"}>
                         <div className="grid grid-cols-full gap-x-6 col-span-full mx-16 relative">

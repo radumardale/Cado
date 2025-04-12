@@ -19,6 +19,7 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectVa
 import { ChevronDown } from "lucide-react"
 import { Checkbox } from "../ui/checkbox"
 import { Link } from "@/i18n/navigation"
+import { toast } from "@/components/ui/contactToast";
 
 export default function ContactForm() {
     const form = useForm<z.infer<typeof sendMessageRequest>>({
@@ -34,7 +35,8 @@ export default function ContactForm() {
       })
 
     function onSubmit(values: z.infer<typeof sendMessageRequest>) {
-        console.log(values)
+        console.log(values);
+        toast();
     }
 
     return (
@@ -51,17 +53,17 @@ export default function ContactForm() {
                                 <FormMessage />
                                     <Select onValueChange={field.onChange} >
                                         <FormControl>
-                                            <SelectTrigger className="cursor-pointer flex h-12 max-h-none items-center px-6 gap-2 border border-gray rounded-3xl text-base text-black font-manrope font-semibold w-full">
+                                            <SelectTrigger className="text-base cursor-pointer flex h-12 max-h-none items-center px-6 gap-2 border border-gray rounded-3xl text-black  font-semibold w-full">
                                                 <SelectValue placeholder="Alege subiectul" />
                                                 <ChevronDown className='size-5' strokeWidth={1.5}/>
                                             </SelectTrigger>
                                         </FormControl>  
                                         <SelectContent className="border-gray">
                                             <SelectGroup>
-                                                <SelectItem className="text-base cursor-pointer font-semibold font-manrope" value={"ORDER_ISSUE"}>Recomandate</SelectItem>
-                                                <SelectItem className="text-base cursor-pointer font-semibold font-manrope" value={"GIFT_ASSITANCE"}>Produse noi</SelectItem>
-                                                <SelectItem className="text-base cursor-pointer font-semibold font-manrope" value={"COMPANY_COLLABORATION"}>Preț: Mic la Mare</SelectItem>
-                                                <SelectItem className="text-base cursor-pointer font-semibold font-manrope" value={"OTHER"}>Preț: Mare la Mic</SelectItem>
+                                                <SelectItem className="text-base cursor-pointer font-semibold " value={"ORDER_ISSUE"}>Problemă cu comanda</SelectItem>
+                                                <SelectItem className="text-base cursor-pointer font-semibold " value={"GIFT_ASSITANCE"}>Consultanță (persoană fizică)</SelectItem>
+                                                <SelectItem className="text-base cursor-pointer font-semibold " value={"COMPANY_COLLABORATION"}>Oferte de colaborare (persoană juridică)</SelectItem>
+                                                <SelectItem className="text-base cursor-pointer font-semibold " value={"OTHER"}>Altele</SelectItem>
                                             </SelectGroup>
                                         </SelectContent>
                                     </Select>
@@ -77,7 +79,7 @@ export default function ContactForm() {
                         render={({ field }) => (
                             <FormItem className="text-base text-black font-semibold w-full">
                                 <FormMessage />
-                                <FormControl className="border font-manrope rounded-3xl border-gray shadow-none p-0 text-black placeholder:text-black focus-visible:outline-none">
+                                <FormControl className="border  rounded-3xl border-gray shadow-none p-0 text-black placeholder:text-black focus-visible:outline-none">
                                     <Input className="h-12 w-full px-6 rounded-3xl" placeholder="Nume*" {...field} />
                                 </FormControl>
                             </FormItem>
@@ -92,7 +94,7 @@ export default function ContactForm() {
                         render={({ field }) => (
                             <FormItem className="text-black w-full">
                                 <FormMessage />
-                                <FormControl className="border font-manrope rounded-3xl border-gray shadow-none p-0 text-black placeholder:text-black focus-visible:outline-none">
+                                <FormControl className="border  rounded-3xl border-gray shadow-none p-0 text-black placeholder:text-black focus-visible:outline-none">
                                     <Input className="font-semibold text-base h-12 w-full px-6 rounded-3xl" placeholder="Email*" {...field} />
                                 </FormControl>
                             </FormItem>
@@ -107,7 +109,7 @@ export default function ContactForm() {
                         render={({ field }) => (
                             <FormItem className="text-black font-semibold w-full">
                                 <FormMessage />
-                                <FormControl className="border font-manrope rounded-3xl border-gray shadow-none p-0 text-black placeholder:text-black focus-visible:outline-none">
+                                <FormControl className="border  rounded-3xl border-gray shadow-none p-0 text-black placeholder:text-black focus-visible:outline-none">
                                     <Input className="text-base h-12 w-full px-6 rounded-3xl" placeholder="Telefon*" {...field} />
                                 </FormControl>
                             </FormItem>
@@ -116,7 +118,7 @@ export default function ContactForm() {
                 </div>
 
                 <div className="col-span-full mt-4">
-                    <p className="font-semibold font-manrope mb-4">Modul preferat de contact?</p>
+                    <p className="font-semibold  mb-4">Modul preferat de contact?</p>
                     <div className="flex gap-8">
                         <FormField
                             control={form.control}
@@ -175,7 +177,7 @@ export default function ContactForm() {
                     render={({ field }) => (
                         <FormItem className="col-span-full mt-4">
                             <FormControl>
-                                <Textarea className="placeholder:text-black h-40 items-center px-6 border border-gray rounded-3xl text-base text-black font-manrope font-semibold col-span-full" placeholder="Mesaj*" {...field}/>
+                                <Textarea className="placeholder:text-black h-40 items-center px-6 border border-gray rounded-3xl text-base text-black  font-semibold col-span-full" placeholder="Mesaj*" {...field}/>
                             </FormControl>
                             <FormMessage />
                         </FormItem>
@@ -197,14 +199,14 @@ export default function ContactForm() {
                                                 }}
                                             />
                                         </FormControl>
-                                        <div className={`${form.formState.errors.termsAccepted ? 'text-destructive' : ''}`}>
+                                        <div className={`${form.formState.errors.termsAccepted ? 'text-destructive animate-shake' : ''}`}>
                                             Sunt de acord cu <Link href="/terms" className="underline">Termenii și condițiile și cu Politica de confidențialitate</Link>
                                         </div>
                                 </div>
                         </FormItem>
                     )}
                 />  
-                <Button type="submit" className="font-manrope hover:bg-blue-2 text-white font-semibold text-base cursor-pointer col-span-full h-12 rounded-3xl bg-blue-2 mt-8 mb-24">Transmite mesajul</Button>
+                <Button type="submit" className=" hover:bg-blue-2 text-white font-semibold text-base cursor-pointer col-span-full h-12 rounded-3xl bg-blue-2 mt-8 mb-24">Transmite mesajul</Button>
             </form>
             </Form>
         </>
