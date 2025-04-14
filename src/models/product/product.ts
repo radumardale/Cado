@@ -21,6 +21,10 @@ const ProductSchema = new mongoose.Schema<ProductInterface>({
     type: ProductInfoSchema,
     required: true,
   },
+  long_description: {
+    type: ProductInfoSchema,
+    required: true
+  },
   set_description: {
     type: ProductInfoSchema,
     required: false

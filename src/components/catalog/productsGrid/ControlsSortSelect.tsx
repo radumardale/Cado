@@ -52,7 +52,7 @@ export function ControlsSortSelect({setSortBy, currentSort = SortBy.RECOMMENDED}
       defaultValue={currentSort}
       onValueChange={handleSortChange}
     >
-      <SelectTrigger className="cursor-pointer flex h-12 max-h-none items-center px-6 gap-2 border border-gray rounded-3xl mr-4 text-base text-black font-manrope font-semibold">
+      <SelectTrigger className="cursor-pointer flex h-12 max-h-none items-center px-6 gap-2 border border-gray rounded-3xl lg:mr-4 text-base text-black font-manrope font-semibold">
         <ArrowUpDown className='size-5' strokeWidth={1.5}/>
         <SelectValue placeholder="Sortează după" />
       </SelectTrigger>

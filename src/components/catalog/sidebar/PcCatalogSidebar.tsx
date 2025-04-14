@@ -8,10 +8,8 @@ import ActiveFilters from './ActiveFilters'
 import { AnimatePresence, LayoutGroup } from 'motion/react'
 import { Categories } from '@/lib/enums/Categories'
 import { useCallback } from 'react'
-import { checkboxUpdateUrlParams, easeInOutCubic, resetUrlParams, updateCategoriesParams } from '@/lib/utils'
+import { checkboxUpdateUrlParams, resetUrlParams, updateCategoriesParams } from '@/lib/utils'
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime'
-import { motion } from 'motion/react'
-import { Plus } from 'lucide-react'
 
 interface CatalogSidebarProps {
   productContentState: {
@@ -30,11 +28,9 @@ interface CatalogSidebarProps {
     category: Categories | null,
     setCategory: (v: Categories | null) => void
   },
-  setSidebarOpen: (v: boolean) => void,
-  isSidebarOpen: boolean
 }
 
-export default function CatalogSidebar({priceState, categoriesState, ocasionsState, productContentState, setSidebarOpen, isSidebarOpen}: CatalogSidebarProps) {
+export default function PcCatalogSidebar({priceState, categoriesState, ocasionsState, productContentState}: CatalogSidebarProps) {
   const updateOcasions = useCallback((value: Ocasions) => {
     ocasionsState.setOcasions(
       ocasionsState.ocasions.includes(value) 
@@ -52,14 +48,7 @@ export default function CatalogSidebar({priceState, categoriesState, ocasionsSta
   }, [productContentState.productContent, productContentState.setProductContent]);
 
   return (
-    <motion.div 
-      initial={{x: '-100%'}}
-      animate={isSidebarOpen ? {x: 0, transition: {duration: .4, ease: easeInOutCubic}} : {x: '-100%', transition: {duration: .4, ease: easeInOutCubic}}} 
-      data-lenis-prevent 
-      className="lg:hidden scroll-bar-custom w-screen lg:w-auto fixed lg:col-start-1 lg:col-span-3 h-screen lg:h-[calc(100vh-13rem)] overflow-y-scroll lg:mt-12 lg:sticky left-0 top-0 lg:top-[9rem] pr-4 pl-4 lg:pl-0 z-50 lg:z-10 bg-white pt-16 lg:pt-0">
-        <button className='cursor-pointer absolute right-4 top-4 lg:hidden' onClick={() => {setSidebarOpen(false)}}>
-            <Plus className='size-5 rotate-45' strokeWidth={1.75} />
-        </button>
+    <div data-lenis-prevent className="hidden lg:block scroll-bar-custom col-start-1 col-span-3 h-[calc(100vh-13rem)] overflow-y-scroll mt-12 sticky top-[9rem] pr-4">
       <LayoutGroup>
         <AnimatePresence>
         {
@@ -140,8 +129,6 @@ export default function CatalogSidebar({priceState, categoriesState, ocasionsSta
             }}  />
         </Accordion>
       </LayoutGroup>
-
-      <button onClick={() => {setSidebarOpen(false)}} className='h-12 w-full bg-blue-2 text-white rounded-3xl font-manrope font-semibold cursor-pointer border mt-10 mb-16'>Actualizează</button>
-    </motion.div>
+    </div>
   )
 }

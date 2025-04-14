@@ -11,6 +11,7 @@ import SortBy from "@/lib/enums/SortBy";
 import { useSearchParams } from "next/navigation";
 import Header from "../header/Header";
 import { productsLimit } from "@/lib/constants";
+import PcCatalogSidebar from "./sidebar/PcCatalogSidebar";
 
 export default function Catalog() {
     // All your existing state and params
@@ -19,7 +20,8 @@ export default function Catalog() {
     const [ocasions, setOcasions] = useState<Ocasions[]>(searchParams.getAll("ocasions") as Ocasions[]);
     const [productContent, setProductContent] = useState<ProductContent[]>(searchParams.getAll("product_content") as ProductContent[]);
     const [price, setPrice] = useState([Number(searchParams.get("min_price")), searchParams.get("max_price") ? Number(searchParams.get("max_price")) : 5000]);
-    const [sortBy, setSortBy] = useState<SortBy>(searchParams.get("sort_by") ? searchParams.get("sort_by") as SortBy : SortBy.RECOMMENDED)
+    const [sortBy, setSortBy] = useState<SortBy>(searchParams.get("sort_by") ? searchParams.get("sort_by") as SortBy : SortBy.RECOMMENDED);
+    const [isSidebarOpen, setSidebarOpen] = useState(false);
     
     // Create a ref for the loading trigger element
     const observerRef = useRef<HTMLDivElement>(null);
@@ -89,8 +91,28 @@ export default function Catalog() {
     return (
         <> 
             <Header category={category} breadcrumbs />
-            <div className="relative col-span-full grid grid-cols-full gap-x-6 mb-24">
+            <div className="relative col-span-full grid grid-cols-full gap-x-2 lg:gap-x-6 mb-24">
                 <CatalogSidebar                 
+                    categoriesState={{
+                        category,
+                        setCategory
+                    }}
+                    priceState={{
+                        price,
+                        setPrice,
+                    }}
+                    ocasionsState={{
+                        ocasions,
+                        setOcasions
+                    }}
+                    productContentState={{
+                        productContent,
+                        setProductContent
+                    }}
+                    setSidebarOpen={setSidebarOpen}
+                    isSidebarOpen={isSidebarOpen}
+                />
+                 <PcCatalogSidebar        
                     categoriesState={{
                         category,
                         setCategory
@@ -114,11 +136,13 @@ export default function Catalog() {
                     loading={status === "pending"}
                     setSortBy={setSortBy}
                     category={category}
+                    setSidebarOpen={setSidebarOpen}
+                    isSidebarOpen={isSidebarOpen}
                 />
                 
                 <div 
                     ref={observerRef} 
-                    className="col-start-4 col-span-12 flex justify-center"
+                    className="col-span-full lg:col-start-4 lg:col-span-12 flex justify-center"
                 >
                     {isFetchingNextPage && (
                         <div className="animate-pulse flex justify-center py-4">

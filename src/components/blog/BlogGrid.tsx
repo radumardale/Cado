@@ -11,7 +11,7 @@ export default function BlogGrid() {
     const locale = useLocale();
 
   return (
-    <div className='col-start-2 col-span-13 grid grid-cols-13 gap-y-12 gap-x-6 mb-42'>
+    <div className='col-span-full lg:col-start-2 lg:col-span-13 grid grid-cols-13 gap-y-8 lg:gap-y-12 gap-x-6 mb-24 lg:mb-42'>
         {
             isLoading || !data?.blogs ?
             <>
@@ -39,7 +39,7 @@ export default function BlogGrid() {
                                 title={blog.title[locale]} 
                                 date={new Date(blog.date).toLocaleDateString(locale, { day: '2-digit', month: '2-digit', year: 'numeric' }).replace(/\//g, '.')} 
                             />
-                            {(index + 1) % 2 !== 0 && <div className='col-span-1'></div>}
+                            {(index + 1) % 2 !== 0 && <div className='col-span-1 hidden lg:block'></div>}
                         </Fragment>
                     )
                 })

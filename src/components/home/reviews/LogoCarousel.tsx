@@ -7,6 +7,7 @@ import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react'
 import TextCarousel from './TextCarousel';
 import TitlesCarousel from './TitlesCarousel';
+import { ArrowLeft, ArrowRight } from 'lucide-react';
 
 interface LogoCardInterface {
     src: string,
@@ -19,6 +20,23 @@ export default function LogoCarousel() {
     const [isAnimationPlaying, setAnimationPlaying] = useState(false);
     const [isMovingForward, setIsMovingForward] = useState(true);
     const intervalRef = useRef<NodeJS.Timeout>(null);
+    const [isDesktop, setIsDesktop] = useState(false);
+  
+    // Check screen size on mount and window resize
+    useEffect(() => {
+        const checkScreenSize = () => {
+            setIsDesktop(window.innerWidth >= 1024);
+        };
+        
+        // Set initial state
+        checkScreenSize();
+        
+        // Add event listener for resize
+        window.addEventListener('resize', checkScreenSize);
+        
+        // Clean up
+        return () => window.removeEventListener('resize', checkScreenSize);
+    }, []);
 
     useEffect(() => {
         // Initial interval setup
@@ -88,8 +106,14 @@ export default function LogoCarousel() {
     <>
         <TextCarousel slide={steps[steps.length - 1].value} />
 
-        <div className='flex justify-center col-span-full h-34 mb-12'>
-            <div className="relative" style={{width: `calc(${(steps.length - 1) * 1.5}rem + 8.5rem)`}}>
+        <div className='flex justify-center col-span-full h-24 lg:h-34 mb-4 lg:mb-12 relative'>
+            <button className='lg:hidden cursor-pointer disabled:pointer-events-none top-1/2 -translate-y-1/2 absolute right-0' disabled={isAnimationPlaying} onClick={moveItemsForward}>
+                <ArrowRight strokeWidth={1.5} className='size-6'/>
+            </button>
+            <button className='lg:hidden cursor-pointer disabled:pointer-events-none top-1/2 -translate-y-1/2 absolute left-0' disabled={isAnimationPlaying} onClick={moveItemsBackward}>
+                <ArrowLeft strokeWidth={1.5} className='size-6'/>
+            </button>
+            <div className="relative" style={{width: `calc(${(steps.length - 1) * 1.5}rem + ${isDesktop ? "8.5" : "6"}rem)`}}>
                 {
                     steps.map( (obj, index) => {
                         return (
@@ -98,13 +122,13 @@ export default function LogoCarousel() {
                                     isSlideInitialized ? (
                                         isMovingForward ? (
                                             obj.value === steps.length - 3 ? {
-                                                x: [null, `${8.5 * 1.3}rem`, `${obj.value * 1.5}rem`],
+                                                x: [null, `${(isDesktop ? 8.5 : 6) * 1.3}rem`, `${obj.value * 1.5}rem`],
                                             } : {
                                                 x: [`${(obj.value - 1) * 1.5}rem`, `${(obj.value - 1) * 1.5}rem`, `${obj.value * 1.5}rem`],
                                             }
                                         ) : ( 
                                                 obj.value === 2 ? {
-                                                    x: [null, `${8.5 * 1.3 + (obj.value - 1) * 1.5}rem`, `${(steps.length - 1) * 1.5}rem`],
+                                                    x: [null, `${(isDesktop ? 8.5 : 6) * 1.3 + (obj.value - 1) * 1.5}rem`, `${(steps.length - 1) * 1.5}rem`],
                                                 } : {
                                                     x: [`${(obj.value + 1) * 1.5}rem`, `${(obj.value + 1) * 1.5}rem`, `${obj.value * 1.5}rem`],
                                                 }
@@ -123,7 +147,7 @@ export default function LogoCarousel() {
                                     duration: 0.8,
                                     ease: easeInOutCubic,
                                 }} 
-                                className={`size-34 rounded-2xl overflow-hidden absolute transition-[z-index] delay-300`}
+                                className={`size-24 lg:size-34 rounded-2xl overflow-hidden absolute transition-[z-index] delay-300`}
                             >
                                 <Image src={obj.src} alt='asf' width={120} height={120} className='h-full w-full object-cover' />
                             </motion.div>

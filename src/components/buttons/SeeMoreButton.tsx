@@ -1,7 +1,7 @@
 'use client'
 
 import { ArrowRight } from 'lucide-react'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { motion } from "motion/react"
 import { easeInOutCubic } from '@/lib/utils';
 import { Link } from '@/i18n/navigation';
@@ -9,15 +9,36 @@ import { Pathnames } from '@/i18n/routing';
 
 interface SeeMoreButtonInterface {
     className?: string,
-    href?: Pathnames
+    href?: Pathnames,
+    text?: string
 }
 
-export default function SeeMoreButton({className, href="/catalog"}: SeeMoreButtonInterface) {
+export default function SeeMoreButton({className, href="/catalog", text="Vezi mai multe"}: SeeMoreButtonInterface) {
     const [isButtonActive, setButtonActive] = useState(false);
+    const [isDesktop, setIsDesktop] = useState(false);
+    const [isMounted, setMounted] = useState(false);
+  
+    // Check screen size on mount and window resize
+    useEffect(() => {
+        const checkScreenSize = () => {
+            setIsDesktop(window.innerWidth >= 1024);
+        };
+        
+        // Set initial state
+        checkScreenSize();
+
+        setMounted(true);
+        
+        // Add event listener for resize
+        window.addEventListener('resize', checkScreenSize);
+        
+        // Clean up
+        return () => window.removeEventListener('resize', checkScreenSize);
+    }, []);
 
     const buttonVariants = {
         close: {
-            width: '3rem'
+            width: isMounted && isDesktop ? "3rem" : 'auto'
         },
         open: {
             width: "auto"
@@ -26,7 +47,7 @@ export default function SeeMoreButton({className, href="/catalog"}: SeeMoreButto
 
     const textVariants = {
         close: {
-            opacity: 0
+            opacity: isMounted && isDesktop ? 0 : 1
         },
         open: {
             opacity: 1
@@ -51,9 +72,9 @@ export default function SeeMoreButton({className, href="/catalog"}: SeeMoreButto
                 variants={textVariants}
                 animate={isButtonActive ? "open" : "close"} 
             >
-                Vezi mai multe
+                {text}
             </motion.span>
-            <ArrowRight className={`size-6 absolute z-20 right-3 top-1/2 -translate-y-1/2 transition duration-300 ${isButtonActive ? "" : "-rotate-45 delay-300"}`}/>
+            <ArrowRight className={`size-6 absolute z-20 right-3 top-1/2 -translate-y-1/2 transition duration-300 ${isButtonActive ? "" : "lg:-rotate-45 lg:delay-300"}`}/>
         </motion.button>
     </Link>
   )

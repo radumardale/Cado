@@ -6,13 +6,13 @@ import Image from 'next/image'
 export default function Hero() {
   return (
     <>
-        <Image src="/ribbon/about-us-ribbon.png" alt="waving ribbon" width={1920} height={679} className='w-full absolute top-48 z-0' />
-        <div className='lg:col-start-5 2xl:col-start-6 lg:col-span-7 2xl:col-span-5 mb-66 relative'>
-          <h3 className='mt-32 text-center font-manrope text-3xl leading-11 uppercase font-semibold mb-6'>CADO — cadouri care <br/> nu se redăruiesc</h3>
-          <p className='text-center mb-12'>Cadourile noastre sunt create cu gândul la impactul emoțional — pentru ca fiecare gest să devină o amintire și fiecare set să transmită grijă autentică.</p>
-          <SeeMoreButton />
+        <Image src="/ribbon/about-us-ribbon.png" alt="waving ribbon" width={1920} height={679} className='w-[calc(100%+20rem)] max-w-none -ml-40 lg:ml-0 lg:w-full absolute top-85 lg:top-48 z-0' />
+        <div className='col-span-full lg:col-start-5 2xl:col-start-6 lg:col-span-7 2xl:col-span-5 mb-58 lg:mb-66 relative'>
+          <h3 className='mt-16 lg:mt-32 text-center font-manrope text-2xl lg:text-3xl leading</div>-7 lg:leading-11 uppercase font-semibold mb-8 lg:mb-6'>CADO — cadouri care <br/> nu se redăruiesc</h3>
+          <p className='text-center mb-8 lg:mb-12 text-sm lg:text-base'>Cadourile noastre sunt create cu gândul la impactul emoțional — pentru ca fiecare gest să devină o amintire și fiecare set să transmită grijă autentică.</p>
+          <SeeMoreButton text="Vezi catalog" />
         </div>
-          <AboutUsCards />
+        <AboutUsCards />
     </>
   )
 }

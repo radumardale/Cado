@@ -13,7 +13,7 @@ interface TextCarouselInterface {
 
 export default function TextCarousel({slide}: TextCarouselInterface) {
   return (
-    <motion.div layout className='mb-12 grid grid-cols-9 col-span-9 col-start-4 relative h-36'>
+    <motion.div layout className='mb-6 lg:mb-12 grid grid-cols-8 lg:grid-cols-9 col-span-full lg:col-span-9 lg:col-start-4 relative h-24 lg:h-36'>
         {
             texts.map((text, index) => {
                 return(
@@ -21,7 +21,7 @@ export default function TextCarousel({slide}: TextCarouselInterface) {
                         initial={false}
                         key={index} 
                         animate={index === slide ? {opacity: 1, transition: {delay: 0.4, duration: 0.8, ease:easeInOutCubic}} : {opacity: 0, transition: {duration: 0.4, ease:easeInOutCubic}}} 
-                        className='text-2xl italic text-center absolute w-full self-center'>&quot;{text}&quot;
+                        className='text-sm lg:text-2xl leading-4 lg:leading-7 italic text-center absolute w-full self-center'>&quot;{text}&quot;
                     </motion.p>
                 )
             })

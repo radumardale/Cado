@@ -17,7 +17,7 @@ interface BgMapProps {
 
 export default function BgMap({lat, lng}: BgMapProps) {
     return(
-        <div className="w-full h-full object-cover absolute left-0 top-0 rounded-3xl z-0 overflow-hidden">
+        <div className="w-full h-full object-cover lg:absolute aspect-[22.375/28.125] lg:aspect-auto col-span-full left-0 top-0 rounded-3xl z-0 overflow-hidden">
             <MapContainer center={[lat, lng]} scrollWheelZoom={false} zoom={17} zoomControl={false} style={{ height: "100%", width: "100%", zIndex: 0 }} >
                 <ZoomControl position="topright" />
                 <TileLayer

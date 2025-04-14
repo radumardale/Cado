@@ -8,6 +8,7 @@ export interface ProductInterface {
     custom_id: string,
     title: ProductInfo,
     description: ProductInfo,
+    long_description: ProductInfo,
     set_description: ProductInfo,
     price: number,
     categories: Categories[],

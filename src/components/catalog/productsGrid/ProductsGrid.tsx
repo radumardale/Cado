@@ -14,10 +14,12 @@ interface ProductsGridProps {
     loading: boolean,
     setSortBy: (v: SortBy) => void,
     sortBy: SortBy,
-    category: Categories | null
+    category: Categories | null,
+    setSidebarOpen: (v: boolean) => void,
+    isSidebarOpen: boolean
 }
 
-export default function ProductsGrid({products, loading, setSortBy, sortBy, category}: ProductsGridProps) {
+export default function ProductsGrid({products, loading, setSortBy, sortBy, category, setSidebarOpen, isSidebarOpen}: ProductsGridProps) {
     const [gridLayout, setGridLayout] = useState(true);
     const [scope, animate] = useAnimate()
 
@@ -29,9 +31,9 @@ export default function ProductsGrid({products, loading, setSortBy, sortBy, cate
       }, [gridLayout, loading])
 
   return (
-    <motion.div className='col-start-4 col-span-10 2xl:col-span-12 grid grid-cols-12 mt-12 gap-6 h-fit'>
-        <Controls gridLayout={gridLayout} setGridLayout={setGridLayout} setSortBy={setSortBy} sortBy={sortBy}/>
-        <div ref={scope} className='col-span-full grid grid-cols-12 gap-6'>
+    <motion.div className='col-span-full lg:col-start-4 lg:col-span-10 2xl:col-span-12 grid grid-cols-8 lg:grid-cols-12 mt-12 gap-x-2 gap-y-6 lg:gap-6 h-fit'>
+        <Controls gridLayout={gridLayout} setGridLayout={setGridLayout} setSortBy={setSortBy} sortBy={sortBy} setSidebarOpen={setSidebarOpen} isSidebarOpen={isSidebarOpen}/>
+        <div ref={scope} className='col-span-full grid grid-cols-8 lg:grid-cols-12 gap-x-2 gap-y-6 lg:gap-6'>
             {
                 loading ? 
                 (
@@ -39,7 +41,7 @@ export default function ProductsGrid({products, loading, setSortBy, sortBy, cate
                 ) : (
                     products.map((product, index) => {
                         return (
-                            gridLayout ? <ProductCard category={category} key={index} product={product} /> : <ListProductCard key={index} product={product}/>
+                            gridLayout ? <ProductCard section='CATALOG' category={category} key={index} product={product} /> : <ListProductCard key={index} product={product}/>
                         )
                     })
                 )

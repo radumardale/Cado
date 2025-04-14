@@ -9,6 +9,8 @@ export const addProductRequestSchema = z.object({
     data: z.object({
         title: productInfoSchema,
         description: productInfoSchema,
+        long_description: productInfoSchema,
+        set_description: productInfoSchema,
         price: z.number().min(0, "Price cannot be below 0"),
         categories: z.array(z.nativeEnum(Categories)),
         ocasions: z.array(z.nativeEnum(Ocasions)),

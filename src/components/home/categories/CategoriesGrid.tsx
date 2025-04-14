@@ -6,7 +6,7 @@ export default function CategoriesGrid() {
     const t = useTranslations("tags");
 
   return (
-    <div className='col-start-2 col-end-15 grid grid-cols-11 gap-x-6 gap-y-4 mb-42'>
+    <div className='col-start-1 lg:col-start-2 col-end-9 lg:col-end-15 grid grid-cols-8 lg:grid-cols-11 gap-x-2 lg:gap-x-6 gap-y-4 mb-24 lg:mb-42'>
         <CategoriesRow index={0} title={['8 martie', t(`${CategoriesArr[0]}.title`)]} description={[t(`${CategoriesArr[0]}.description`), t(`${CategoriesArr[0]}.description`)]} images={["", `/categories/${CategoriesArr[0]}.jpg`]}/>
         {
             CategoriesArr.map((category, index) => {

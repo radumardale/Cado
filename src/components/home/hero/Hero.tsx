@@ -100,15 +100,15 @@ export default function Hero() {
     }, [isAnimationPlaying]);
 
   return (
-    <div className='col-span-full aspect-[112/50] overflow-hidden rounded-3xl relative mb-32'>
-      <ArrowRight className='absolute top-1/2 -translate-y-1/2 right-6 z-20 text-pureblack cursor-pointer' onClick={nextSlide}/>
-      <ArrowLeft className='absolute top-1/2 -translate-y-1/2 left-6 z-20 text-pureblack cursor-pointer' onClick={previousSlide}/>
-      <div className="flex gap-6 absolute left-1/2 -translate-x-1/2 bottom-6 z-20">
+    <div className='col-span-full aspect-[358/362] lg:aspect-[112/50] overflow-hidden rounded-2xl lg:rounded-3xl relative mb-16 lg:mb-32 lg:mt-0 mt-3'>
+      <ArrowRight className='absolute top-1/2 -translate-y-1/2 right-2 lg:right-6 z-20 text-pureblack cursor-pointer' onClick={nextSlide}/>
+      <ArrowLeft className='absolute top-1/2 -translate-y-1/2 left-2 lg:left-6 z-20 text-pureblack cursor-pointer' onClick={previousSlide}/>
+      <div className="flex gap-4 lg:gap-6 absolute w-full lg:w-fit left-1/2 -translate-x-1/2 bottom-2 lg:bottom-6 z-20 px-4 lg:px-0">
         {
           heroImages.map((image, index) => {
              return (
-              <div key={index} className='py-4 cursor-pointer' onClick={() => {setToSlide(index)}}>
-                <button className={`h-0.5 w-18 pointer-events-none transition duration-200 rounded-2xl ${slideNumber === index ? "bg-black" : "bg-gray"}`}></button>
+              <div key={index} className='lg:py-4 cursor-pointer flex-1 lg:flex-auto' onClick={() => {setToSlide(index)}}>
+                <button className={`h-0.5 w-full lg:w-18 pointer-events-none transition duration-200 rounded-2xl ${slideNumber === index ? "bg-black" : "bg-gray"}`}></button>
               </div>
             )
           })

@@ -41,19 +41,19 @@ export default function ContactForm() {
 
     return (
         <>
-            <h3 className='col-span-full text-center mb-16 font-manrope text-3xl leading-11 uppercase font-semibold'>CONTACTEAZĂ-NE</h3>
+            <h3 className='col-span-full lg:text-center mb-8 lg:mb-16 font-manrope text-2xl lg:text-3xl leading-7 lg:leading-11 uppercase font-semibold'>CONTACTEAZĂ-NE</h3>
             <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="col-start-4 col-span-9 grid grid-cols-9">
-                <div className="col-span-4">
+            <form onSubmit={form.handleSubmit(onSubmit)} className="col-span-full lg:col-start-4 lg:col-span-9 grid grid-cols-8 lg:grid-cols-9">
+                <div className="col-span-full lg:col-span-4 mb-2 lg:mb-0">
                     <FormField
                         control={form.control}
                         name="subject"
                         render={({ field }) => (
-                            <FormItem className=""> 
+                            <FormItem> 
                                 <FormMessage />
                                     <Select onValueChange={field.onChange} >
                                         <FormControl>
-                                            <SelectTrigger className="text-base cursor-pointer flex h-12 max-h-none items-center px-6 gap-2 border border-gray rounded-3xl text-black  font-semibold w-full">
+                                            <SelectTrigger className="text-base cursor-pointer flex h-12 max-h-none items-center px-6 gap-2 border border-gray rounded-3xl text-black font-semibold w-full">
                                                 <SelectValue placeholder="Alege subiectul" />
                                                 <ChevronDown className='size-5' strokeWidth={1.5}/>
                                             </SelectTrigger>
@@ -71,8 +71,8 @@ export default function ContactForm() {
                         )}
                     />
                 </div>
-                <div className="col-span-1"></div>
-                <div className="col-span-4">
+                <div className="col-span-full lg:col-span-1 hidden lg:block"></div>
+                <div className="col-span-full lg:col-span-4">
                     <FormField
                         control={form.control}
                         name="name"
@@ -87,7 +87,7 @@ export default function ContactForm() {
                     />
                 </div>
 
-                <div className="col-span-4 mt-4">
+                <div className="col-span-full lg:col-span-4 mt-2 lg:mt-4">
                     <FormField
                         control={form.control}
                         name="email"
@@ -101,8 +101,8 @@ export default function ContactForm() {
                         )}
                     />
                 </div>
-                <div className="col-span-1"></div>
-                <div className="col-span-4 mt-4">
+                <div className="col-span-full lg:col-span-1 hidden lg:block"></div>
+                <div className="col-span-full lg:col-span-4 mt-2 lg:mt-4">
                     <FormField
                         control={form.control}
                         name="tel_number"
@@ -117,8 +117,8 @@ export default function ContactForm() {
                     />
                 </div>
 
-                <div className="col-span-full mt-4">
-                    <p className="font-semibold  mb-4">Modul preferat de contact?</p>
+                <div className="col-span-full mt-8 lg:mt-4">
+                    <p className="font-semibold mb-2 lg:mb-4">Modul preferat de contact?</p>
                     <div className="flex gap-8">
                         <FormField
                             control={form.control}
@@ -175,7 +175,7 @@ export default function ContactForm() {
                     control={form.control}
                     name="message"
                     render={({ field }) => (
-                        <FormItem className="col-span-full mt-4">
+                        <FormItem className="col-span-full mt-8 lg:mt-4">
                             <FormControl>
                                 <Textarea className="placeholder:text-black h-40 items-center px-6 border border-gray rounded-3xl text-base text-black  font-semibold col-span-full" placeholder="Mesaj*" {...field}/>
                             </FormControl>
@@ -187,8 +187,8 @@ export default function ContactForm() {
                     control={form.control}
                     name="termsAccepted"
                     render={({ field }) => (
-                        <FormItem className="col-span-full mt-4">
-                                <div className="flex gap-2 col-span-full mt-4">
+                        <FormItem className="col-span-full mt-2 lg:mt-4">
+                                <div className="flex gap-2 col-span-full mt-2 lg:mt-4">
                                         <FormControl>
                                             <Checkbox 
                                                 id="termeni" 

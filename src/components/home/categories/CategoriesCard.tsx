@@ -15,7 +15,7 @@ interface CategoriesCardInterface {
 
 export default function CategoriesCard({index, title, description, side, rowHover, setRowHover, image}: CategoriesCardInterface) {
   return (
-    <div className={`bg-blue-2 h-80 rounded-2xl relative transition-all duration-400 cursor-pointer overflow-hidden ${side === rowHover ? "w-7/13" : rowHover === CategoriesRowHover.NONE ? "w-6/13" : "w-5/13"}`} onMouseEnter={() => {setRowHover(side)}} onMouseLeave={() => {setRowHover(CategoriesRowHover.NONE)}}>
+    <div className={`bg-blue-2 h-38 lg:h-80 rounded-2xl relative transition-all duration-400 cursor-pointer overflow-hidden ${side === rowHover ? "lg:w-7/13" : rowHover === CategoriesRowHover.NONE ? "lg:w-6/13" : "lg:w-5/13"}`} onMouseEnter={() => {setRowHover(side)}} onMouseLeave={() => {setRowHover(CategoriesRowHover.NONE)}}>
         {image.length > 0 && 
             <>
                 <Image src={image} alt={title} className='absolute left-0 top-0 w-full h-full object-cover' width={702} height={320} />
@@ -23,10 +23,10 @@ export default function CategoriesCard({index, title, description, side, rowHove
                 <div className='absolute left-0 top-0 w-full h-full bg-linear-to-r from-pureblack opacity-40'></div>
             </>
         }
-        <p className='text-white font-manrope font-semibold text-3xl leading-11 uppercase absolute left-8 top-8'>{title}</p>
-        <p className='text-white absolute left-8 bottom-8 w-104'>{description}</p>
-        <button className={`absolute right-8 top-6 size-12 flex justify-center items-center bg-white rounded-full transition duration-400 ${side === rowHover ? "rotate-0" : "-rotate-45"}`}>
-            <ArrowRight style={{color: `var(--blue${index + 1})`}} />
+        <p className='text-white font-manrope font-semibold text-2xl lg:text-3xl leading-7 lg:leading-11 uppercase absolute left-4 lg:left-8 top-4 lg:top-8'>{title}</p>
+        <p className='text-white absolute left-4 lg:left-8 bottom-4 lg:bottom-8 w-80 lg:w-104 text-sm lg:text-base leading-4 lg:leading-5'>{description}</p>
+        <button className={`absolute right-4 lg:right-8 top-4 lg:top-6 size-8 lg:size-12 flex justify-center items-center bg-white rounded-full transition duration-400 ${side === rowHover ? "-rotate-45 lg:rotate-0" : "-rotate-45 lg:-rotate-45"}`}>
+            <ArrowRight style={{color: `var(--blue${index + 1})`}} className='size-5 lg:size-8'/>
         </button>
     </div>
   )
