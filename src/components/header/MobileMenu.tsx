@@ -21,7 +21,7 @@ export default function MobileMenu({setSidebarOpen}: MobileMenuInterface) {
         initial={{x: '-100%'}} 
         animate={{x: 0, transition: {duration: .4, ease: easeInOutCubic}}} 
         exit={{x: '-100%', transition: {duration: .4, ease: easeInOutCubic}}} 
-        className='fixed w-screen h-screen top-0 left-0 z-50 bg-white lg:w-1/3 pt-3 lg:pt-6 px-4 lg:pl-6 lg:pr-8 flex flex-col pb-32 lg:pb-42' 
+        className='fixed w-screen h-full top-0 left-0 z-50 bg-white lg:w-1/3 pt-3 lg:pt-6 px-4 lg:pl-6 lg:pr-8 flex flex-col pb-32 lg:pb-42' 
         onMouseDown={(e) => {e.stopPropagation()}}
     >
         <button className='absolute left-4 top-4 cursor-pointer' onClick={() => {setSidebarOpen(false)}}>

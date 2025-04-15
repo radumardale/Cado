@@ -56,7 +56,7 @@ export default function CatalogSidebar({priceState, categoriesState, ocasionsSta
       initial={{x: '-100%'}}
       animate={isSidebarOpen ? {x: 0, transition: {duration: .4, ease: easeInOutCubic}} : {x: '-100%', transition: {duration: .4, ease: easeInOutCubic}}} 
       data-lenis-prevent 
-      className="lg:hidden scroll-bar-custom w-screen lg:w-auto fixed lg:col-start-1 lg:col-span-3 h-screen lg:h-[calc(100vh-13rem)] overflow-y-scroll lg:mt-12 lg:sticky left-0 top-0 lg:top-[9rem] pr-4 pl-4 lg:pl-0 z-50 lg:z-10 bg-white pt-16 lg:pt-0">
+      className="lg:hidden scroll-bar-custom w-screen lg:w-auto fixed lg:col-start-1 lg:col-span-3 h-full lg:h-[calc(100vh-13rem)] overflow-y-scroll lg:mt-12 lg:sticky left-0 top-0 lg:top-[9rem] pr-4 pl-4 lg:pl-0 z-50 lg:z-10 bg-white pt-16 lg:pt-0">
         <button className='cursor-pointer absolute right-4 top-4 lg:hidden' onClick={() => {setSidebarOpen(false)}}>
             <Plus className='size-5 rotate-45' strokeWidth={1.75} />
         </button>

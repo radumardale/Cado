@@ -16,7 +16,7 @@ export default function ImagesCarousel({setCarouselOpen, product, locale, initia
     const [activeImage, setActiveImage] = useState(initialActive);
 
   return (
-    <motion.div initial={{opacity: 0}} animate={{opacity: 1, transition: {duration: .2, ease: easeInOutCubic}}}  exit={{opacity: 0, transition: {duration: .2, ease: easeInOutCubic}}} className='fixed bg-darkblue/75 w-screen h-screen top-0 left-0 z-50 backdrop-blur-xs flex flex-col items-center py-4 lg:py-6 px-4 justify-end lg:justify-start' onMouseDown={(e) => {e.stopPropagation(); setCarouselOpen(false)}}>
+    <motion.div initial={{opacity: 0}} animate={{opacity: 1, transition: {duration: .2, ease: easeInOutCubic}}}  exit={{opacity: 0, transition: {duration: .2, ease: easeInOutCubic}}} className='fixed bg-darkblue/75 w-screen h-full top-0 left-0 z-50 backdrop-blur-xs flex flex-col items-center py-4 lg:py-6 px-4 justify-end lg:justify-start' onMouseDown={(e) => {e.stopPropagation(); setCarouselOpen(false)}}>
         <div className='lg:flex-1 aspect-[738/919] absolute top-1/2 -translate-y-1/2 lg:translate-0 lg:relative mb-4 w-[calc(100%-2rem)] lg:w-auto max-w-full' onMouseDown={(e) => {e.stopPropagation()}}>
             {
                 product.images.map((image, index) => {
