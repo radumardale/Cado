@@ -16,8 +16,8 @@ export default function ImagesCarousel({setCarouselOpen, product, locale, initia
     const [activeImage, setActiveImage] = useState(initialActive);
 
   return (
-    <motion.div initial={{opacity: 0}} animate={{opacity: 1, transition: {duration: .2, ease: easeInOutCubic}}}  exit={{opacity: 0, transition: {duration: .2, ease: easeInOutCubic}}} className='fixed bg-darkblue/75 w-screen h-screen top-0 left-0 z-50 backdrop-blur-xs flex flex-col items-center py-6' onMouseDown={(e) => {e.stopPropagation(); setCarouselOpen(false)}}>
-        <div className='flex-1 aspect-[738/919] relative mb-4' onMouseDown={(e) => {e.stopPropagation()}}>
+    <motion.div initial={{opacity: 0}} animate={{opacity: 1, transition: {duration: .2, ease: easeInOutCubic}}}  exit={{opacity: 0, transition: {duration: .2, ease: easeInOutCubic}}} className='fixed bg-darkblue/75 w-screen h-screen top-0 left-0 z-50 backdrop-blur-xs flex flex-col items-center py-4 lg:py-6 px-4 justify-end lg:justify-start' onMouseDown={(e) => {e.stopPropagation(); setCarouselOpen(false)}}>
+        <div className='lg:flex-1 aspect-[738/919] absolute top-1/2 -translate-y-1/2 lg:translate-0 lg:relative mb-4 w-[calc(100%-2rem)] lg:w-auto max-w-full' onMouseDown={(e) => {e.stopPropagation()}}>
             {
                 product.images.map((image, index) => {
                     return(
@@ -37,14 +37,14 @@ export default function ImagesCarousel({setCarouselOpen, product, locale, initia
                 })
             }
         </div>
-        <button className='absolute right-16 top-1/2 -translate-y-1/2 cursor-pointer' onMouseDown={(e) => {e.stopPropagation()}} onClick={() => {setActiveImage(activeImage + 1 >= product.images.length ? 0 : activeImage + 1)}}>
+        <button className='hidden lg:block absolute right-16 top-1/2 -translate-y-1/2 cursor-pointer' onMouseDown={(e) => {e.stopPropagation()}} onClick={() => {setActiveImage(activeImage + 1 >= product.images.length ? 0 : activeImage + 1)}}>
             <ArrowRight className='text-white size-8' strokeWidth={1.5} />
         </button>
-        <button className='absolute left-16 top-1/2 -translate-y-1/2 cursor-pointer' onMouseDown={(e) => {e.stopPropagation()}} onClick={() => {setActiveImage(activeImage - 1 < 0 ? product.images.length - 1 : activeImage - 1)}}>
+        <button className='hidden lg:block absolute left-16 top-1/2 -translate-y-1/2 cursor-pointer' onMouseDown={(e) => {e.stopPropagation()}} onClick={() => {setActiveImage(activeImage - 1 < 0 ? product.images.length - 1 : activeImage - 1)}}>
             <ArrowLeft className='text-white size-8' strokeWidth={1.5} />
         </button>
-        <button className='absolute right-16 top-6 cursor-pointer'>
-            <X className='text-white size-8' strokeWidth={1.5} />
+        <button className='absolute right-4 lg:right-16 top-4 lg:top-6 cursor-pointer'>
+            <X className='text-white size-6 lg:size-8' strokeWidth={1.5} />
         </button>
     </motion.div>
   )

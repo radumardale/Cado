@@ -10,11 +10,12 @@ interface AccordionProps {
     title: string,
     children: React.ReactNode,
     last?: boolean,
-    first?: boolean
+    first?: boolean,
+    isMenuAccordion?: boolean
 }
 
-export default function Accordion({title, children, last = false, first = false}: AccordionProps) {
-    const [isAccordionOpen, setAccordionOpen] = useState(true);
+export default function Accordion({title, children, last = false, first = false, isMenuAccordion = false}: AccordionProps) {
+    const [isAccordionOpen, setAccordionOpen] = useState(!isMenuAccordion);
 
     const accordionVariants = {
         close: {
@@ -27,8 +28,8 @@ export default function Accordion({title, children, last = false, first = false}
 
   return (
     <motion.div className={`h-12 overflow-hidden ${last ? "" : "border-b border-lightgray"} ${first ? "border-t border-lightgray" : ""}`} transition={{ease: easeInOutCubic, duration: .4}} variants={accordionVariants} animate={isAccordionOpen ? "open" : "close"} initial={false}>
-        <div className='h-12 flex items-center justify-between cursor-pointer mb-4' onClick={() => {setAccordionOpen(!isAccordionOpen)}}>
-            <p className='font-semibold font-manrope'>{title}</p>
+        <div className={`h-12 flex items-center justify-between cursor-pointer ${isMenuAccordion ? "" : "mb-4"}`} onClick={() => {setAccordionOpen(!isAccordionOpen)}}>
+            <p className={`font-semibold font-manrope ${isMenuAccordion ? "pl-2" : ""}`}>{title}</p>
             <Plus color={COLORS.black} strokeWidth={1.75} className={`size-5 transition duration-300 ${isAccordionOpen ? "rotate-45" : ""}`} />
         </div>
         <div className='mb-4'>

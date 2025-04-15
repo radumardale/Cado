@@ -27,9 +27,9 @@ export default function ProductInfo({id}: ProductInfoInterface) {
     return (
         <>
             <Header category={categoryParam ? categoryParam : data.product.categories[0]} breadcrumbs productInfo={{id: data.product.custom_id, title: data.product.title[locale]}}/>
-            <div className='grid grid-cols-15 col-span-15 gap-x-6'>
+            <div className='grid grid-cols-8 lg:grid-cols-15 col-span-8 lg:col-span-15 gap-x-6'>
                 <ProductImages product={data.product}/>
-                <div className='col-span-1'></div>
+                <div className='col-span-1 hidden lg:block'></div>
                 <ProductContent product={data.product}/>
             </div>
             <SimiliarProducts category={categoryParam ? categoryParam : data.product.categories[0]} />

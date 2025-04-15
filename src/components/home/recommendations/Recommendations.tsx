@@ -32,11 +32,11 @@ export default function Recommendations({indProductSection = false}: Recommendat
 
     return (
         <>
-            <h3 className={`${indProductSection ? "border-t border-black text-[2rem] leading-9 pt-6 mb-8" : "text-2xl lg:text-3xl leading-7 lg:leading-11 text-center mb-8 lg:mb-12"} col-span-full font-manrope uppercase font-semibold`}>RECOMANDĂRILE NOASTRE</h3>
+            <h3 className={`${indProductSection ? "lg:border-t lg:border-black text-2xl lg:text-[2rem] leading-7 lg:leading-9 lg:pt-6 mb-8 text-center" : "text-2xl lg:text-3xl leading-7 lg:leading-11 text-center mb-8 lg:mb-12"} col-span-full font-manrope uppercase font-semibold`}>{isDesktop ? "RECOMANDĂRILE NOASTRE" : "RECOMANDĂRI"}</h3>
             {
                 isDesktop ? 
                 <PCRecommendations data={data} indProductSection={indProductSection} isLoading={isLoading} /> :
-                <MobileRecommendations data={data} isLoading={isLoading} />
+                <MobileRecommendations data={data} isLoading={isLoading} indProductSection={indProductSection}/>
             }
            {!indProductSection && <SeeMoreButton className='mb-24 lg:mb-42' />}
         </>

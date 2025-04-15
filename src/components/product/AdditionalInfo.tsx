@@ -10,9 +10,8 @@ interface AdditionalInfoInterface {
 export default function AdditionalInfo({product, locale}: AdditionalInfoInterface) {
     const [activeIndex, setActiveIndex] = useState(-1);
 
-
   return (
-    <div>
+    <div className='mt-12 lg:mt-0'>
         {
             product.set_description && 
             <Accordion open={activeIndex == 0} setActiveIndex={() => {setActiveIndex(activeIndex === 0 ? -1 : 0)}} title="Cadoul include">

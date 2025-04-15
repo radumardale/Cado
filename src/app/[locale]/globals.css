@@ -203,7 +203,7 @@ html {
 
 body.carousel {
   overflow: hidden;
-  margin-right: 10px;
+  padding-right: 0px !important;
 }
 
 .footer-link img {
@@ -211,6 +211,11 @@ body.carousel {
 }
 
 @media (min-width: 1024px) {
+  body.carousel {
+    overflow: hidden;
+    padding-right: 10px !important;
+  }
+  
   .footer-link img {
     filter: brightness(0) saturate(100%) invert(100%) sepia(100%) saturate(0%) hue-rotate(252deg) brightness(108%) contrast(96%);
   }

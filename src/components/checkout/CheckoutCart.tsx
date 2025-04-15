@@ -17,19 +17,19 @@ export default function CheckoutCart() {
     }, [])
 
   return (
-    <div className='lg:col-start-10 2xl:col-start-10 lg:col-span-5 2xl:col-span-4 sticky left-0 h-screen pb-31 top-25 flex flex-col'>
-        <p className='font-manrope text-2xl font-semibold leading-7 mb-6'>Sumarul comenzii</p>
+    <div className='col-span-full lg:col-start-10 2xl:col-start-10 lg:col-span-5 2xl:col-span-4 lg:sticky left-0 lg:h-screen -mb-7 pb-16 lg:pb-31 top-25 flex flex-col'>
+        <p className='font-manrope text-2xl font-semibold leading-7 mb-4 lg:mb-6'>Sumarul comenzii</p>
         {
             items.length > 0 && mounted ?
-                <div data-lenis-prevent className='flex flex-col pr-2 gap-6 flex-1 overflow-y-scroll scroll-bar-custom mb-8'>
+                <div data-lenis-prevent className='flex flex-col pr-2 gap-6 flex-1 lg:overflow-y-auto scroll-bar-custom mb-16 lg:mb-8'>
                     {
                         items.map((item, index) => {
                             return (
-                                <div key={index} className='w-full flex gap-4'>
+                                <div key={index} className='w-full flex gap-2 lg:gap-4'>
                                     <Image src={item.product.images[0]} alt={item.product.title[locale]} width={129} height={164} className='w-32 aspect-[129/164] rounded-lg' />
                                     <div className='flex flex-col justify-between flex-1'>
                                         <div>
-                                            <p className='font-manrope text-sm font-semibold mb-4'>{item.product.title[locale]}</p>
+                                            <p className='font-manrope text-sm leading-4 font-semibold mb-4'>{item.product.title[locale]}</p>
                                             <div className='font-manrope font-semibold py-2 px-4 border border-gray rounded-3xl w-fit'>{item.product.price} MDL</div>
                                         </div>
                                         <div className="flex justify-between items-end">
@@ -73,21 +73,25 @@ export default function CheckoutCart() {
                     }
                 </div>
             :
-            <div className='absolute left-0 top-1/2 -translate-y-1/2 w-full px-16'>
+            <div className='lg:absolute left-0 top-1/2 lg:-translate-y-1/2 w-full px-4 lg:px-16 my-16 lg:my-0'>
                 <ShoppingBag className='size-12 mx-auto mb-2' strokeWidth={1.25}/>
-                <p className='text-center'>Coșul dvs. este gol. Vizitați magazinul pentru inspirație și recomandări personalizate.</p>
+                <p className='text-sm leading-4 lg:text-base lg:leading-5 text-center'>Coșul dvs. este gol. Vizitați magazinul pentru inspirație și recomandări personalizate.</p>
             </div>
         }
-        <div className="flex justify-between items-end mb-4">
-            <p>Livrare:</p>
-            <p className='font-semibold'>Livrare gratuită</p>
-        </div>
-        <div className="flex justify-between items-end mb-4">
-            <p>Total:</p>
-            <p className='font-semibold'>{mounted && items.reduce((acc, item) => acc + item.product.price, 0).toLocaleString()} MDL</p>
-        </div>
+        {
+            items.length > 0 &&
+            <>
+                <div className="flex justify-between items-end mb-2 lg:mb-4">
+                    <p>Livrare:</p>
+                    <p className='font-semibold'>Livrare gratuită</p>
+                </div>
+                <div className="flex justify-between items-end mb-4">
+                    <p>Total:</p>
+                    <p className='font-semibold'>{mounted && items.reduce((acc, item) => acc + item.product.price, 0).toLocaleString()} MDL</p>
+                </div>
+            </>
+        }
         <button className='h-12 w-full bg-blue-2 text-white rounded-3xl font-manrope font-semibold cursor-pointer border hover:opacity-75 transition duration-300' form="checkout-form">Continuă plata</button>
-
     </div>
   )
 }

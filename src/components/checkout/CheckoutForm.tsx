@@ -48,10 +48,10 @@ export default function CheckoutForm() {
     const entityType = form.watch("additional_info.enitity_type");
 
   return (
-    <div className='lg:col-span-7 2xl:col-span-6 lg:col-start-2 2xl:col-start-3 grid grid-cols-6 gap-x-6 h-fit'>
+    <div className='col-span-full lg:col-span-7 2xl:col-span-6 lg:col-start-2 2xl:col-start-3 grid grid-cols-8 lg:grid-cols-6 gap-x-2 lg:gap-x-6 h-fit'>
         <Form {...form}>
             <form id="checkout-form" onSubmit={form.handleSubmit(onSubmit)} className='col-span-full grid grid-cols-6 gap-x-6 h-fit'>
-                <p className=' text-2xl font-semibold leading-7 mb-6 col-span-full font-manrope'>Metoda de expediere</p>
+                <p className='text-2xl font-semibold leading-7 mb-4 lg:mb-6 col-span-full font-manrope'>Metoda de expediere</p>
 
                 {/* Delivery method */}
                 <FormField 
@@ -64,9 +64,9 @@ export default function CheckoutForm() {
                                 <RadioGroup
                                     onValueChange={field.onChange}
                                     defaultValue={field.value}
-                                    className="flex gap-6 col-span-full"
+                                    className="flex flex-col lg:flex-row gap-2 lg:gap-6 col-span-full"
                                 >
-                                    <FormItem className='flex-1'>
+                                    <FormItem className='w-full lg:w-auto lg:flex-1 gap-0'>
                                         <FormControl>
                                             <RadioGroupItem className='' value={DeliveryMethod.HOME_DELIVERY} id="home-delivery" />
                                         </FormControl>
@@ -79,7 +79,7 @@ export default function CheckoutForm() {
                                         </label>
                                     </FormItem>
 
-                                    <FormItem className='flex-1'>
+                                    <FormItem className='w-full lg:w-auto lg:flex-1 gap-0'>
                                         <FormControl>
                                             <RadioGroupItem className='' value={DeliveryMethod.PICKUP} id="pickup" />
                                         </FormControl>
@@ -101,20 +101,20 @@ export default function CheckoutForm() {
                 {
                     deliveryMethod === DeliveryMethod.PICKUP && 
                     <>
-                        <p className=' text-2xl font-semibold leading-7 mb-6 col-span-full mt-12'>Punct de ridicare</p>
+                        <p className=' text-2xl font-semibold leading-7 mb-2 lg:mb-6 col-span-full mt-8 lg:mt-12'>Punct de ridicare</p>
                         <p className='col-span-full'>Ridicarea comenzii este posibilă pe <span className='font-semibold'>str. Alecu Russo 15, of. 59, Chișinău,  Luni-Vineri 9:00 - 16:00 </span> </p>
                     </>
                 }
 
-                <p className=' text-2xl font-semibold leading-7 mb-2 col-span-full mt-12 font-manrope'>Informație client</p>
-                <p className='col-span-full mb-6'>Adresa trebuie să fie în Republica Moldova.</p>
+                <p className=' text-2xl font-semibold leading-7 mb-2 col-span-full mt-8 lg:mt-12 font-manrope'>Informație client</p>
+                <p className='col-span-full mb-4 lg:mb-6'>Adresa trebuie să fie în Republica Moldova.</p>
 
                 {/* Client information */}
                 <FormField
                     control={form.control}
                     name="additional_info.user_data.email"
                     render={({ field }) => (
-                        <FormItem className="col-span-3 mt-4">
+                        <FormItem className="col-span-full lg:col-span-3 lg:mt-4">
                             <FormMessage />
                             <FormControl className="border  rounded-3xl border-gray shadow-none p-0 text-black placeholder:text-black focus-visible:outline-none">
                                 <Input className="h-12 w-full px-6 rounded-3xl text-base text-black" placeholder="Email*" {...field} />
@@ -126,7 +126,7 @@ export default function CheckoutForm() {
                     control={form.control}
                     name="additional_info.user_data.tel_number"
                     render={({ field }) => (
-                        <FormItem className="col-span-3 mt-4">
+                        <FormItem className="col-span-full lg:col-span-3 mt-2 lg:mt-4">
                             <FormMessage />
                             <FormControl className="border  rounded-3xl border-gray shadow-none p-0 text-black placeholder:text-black focus-visible:outline-none">
                                 <Input className="h-12 w-full px-6 rounded-3xl text-base text-black" placeholder="Telefon*" {...field} />
@@ -138,7 +138,7 @@ export default function CheckoutForm() {
                     control={form.control}
                     name="additional_info.user_data.firstname"
                     render={({ field }) => (
-                        <FormItem className="col-span-3 mt-4">
+                        <FormItem className="col-span-full lg:col-span-3 mt-2 lg:mt-4">
                             <FormMessage />
                             <FormControl className="border  rounded-3xl border-gray shadow-none p-0 text-black placeholder:text-black focus-visible:outline-none">
                                 <Input className="h-12 w-full px-6 rounded-3xl text-base text-black" placeholder="Prenume*" {...field} />
@@ -150,7 +150,7 @@ export default function CheckoutForm() {
                     control={form.control}
                     name="additional_info.user_data.lastname"
                     render={({ field }) => (
-                        <FormItem className="col-span-3 mt-4">
+                        <FormItem className="col-span-full lg:col-span-3 mt-2 lg:mt-4">
                             <FormMessage />
                             <FormControl className="border  rounded-3xl border-gray shadow-none p-0 text-black placeholder:text-black focus-visible:outline-none">
                                 <Input className="h-12 w-full px-6 rounded-3xl text-base text-black" placeholder="Nume de familie*" {...field} />
@@ -166,7 +166,7 @@ export default function CheckoutForm() {
                             control={form.control}
                             name="additional_info.delivery_address.home_address"
                             render={({ field }) => (
-                                <FormItem className="col-span-3 mt-4">
+                                <FormItem className="col-span-full lg:col-span-3 mt-2 lg:mt-4">
                                     <FormMessage />
                                     <FormControl className="border  rounded-3xl border-gray shadow-none p-0 text-black placeholder:text-black focus-visible:outline-none">
                                         <Input className="h-12 w-full px-6 rounded-3xl text-base text-black" placeholder="Adresa* (stradă, număr, etc.)" {...field} />
@@ -178,7 +178,7 @@ export default function CheckoutForm() {
                             control={form.control}
                             name="additional_info.delivery_address.home_nr"
                             render={({ field }) => (
-                                <FormItem className="col-span-3 mt-4">
+                                <FormItem className="col-span-full lg:col-span-3 mt-2 lg:mt-4">
                                     <FormMessage />
                                     <FormControl className="border  rounded-3xl border-gray shadow-none p-0 text-black placeholder:text-black focus-visible:outline-none">
                                         <Input className="h-12 w-full px-6 rounded-3xl text-base text-black" placeholder="Număr casă/apartament" {...field} />
@@ -190,7 +190,7 @@ export default function CheckoutForm() {
                         control={form.control}
                         name="additional_info.delivery_address.region"
                         render={({ field }) => (
-                            <FormItem className="col-span-3 mt-4"> 
+                            <FormItem className="col-span-full lg:col-span-3 mt-2 lg:mt-4"> 
                                 <FormMessage />
                                     <Select onValueChange={field.onChange} defaultValue={"CHISINAU"} >
                                         <FormControl>
@@ -215,7 +215,7 @@ export default function CheckoutForm() {
                             control={form.control}
                             name="additional_info.delivery_address.city"
                             render={({ field }) => (
-                                <FormItem className="col-span-3 mt-4">
+                                <FormItem className="col-span-full lg:col-span-3 mt-2 lg:mt-4">
                                     <FormMessage />
                                     <FormControl className="border  rounded-3xl border-gray shadow-none p-0 text-black placeholder:text-black focus-visible:outline-none">
                                         <Input className="h-12 w-full px-6 rounded-3xl text-base text-black" placeholder="Oraș*" {...field} />
@@ -226,7 +226,7 @@ export default function CheckoutForm() {
                     </>
                 }
 
-                <p className=' text-2xl font-semibold leading-7 mb-6 col-span-full mt-12 font-manrope'>Adresa de facturare</p>
+                <p className=' text-2xl font-semibold leading-7 mb-4 lg:mb-6 col-span-full mt-8 lg:mt-12 font-manrope'>Adresa de facturare</p>
                 {
                     deliveryMethod === DeliveryMethod.HOME_DELIVERY && 
                     <div className="flex mb-6 col-span-full gap-2">
@@ -235,7 +235,7 @@ export default function CheckoutForm() {
                             checked={isBillingAddress} 
                             onCheckedChange={(checked) => setBillingAddress(checked === true)} 
                         />
-                        <label htmlFor='billing_address_check'>Adresa trebuie să fie în Republica Moldova.</label>
+                        <label htmlFor='billing_address_check'>Folosește aceleași date cu cele de la adresa de livrare.</label>
                     </div>
                 }
 
@@ -253,9 +253,9 @@ export default function CheckoutForm() {
                                 <RadioGroup
                                 onValueChange={field.onChange}
                                 defaultValue={field.value}
-                                className="flex gap-6 col-span-full"
+                                className="flex flex-col lg:flex-row gap-2 lg:gap-6 col-span-full"
                                 >
-                                <FormItem className='flex-1'>
+                                <FormItem className='gap-0 lg:flex-1'>
                                     <FormControl>
                                     <RadioGroupItem className='' value={ClientEntity.Natural} id="entity-natural" />
                                     </FormControl>
@@ -268,7 +268,7 @@ export default function CheckoutForm() {
                                     </label>
                                 </FormItem>
 
-                                <FormItem className='flex-1'>
+                                <FormItem className='gap-0 lg:flex-1'>
                                     <FormControl>
                                     <RadioGroupItem className='' value={ClientEntity.Legal} id="entity-legal" />
                                     </FormControl>
@@ -293,7 +293,7 @@ export default function CheckoutForm() {
                                     control={form.control}
                                     name="additional_info.billing_address.firstname"
                                     render={({ field }) => (
-                                        <FormItem className="col-span-3 mt-4">
+                                        <FormItem className="col-span-full lg:col-span-3 mt-2 lg:mt-4">
                                             <FormMessage />
                                             <FormControl className="border  rounded-3xl border-gray shadow-none p-0 text-black placeholder:text-black focus-visible:outline-none">
                                                 <Input className="h-12 w-full px-6 rounded-3xl text-base text-black" placeholder="Prenume*" {...field} />
@@ -305,7 +305,7 @@ export default function CheckoutForm() {
                                     control={form.control}
                                     name="additional_info.billing_address.lastname"
                                     render={({ field }) => (
-                                        <FormItem className="col-span-3 mt-4">
+                                        <FormItem className="col-span-full lg:col-span-3 mt-2 lg:mt-4">
                                             <FormMessage />
                                             <FormControl className="border  rounded-3xl border-gray shadow-none p-0 text-black placeholder:text-black focus-visible:outline-none">
                                                 <Input className="h-12 w-full px-6 rounded-3xl text-base text-black" placeholder="Nume de familie*" {...field} />
@@ -320,7 +320,7 @@ export default function CheckoutForm() {
                                     control={form.control}
                                     name="additional_info.billing_address.company_name"
                                     render={({ field }) => (
-                                        <FormItem className="col-span-3 mt-4">
+                                        <FormItem className="col-span-full lg:col-span-3 mt-2 lg:mt-4">
                                             <FormMessage />
                                             <FormControl className="border  rounded-3xl border-gray shadow-none p-0 text-black placeholder:text-black focus-visible:outline-none">
                                                 <Input className="h-12 w-full px-6 rounded-3xl text-base text-black" placeholder="Nume companie*" {...field} />
@@ -332,7 +332,7 @@ export default function CheckoutForm() {
                                     control={form.control}
                                     name="additional_info.billing_address.idno"
                                     render={({ field }) => (
-                                        <FormItem className="col-span-3 mt-4">
+                                        <FormItem className="col-span-full lg:col-span-3 mt-2 lg:mt-4">
                                             <FormMessage />
                                             <FormControl className="border  rounded-3xl border-gray shadow-none p-0 text-black placeholder:text-black focus-visible:outline-none">
                                                 <Input className="h-12 w-full px-6 rounded-3xl text-base text-black" placeholder="IDNO*" {...field} />
@@ -347,7 +347,7 @@ export default function CheckoutForm() {
                             control={form.control}
                             name="additional_info.billing_address.home_address"
                             render={({ field }) => (
-                                <FormItem className="col-span-3 mt-4">
+                                <FormItem className="col-span-full lg:col-span-3 mt-2 lg:mt-4">
                                     <FormMessage />
                                     <FormControl className="border  rounded-3xl border-gray shadow-none p-0 text-black placeholder:text-black focus-visible:outline-none">
                                         <Input className="h-12 w-full px-6 rounded-3xl text-base text-black" placeholder="Adresa* (stradă, număr, etc.)" {...field} />
@@ -359,7 +359,7 @@ export default function CheckoutForm() {
                             control={form.control}
                             name="additional_info.billing_address.home_nr"
                             render={({ field }) => (
-                                <FormItem className="col-span-3 mt-4">
+                                <FormItem className="col-span-full lg:col-span-3 mt-2 lg:mt-4">
                                     <FormMessage />
                                     <FormControl className="border  rounded-3xl border-gray shadow-none p-0 text-black placeholder:text-black focus-visible:outline-none">
                                         <Input className="h-12 w-full px-6 rounded-3xl text-base text-black" placeholder="Număr casă/apartament" {...field} />
@@ -372,7 +372,7 @@ export default function CheckoutForm() {
                             control={form.control}
                             name="additional_info.billing_address.region"
                             render={({ field }) => (
-                                <FormItem className="col-span-3 mt-4"> 
+                                <FormItem className="col-span-full lg:col-span-3 mt-2 lg:mt-4"> 
                                     <FormMessage />
                                         <Select onValueChange={field.onChange} defaultValue={"CHISINAU"} >
                                             <FormControl>
@@ -397,7 +397,7 @@ export default function CheckoutForm() {
                                 control={form.control}
                                 name="additional_info.billing_address.city"
                                 render={({ field }) => (
-                                    <FormItem className="col-span-3 mt-4">
+                                    <FormItem className="col-span-full lg:col-span-3 mt-2 lg:mt-4">
                                         <FormMessage />
                                         <FormControl className="border  rounded-3xl border-gray shadow-none p-0 text-black placeholder:text-black focus-visible:outline-none">
                                             <Input className="h-12 w-full px-6 rounded-3xl text-base text-black" placeholder="Oraș*" {...field} />
@@ -408,23 +408,23 @@ export default function CheckoutForm() {
                         </>
                 }
 
-                <p className=' text-2xl font-semibold leading-7 mb-2 col-span-full mt-12 font-manrope'>Detalii pentru livrare</p>
+                <p className=' text-2xl font-semibold leading-7 mb-2 col-span-full mt-8 lg:mt-12 font-manrope'>Detalii pentru livrare</p>
                 {
                     deliveryMethod === DeliveryMethod.HOME_DELIVERY && 
                     <>
-                        <p className='col-span-full mb-6'>Livrările între intervalele orelor 1:00-9:00 și 20:00-24:00 sunt tarifate diferit</p>
+                        <p className='col-span-full mb-4 lg:mb-6'>Livrările între intervalele orelor 1:00-9:00 și 20:00-24:00 sunt tarifate diferit</p>
                         <FormField
                             control={form.control}
                             name="delivery_details.delivery_date"
                             render={({ field }) => (
-                                <FormItem className="col-span-3">
+                                <FormItem className="col-span-full lg:col-span-3">
                                     <FormMessage />
                                     <Popover>
                                         <PopoverTrigger asChild>
                                         <FormControl>
                                             <Button
                                             className={cn(
-                                                "w-full h-12 pl-6 text-left font-normal bg-white rounded-3xl border border-gray text-base hover:bg-white cursor-pointer text-black ",
+                                                "w-full h-12 pl-6 text-left font-normal bg-white rounded-3xl border border-gray text-base hover:bg-white cursor-pointer text-black justify-start",
                                                 !field.value && "text-black"
                                             )}
                                             >
@@ -443,8 +443,9 @@ export default function CheckoutForm() {
                                             selected={field.value}
                                             onSelect={field.onChange}
                                             disabled={(date) =>
-                                            date > new Date() || date < new Date("1900-01-01")
+                                                date < new Date()
                                             }
+                                            weekStartsOn={1}
                                             initialFocus
                                         />
                                         </PopoverContent>
@@ -457,7 +458,7 @@ export default function CheckoutForm() {
                             control={form.control}
                             name="delivery_details.hours_intervals"
                             render={({ field }) => (
-                                <FormItem className="col-span-3"> 
+                                <FormItem className="col-span-full lg:col-span-3 mt-2 lg:mt-0"> 
                                     <FormMessage />
                                         <Select onValueChange={field.onChange} >
                                             <FormControl>
@@ -490,7 +491,7 @@ export default function CheckoutForm() {
                     control={form.control}
                     name="delivery_details.message"
                     render={({ field }) => (
-                        <FormItem className="col-span-3 mt-4">
+                        <FormItem className="col-span-full lg:col-span-3 mt-2 lg:mt-4">
                             <FormControl>
                                 <Textarea className="placeholder:text-black h-40 items-center px-6 border border-gray rounded-3xl text-base text-black col-span-full" placeholder="Scrie aici câteva cuvinte pe care le vom imprima pe felicitare" {...field}/>
                             </FormControl>
@@ -503,7 +504,7 @@ export default function CheckoutForm() {
                     control={form.control}
                     name="delivery_details.comments"
                     render={({ field }) => (
-                        <FormItem className="col-span-3 mt-4">
+                        <FormItem className="col-span-full lg:col-span-3 mt-2 lg:mt-4">
                             <FormControl>
                                 <Textarea className="placeholder:text-black h-40 items-center px-6 border border-gray rounded-3xl text-base text-black col-span-full" placeholder="Comentariu despre comandă" {...field}/>
                             </FormControl>
@@ -512,9 +513,9 @@ export default function CheckoutForm() {
                     )}
                 />      
 
-                <p className='font-semibold col-span-full mt-4'>*Completarea casetelor nu este obligatorie</p>
+                <p className='font-semibold col-span-full mt-2 lg:mt-4'>*Completarea casetelor nu este obligatorie</p>
 
-                <p className=' text-2xl font-semibold leading-7 mb-6 col-span-full mt-12'>Metoda de plată</p>
+                <p className=' text-2xl font-semibold leading-7 mb-4 lg:mb-6 col-span-full mt-8 lg:mt-12'>Metoda de plată</p>
 
                 {/* Payment Method Radio Group */}
                     <FormField 
@@ -527,9 +528,9 @@ export default function CheckoutForm() {
                             <RadioGroup
                             onValueChange={field.onChange}
                             defaultValue={field.value}
-                            className="flex gap-6 col-span-full"
+                            className="flex gap-2 lg:gap-6 col-span-full flex-col lg:flex-row"
                             >
-                            <FormItem className='flex-1'>
+                            <FormItem className='gap-0 lg:flex-1'>
                                 <FormControl>
                                 <RadioGroupItem className='' value={OrderPaymentMethod.Paynet} id="payment-card" />
                                 </FormControl>
@@ -542,7 +543,7 @@ export default function CheckoutForm() {
                                 </label>
                             </FormItem>
 
-                            <FormItem className='flex-1'>
+                            <FormItem className='gap-0 lg:flex-1'>
                                 <FormControl>
                                 <RadioGroupItem className='' value={OrderPaymentMethod.Cash} id="payment-cash" />
                                 </FormControl>
@@ -565,7 +566,7 @@ export default function CheckoutForm() {
                     name="termsAccepted"
                     render={({ field }) => (
                         <FormItem className="col-span-full mb-24">
-                                <div className="flex gap-2 col-span-full mt-12">
+                                <div className="flex gap-2 col-span-full mt-8 lg:mt-12">
                                         <FormControl>
                                             <Checkbox 
                                                 id="termeni" 

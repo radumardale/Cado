@@ -9,21 +9,20 @@ import ProductCard from '@/components/catalog/productsGrid/ProductCard';
 import { ProductInterface } from '@/models/product/types/productInterface';
 
 
-interface MobileRecommendationsProps {
+interface MobileSimilarProductsProps {
     isLoading: boolean;
     data: {
         success: boolean;
         error?: string | undefined;
         products?: ProductInterface[];
-    } | undefined,
-    indProductSection: boolean;
+    } | undefined
 }
 
-export default function MobileRecommendations({isLoading, data, indProductSection}: MobileRecommendationsProps) {
+export default function MobileSimilarProducts({isLoading, data}: MobileSimilarProductsProps) {
     const swiperRef = useRef<SwiperRef>(null);
 
     return (
-        <div className={`col-span-8 lg:col-span-15 -mr-4 lg:-mr-16 overflow-hidden ${indProductSection ? "mb-24" : "mb-8"}`}>
+        <div className='col-span-8 lg:col-span-15 -mr-4 lg:-mr-16 overflow-hidden mb-24'>
             <div className='-mr-12 lg:-mr-18 rounded-tl-2xl'>
                 <Swiper
                     modules={[Autoplay]}

@@ -27,7 +27,7 @@ export default function ProductCard({product, category, section="RECOMMENDATIONS
         </div>
         <Link href={{pathname: "/catalog/product/[id]", params: {id: product.custom_id}, query: category ? {category: category} : {}}} className='col-span-3 group cursor-pointer'>
             <p className={`font-manrope font-semibold mb-2 ${section === "CATALOG" ? "text-left" : "text-center"} lg:text-left`}>{product.title[locale]}</p>
-            <div className={`font-manrope font-semibold border border-gray rounded-3xl w-fit ${section === "CATALOG" ? "mx-0 px-2 py-1.5" : "mx-auto px-4 py-2"} lg:mx-0`}>{product.price.toLocaleString()} MDL</div>
+            <div className={`font-manrope font-semibold border border-gray rounded-3xl w-fit ${section === "CATALOG" ? "mx-0 px-3 py-1.5" : "mx-auto px-4 py-2"} lg:mx-0`}>{product.price.toLocaleString()} MDL</div>
         </Link>
     </div>
   )

@@ -45,7 +45,7 @@ export default function BlogCarousel() {
         <>
             <BlogTitle goToNextSlide={goToNextSlide} goToPreviousSlide={goToPreviousSlide}/>
             <div className='col-span-8 lg:col-span-15 -mr-4 lg:-mr-16 overflow-hidden mb-24 lg:mb-42'>
-                <div className='-mr-18 rounded-tl-2xl mt-8'>
+                <div className='-mr-12 lg:-mr-18 rounded-tl-2xl mt-8'>
                     <Swiper
                         modules={[Autoplay]}
                         autoplay={{

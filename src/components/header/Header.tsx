@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import React, { useEffect, useRef, useState } from 'react';
-import { Globe, Menu, Search } from 'lucide-react';
+import { Search } from 'lucide-react';
 import { COLORS } from '@/lib/colors/colors';
 import CatalogMenuButton from './CatalogMenu/CatalogMenuButton';
 import TopHeader from './TopHeader';
@@ -14,6 +14,8 @@ import CustomLink from '../CustomLink';
 import { Link } from '@/i18n/navigation';
 import { Categories } from '@/lib/enums/Categories';
 import CartIcon from './CartIcon';
+import MobileMenuIcon from './MobileMenuIcon';
+import LangIcon from './LangIcon';
 
 interface HeaderProps {
     category?: Categories | null,
@@ -89,12 +91,8 @@ export default function Header({category, breadcrumbs = false, productInfo}: Hea
                             <div className='absolute bottom-[.1rem] left-0 w-full h-[1px] bg-lightgray px-16 lg:block hidden'></div>
                             <div className='lg:col-start-2 2xl:col-start-2 col-span-8 lg:col-span-11 2xl:col-span-13 h-14 lg:h-[5.1rem] flex justify-between items-center relative w-full border-b border-lightgray lg:border-none'>
                                 <div className="flex gap-4 items-center lg:hidden">
-                                    <Link href="/">
-                                        <Menu color={COLORS.black} className='size-6' strokeWidth={1.25}/>
-                                    </Link>
-                                    <Link href="/">
-                                        <Globe color={COLORS.black} className='size-6' strokeWidth={1.25}/>
-                                    </Link>
+                                    <MobileMenuIcon />
+                                    <LangIcon />
                                 </div>
                                 <Link href="/">
                                     <Image src="/logo/logo-white.svg" width={228} height={56} alt='logo' className='h-8 lg:h-14 w-fit'/>
@@ -110,9 +108,9 @@ export default function Header({category, breadcrumbs = false, productInfo}: Hea
                                     <Link href="/">
                                         <Search color={COLORS.black} className='size-6' strokeWidth={1.25}/>
                                     </Link>
-                                    <Link href="/" className='hidden lg:block'>
-                                        <Globe color={COLORS.black} className='size-6' strokeWidth={1.25}/>
-                                    </Link> 
+                                    <div className='hidden lg:block'>
+                                        <LangIcon />
+                                    </div>
                                     <CartIcon />
                                 </div>
                             </div>

@@ -127,5 +127,10 @@
         "email_orders": "E-mail comenzi: order@cado.md",
         "additional_info": "Informație suplimentară: <br></br> <br></br> Oficiul nostru din Sankt Petersburg se află în Centrul de Afaceri \"Dominat. Modern\", care este situat la 1,6 km de stația de metrou Ladojskaia (15-20 minute de mers pe jos) <br></br> <br></br> SRL \"Atributika\" OGRN 1147847156676 Adresa de facto/poștală: 195027, or. Sankt Petersburg, str. Magnitogorskaia, 30, lit.B, of. 410"
       }
-    } 
+    },
+    "lang": {
+      "ro": "Română",
+      "ru": "Rusă",
+      "en": "Engleză"
+    }
   }

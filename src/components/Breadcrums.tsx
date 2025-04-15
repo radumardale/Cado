@@ -23,7 +23,7 @@ export default function Breadcrums({category, productInfo}: BreadcrumsInterface)
     const t = useTranslations("tags");
 
     return (
-        <div className={`mt-4 flex`}>
+        <div className='mt-4 hidden lg:flex'>
             {
                 <div className='flex gap-2'>
                     <Link href={'/'} className='text-gray font-semibold font-manrope uppercase whitespace-nowrap'>{pathnamesTranslations("home")}</Link>
