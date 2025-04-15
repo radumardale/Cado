@@ -17,7 +17,7 @@ export default function CartSidebar({items, locale, setSidebarOpen, setValue}: C
   return (
     <motion.div 
         onMouseDown={(e) => {e.stopPropagation(); setSidebarOpen(false)}} 
-        className='fixed w-screen h-screen top-0 left-0 z-50 flex justify-end'
+        className='fixed w-screen h-full top-0 left-0 z-50 flex justify-end'
     >
         <motion.div 
             initial={{opacity: 0}} 
