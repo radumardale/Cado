@@ -9,7 +9,7 @@ export default function TermsContainer() {
   return (
     <>
         <TermsSidebar activeSection={activeSection} setActiveSection={setActiveSection} />
-        <TermsContent activeSection={activeSection} />
+        <TermsContent activeSection={activeSection} setActiveSection={setActiveSection}/>
     </>
   )
 }

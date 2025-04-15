@@ -4,7 +4,7 @@ import { motion } from 'motion/react';
 import Image from 'next/image';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
 import { useEffect, useState } from 'react';
-import { CountriesOptions, CountriesOptionsInterface } from '@/lib/enums/CountriesOptions';
+import { CountriesOptions, CountriesOptionsArr, CountriesOptionsInterface } from '@/lib/enums/CountriesOptions';
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 
@@ -19,7 +19,10 @@ export default function LangSidebar({setSidebarOpen}: LangSidebarInterface) {
     const t = useTranslations("lang");
     
     useEffect(() => {
-        const country = window.location.hostname.split(".")[1] as CountriesOptionsInterface;
+        let country = window.location.hostname.split(".")[1] as CountriesOptionsInterface;
+
+        if (!CountriesOptionsArr.includes(country)) country = CountriesOptionsInterface.md;
+
         setCountry(country);
         setLanguage(CountriesOptions[country ? country : 'md'][0]);
     }, [])

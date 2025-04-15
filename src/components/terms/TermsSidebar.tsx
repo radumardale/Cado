@@ -11,7 +11,7 @@ interface TermsSidebarProps {
 export default function TermsSidebar({activeSection, setActiveSection}: TermsSidebarProps) {
     const t = useTranslations("terms_sections");
   return (
-    <div className='col-span-3 mt-16'>
+    <div className='col-span-3 mt-16 hidden lg:block'>
         {
             TermsSectionsArr.map((section, index) => {
                 return (
