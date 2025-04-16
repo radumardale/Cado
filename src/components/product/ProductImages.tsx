@@ -15,6 +15,23 @@ export default function ProductImages({product}: ProductImagesInterface) {
     const [imageIndex, setImageIndex] = useState(0);
     const locale = useLocale();
     const lenis = useLenis();
+    const [isDesktop, setIsDesktop] = useState(false);
+  
+    // Check screen size on mount and window resize
+    useEffect(() => {
+        const checkScreenSize = () => {
+            setIsDesktop(window.innerWidth >= 1024);
+        };
+        
+        // Set initial state
+        checkScreenSize();
+
+        // Add event listener for resize
+        window.addEventListener('resize', checkScreenSize);
+        
+        // Clean up
+        return () => window.removeEventListener('resize', checkScreenSize);
+    }, []);
 
     useEffect(() => {
         if (isCarouselOpen) {
@@ -36,8 +53,8 @@ export default function ProductImages({product}: ProductImagesInterface) {
                 {
                     product.images.map((image, index) => {
                         return(
-                            <button className={`cursor-pointer w-1/4 lg:w-full ${index >= 4 ? "hidden lg:block" : ""}`}key={index} onClick={() => {setImageIndex(index); setCarouselOpen(true)}}>
-                                <Image src={image} alt={product.title[locale]} width={97} height={121} className='rounded-sm lg:rounded-xl w-full' />
+                            <button className={`cursor-pointer w-1/4 aspect-[339/425] lg:w-full ${index >= 4 ? "hidden lg:block" : ""}`}key={index} onClick={() => {setImageIndex(index); setCarouselOpen(true)}}>
+                                <Image src={image} alt={product.title[locale]} width={97} height={121} className='rounded-sm lg:rounded-xl w-full h-full object-cover' />
                             </button>
                         )
                     })
@@ -47,7 +64,7 @@ export default function ProductImages({product}: ProductImagesInterface) {
                 {
                     product.images.map((image, index) => {
                         return(
-                            <button key={index}>
+                            <button key={index} onClick={() => {if (!isDesktop) setCarouselOpen(true)}}>
                                 <Image src={image} alt={product.title[locale]} width={578} height={723} className={`rounded-lg lg:rounded-xl w-full ${index > 0 ? "hidden lg:block" : ""}`} />
                             </button>
                         )

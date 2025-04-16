@@ -51,11 +51,11 @@ export default function CartSidebar({items, locale, setSidebarOpen, setValue}: C
                             items.map((item, index) => {
                                 return (
                                     <div key={index} className='w-full flex gap-2 lg:gap-4'>
-                                        <Image src={item.product.images[0]} alt={item.product.title[locale]} width={129} height={164} className='w-32 aspect-[129/164] rounded-lg' />
+                                        <Image src={item.product.images[0]} alt={item.product.title[locale]} width={129} height={164} className='w-32 aspect-[129/164] object-cover rounded-lg' />
                                         <div className='flex flex-col justify-between flex-1'>
                                             <div>
                                                 <p className='font-manrope text-sm font-semibold mb-4'>{item.product.title[locale]}</p>
-                                                <div className='font-manrope font-semibold py-2 px-4 border border-gray rounded-3xl w-fit'>{item.product.price} MDL</div>
+                                                <div className='font-manrope font-semibold py-2 px-4 border border-gray rounded-3xl w-fit'>{item.product.price.toLocaleString()} MDL</div>
                                             </div>
                                             <div className="flex justify-between items-end">
                                                 <div className='w-30 flex items-center justify-between font-manrope font-semibold py-1 px-4 border border-gray rounded-3xl'>
@@ -108,7 +108,7 @@ export default function CartSidebar({items, locale, setSidebarOpen, setValue}: C
                     items.length > 0 &&
                     <div className="flex justify-between items-end mb-4">
                         <p>Total:</p>
-                        <p className='font-semibold'>{items.reduce((acc, item) => acc + item.product.price, 0).toLocaleString()} MDL</p>
+                        <p className='font-semibold'>{items.reduce((acc, item) => acc + item.product.price * item.quantity, 0).toLocaleString()} MDL</p>
                     </div>
                 }
                 {

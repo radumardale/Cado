@@ -11,3 +11,11 @@ export interface BlogInterface {
     reading_length: number,
     sections: SectionInterface[]
 }
+
+export interface OptimizedBlogInterface {
+    _id: string,
+    title: ProductInfo,
+    image: string,
+    tag: BlogTags,
+    date: Date,
+}

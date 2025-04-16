@@ -21,7 +21,7 @@ function ToastCustom(props: ToastProps) {
   const { title, image, price, id } = props;
 
   return (
-    <div className="py-4 px-6 rounded-2xl bg-white border border-gray w-94">
+    <div className="py-4 px-6 rounded-2xl bg-white border border-gray w-94 mx-auto lg:mx-0">
       <div className="flex justify-between items-center mb-4">
         <p className='font-manrope leading-5 font-semibold'>Adăugat în coș</p>
         <button className='cursor-pointer' onClick={() => {sonnerToast.dismiss(id);}}>
@@ -29,10 +29,10 @@ function ToastCustom(props: ToastProps) {
         </button>
       </div>
       <div className="flex gap-2 mb-6">
-        <Image src={image} alt={title} width={129} height={164} className='w-32 rounded-lg'/>
+        <Image src={image} alt={title} width={129} height={164} className='w-32 aspect-[339/425] object-cover rounded-lg'/>
         <div>
             <p className='font-manrope text-sm font-semibold mb-2'>{title}</p>
-            <div className='font-manrope font-semibold py-2 px-4 border border-gray rounded-3xl w-fit'>{price} MDL</div>
+            <div className='font-manrope font-semibold py-2 px-4 border border-gray rounded-3xl w-fit'>{price.toLocaleString()} MDL</div>
         </div>
       </div>
       <Link href="/checkout">

@@ -5,9 +5,10 @@ import BlogCard from './BlogCard';
 import { trpc } from '@/app/_trpc/client';
 import { useLocale } from 'next-intl';
 import BlogSkeleton from './BlogSkeleton';
+import { BlogInterface } from '@/models/blog/types/BlogInterface';
 
 export default function BlogGrid() {
-    const {data, isLoading} = trpc.blog.getLimitedBlogs.useQuery({limit: 4});
+    const {data, isLoading} = trpc.blog.getAllBlogs.useQuery();
     const locale = useLocale();
 
   return (
@@ -29,7 +30,7 @@ export default function BlogGrid() {
             :
             <>
             {
-                data.blogs.map((blog, index) => {
+                data.blogs.map((blog: BlogInterface, index: number) => {
                     return (
                         <Fragment key={index}>
                             <BlogCard 

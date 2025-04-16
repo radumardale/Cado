@@ -53,17 +53,17 @@ export default function ContactForm() {
                                 <FormMessage />
                                     <Select onValueChange={field.onChange} >
                                         <FormControl>
-                                            <SelectTrigger className="text-base cursor-pointer flex h-12 max-h-none items-center px-6 gap-2 border border-gray rounded-3xl text-black font-semibold w-full">
+                                            <SelectTrigger className="text-base cursor-pointer flex h-12 max-h-none items-center px-6 gap-2 border border-gray rounded-3xl text-black  w-full">
                                                 <SelectValue placeholder="Alege subiectul" />
                                                 <ChevronDown className='size-5' strokeWidth={1.5}/>
                                             </SelectTrigger>
                                         </FormControl>  
                                         <SelectContent className="border-gray">
                                             <SelectGroup>
-                                                <SelectItem className="text-base cursor-pointer font-semibold " value={"ORDER_ISSUE"}>Problemă cu comanda</SelectItem>
-                                                <SelectItem className="text-base cursor-pointer font-semibold " value={"GIFT_ASSITANCE"}>Consultanță (persoană fizică)</SelectItem>
-                                                <SelectItem className="text-base cursor-pointer font-semibold " value={"COMPANY_COLLABORATION"}>Oferte de colaborare (persoană juridică)</SelectItem>
-                                                <SelectItem className="text-base cursor-pointer font-semibold " value={"OTHER"}>Altele</SelectItem>
+                                                <SelectItem className="text-base cursor-pointer  " value={"ORDER_ISSUE"}>Problemă cu comanda</SelectItem>
+                                                <SelectItem className="text-base cursor-pointer  " value={"GIFT_ASSITANCE"}>Consultanță (persoană fizică)</SelectItem>
+                                                <SelectItem className="text-base cursor-pointer  " value={"COMPANY_COLLABORATION"}>Oferte de colaborare (persoană juridică)</SelectItem>
+                                                <SelectItem className="text-base cursor-pointer  " value={"OTHER"}>Altele</SelectItem>
                                             </SelectGroup>
                                         </SelectContent>
                                     </Select>
@@ -77,7 +77,7 @@ export default function ContactForm() {
                         control={form.control}
                         name="name"
                         render={({ field }) => (
-                            <FormItem className="text-base text-black font-semibold w-full">
+                            <FormItem className="text-base text-black  w-full">
                                 <FormMessage />
                                 <FormControl className="border  rounded-3xl border-gray shadow-none p-0 text-black placeholder:text-black focus-visible:outline-none">
                                     <Input className="h-12 w-full px-6 rounded-3xl" placeholder="Nume*" {...field} />
@@ -94,8 +94,8 @@ export default function ContactForm() {
                         render={({ field }) => (
                             <FormItem className="text-black w-full">
                                 <FormMessage />
-                                <FormControl className="border  rounded-3xl border-gray shadow-none p-0 text-black placeholder:text-black focus-visible:outline-none">
-                                    <Input className="font-semibold text-base h-12 w-full px-6 rounded-3xl" placeholder="Email*" {...field} />
+                                <FormControl className="border rounded-3xl border-gray shadow-none p-0 text-black placeholder:text-black focus-visible:outline-none">
+                                    <Input className=" text-base h-12 w-full px-6 rounded-3xl" placeholder="Email*" {...field} />
                                 </FormControl>
                             </FormItem>
                         )}
@@ -107,7 +107,7 @@ export default function ContactForm() {
                         control={form.control}
                         name="tel_number"
                         render={({ field }) => (
-                            <FormItem className="text-black font-semibold w-full">
+                            <FormItem className="text-black  w-full">
                                 <FormMessage />
                                 <FormControl className="border  rounded-3xl border-gray shadow-none p-0 text-black placeholder:text-black focus-visible:outline-none">
                                     <Input className="text-base h-12 w-full px-6 rounded-3xl" placeholder="Telefon*" {...field} />
@@ -118,7 +118,7 @@ export default function ContactForm() {
                 </div>
 
                 <div className="col-span-full mt-8 lg:mt-4">
-                    <p className="font-semibold mb-2 lg:mb-4">Modul preferat de contact?</p>
+                    <p className=" mb-2 lg:mb-4">Modul preferat de contact?</p>
                     <div className="flex gap-8">
                         <FormField
                             control={form.control}
@@ -177,7 +177,7 @@ export default function ContactForm() {
                     render={({ field }) => (
                         <FormItem className="col-span-full mt-8 lg:mt-4">
                             <FormControl>
-                                <Textarea className="placeholder:text-black h-40 items-center px-6 border border-gray rounded-3xl text-base text-black  font-semibold col-span-full" placeholder="Mesaj*" {...field}/>
+                                <Textarea className="placeholder:text-black h-40 items-center px-6 border border-gray rounded-3xl text-base text-black   col-span-full" placeholder="Mesaj*" {...field}/>
                             </FormControl>
                             <FormMessage />
                         </FormItem>
@@ -206,7 +206,7 @@ export default function ContactForm() {
                         </FormItem>
                     )}
                 />  
-                <Button type="submit" className=" hover:bg-blue-2 text-white font-semibold text-base cursor-pointer col-span-full h-12 rounded-3xl bg-blue-2 mt-8 mb-24">Transmite mesajul</Button>
+                <Button type="submit" className=" hover:bg-blue-2 text-white  text-base cursor-pointer col-span-full h-12 rounded-3xl bg-blue-2 mt-8 mb-24 font-semibold">Transmite mesajul</Button>
             </form>
             </Form>
         </>

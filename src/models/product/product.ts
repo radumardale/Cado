@@ -5,6 +5,7 @@ import { ProductInterface } from "./types/productInterface";
 import { Categories } from "@/lib/enums/Categories";
 import { Ocasions } from "@/lib/enums/Ocasions";
 import { ProductContent } from "@/lib/enums/ProductContent";
+import { nanoid } from 'nanoid';
 
 // Product Schema
 const ProductSchema = new mongoose.Schema<ProductInterface>({
@@ -12,6 +13,7 @@ const ProductSchema = new mongoose.Schema<ProductInterface>({
     type: String,
     required: true,
     unique: true,
+    default: nanoid(8)
   },
   title: {
     type: ProductInfoSchema,
@@ -58,7 +60,7 @@ const ProductSchema = new mongoose.Schema<ProductInterface>({
   },
   sale: {
     type: SaleSchema,
-    required: true,
+    required: false,
   }
 });
 

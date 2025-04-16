@@ -19,10 +19,7 @@ export const updateProductProcedure = publicProcedure
 
       const product = await Product.findByIdAndUpdate(
         input.id, 
-        {
-          ...input.data,
-          custom_id: `${input.data.title.ro.split(" ").join("-").toLocaleLowerCase()}-${Math.round(Math.random() * 1000)}`
-        },
+        input.data,
         { new: true }
       );
 

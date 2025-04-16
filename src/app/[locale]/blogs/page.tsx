@@ -20,7 +20,7 @@ export async function generateMetadata() {
 export default function AboutUs({params}: {params: Promise<{locale: string}>;}) {
   const {locale} = use(params);
   setRequestLocale(locale);
-  trpc.blog.getLimitedBlogs.prefetch({limit: 4});
+  trpc.blog.getAllBlogs.prefetch();
 
   return (
     <>

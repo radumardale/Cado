@@ -32,12 +32,12 @@ export default function AboutUsCards() {
             </div>
             <Image src="/hero/hero1.jpg" alt='hero image' width={580} height={600} className='col-span-full lg:col-span-5 h-56 lg:h-full object-cover rounded-2xl lg:rounded-3xl order-1 lg:order-2' />
         </div>
-        <div className="grid col-span-full grid-cols-13 gap-x-6 bg-blue-4 rounded-2xl lg:rounded-3xl pt-4 pb-6 lg:py-0 px-4 lg:px-0">
-            <div className='col-span-full lg:col-span-6 lg:py-8 lg:pl-8'>
-                <Image src="/about-us/hero2.jpg" alt='hero image' width={580} height={600} className='h-full w-full object-cover rounded-2xl lg:rounded-3xl' />
+        <div className="grid col-span-full grid-cols-13 gap-x-6 bg-blue-4 rounded-2xl lg:rounded-3xl pt-4 pb-6 lg:py-8 px-4 lg:px-0 lg:pl-8">
+            <div className='col-span-full lg:col-span-6 h-full relative box-border'>
+                <Image src="/about-us/hero2.jpg" alt='hero image' width={913} height={536} className='h-full w-full object-cover rounded-2xl lg:rounded-3xl lg:absolute' />
             </div>
 
-            <div className='lg:py-14 lg:pr-8 col-span-full lg:col-span-7 mt-6 lg:mt-0'>
+            <div className='lg:py-6 lg:pr-8 col-span-full lg:col-span-7 mt-6 lg:mt-0'>
                 <p className='text-white font-manrope text-2xl lg:text-3xl leading-7 lg:leading-11 uppercase font-semibold mb-6 lg:mb-8 lg:w-7/8'>CADO înseamnă mai mult decât cadouri — înseamnă și experiențe</p>
                 <p className='mb-8 lg:mb-17 text-white text-sm lg:text-2xl leading-4 lg:leading-7'>Dincolo de cadourile personalizate, oferim și <span className='font-semibold'> servicii complete de organizare de evenimente</span> — de la petreceri corporate la evenimente private. <br/><br/> Prin proiectul nostru <span className='font-semibold'>Event Republic</span>, aducem concepte memorabile la viață, cu profesionalism și creativitate. <br/><br/> Accesați <NextLink href="https://eventrepublic.md" className='underline'>www.eventrepublic.md</NextLink> pentru a descoperi cum putem transforma ocaziile speciale în experiențe de neuitat. </p>
                 <NextLink href="https://eventrepublic.md" target="_blank" className='bg-white rounded-3xl h-12 px-6 flex items-center gap-2 text-blue-4 font-semibold hover:opacity-75 transition duration-300 w-fit'>

@@ -28,8 +28,12 @@
       "description": "Seturi atent alese pentru a impresiona și încânta."
       },
       "ALL_PRODUCTS": {
-      "title": "Toate produsele",
-      "description": "Descoperă întreaga noastră gamă de produse."
+        "title": "Toate produsele",
+        "description": "Descoperă întreaga noastră gamă de produse."
+      },
+      "CUSTOM": {
+        "title": "8 martie",
+        "description": "Cadouri care promovează bunăstarea, incluzând produse pentru relaxare, îngrijire personală și echilibru zilnic."
       }
     },
     "ocasions": {

@@ -17,7 +17,7 @@ export default function CheckoutCart() {
     }, [])
 
   return (
-    <div className='col-span-full lg:col-start-10 2xl:col-start-10 lg:col-span-5 2xl:col-span-4 lg:sticky left-0 lg:h-screen -mb-7 pb-16 lg:pb-31 top-25 flex flex-col'>
+    <div className='col-span-full lg:col-start-10 2xl:col-start-10 lg:col-span-5 2xl:col-span-4 lg:sticky left-0 lg:h-screen -mb-7 pb-16 lg:pb-31 top-25 flex flex-col justify-between'>
         <p className='font-manrope text-2xl font-semibold leading-7 mb-4 lg:mb-6'>Sumarul comenzii</p>
         {
             items.length > 0 && mounted ?
@@ -26,11 +26,11 @@ export default function CheckoutCart() {
                         items.map((item, index) => {
                             return (
                                 <div key={index} className='w-full flex gap-2 lg:gap-4'>
-                                    <Image src={item.product.images[0]} alt={item.product.title[locale]} width={129} height={164} className='w-32 aspect-[129/164] rounded-lg' />
+                                    <Image src={item.product.images[0]} alt={item.product.title[locale]} width={129} height={164} className='w-32 aspect-[129/164] object-cover rounded-lg' />
                                     <div className='flex flex-col justify-between flex-1'>
                                         <div>
                                             <p className='font-manrope text-sm leading-4 font-semibold mb-4'>{item.product.title[locale]}</p>
-                                            <div className='font-manrope font-semibold py-2 px-4 border border-gray rounded-3xl w-fit'>{item.product.price} MDL</div>
+                                            <div className='font-manrope font-semibold py-2 px-4 border border-gray rounded-3xl w-fit'>{item.product.price.toLocaleString()} MDL</div>
                                         </div>
                                         <div className="flex justify-between items-end">
                                             <div className='w-30 flex items-center justify-between font-manrope font-semibold py-1 px-4 border border-gray rounded-3xl'>
@@ -59,7 +59,7 @@ export default function CheckoutCart() {
 
                                             
                                             <button 
-                                                className='text-gray underline cursor-pointer' 
+                                                className='text-gray cursor-pointer relative after:contetn-[""] after:absolute after:left-0 after:bottom-0 after:w-0 after:h-[1px] after:bg-gray hover:after:w-full after:transition-all after:duration-300' 
                                                 onClick={() => {
                                                     const newItems = items.filter((_, i) => i !== index);
                                                     setValue(newItems);
@@ -87,10 +87,11 @@ export default function CheckoutCart() {
                 </div>
                 <div className="flex justify-between items-end mb-4">
                     <p>Total:</p>
-                    <p className='font-semibold'>{mounted && items.reduce((acc, item) => acc + item.product.price, 0).toLocaleString()} MDL</p>
+                    <p className='font-semibold'>{mounted && items.reduce((acc, item) => acc + item.product.price * item.quantity, 0).toLocaleString()} MDL</p>
                 </div>
             </>
         }
+
         <button className='h-12 w-full bg-blue-2 text-white rounded-3xl font-manrope font-semibold cursor-pointer border hover:opacity-75 transition duration-300' form="checkout-form">Continuă plata</button>
     </div>
   )

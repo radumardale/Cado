@@ -9,9 +9,11 @@ test.skip("deleteAllProducts", async () => {
 
 
     for (const product of productsRes.products) {
-        await caller.products.deleteProduct({
-            id: product._id.toString(),
-        })
+        if (product.images.length < 4) {
+            await caller.products.deleteProduct({
+                id: product._id.toString(),
+            })
+        } 
     }
 
     // expectTypeOf(res).toEqualTypeOf<ActionResponse>();

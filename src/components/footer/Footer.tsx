@@ -76,8 +76,8 @@ export default function Footer() {
             </div>
 
             <div className="flex justify-center col-span-full mt-12 mb-16 lg:mb-6 order-6">
-                <button className='bg-white size-12 flex justify-center items-center rounded-full cursor-pointer' onClick={() => {lenis?.scrollTo(0)}}>
-                    <ArrowUp className='text-blue-2 size-8' />
+                <button className='hover:bg-white size-12 flex justify-center items-center rounded-full cursor-pointer transition duration-300 group border border-white' onClick={() => {lenis?.scrollTo(0)}}>
+                    <ArrowUp className='group-hover:text-blue-2 text-white size-8 transition duration-300' />
                 </button>
             </div>
         </div>
