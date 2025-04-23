@@ -23,20 +23,20 @@ export default function ImagesCarousel({setCarouselOpen, product, locale, initia
 
     const prevDragOpacity = useTransform(
         x, 
-        [0, 20], 
+        [0, 10], 
         [0, 1]
     );
 
 
     const nextDragOpacity = useTransform(
         x, 
-        [-20, 0], 
+        [-10, 0], 
         [1, 0]
     );
 
     const activeDragOpacity = useTransform(
         x, 
-        [-20, 0, 20], 
+        [-10, 0, 10], 
         [0, 1, 0]
     );
     
@@ -97,7 +97,7 @@ export default function ImagesCarousel({setCarouselOpen, product, locale, initia
                 {product.images.map((image, index) => (
                     <motion.div
                         key={index} 
-                        className='pointer-events-none h-auto top-1/2 lg:top-0 -translate-y-1/2 lg:-translate-y-0 lg:h-full w-full lg:w-auto rounded-2xl absolute left-1/2 -translate-x-1/2'
+                        className='pointer-events-none top-1/2 lg:top-0 -translate-y-1/2 lg:-translate-y-0 lg:h-full w-full lg:w-auto rounded-2xl absolute left-1/2 -translate-x-1/2'
                         style={{ opacity: index === activeImage ? isDragOver ? activeDragOpacity : 1 : index === nextImage ? isDragOver ? nextDragOpacity : 0 : index === prevImage ? isDragOver ? prevDragOpacity : 0 : 0 }}
                     >
                         <Image    
@@ -105,7 +105,7 @@ export default function ImagesCarousel({setCarouselOpen, product, locale, initia
                             alt={product.title[locale]} 
                             width={738} 
                             height={919} 
-                            className={`h-full w-auto rounded-2xl lg:max-w-none ${activeImage === index ? "z-10" : "z-0"}`} 
+                            className={`h-auto lg:h-full w-auto rounded-2xl lg:max-w-none object-contain ${activeImage === index ? "z-10" : "z-0"}`} 
                         />
                     </motion.div>
                 ))}

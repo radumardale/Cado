@@ -105,10 +105,10 @@ export default function Header({category, breadcrumbs = false, productInfo}: Hea
                                     <CustomLink className='text-black font-semibold font-manrope h-5' href="/contacts" value='Contacte'/>
                                 </div>
                                 <div className="flex gap-4 items-center">
-                                    <Link href="/">
+                                    <button className='cursor-pointer h-6' onClick={() => setIsCatalogMenuOpen(true)}>
                                         <Search color={COLORS.black} className='size-6' strokeWidth={1.25}/>
-                                    </Link>
-                                    <div className='hidden lg:block'>
+                                    </button>
+                                    <div className='hidden lg:block h-6'>
                                         <LangIcon />
                                     </div>
                                     <CartIcon />

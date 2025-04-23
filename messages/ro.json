@@ -80,6 +80,56 @@
       "DELIVERY": "Livrare & Transport",
       "SUPPORT": "Suport"
     },
+    "delivery_regions": {
+      "CHISINAU": "Chișinău - 0 (la comenzi de la MDL 500)",
+      "AEROPORT_CHISINAU": "Aeroport Chișinău - MDL 100",
+      "CHISINAU_MUNICIPII": "Chișinău (municipii) - MDL 80",
+      "BALTI": "Bălți - MDL 1,350",
+      "BENDER": "Bender - MDL 680",
+      "BASARABEASCA": "Basarabeasca - MDL 1,170",
+      "BRICENI": "Briceni - MDL 2,340",
+      "BUCOVAT": "Bucovăț - MDL 340",
+      "VULCANESTI": "Vulcănești - MDL 1,790",
+      "GLODENI": "Glodeni - MDL 1,750",
+      "DROCHIA": "Drochia - MDL 1,870",
+      "DUBASARI": "Dubăsari - MDL 500",
+      "EDINET": "Edineț - MDL 2,060",
+      "CAHUL": "Cahul - MDL 1,770",
+      "CALARASI": "Călărași - MDL 470",
+      "CANTEMIR": "Cantemir - MDL 1,240",
+      "CAUSENI": "Căușeni - MDL 700",
+      "COMRAT": "Comrat - MDL 970",
+      "LEOVA": "Leova - MDL 1,220",
+      "LIPCANI": "Lipcani - MDL 2,570",
+      "NISPORENI": "Nisporeni - MDL 770",
+      "ANENII_NOI": "Anenii Noi - MDL 300",
+      "OCNITA": "Ocnița - MDL 2,330",
+      "ORHEI": "Orhei - MDL 435",
+      "REZINA": "Rezina - MDL 1,130",
+      "RIBNITA": "Rîbnița - MDL 1,200",
+      "RISCANI": "Rîșcani - MDL 1,760",
+      "SOROCA": "Soroca - MDL 1,580",
+      "STRASENI": "Strășeni - MDL 240",
+      "TARACLIA": "Taraclia - MDL 1,520",
+      "TVARDITA": "Tvardița - MDL 1,140",
+      "TIRASPOL": "Tiraspol - MDL 750",
+      "UNGHENI": "Ungheni - MDL 1,100",
+      "FALESTI": "Fălești - MDL 1,340",
+      "FLORESTI": "Florești - MDL 1,290",
+      "HINCESTI": "Hîncești - MDL 370",
+      "CEADIR_LUNGA": "Ceadîr-Lunga - MDL 1,290",
+      "CIMISLIA": "Cimișlia - MDL 600",
+      "SOLDANESTI": "Șoldănești - MDL 1,210",
+      "STEFAN_VODA": "Ștefan-Vodă - MDL 950",
+      "IALOVENI": "Ialoveni - MDL 150"
+    },
+    "delivery_hours": {
+      "01:00-05:00": "01:00 - 05:00 - suplimentar +60% pret livrare",
+      "06:00-09:00": "06:00 - 09:00 - suplimentar +40% pret livrare",
+      "10:00-13:00": "10:00 - 13:00",
+      "14:00-19:00": "14:00 - 19:00",
+      "20:00-00:00": "20:00 - 00:00 - suplimentar +40% pret livrare"
+    },
     "index": {
       "meta": {
         "title": "Index page",
@@ -110,13 +160,24 @@
         }
       }
     },
+    "admin" : {
+      "admin_pages": {
+        "ORDERS": "Toate comenzile",
+        "PRODUCTS": "Catalog produse",
+        "CLIENTS": "Date clienți",
+        "HOME_PAGE": "Pagina “Acasă”",
+        "BLOG_PAGE": "Pagina “Blog”",
+        "SEASON_CATALOG": "Catalog de sezon",
+        "CONTACT_DETAILS": "Detalii contact"
+      }
+    },
     "maps": {
       "0": {
         "full_city": "Chișinău, Moldova",
         "city": "Chișinău",
         "address": "Adresa: Moldova, Chișinău, <br></br> str. Alecu Russo 15, of. 59",
         "work_hours": "Ore de lucru: Luni-Vineri 9:00 - 16:00",
-        "phone": "Telefon: +373 69 645 153 | +373 69 645 153",
+        "phone": "Telefon: +373 69 645 153 | +373 68 501 809",
         "email_support": "E-mail suport: info@cado.md",
         "email_orders": "E-mail comenzi: order@cado.md",
         "additional_info": "Informație suplimentară: <br></br> <br></br> Oficiul nostru din Sankt Petersburg se află în Centrul de Afaceri 'Dominat. Modern', care este situat la 1,6 km de stația de metrou Ladojskaia (15-20 minute de mers pe jos) <br></br> <br></br> SRL 'Atributika' OGRN 1147847156676 Adresa de facto/poștală: 195027, or. Sankt Petersburg, str. Magnitogorskaia, 30, lit.B, of. 410"

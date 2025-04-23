@@ -16,12 +16,38 @@ export const getSimilarProducts = publicProcedure
     try {
 
       await connectMongo();
-      
-      const products = await Product.find({categories: input.category})
-      .limit(5)
-      .select("_id title price images custom_id stock_availability")
-      .lean();
 
+      const products = await Product.aggregate([
+        {
+          $project: {
+            "description": 0,
+            "long_description": 0,
+            "set_description": 0,
+            "ocasions": 0,
+            "product_content": 0,
+          }
+        },
+        {
+          $set: {
+            relevance: {
+              $cond: [
+                {$in: [input.category, "$categories"]},
+                0,
+                1
+              ]
+            }
+          }
+        },
+        {
+          $limit: 5
+        },
+        {
+          $sort: {
+            relevance: -1
+          }
+        }
+      ]);
+      
       if (!products) {
         return {
           success: false,

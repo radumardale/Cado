@@ -29,7 +29,7 @@ test.skip("updateOrder", async () => {
 //                 city: "San Francisco",
 //                 home_address: "456 Market St"
 //             },
-//             enitity_type: ClientEntity.Legal
+//             entity_type: ClientEntity.Legal
 //         },
 //         payment_method: OrderPaymentMethod.Paynet,
 //         state: OrderState.Paid

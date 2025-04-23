@@ -14,6 +14,10 @@ import { motion } from 'motion/react'
 import { Plus } from 'lucide-react'
 
 interface CatalogSidebarProps {
+  keywordsState: {
+    keywords: string | null,
+    setKeywords: (v: string | null) => void
+  },
   productContentState: {
     productContent: ProductContent[],
     setProductContent: (v: ProductContent[]) => void
@@ -34,7 +38,7 @@ interface CatalogSidebarProps {
   isSidebarOpen: boolean
 }
 
-export default function CatalogSidebar({priceState, categoriesState, ocasionsState, productContentState, setSidebarOpen, isSidebarOpen}: CatalogSidebarProps) {
+export default function CatalogSidebar({priceState, categoriesState, ocasionsState, productContentState, setSidebarOpen, isSidebarOpen, keywordsState}: CatalogSidebarProps) {
   const updateOcasions = useCallback((value: Ocasions) => {
     ocasionsState.setOcasions(
       ocasionsState.ocasions.includes(value) 
@@ -63,7 +67,7 @@ export default function CatalogSidebar({priceState, categoriesState, ocasionsSta
       <LayoutGroup>
         <AnimatePresence>
         {
-          (categoriesState.category || ocasionsState.ocasions.length > 0 || productContentState.productContent.length > 0 || priceState.price[0] !== 0 || priceState.price[1] !== 5000) &&
+          (categoriesState.category || ocasionsState.ocasions.length > 0 || productContentState.productContent.length > 0 || priceState.price[0] !== 0 || priceState.price[1] !== 5000 || keywordsState.keywords !== null) &&
             <ActiveFilters
               resetAllFilters={(router: AppRouterInstance) => {
                 priceState.setPrice([0, 5000]);
@@ -72,6 +76,18 @@ export default function CatalogSidebar({priceState, categoriesState, ocasionsSta
                 productContentState.setProductContent([]);
                 resetUrlParams(router);
               }}
+
+              keywords={keywordsState.keywords}
+              resetKeywords={(searchParams: URLSearchParams, router: AppRouterInstance) => {
+                keywordsState.setKeywords(null);
+
+                const params = new URLSearchParams(searchParams.toString());
+                params.delete('keywords');
+                
+                const newUrl = window.location.pathname + (params.toString() ? `?${params.toString()}` : '');
+                router.push(newUrl, {scroll: false});
+              }}
+
               categories={categoriesState.category ? [categoriesState.category] : []}
               updateCategories={(value: Categories, searchParams: URLSearchParams, router: AppRouterInstance) => {
                 categoriesState.setCategory(value === categoriesState.category ? null : value);

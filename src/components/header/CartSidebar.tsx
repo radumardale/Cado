@@ -107,7 +107,7 @@ export default function CartSidebar({items, locale, setSidebarOpen, setValue}: C
                 {
                     items.length > 0 &&
                     <div className="flex justify-between items-end mb-4">
-                        <p>Total:</p>
+                        <p>Subtotal:</p>
                         <p className='font-semibold'>{items.reduce((acc, item) => acc + item.product.price * item.quantity, 0).toLocaleString()} MDL</p>
                     </div>
                 }

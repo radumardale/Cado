@@ -11,7 +11,7 @@ export default function Hero() {
         </div>
         <div className='col-span-full lg:col-start-5 2xl:col-start-6 lg:col-span-7 2xl:col-span-5 mb-58 lg:mb-66 relative'>
           <h3 className='mt-16 lg:mt-32 text-center font-manrope text-2xl lg:text-3xl leading-7 lg:leading-11 uppercase font-semibold mb-8 lg:mb-6'>CADO — cadouri care <br/> nu se redăruiesc</h3>
-          <p className='text-center mb-8 lg:mb-12 text-sm lg:text-base'>Cadourile noastre sunt create cu gândul la impactul emoțional — pentru ca fiecare gest să devină o amintire și fiecare set să transmită grijă autentică.</p>
+          <p className='text-center mb-8 lg:mb-12 text-sm lg:text-lg lg:leading-5'>Cadourile noastre sunt create cu gândul la impactul emoțional — pentru ca fiecare gest să devină o amintire și fiecare set să transmită grijă autentică.</p>
           <SeeMoreButton text="Vezi catalog" />
         </div>
         <AboutUsCards />

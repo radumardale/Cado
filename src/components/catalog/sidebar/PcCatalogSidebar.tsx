@@ -12,6 +12,10 @@ import { checkboxUpdateUrlParams, resetUrlParams, updateCategoriesParams } from 
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime'
 
 interface CatalogSidebarProps {
+  keywordsState: {
+    keywords: string | null,
+    setKeywords: (v: string | null) => void
+  },
   productContentState: {
     productContent: ProductContent[],
     setProductContent: (v: ProductContent[]) => void
@@ -30,7 +34,7 @@ interface CatalogSidebarProps {
   },
 }
 
-export default function PcCatalogSidebar({priceState, categoriesState, ocasionsState, productContentState}: CatalogSidebarProps) {
+export default function PcCatalogSidebar({priceState, categoriesState, ocasionsState, productContentState, keywordsState}: CatalogSidebarProps) {
   const updateOcasions = useCallback((value: Ocasions) => {
     ocasionsState.setOcasions(
       ocasionsState.ocasions.includes(value) 
@@ -52,7 +56,7 @@ export default function PcCatalogSidebar({priceState, categoriesState, ocasionsS
       <LayoutGroup>
         <AnimatePresence>
         {
-          (categoriesState.category || ocasionsState.ocasions.length > 0 || productContentState.productContent.length > 0 || priceState.price[0] !== 0 || priceState.price[1] !== 5000) &&
+          (categoriesState.category || ocasionsState.ocasions.length > 0 || productContentState.productContent.length > 0 || priceState.price[0] !== 0 || priceState.price[1] !== 5000 || keywordsState.keywords !== null) &&
             <ActiveFilters
               resetAllFilters={(router: AppRouterInstance) => {
                 priceState.setPrice([0, 5000]);
@@ -61,10 +65,22 @@ export default function PcCatalogSidebar({priceState, categoriesState, ocasionsS
                 productContentState.setProductContent([]);
                 resetUrlParams(router);
               }}
+
               categories={categoriesState.category ? [categoriesState.category] : []}
               updateCategories={(value: Categories, searchParams: URLSearchParams, router: AppRouterInstance) => {
                 categoriesState.setCategory(value === categoriesState.category ? null : value);
                 updateCategoriesParams(value === categoriesState.category ? [] : [value], searchParams, router);
+              }}
+
+              keywords={keywordsState.keywords}
+              resetKeywords={(searchParams: URLSearchParams, router: AppRouterInstance) => {
+                keywordsState.setKeywords(null);
+
+                const params = new URLSearchParams(searchParams.toString());
+                params.delete('keywords');
+                
+                const newUrl = window.location.pathname + (params.toString() ? `?${params.toString()}` : '');
+                router.push(newUrl, {scroll: false});
               }}
         
               ocasions={ocasionsState.ocasions}

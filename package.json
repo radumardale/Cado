@@ -34,6 +34,7 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "date-fns": "^3.6.0",
+    "diacritic-regex": "^1.2.0",
     "leaflet": "^1.9.4",
     "lenis": "^1.2.3",
     "lucide-react": "^0.479.0",
@@ -57,7 +58,8 @@
     "tailwindcss-animate": "^1.0.7",
     "usehooks-ts": "^3.1.1",
     "zod": "^3.24.2",
-    "zod-validation-error": "^3.4.0"
+    "zod-validation-error": "^3.4.0",
+    "zustand": "^5.0.3"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

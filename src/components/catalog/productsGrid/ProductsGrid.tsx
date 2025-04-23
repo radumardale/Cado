@@ -1,5 +1,5 @@
 import { ProductInterface } from '@/models/product/types/productInterface'
-import React, { useEffect, useState } from 'react'
+import React, { Fragment, useEffect, useState } from 'react'
 import ProductCard from './ProductCard'
 import Controls from './Controls'
 import ListProductCard from './ListProductCard'
@@ -16,10 +16,12 @@ interface ProductsGridProps {
     sortBy: SortBy,
     category: Categories | null,
     setSidebarOpen: (v: boolean) => void,
-    isSidebarOpen: boolean
+    isSidebarOpen: boolean,
+    searchText: string | null,
+    countProducts: number
 }
 
-export default function ProductsGrid({products, loading, setSortBy, sortBy, category, setSidebarOpen, isSidebarOpen}: ProductsGridProps) {
+export default function ProductsGrid({products, loading, setSortBy, sortBy, category, setSidebarOpen, isSidebarOpen, searchText, countProducts}: ProductsGridProps) {
     const [gridLayout, setGridLayout] = useState(true);
     const [scope, animate] = useAnimate()
 
@@ -31,8 +33,8 @@ export default function ProductsGrid({products, loading, setSortBy, sortBy, cate
       }, [gridLayout, loading])
 
   return (
-    <motion.div className='col-span-full lg:col-start-4 lg:col-span-10 2xl:col-span-12 grid grid-cols-8 lg:grid-cols-12 mt-12 gap-x-2 gap-y-6 lg:gap-6 h-fit'>
-        <Controls gridLayout={gridLayout} setGridLayout={setGridLayout} setSortBy={setSortBy} sortBy={sortBy} setSidebarOpen={setSidebarOpen} isSidebarOpen={isSidebarOpen}/>
+    <motion.div className='col-span-full lg:col-start-4 lg:col-span-10 2xl:col-span-12 grid grid-cols-8 lg:grid-cols-12 mt-16 lg:mt-12 gap-x-2 lg:gap-y-6 lg:gap-6 h-fit'>
+        <Controls gridLayout={gridLayout} setGridLayout={setGridLayout} setSortBy={setSortBy} sortBy={sortBy} setSidebarOpen={setSidebarOpen} isSidebarOpen={isSidebarOpen} searchText={searchText} countProducts={countProducts}/>
         <div ref={scope} className='col-span-full grid grid-cols-8 lg:grid-cols-12 gap-x-2 gap-y-6 lg:gap-6'>
             {
                 loading ? 
@@ -41,7 +43,20 @@ export default function ProductsGrid({products, loading, setSortBy, sortBy, cate
                 ) : (
                     products.map((product, index) => {
                         return (
-                            gridLayout ? <ProductCard section='CATALOG' category={category} key={index} product={product} /> : <ListProductCard key={index} product={product}/>
+                            <Fragment key={index}>
+                                {
+                                    products[index].relevance < 1 && products[index - 1] && products[index - 1].relevance > 0 && 
+                                    <>
+                                        {
+                                            gridLayout && <div key={'line' + index} className='col-span-full h-[1px] w-full bg-black'></div>
+                                        }
+                                        <p className='col-span-full font-manrope text-2xl leading-7 uppercase font-semibold'>CATALOG GENERAL</p>
+                                    </>
+                                }
+                                {
+                                    gridLayout ? <ProductCard section='CATALOG' category={category} product={product} newLine={products[index].relevance < 1 && products[index - 1] && products[index - 1].relevance > 0} /> : <ListProductCard key={index} product={product}/>
+                                }
+                            </Fragment>
                         )
                     })
                 )

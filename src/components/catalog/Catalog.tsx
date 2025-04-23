@@ -21,13 +21,15 @@ export default function Catalog() {
     const [productContent, setProductContent] = useState<ProductContent[]>(searchParams.getAll("product_content") as ProductContent[]);
     const [price, setPrice] = useState([Number(searchParams.get("min_price")), searchParams.get("max_price") ? Number(searchParams.get("max_price")) : 5000]);
     const [sortBy, setSortBy] = useState<SortBy>(searchParams.get("sort_by") ? searchParams.get("sort_by") as SortBy : SortBy.RECOMMENDED);
+    const [keywords, setKeywords] = useState(searchParams.get("keywords"));
     const [isSidebarOpen, setSidebarOpen] = useState(false);
-    
+
     // Create a ref for the loading trigger element
     const observerRef = useRef<HTMLDivElement>(null);
     
     useEffect(() => {
         // Your existing effect for search params
+        const newKeywords = searchParams.get("keywords");
         const newCategory = searchParams.get("category") as Categories || null;
         const newOcasions = searchParams.getAll("ocasions") as Ocasions[];
         const newProductContent = searchParams.getAll("product_content") as ProductContent[];
@@ -35,15 +37,17 @@ export default function Catalog() {
         const newMaxPrice = Number(searchParams.get("max_price") || price[1]);
         const newSortBy = searchParams.get("sort_by") as SortBy || sortBy;
 
-        if (category !== newCategory) setCategory(newCategory);
-        if (JSON.stringify(ocasions) !== JSON.stringify(newOcasions)) setOcasions(newOcasions);
-        if (JSON.stringify(productContent) !== JSON.stringify(newProductContent)) setProductContent(newProductContent);
-        if (price[0] !== newMinPrice || price[1] !== newMaxPrice) setPrice([newMinPrice, newMaxPrice]);
-        if (sortBy !== newSortBy) setSortBy(newSortBy);
+        setKeywords(newKeywords);
+        setCategory(newCategory);
+        setOcasions(newOcasions);
+        setProductContent(newProductContent);
+        setPrice([newMinPrice, newMaxPrice]);
+        setSortBy(newSortBy);
     }, [searchParams])
     
     const { data, fetchNextPage, hasNextPage, isFetchingNextPage, status } = trpc.products.getProducts.useInfiniteQuery({
         limit: productsLimit,
+        title: keywords,
         category: category,
         ocasions: ocasions,
         productContent: productContent,
@@ -58,6 +62,7 @@ export default function Catalog() {
     });
     
     const allProducts = data?.pages.flatMap(page => page.products) || [];
+    const countProducts = data?.pages.reduce((total, page) => total += page.productsCount, 0) || 0;
 
     // Set up intersection observer for infinite scrolling
     useEffect(() => {
@@ -92,7 +97,11 @@ export default function Catalog() {
         <> 
             <Header category={category} breadcrumbs />
             <div className="relative col-span-full grid grid-cols-full gap-x-2 lg:gap-x-6 mb-24">
-                <CatalogSidebar                 
+                <CatalogSidebar      
+                    keywordsState={{
+                        keywords,
+                        setKeywords
+                    }}
                     categoriesState={{
                         category,
                         setCategory
@@ -113,6 +122,10 @@ export default function Catalog() {
                     isSidebarOpen={isSidebarOpen}
                 />
                  <PcCatalogSidebar        
+                    keywordsState={{
+                        keywords,
+                        setKeywords
+                    }}
                     categoriesState={{
                         category,
                         setCategory
@@ -138,6 +151,8 @@ export default function Catalog() {
                     category={category}
                     setSidebarOpen={setSidebarOpen}
                     isSidebarOpen={isSidebarOpen}
+                    searchText={keywords}
+                    countProducts={countProducts}
                 />
                 
                 <div 

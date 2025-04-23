@@ -3,7 +3,6 @@
 import { Form, FormControl, FormField, FormItem, FormMessage } from '../ui/form'
 import { addOrderRequestSchema } from '@/lib/validation/order/addOrderRequest'
 import { z } from 'zod'
-import { zodResolver } from '@hookform/resolvers/zod'
 import { DeliveryMethod } from '@/models/order/types/deliveryMethod'
 import { RadioGroup } from '../ui/radio-group'
 import { RadioGroupItem } from '@radix-ui/react-radio-group'
@@ -11,7 +10,7 @@ import { useForm } from 'react-hook-form'
 import { BanknoteIcon, BriefcaseBusiness, CalendarIcon, ChevronDown, Clock, CreditCard, MapPin, Truck, User } from 'lucide-react'
 import { Input } from '../ui/input'
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '../ui/select'
-import { useState } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 import { Checkbox } from '../ui/checkbox'
 import { ClientEntity } from '@/models/order/types/orderEntity'
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover'
@@ -22,8 +21,20 @@ import { Calendar } from '../ui/calendar'
 import { Textarea } from '../ui/textarea'
 import { OrderPaymentMethod } from '@/models/order/types/orderPaymentMethod'
 import { Link } from '@/i18n/navigation'
+import { CartInterface } from '@/lib/types/CartInterface'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { DeliveryRegions, DeliveryRegionsArr } from '@/lib/enums/DeliveryRegions'
+import { useTranslations } from 'next-intl'
+import { DeliveryHours, DeliveryHoursArr } from '@/lib/enums/DeliveryHours'
 
-export default function CheckoutForm() {
+interface CheckoutFormProps {
+    items: CartInterface[],
+    setDeliveryRegion: (v: DeliveryRegions | null) => void,
+    setDeliveryHour: (v: DeliveryHours | null) => void,
+}
+
+export default function CheckoutForm({items, setDeliveryRegion, setDeliveryHour}: CheckoutFormProps) {
+    const t = useTranslations();
     const [isBillingAddress, setBillingAddress] = useState(true);
 
     const form = useForm<z.infer<typeof addOrderRequestSchema>>({
@@ -32,20 +43,75 @@ export default function CheckoutForm() {
             delivery_method: DeliveryMethod.HOME_DELIVERY,
             additional_info: {
                 delivery_address: {
-                    region: "CHISINAU"
+                    region: "CHISINAU",
+                    city: undefined,
+                    home_address: undefined
                 },
-                enitity_type: ClientEntity.Natural
+                entity_type: ClientEntity.Natural
             },
             payment_method: OrderPaymentMethod.Paynet
         }
       })      
 
     function onSubmit(values: z.infer<typeof addOrderRequestSchema>) {
+        addOrderRequestSchema.parse(values);
         console.log(values)
     }
 
     const deliveryMethod = form.watch("delivery_method");
-    const entityType = form.watch("additional_info.enitity_type");
+    const entityType = form.watch("additional_info.entity_type");
+    const deliveryRegion = form.watch("additional_info.delivery_address.region");
+    const deliveryHour = form.watch("delivery_details.hours_intervals");
+
+    useEffect(() => {
+        setDeliveryRegion(deliveryRegion ? deliveryRegion as DeliveryRegions : DeliveryRegions.CHISINAU);
+    }, [deliveryRegion])
+
+    useEffect(() => {
+        setDeliveryHour(deliveryHour ? deliveryHour as DeliveryHours : null);
+    }, [deliveryHour])
+
+    useEffect(() => {
+        const productIds = items.map(item => item.product._id);
+        form.setValue("products", productIds);
+    }, []);
+
+    useEffect(() => {
+        if (deliveryMethod === DeliveryMethod.HOME_DELIVERY) {
+            form.setValue("payment_method", OrderPaymentMethod.Paynet);
+            setBillingAddress(true);
+            setDeliveryRegion(DeliveryRegions.CHISINAU);
+        }
+
+        if (deliveryMethod === DeliveryMethod.PICKUP) {
+            form.resetField("additional_info.delivery_address.city");
+            form.resetField("additional_info.delivery_address.home_address");
+            form.resetField("delivery_details.hours_intervals");
+            setBillingAddress(false);
+            setDeliveryRegion(null);
+            setDeliveryHour(null);
+        }
+    }, [deliveryMethod])
+
+    useEffect(() => {
+        if (entityType === ClientEntity.Legal) {
+            form.resetField("additional_info.billing_address.firstname");
+            form.resetField("additional_info.billing_address.lastname");
+        }
+
+        if (entityType === ClientEntity.Natural) {
+            form.resetField("additional_info.billing_address.company_name");
+            form.resetField("additional_info.billing_address.idno");
+        }
+    }, [entityType])
+
+    useEffect(() => {
+        if (isBillingAddress) {
+            form.resetField("additional_info.billing_address");
+        } else {
+            form.setValue("additional_info.billing_address.region", 'CHISINAU')
+        }
+    }, [isBillingAddress])
 
   return (
     <div className='col-span-full lg:col-span-7 2xl:col-span-6 lg:col-start-2 2xl:col-start-3 grid grid-cols-8 lg:grid-cols-6 gap-x-2 lg:gap-x-6 h-fit'>
@@ -192,20 +258,23 @@ export default function CheckoutForm() {
                         render={({ field }) => (
                             <FormItem className="col-span-full lg:col-span-3 mt-2 lg:mt-4"> 
                                 <FormMessage />
-                                    <Select onValueChange={field.onChange} defaultValue={"CHISINAU"} >
+                                    <Select onValueChange={field.onChange} defaultValue={"CHISINAU"}>
                                         <FormControl>
-                                            <SelectTrigger className="cursor-pointer flex h-12 max-h-none items-center px-6 gap-2 border border-gray rounded-3xl text-base text-black  w-full">
+                                            <SelectTrigger className="cursor-pointer flex h-12 max-h-none items-center px-6 gap-2 border border-gray rounded-3xl text-base text-black w-full max-w-full *:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:text-left">
                                                 <SelectValue placeholder="Alege subiectul"/>
-                                                <ChevronDown className='size-5' strokeWidth={1.5}/>
+                                                <ChevronDown className='min-w-5 size-5' strokeWidth={1.5}/>
                                             </SelectTrigger>
                                         </FormControl>  
                                         <SelectContent className="border-gray">
-                                            <SelectGroup>
-                                                <SelectItem className="text-base cursor-pointer " value={"CHISINAU"}>Chișinău</SelectItem>
-                                                <SelectItem className="text-base cursor-pointer " value={"CAHUL"}>Cahul</SelectItem>
-                                                <SelectItem className="text-base cursor-pointer " value={"BALTI"}>Balti</SelectItem>
-                                                <SelectItem className="text-base cursor-pointer " value={"ANENII NOI"}>Anenii Noi</SelectItem>
-                                            </SelectGroup>
+                                        <SelectGroup className='max-h-[calc(100vh-10rem)] overflow-auto z-10' data-lenis-prevent>
+                                            {
+                                                DeliveryRegionsArr.map((region, index) => {
+                                                    return (
+                                                        <SelectItem key={index} className="text-base cursor-pointer" value={DeliveryRegions[region as DeliveryRegions]}>{t(`delivery_regions.${region}`)}</SelectItem>
+                                                    )
+                                                })
+                                            }
+                                        </SelectGroup>
                                         </SelectContent>
                                     </Select>
                             </FormItem>
@@ -240,12 +309,12 @@ export default function CheckoutForm() {
                 }
 
                 {
-                    (deliveryMethod === DeliveryMethod.PICKUP || !isBillingAddress ) && 
+                    (!isBillingAddress ) && 
                     <>
                         {/* Entity Type Radio Group */}
                         <FormField 
                         control={form.control}
-                        name="additional_info.enitity_type"
+                        name="additional_info.entity_type"
                         render={({ field }) => (
                             <FormItem className='col-span-full'>
                             <FormMessage />
@@ -288,7 +357,7 @@ export default function CheckoutForm() {
 
                         {
                             entityType === ClientEntity.Natural ? 
-                            <>
+                            <Fragment key="natural-fields">
                                 <FormField
                                     control={form.control}
                                     name="additional_info.billing_address.firstname"
@@ -313,9 +382,9 @@ export default function CheckoutForm() {
                                         </FormItem>
                                     )}
                                 />
-                            </>
+                            </Fragment>
                             :
-                            <>
+                            <Fragment key="legal-fields">
                                 <FormField
                                     control={form.control}
                                     name="additional_info.billing_address.company_name"
@@ -340,7 +409,7 @@ export default function CheckoutForm() {
                                         </FormItem>
                                     )}
                                 />
-                            </>
+                            </Fragment>
                         }
 
                          <FormField
@@ -462,21 +531,23 @@ export default function CheckoutForm() {
                                     <FormMessage />
                                         <Select onValueChange={field.onChange} >
                                             <FormControl>
-                                                <SelectTrigger className="cursor-pointer flex h-12 max-h-none items-center px-6 gap-2 border border-gray rounded-3xl text-base text-black w-full">
-                                                    <div className='flex gap-2 items-center'>
+                                                <SelectTrigger className="cursor-pointer flex h-div12 max-h-none items-center px-6 gap-2 border border-gray rounded-3xl text-base text-black w-full max-w-full *:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:mr-auto">
+                                                    <div>
                                                         <Clock strokeWidth={1.25} className='size-5'/>
-                                                        <SelectValue placeholder="Intervalul orelor de livrare"/>
                                                     </div>
+                                                    <SelectValue placeholder="Intervalul orelor de livrare"/>
                                                     <ChevronDown className='size-5' strokeWidth={1.5}/>
                                                 </SelectTrigger>
                                             </FormControl>  
                                             <SelectContent className="border-gray">
                                                 <SelectGroup>
-                                                    <SelectItem className="text-base cursor-pointer " value={"01-05"}>01:00 - 05:00</SelectItem>
-                                                    <SelectItem className="text-base cursor-pointer " value={"06-09"}>06:00 - 09:00</SelectItem>
-                                                    <SelectItem className="text-base cursor-pointer " value={"10-13"}>10:00 - 13:00 </SelectItem>
-                                                    <SelectItem className="text-base cursor-pointer " value={"14-19"}>14:00 - 19:00 </SelectItem>
-                                                    <SelectItem className="text-base cursor-pointer " value={"20-00"}>20:00 - 00:00</SelectItem>
+                                                    {
+                                                        DeliveryHoursArr.map((hour, index) => {
+                                                            return (
+                                                                <SelectItem key={index} className="text-base cursor-pointer" value={DeliveryHours[hour as DeliveryHours]}>{t(`delivery_hours.${hour}`)}</SelectItem>
+                                                            )
+                                                        })
+                                                    }
                                                 </SelectGroup>
                                             </SelectContent>
                                         </Select>
@@ -493,7 +564,7 @@ export default function CheckoutForm() {
                     render={({ field }) => (
                         <FormItem className="col-span-full lg:col-span-3 mt-2 lg:mt-4">
                             <FormControl>
-                                <Textarea className="placeholder:text-black h-40 items-center px-6 border border-gray rounded-3xl text-base text-black col-span-full" placeholder="Scrie aici câteva cuvinte pe care le vom imprima pe felicitare" {...field}/>
+                                <Textarea className="placeholder:text-black h-40 items-center px-6 border border-gray rounded-3xl text-base text-black col-span-full" placeholder="Lăsați aici câteva cuvinte pe care le vom imprima pe felicitare" {...field}/>
                             </FormControl>
                             <FormMessage />
                         </FormItem>
@@ -523,43 +594,46 @@ export default function CheckoutForm() {
                     name="payment_method"
                     render={({ field }) => (
                         <FormItem className='col-span-full'>
-                        <FormMessage />
-                        <FormControl>
-                            <RadioGroup
-                            onValueChange={field.onChange}
-                            defaultValue={field.value}
-                            className="flex gap-2 lg:gap-6 col-span-full flex-col lg:flex-row"
-                            >
-                            <FormItem className='gap-0 lg:flex-1'>
-                                <FormControl>
-                                <RadioGroupItem className='' value={OrderPaymentMethod.Paynet} id="payment-card" />
-                                </FormControl>
-                                <label 
-                                htmlFor="payment-card" 
-                                className={`${field.value === OrderPaymentMethod.Paynet ? "bg-black text-white" : "bg-white"} transition duration-300 py-3 w-full flex gap-2 font-semibold justify-center items-center rounded-3xl border border-black cursor-pointer`}
+                            <FormControl>
+                                <RadioGroup
+                                onValueChange={field.onChange}
+                                defaultValue={field.value}
+                                className="flex gap-2 lg:gap-6 col-span-full flex-col lg:flex-row"
                                 >
-                                <CreditCard strokeWidth={1.25} className='size-6' />
-                                <p className='font-semibold'>Achitare online</p>
-                                </label>
-                            </FormItem>
+                                <FormItem className='gap-0 lg:flex-1'>
+                                    <FormControl>
+                                    <RadioGroupItem className='' value={OrderPaymentMethod.Paynet} id="payment-card" />
+                                    </FormControl>
+                                    <label 
+                                    htmlFor="payment-card" 
+                                    className={`${field.value === OrderPaymentMethod.Paynet ? "bg-black text-white" : "bg-white"} transition duration-300 py-3 w-full flex gap-2 font-semibold justify-center items-center rounded-3xl border border-black cursor-pointer`}
+                                    >
+                                    <CreditCard strokeWidth={1.25} className='size-6' />
+                                    <p className='font-semibold'>Achitare online</p>
+                                    </label>
+                                </FormItem>
 
-                            <FormItem className='gap-0 lg:flex-1'>
-                                <FormControl>
-                                <RadioGroupItem className='' value={OrderPaymentMethod.Cash} id="payment-cash" />
-                                </FormControl>
-                                <label 
-                                htmlFor="payment-cash" 
-                                className={`${field.value === OrderPaymentMethod.Cash ? "bg-black text-white" : "bg-white"} transition duration-300 py-3 flex gap-2 justify-center items-center font-semibold rounded-3xl border border-black cursor-pointer`}
-                                >
-                                <BanknoteIcon strokeWidth={1.25} className='size-6' />
-                                <p className='font-semibold'>Achitare în numerar</p>
-                                </label>
-                            </FormItem>
-                            </RadioGroup>
-                        </FormControl>
+                                <FormItem className='gap-0 lg:flex-1'>
+                                    <FormControl>
+                                    <RadioGroupItem
+                                    disabled={deliveryMethod === DeliveryMethod.HOME_DELIVERY} 
+                                    className='peer' value={OrderPaymentMethod.Cash} id="payment-cash" />
+                                    </FormControl>
+                                    <label 
+                                    htmlFor="payment-cash" 
+                                    className={`${field.value === OrderPaymentMethod.Cash ? "bg-black text-white" : "bg-white"} peer-disabled:cursor-default peer-disabled:opacity-25 transition duration-300 py-3 flex gap-2 justify-center items-center font-semibold rounded-3xl border border-black cursor-pointer`}
+                                    >
+                                    <BanknoteIcon strokeWidth={1.25} className='size-6' />
+                                    <p className='font-semibold'>Achitare în numerar</p>
+                                    </label>
+                                </FormItem>
+                                </RadioGroup>
+                            </FormControl>
+                            <FormMessage />
                         </FormItem>
                     )}
                     />
+                <p className='font-semibold col-span-full mt-2 lg:mt-4'>*Achitarea numerar este posibilă doar la ridicare personală</p>
 
                 <FormField
                     control={form.control}

@@ -1,16 +1,34 @@
 'use client'
 
+import { DeliveryHours, getDeliveryAdditionalRate } from "@/lib/enums/DeliveryHours";
+import { DeliveryRegions, getDeliveryPrice } from "@/lib/enums/DeliveryRegions";
 import { CartInterface } from "@/lib/types/CartInterface";
 import { Minus, Plus, ShoppingBag } from "lucide-react";
 import { useLocale } from "next-intl";
 import Image from "next/image";
-import { useEffect, useState } from "react";
-import { useLocalStorage } from "usehooks-ts";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 
-export default function CheckoutCart() {
-    const [items, setValue] = useLocalStorage<CartInterface[]>("cart", []);
+interface CheckoutCartProps {
+    items: CartInterface[],
+    setValue: Dispatch<SetStateAction<CartInterface[]>>,
+    deliveryRegion: DeliveryRegions | null,
+    deliveryHour: DeliveryHours | null
+}
+
+export default function CheckoutCart({items, setValue, deliveryRegion, deliveryHour}: CheckoutCartProps) {
     const [mounted, setMounted] = useState(false);
+    const [deliveryPrice, setDeliveryPrice] = useState(deliveryRegion ? getDeliveryPrice(deliveryRegion, items.reduce((acc, item) => acc + item.product.price * item.quantity, 0)) : null)
+    const [deliveryHourRate, setDeliveryHourRate] = useState(deliveryHour ? getDeliveryAdditionalRate(deliveryHour) : null);
     const locale = useLocale();
+
+    useEffect(() => {
+        setDeliveryPrice(deliveryRegion ? getDeliveryPrice(deliveryRegion, items.reduce((acc, item) => acc + item.product.price * item.quantity, 0)) : null);
+    }, [deliveryRegion])
+
+    useEffect(() => {
+        // console.log(deliveryHour);
+        setDeliveryHourRate(deliveryHour ? getDeliveryAdditionalRate(deliveryHour) : null);
+    }, [deliveryHour])
 
     useEffect(() => {
         setMounted(true)
@@ -79,15 +97,31 @@ export default function CheckoutCart() {
             </div>
         }
         {
-            items.length > 0 &&
+            mounted && items.length > 0 &&
             <>
-                <div className="flex justify-between items-end mb-2 lg:mb-4">
-                    <p>Livrare:</p>
-                    <p className='font-semibold'>Livrare gratuită</p>
-                </div>
+                {
+                    deliveryPrice !== null &&
+                    <>
+                        <div className="flex justify-between items-end mb-2">
+                            <p>Subtotal:</p>
+                            <p>{mounted && items.reduce((acc, item) => acc + item.product.price * item.quantity, 0).toLocaleString()} MDL</p>
+                        </div>
+                        <div className="flex justify-between items-end mb-2 lg:mb-4">
+                            <p>Livrare:</p>
+                            <p>{deliveryPrice.toLocaleString()} MDL</p>
+                        </div>
+                        {
+                            deliveryHourRate !== null && deliveryPrice * deliveryHourRate !== 0 && 
+                            <div className="flex justify-between items-end -mt-2 mb-2 lg:mb-4">
+                                <p>Ora livrării: {deliveryHour}</p>
+                                <p>{(deliveryPrice * deliveryHourRate).toLocaleString()} MDL</p>
+                            </div>
+                        }
+                    </>
+                }
                 <div className="flex justify-between items-end mb-4">
                     <p>Total:</p>
-                    <p className='font-semibold'>{mounted && items.reduce((acc, item) => acc + item.product.price * item.quantity, 0).toLocaleString()} MDL</p>
+                    <p className='font-semibold'>{mounted && (items.reduce((acc, item) => acc + item.product.price * item.quantity, 0) + (deliveryPrice ? deliveryPrice + (deliveryHourRate ? deliveryHourRate * deliveryPrice : 0) : 0)).toLocaleString()} MDL</p>
                 </div>
             </>
         }

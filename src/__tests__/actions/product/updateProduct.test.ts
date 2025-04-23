@@ -1,7 +1,7 @@
 import { appRouter } from "@/server";
 import { assert, test } from "vitest";
 
-test.skip("update prices for all products", async () => {
+test.skip("update products", async () => {
     // Create a tRPC caller
     const caller = appRouter.createCaller({});
     
@@ -18,15 +18,19 @@ test.skip("update prices for all products", async () => {
     // 3. Update each product's price
     for (const product of productsResponse.products) {
         const productId = product._id.toString();
-        
-        const newPrice = product.price * 1.05;
+
+        const newTitle = {
+            ro: product.title.ro.slice(0, -1),
+            ru: product.title.ru.slice(0, -1)
+        }
         
         const updateRes = await caller.products.updateProduct({
             id: productId,
             data: { 
-                title: product.title,
+                title: newTitle,
                 description: product.description,
-                price: parseFloat(newPrice.toFixed(2)),
+                long_description: product.long_description,
+                price: product.price,
                 ocasions: product.ocasions,
                 categories: product.categories,
                 product_content: product.product_content,

@@ -15,14 +15,15 @@ interface ActiveFiltersInterface {
     updateProductContent: (value: string, searchParams: URLSearchParams, router: AppRouterInstance) => void,
     resetAllFilters: (router: AppRouterInstance) => void,
     price: number[],
-    resetPrice: (searchParams: URLSearchParams, router: AppRouterInstance) => void
+    resetPrice: (searchParams: URLSearchParams, router: AppRouterInstance) => void,
+    keywords: string | null,
+    resetKeywords: (searchParams: URLSearchParams, router: AppRouterInstance) => void,
 }
 
-export default function ActiveFilters({categories, updateCategories, ocasions, updateOcasions, productContent, updateProductContent, resetAllFilters, price, resetPrice}: ActiveFiltersInterface) {
+export default function ActiveFilters({categories, updateCategories, ocasions, updateOcasions, productContent, updateProductContent, resetAllFilters, price, resetPrice, keywords, resetKeywords}: ActiveFiltersInterface) {
     const t = useTranslations("");
     const router = useRouter();
     const searchParams = useSearchParams();
-    
 
   return (
     <motion.div 
@@ -36,6 +37,9 @@ export default function ActiveFilters({categories, updateCategories, ocasions, u
 
         <p className='font-semibold font-manrope mb-4 mt-4'>Filtre active</p>
             <div className='flex gap-2 max-w-full flex-wrap mb-4'>
+                {
+                    keywords !== null && <ActiveFiltersButton key="keyword" title={'"' + keywords.split("+").join(" ") + '"'} onClick={() => {resetKeywords(searchParams, router)}} />
+                }
                 {
                     categories.map((value, index) => {
                         return (<ActiveFiltersButton key={index} title={t("tags." + value + '.title')} onClick={() => {updateCategories(value, searchParams, router)}} />)

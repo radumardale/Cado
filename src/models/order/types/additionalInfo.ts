@@ -6,7 +6,7 @@ import mongoose from "mongoose";
 export interface AdditionalInfoInterface {
     delivery_address?: NormalAddress,
     billing_address: NormalAddress | LegalAddress,
-    enitity_type: ClientEntity,
+    entity_type: ClientEntity,
 }
 
 // Additional Info schema
@@ -19,7 +19,7 @@ export const AdditionalInfoSchema = new mongoose.Schema<AdditionalInfoInterface>
         type: LegalAddressSchema,
         required: true
       },
-      enitity_type: {
+      entity_type: {
         type: String,
         enum: ClientEntity,
         required: true

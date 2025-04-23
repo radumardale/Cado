@@ -6,6 +6,9 @@ import Image from 'next/image';
 import Searchbar from './CatalogMenu/Searchbar';
 import Accordion from '../catalog/sidebar/Accordion';
 import { useTranslations } from 'next-intl';
+import { useState } from 'react';
+import { trpc } from '@/app/_trpc/client';
+import SearchProducts from './CatalogMenu/SearchProducts';
 
 interface MobileMenuInterface {
     setSidebarOpen: (v: boolean) => void,
@@ -15,6 +18,17 @@ interface MobileMenuInterface {
 export default function MobileMenu({setSidebarOpen}: MobileMenuInterface) {
     const t = useTranslations("tags");
     const pathname = usePathname();
+    const [searchText, setSearchText] = useState("");
+
+    const { data } = trpc.search.useQuery(
+        { title: searchText },
+        { 
+          enabled: searchText.length > 1,
+          staleTime: 30000, 
+          gcTime: 60000, 
+        }
+      );
+    
 
   return (
     <motion.div 
@@ -30,29 +44,36 @@ export default function MobileMenu({setSidebarOpen}: MobileMenuInterface) {
         <Link href="/" onClick={() => {if (pathname === "/") setSidebarOpen(false)}}>
             <Image src="/logo/logo-white.svg" width={228} height={56} alt='logo' className='h-8 w-fit mx-auto mb-4'/>
         </Link>
-        <Searchbar />
-        <Accordion title='Catalog' isMenuAccordion>
-            <div className='flex flex-col gap-4 pb-2 pl-4'>
-                <Link onClick={() => {if (pathname === "/catalog") setSidebarOpen(false)}} href={{pathname: '/catalog'}} className='font-manrope font-semibold'>{t("ALL_PRODUCTS.title")}</Link>
-                <Link onClick={() => {if (pathname === "/catalog") setSidebarOpen(false)}} href={{pathname: '/catalog', query: {category: "FOR_HER"}}} className='font-manrope font-semibold'>{t("FOR_HER.title")}</Link>
-                <Link onClick={() => {if (pathname === "/catalog") setSidebarOpen(false)}} href={{pathname: '/catalog', query: {category: "FOR_HIM"}}} className='font-manrope font-semibold'>{t("FOR_HIM.title")}</Link>
-                <Link onClick={() => {if (pathname === "/catalog") setSidebarOpen(false)}} href={{pathname: '/catalog', query: {category: "FOR_KIDS"}}} className='font-manrope font-semibold'>{t("FOR_KIDS.title")}</Link>
-                <Link onClick={() => {if (pathname === "/catalog") setSidebarOpen(false)}} href={{pathname: '/catalog', query: {category: "ACCESSORIES"}}} className='font-manrope font-semibold'>{t("ACCESSORIES.title")}</Link>
-                <Link onClick={() => {if (pathname === "/catalog") setSidebarOpen(false)}} href={{pathname: '/catalog', query: {category: "FLOWERS_AND_BALLOONS"}}} className='font-manrope font-semibold'>{t("FLOWERS_AND_BALLOONS.title")}</Link>
-            </div>
-        </Accordion>
-        <Link className='py-4 border-b border-lightgray' href="/" onClick={() => {if (pathname === "/") setSidebarOpen(false)}}>
-            <span className='pl-2 font-manrope font-semibold leading-5'>Acasă</span>
-        </Link>
-        <Link className='py-4 border-b border-lightgray' href="/about-us" onClick={() => {if (pathname === "/about-us") setSidebarOpen(false)}}>
-            <span className='pl-2 font-manrope font-semibold leading-5'>Despre Noi</span>
-        </Link>
-        <Link className='py-4 border-b border-lightgray' href="/blogs" onClick={() => {if (pathname === "/blogs") setSidebarOpen(false)}}>
-            <span className='pl-2 font-manrope font-semibold leading-5'>Blog</span>
-        </Link>
-        <Link className='py-4 border-b border-lightgray' href="/contacts" onClick={() => {if (pathname === "/contacts") setSidebarOpen(false)}}>
-            <span className='pl-2 font-manrope font-semibold leading-5'>Contacte</span>
-        </Link>
+        <Searchbar productsCount={0} searchText={searchText} setSearchText={setSearchText} closeMenu={() => {setSidebarOpen(false)}}  />
+        { 
+            searchText.length < 2 ?
+            <>
+                <Accordion title='Catalog' isMenuAccordion>
+                    <div className='flex flex-col gap-4 pb-2 pl-4'>
+                        <Link onClick={() => {if (pathname === "/catalog") setSidebarOpen(false)}} href={{pathname: '/catalog'}} className='font-manrope font-semibold'>{t("ALL_PRODUCTS.title")}</Link>
+                        <Link onClick={() => {if (pathname === "/catalog") setSidebarOpen(false)}} href={{pathname: '/catalog', query: {category: "FOR_HER"}}} className='font-manrope font-semibold'>{t("FOR_HER.title")}</Link>
+                        <Link onClick={() => {if (pathname === "/catalog") setSidebarOpen(false)}} href={{pathname: '/catalog', query: {category: "FOR_HIM"}}} className='font-manrope font-semibold'>{t("FOR_HIM.title")}</Link>
+                        <Link onClick={() => {if (pathname === "/catalog") setSidebarOpen(false)}} href={{pathname: '/catalog', query: {category: "FOR_KIDS"}}} className='font-manrope font-semibold'>{t("FOR_KIDS.title")}</Link>
+                        <Link onClick={() => {if (pathname === "/catalog") setSidebarOpen(false)}} href={{pathname: '/catalog', query: {category: "ACCESSORIES"}}} className='font-manrope font-semibold'>{t("ACCESSORIES.title")}</Link>
+                        <Link onClick={() => {if (pathname === "/catalog") setSidebarOpen(false)}} href={{pathname: '/catalog', query: {category: "FLOWERS_AND_BALLOONS"}}} className='font-manrope font-semibold'>{t("FLOWERS_AND_BALLOONS.title")}</Link>
+                    </div>
+                </Accordion>
+                <Link className='py-4 border-b border-lightgray' href="/" onClick={() => {if (pathname === "/") setSidebarOpen(false)}}>
+                    <span className='pl-2 font-manrope font-semibold leading-5'>Acasă</span>
+                </Link>
+                <Link className='py-4 border-b border-lightgray' href="/about-us" onClick={() => {if (pathname === "/about-us") setSidebarOpen(false)}}>
+                    <span className='pl-2 font-manrope font-semibold leading-5'>Despre Noi</span>
+                </Link>
+                <Link className='py-4 border-b border-lightgray' href="/blogs" onClick={() => {if (pathname === "/blogs") setSidebarOpen(false)}}>
+                    <span className='pl-2 font-manrope font-semibold leading-5'>Blog</span>
+                </Link>
+                <Link className='py-4 border-b border-lightgray' href="/contacts" onClick={() => {if (pathname === "/contacts") setSidebarOpen(false)}}>
+                    <span className='pl-2 font-manrope font-semibold leading-5'>Contacte</span>
+                </Link>
+            </>
+            :
+            <SearchProducts productsCount={data?.count} products={data?.products} searchText={searchText} closeMenu={() => {setSidebarOpen(false)}}/>
+        }
     </motion.div>
   )
 }

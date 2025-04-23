@@ -32,7 +32,7 @@ export default function Recommendations({indProductSection = false}: Recommendat
 
     return (
         <>
-            <h3 className={`${indProductSection ? "lg:border-t lg:border-black text-2xl lg:text-[2rem] leading-7 lg:leading-9 lg:pt-6 mb-8 text-center" : "text-2xl lg:text-3xl leading-7 lg:leading-11 text-center mb-8 lg:mb-12"} col-span-full font-manrope uppercase font-semibold`}>{isDesktop ? "RECOMANDĂRILE NOASTRE" : "RECOMANDĂRI"}</h3>
+            <h3 className={`${indProductSection ? "lg:border-t lg:border-black text-2xl lg:text-[2rem] leading-7 lg:leading-9 lg:pt-6 mb-8 text-center lg:text-left" : "text-2xl lg:text-3xl leading-7 lg:leading-11 text-center mb-8 lg:mb-12"} col-span-full font-manrope uppercase font-semibold`}>PRODUSE RECOMANDATE</h3>
             {
                 isDesktop ? 
                 <PCRecommendations data={data} indProductSection={indProductSection} isLoading={isLoading} /> :

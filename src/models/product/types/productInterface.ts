@@ -5,8 +5,10 @@ import { Ocasions } from "@/lib/enums/Ocasions";
 import { ProductContent } from "@/lib/enums/ProductContent";
 
 export interface ProductInterface {
+    _id: string,
     custom_id: string,
     title: ProductInfo,
+    normalized_title: ProductInfo,
     description: ProductInfo,
     long_description: ProductInfo,
     set_description: ProductInfo,
@@ -16,5 +18,6 @@ export interface ProductInterface {
     product_content: ProductContent[],
     stock_availability: number,
     images: string[],
-    sale: ProductSale
+    sale: ProductSale,
+    relevance: number
 }
