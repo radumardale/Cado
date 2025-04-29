@@ -15,7 +15,7 @@ export default function AdditionalInfo({product, locale}: AdditionalInfoInterfac
   return (
     <div className='mt-12 lg:mt-0'>
         {
-            product.set_description && 
+            product.nr_of_items > 1 && 
             <Accordion open={activeIndex == 0} setActiveIndex={() => {setActiveIndex(activeIndex === 0 ? -1 : 0)}} title="Cadoul include">
                 <p className={`[display:-webkit-box] [-webkit-box-orient:vertical] overflow-hidden text-sm lg:text-base leading-4 lg:leading-5 whitespace-pre-line`}>
                     {product.set_description[locale]}

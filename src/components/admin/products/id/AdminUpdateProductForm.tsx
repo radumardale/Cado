@@ -48,7 +48,7 @@ export default function AdminUpdateProductForm({id}: AdminProductFormProps) {
                 set_description: { ro: "", ru: "", en: "" },
                 price: 0,
                 images: [],
-                nr_of_items: 0,
+                nr_of_items: 1,
                 categories: [],
                 ocasions: [],
                 product_content: [],

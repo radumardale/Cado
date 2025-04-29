@@ -29,7 +29,7 @@ export default function AdminProductDetails() {
     const ocasions = form.watch("data.ocasions");
 
     useEffect(() => {
-        if (nrOfItemsInGift === 0) {
+        if (nrOfItemsInGift <= 1) {
             form.setValue("data.set_description", undefined);
         } else {
             form.resetField("data.set_description");
@@ -196,11 +196,11 @@ export default function AdminProductDetails() {
                                 <FormControl>
                                 <div className='w-30 flex items-center justify-between font-manrope font-semibold py-1 px-4 border border-gray rounded-3xl'>
                                     <button 
-                                        disabled={field.value < 1} 
+                                        disabled={field.value <= 1} 
                                         className='cursor-pointer disabled:pointer-events-none disabled:text-gray' 
                                         onClick={(e) => {
                                             e.preventDefault();
-                                            form.setValue("data.nr_of_items", Math.max(field.value - 1, 0));
+                                            form.setValue("data.nr_of_items", Math.max(field.value - 1, 0), {shouldDirty: true});
                                         }}
                                     ><Minus strokeWidth={1.5} className='w-6' /></button>
 
@@ -209,7 +209,7 @@ export default function AdminProductDetails() {
                                     <button 
                                         onClick={(e) => {
                                             e.preventDefault();
-                                            form.setValue("data.nr_of_items", field.value + 1);
+                                            form.setValue("data.nr_of_items", field.value + 1, {shouldDirty: true});
                                         }} 
                                         className='cursor-pointer disabled:pointer-events-none disabled:text-gray'
                                     ><Plus strokeWidth={1.5} className='w-6' /></button>
@@ -221,7 +221,7 @@ export default function AdminProductDetails() {
                     />
                 </div>
                 {
-                    nrOfItemsInGift > 0 &&
+                    nrOfItemsInGift > 1 &&
                     <>
                         <FormField
                             control={form.control}
@@ -253,7 +253,7 @@ export default function AdminProductDetails() {
                             control={form.control}
                             name="data.set_description.en"
                             render={({ field }) => (
-                                <FormItem className="col-span-full">
+                                <FormItem className="col-span-full mb-6">
                                     <FormLabel className="font-semibold font-manrope leading-5">The gift includes</FormLabel>
                                     <FormControl>
                                         <Textarea data-lenis-prevent className="scroll-bar-custom placeholder:text-black h-40 items-center px-6 border border-gray rounded-3xl text-base text-black pt-4 col-span-full" placeholder="The gift includes*" {...field}/>
@@ -262,7 +262,6 @@ export default function AdminProductDetails() {
                                 </FormItem>
                             )}
                         />
-                        <div className='h-[1px] col-span-full bg-lightgray mt-8 mb-2'></div>
                     </>
                 }
 
@@ -270,7 +269,7 @@ export default function AdminProductDetails() {
                     control={form.control}
                     name="data.long_description.ro"
                     render={({ field }) => (
-                        <FormItem className="col-span-full">
+                        <FormItem className="col-span-full mt-2 pt-4 border-t border-lightgray">
                             <FormLabel className="font-semibold font-manrope leading-5">Descriere</FormLabel>
                             <FormControl>
                                 <Textarea data-lenis-prevent className="scroll-bar-custom placeholder:text-black h-40 items-center px-6 border border-gray rounded-3xl text-base text-black pt-4 col-span-full" placeholder="Descriere*" {...field}/>
