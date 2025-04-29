@@ -34,7 +34,7 @@ export default function OrdersForm() {
     useEffect(() => {
         if (isSuccess) {
             toast.success("Produsul a fost actualizat cu succes!");
-            console.log(MutatedData.success, MutatedData.error)
+            console.log(MutatedData);
             if (MutatedData) form.reset({
                 id: MutatedData.order?._id,
                 ...MutatedData.order
@@ -58,8 +58,6 @@ export default function OrdersForm() {
             form.resetField("additional_info.delivery_address.home_address");
             form.resetField("delivery_details.hours_intervals");
             form.setValue("additional_info.billing_checkbox", false);
-            // setDeliveryRegion(null);
-            // setDeliveryHour(null);
         }
     }, [deliveryMethod])
 
@@ -76,6 +74,8 @@ export default function OrdersForm() {
     }, [entityType])
 
     function onSubmit(values: z.infer<typeof updateOrderRequestSchema>) {
+        
+        console.log(values)
         mutate(values);
     }
 
@@ -89,7 +89,7 @@ export default function OrdersForm() {
                 </div>
             </div>
         }
-        <div data-lenis-prevent className='scroll-bar-custom lg:col-span-6 lg:col-start-2 grid grid-cols-6 gap-x-2 lg:gap-x-6 flex-1 overflow-auto mt-16 pr-6 pb-16'>
+        <div className='lg:col-span-6 lg:col-start-2 grid grid-cols-6 gap-x-2 lg:gap-x-6 flex-1 pb-16'>
                 <form id="order-update-form" onSubmit={form.handleSubmit(onSubmit)} className='col-span-full grid grid-cols-6 gap-x-6'>
                     <p className='text-2xl font-semibold leading-7 mb-4 lg:mb-6 col-span-full font-manrope'>Metoda de expediere</p>
 

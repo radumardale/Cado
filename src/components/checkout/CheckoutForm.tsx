@@ -41,11 +41,13 @@ export default function CheckoutForm({items, setDeliveryRegion, setDeliveryHour,
     const { mutate, data, isPending } = trpc.order.addOrder.useMutation();
     
     useEffect(() => {
-        if (!isPending && data?.success) {
-            toast.success("Comanda a fost plasată cu succes!");
-        } else {
-            toast.error(data?.error);
-        }
+        if (!isPending) {
+            if (data?.success) {
+                toast.success("Comanda a fost plasată cu succes!");
+            } else {
+                toast.error(data?.error);
+            }
+        } 
     }, [data, isPending])
 
     const form = useForm<z.infer<typeof addOrderRequestSchema>>({

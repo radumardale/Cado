@@ -82,6 +82,8 @@ const { data, isLoading } = trpc.order.getOrderById.useQuery({id: id});
           (data?.order.additional_info?.delivery_address?.home_address === 
            data?.order.additional_info?.billing_address?.home_address);
 
+           console.log(isSameAddress)
+
            const billingAddress = data.order.additional_info?.billing_address;
     
         // Determine address type by examining the object itself, not just relying on entity_type
@@ -148,7 +150,9 @@ const { data, isLoading } = trpc.order.getOrderById.useQuery({id: id});
 
   return (
     <Form {...form}>
-      <OrdersForm />
+      <div data-lenis-prevent className='col-span-7 grid grid-cols-7 scroll-bar-custom overflow-y-auto flex-1 -mr-6 pr-6 mt-16'>
+        <OrdersForm />
+      </div>
       <OrdersProductsSummary />
     </Form>
   )

@@ -16,6 +16,7 @@ export interface AdditionalInfoInterface {
 export interface ResAdditionalInfoInterface {
   user_data: UserDataInterface,
   delivery_address?: Address,
+  billing_checkbox: boolean,
   billing_address: NormalAddress | LegalAddress,
   entity_type: ClientEntity,
 }

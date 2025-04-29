@@ -58,19 +58,22 @@ const OrderSchema = new mongoose.Schema<OrderInterface>({
     }
 }, {timestamps: true});
 
-interface CompleteOrderI extends OrderInterface {
-    _id: string
-}
-
-OrderSchema.pre<CompleteOrderI>("findOneAndDelete", function(next) {
-
-    Client.updateOne({ _id: this.client }, {
-        $pull: {
-            orders: this._id
-        }
-    });
-    next();
-});
+OrderSchema.pre("findOneAndDelete", async function(next) {
+    try {
+      const orderId = this.getQuery()._id;
+      const order = await this.model.findById(orderId);
+      
+      if (order && order.client) {
+        await Client.updateOne(
+          { _id: order.client },
+          { $pull: { orders: order._id } }
+        );
+      }
+      next();
+    } catch (error) {
+      console.error(error);
+    }
+  });
 
 OrderSchema.path<mongoose.Schema.Types.Subdocument>('additional_info.billing_address').discriminator('NATURAL', NormalAddressSchema);
 OrderSchema.path<mongoose.Schema.Types.Subdocument>('additional_info.billing_address').discriminator('LEGAL', LegalAddressSchema);

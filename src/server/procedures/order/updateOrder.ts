@@ -28,7 +28,7 @@ export const updateOrderProcedure = publicProcedure
               home_address: input.additional_info.delivery_address.home_address,
               home_nr: input.additional_info.delivery_address.home_nr,
               firstname: input.additional_info.user_data.firstname,
-              lastname: input.additional_info.user_data.lastname
+              lastname: input.additional_info.user_data.lastname,
           };
       } else {
         billingAddress = input.additional_info.billing_address;
@@ -36,6 +36,7 @@ export const updateOrderProcedure = publicProcedure
       }
 
       const additionalInfo = {
+        billing_checkbox: input.additional_info.billing_checkbox,
         user_data: input.additional_info.user_data,
         billing_address: billingAddress,
         entity_type: input.additional_info.entity_type
@@ -98,9 +99,16 @@ export const updateOrderProcedure = publicProcedure
         await client.save();
       }
 
+      const plainOrder = order.toObject ? order.toObject() : order;
+
+      // Add the billing_checkbox field to the response
+      if (plainOrder.additional_info) {
+        plainOrder.additional_info.billing_checkbox = input.additional_info.billing_checkbox;
+      }
+      
       return {
         success: true,
-        order: order
+        order: plainOrder
       };
     } catch (error: any) {
       console.error("Error updating order:", error);

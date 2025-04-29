@@ -3,7 +3,6 @@
 import { Link } from '@/i18n/navigation';
 import { ResOrderInterface } from '@/models/order/types/orderInterface';
 import { orderStateColors } from '@/models/order/types/orderState';
-import { Plus } from 'lucide-react'
 import { useTranslations } from 'next-intl';
 
 interface OrdersTableProps {
@@ -16,7 +15,7 @@ export default function OrdersTable({queryOrders}: OrdersTableProps) {
     
   return (
     <>
-        <div className='col-span-12 grid grid-cols-12 mt-6 pb-2 border-b border-lightgray gap-x-6 pr-6'>
+        <div className='col-span-12 grid grid-cols-12 mt-6 pb-2 border-b border-lightgray gap-x-6 pr-6 mb-8'>
             <p className='font-manrope font-semibold leading-5 pl-6 w-[calc(100%+1.5rem)] col-span-1 whitespace-nowrap'>ID comandă</p>
             <p className='font-manrope font-semibold leading-5 col-span-2 translate-x-1/2 w-[calc(50%-.75rem)]'>Data</p>
             <p className='font-manrope col-span-2 font-semibold -translate-x-1/4 w-[125%] leading-5'>Email</p>
@@ -25,10 +24,6 @@ export default function OrdersTable({queryOrders}: OrdersTableProps) {
             <p className='col-span-2 font-manrope font-semibold leading-5'>Total comandă</p>
             <p className='font-manrope font-semibold leading-5'>Status</p>
         </div>
-        <Link href="/admin/orders/new" className='col-span-full h-18 flex gap-2 items-center justify-center bg-[#F0F0F0] rounded-3xl mt-8 border border-dashed border-gray cursor-pointer hover:opacity-75 transition duration-300 mb-4'>
-            <Plus strokeWidth={1.5} className='size-6'/>
-            <p>Adaugă comandă</p>
-        </Link>
         {
             queryOrders.map((order: ResOrderInterface, index) => {
                 return (

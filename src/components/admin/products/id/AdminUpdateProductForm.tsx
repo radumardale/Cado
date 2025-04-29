@@ -38,7 +38,6 @@ export default function AdminUpdateProductForm({id}: AdminProductFormProps) {
 
     const form = useForm<z.infer<typeof updateProductRequestSchema>>({
         resolver: zodResolver(updateProductRequestSchema),
-        // Initialize with empty values to ensure inputs are controlled from the start
         defaultValues: {
             id: data?.product?._id,
             data: {
@@ -114,7 +113,7 @@ export default function AdminUpdateProductForm({id}: AdminProductFormProps) {
                     onSubmit={form.handleSubmit(onSubmit)} 
                     className="col-span-12 grid grid-cols-12 flex-1 overflow-auto gap-x-6"
                     >
-                    <div data-lenis-prevent className='col-span-7 grid grid-cols-7 overflow-y-auto flex-1 -mr-6 pr-6 mt-16'>
+                    <div data-lenis-prevent className='col-span-7 grid grid-cols-7 scroll-bar-custom overflow-y-auto flex-1 -mr-6 pr-6 mt-16'>
                         <AdminProductDetails />
                     </div>
                     <AdminProductImages product={data?.product} />
