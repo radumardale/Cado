@@ -18,13 +18,13 @@ export default function AdditionalInfo({product, locale}: AdditionalInfoInterfac
             product.set_description && 
             <Accordion open={activeIndex == 0} setActiveIndex={() => {setActiveIndex(activeIndex === 0 ? -1 : 0)}} title="Cadoul include">
                 <p className={`[display:-webkit-box] [-webkit-box-orient:vertical] overflow-hidden text-sm lg:text-base leading-4 lg:leading-5 whitespace-pre-line`}>
-                    {product.set_description[locale].replace(/\\n/g, '\n')}
+                    {product.set_description[locale]}
                 </p>
             </Accordion>
         }
         <Accordion open={activeIndex == 1} setActiveIndex={() => {setActiveIndex(activeIndex === 1 ? -1 : 1)}} title="Descriere">
                 <p className={`[display:-webkit-box] [-webkit-box-orient:vertical] overflow-hidden text-sm lg:text-base leading-4 lg:leading-5 whitespace-pre-line`} style={{WebkitLineClamp: `calc(${window.innerHeight} / (1.25 * var(--current-rem)) / 4.3)`}}>
-                    {product.long_description[locale].replace(/\\n/g, '\n')}
+                    {product.long_description[locale]}
                 </p>
         </Accordion>
         <Accordion last open={activeIndex == 2} setActiveIndex={() => {setActiveIndex(activeIndex === 2 ? -1 : 2)}} title="Caracteristici">
@@ -33,7 +33,7 @@ export default function AdditionalInfo({product, locale}: AdditionalInfoInterfac
                 {
                     product.categories.map((category, index) => {
                         return (
-                            <p key={index} className='text-gray text-sm lg:text-base leading-4 lg:leading-5'>{t(`tags.${category}.title`)} {index < product.categories.length - 1 && ","}</p>
+                            <p key={index} className='text-gray text-sm lg:text-base leading-4 lg:leading-5'>{t(`tags.${category}.title`)}<span className='text-black'>{index < product.categories.length - 1 && ","}</span></p>
                         )
                     })
                 }
@@ -43,7 +43,7 @@ export default function AdditionalInfo({product, locale}: AdditionalInfoInterfac
                 {
                     product.product_content.map((product_content, index) => {
                         return (
-                            <p key={index} className='text-gray text-sm lg:text-base leading-4 lg:leading-5'>{t(`product_content.${product_content}`)} {index < product.product_content.length - 1 && ","}</p>
+                            <p key={index} className='text-gray text-sm lg:text-base leading-4 lg:leading-5'>{t(`product_content.${product_content}`)}<span className='text-black'>{index < product.product_content.length - 1 && ","}</span></p>
                         )
                     })
                 }
@@ -53,7 +53,7 @@ export default function AdditionalInfo({product, locale}: AdditionalInfoInterfac
                 {
                     product.ocasions.map((ocasions, index) => {
                         return (
-                            <p key={index} className='text-gray text-sm lg:text-base leading-4 lg:leading-5'>{t(`ocasions.${ocasions}`)} {index < product.ocasions.length - 1 && ","}</p>
+                            <p key={index} className='text-gray text-sm lg:text-base leading-4 lg:leading-5'>{t(`ocasions.${ocasions}.title`)}<span className='text-black'>{index < product.ocasions.length - 1 && ","}</span></p>
                         )
                     })
                 }

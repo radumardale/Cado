@@ -4,7 +4,6 @@ import mongoose from "mongoose";
 export interface NormalAddress extends Address {
     firstname: string,
     lastname: string,
-    tel_number: string,
 }
 
 // Normal Address Schema
@@ -17,8 +16,20 @@ export const NormalAddressSchema = new mongoose.Schema<NormalAddress>({
         type: String,
         required: true,
     },
-    tel_number: {
+    city: {
         type: String,
-        required: true,
-    }
-});
+        required: true
+    },
+    region: {
+        type: String,
+        required: true
+    },
+    home_address: {
+        type: String,
+        required: true
+    },
+    home_nr: {
+        type: String,
+        required: false
+    },
+},  { _id: false });

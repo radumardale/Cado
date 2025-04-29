@@ -1,6 +1,7 @@
 
 import Footer from "@/components/footer/Footer";
 import Header from "@/components/header/Header";
+import LinksMenu from "@/components/LinksMenu";
 import TermsContainer from "@/components/terms/TermsContainer";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { use } from "react";
@@ -23,6 +24,7 @@ export default function AboutUs({params}: {params: Promise<{locale: string}>;}) 
         <Header />
         <TermsContainer />
         <Footer />
+        <LinksMenu />
     </>
   );
 }

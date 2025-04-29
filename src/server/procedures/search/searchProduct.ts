@@ -61,7 +61,7 @@ export const searchProductProcedure = publicProcedure
         { $facet: {
           products: [
             { $limit: 5 },
-            { $project: { _id: 1, title: 1, images: 1, price: 1, sale: 1, custom_id: 1 } }
+            { $project: { _id: 1, title: 1, images: 1, price: 1, sale: 1, custom_id: 1, stock_availability: 1 } }
           ],
           totalCount: [
             { $count: "count" }

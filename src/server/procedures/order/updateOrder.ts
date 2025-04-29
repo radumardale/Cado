@@ -1,36 +1,88 @@
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 
 import { publicProcedure } from "@/server/trpc";
-import { ActionResponse } from '@/lib/types/ActionResponse';
+import { Client } from "@/models/client/client";
+import { Order } from "@/models/order/order";
+import { ResOrderInterface } from "@/models/order/types/orderInterface";
+import { ActionResponse } from "@/lib/types/ActionResponse";
 import { updateOrderRequestSchema } from '@/lib/validation/order/updateOrderRequest';
-import { Order } from '@/models/order/order';
-import { OrderInterface } from '@/models/order/types/orderInterface';
-import { Client } from '@/models/client/client';
+import connectMongo from "@/lib/connect-mongo";
+import { DeliveryMethod } from "@/models/order/types/deliveryMethod";
 
 export interface updateOrderResponse extends ActionResponse {
-  order: OrderInterface | null
+  order: ResOrderInterface | null
 }
 
 export const updateOrderProcedure = publicProcedure
   .input(updateOrderRequestSchema)
   .mutation(async ({ input }): Promise<updateOrderResponse> => {
     try {
+      await connectMongo();
 
+      let billingAddress;
+      if (input.additional_info.billing_checkbox) {
+            billingAddress = {
+              billing_type: input.additional_info.entity_type,
+              region: input.additional_info.delivery_address.region,
+              city: input.additional_info.delivery_address.city,
+              home_address: input.additional_info.delivery_address.home_address,
+              home_nr: input.additional_info.delivery_address.home_nr,
+              firstname: input.additional_info.user_data.firstname,
+              lastname: input.additional_info.user_data.lastname
+          };
+      } else {
+        billingAddress = input.additional_info.billing_address;
+        Object.assign(billingAddress, {billing_type: input.additional_info.entity_type})
+      }
+
+      const additionalInfo = {
+        user_data: input.additional_info.user_data,
+        billing_address: billingAddress,
+        entity_type: input.additional_info.entity_type
+      }
+
+      if (input.delivery_method === DeliveryMethod.HOME_DELIVERY) {
+        Object.assign(additionalInfo, {delivery_address: input.additional_info.delivery_address})
+      }
+
+      const deliveryDetails = {
+        hours_intervals: input.delivery_details.hours_intervals,
+        message: input.delivery_details.message,
+        comments: input.delivery_details.comments,
+      }
+
+      if (input.delivery_details.delivery_date) Object.assign(deliveryDetails, {delivery_date: new Date(input.delivery_details.delivery_date)})
+
+      // Find or create client
       const client = await Client.findOneAndUpdate(
         { email: input.additional_info.user_data.email }, 
         {}, 
         { upsert: true, new: true }
       );
 
-      const newOrderObject = {
-        additional_info: input.additional_info,
-        client: client?._id.toString(),
-        payment_method: input.payment_method,
-        products: input.products,
-        state: input.state
+      if (!client) {
+        return {
+          success: false,
+          error: "Client not found",
+          order: null
+        };
       }
 
-      const order = await Order.findByIdAndUpdate(input.id, newOrderObject, { new: true });
+      // Update the order
+      const order = await Order.findByIdAndUpdate(
+        input.id,
+        {
+          products: input.products,
+          client: client._id,
+          additional_info: additionalInfo,
+          payment_method: input.payment_method,
+          delivery_method: input.delivery_method,
+          total_cost: input.total_cost || 0,
+          delivery_details: deliveryDetails,
+          // state: input.state
+        },
+        { new: true }
+      );
 
       if (!order) {
         return {
@@ -40,11 +92,18 @@ export const updateOrderProcedure = publicProcedure
         };
       }
 
+      // Check if client already has this order
+      if (!client.orders.includes(order._id.toString())) {
+        client.orders.push(order._id.toString());
+        await client.save();
+      }
+
       return {
         success: true,
         order: order
       };
     } catch (error: any) {
+      console.error("Error updating order:", error);
       return {
         success: false,
         error: error.message || "Failed to update order",

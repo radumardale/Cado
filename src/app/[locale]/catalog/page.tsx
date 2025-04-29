@@ -1,6 +1,7 @@
 
 import Catalog from "@/components/catalog/Catalog";
 import Footer from "@/components/footer/Footer";
+import LinksMenu from "@/components/LinksMenu";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Suspense, use } from "react";
 
@@ -23,6 +24,7 @@ export default function CatalogPage({params}: {params: Promise<{locale: string}>
           <Catalog />
         </Suspense>
         <Footer />
+        <LinksMenu />
     </div>
   );
 }

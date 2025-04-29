@@ -14,6 +14,6 @@ export const getAllProductsRequestSchema = z.object({
     price: z.object({
       min: z.number().min(0),
       max: z.number().min(0)
-    }),
+    }).nullish(),
     sortBy: z.nativeEnum(SortBy).default(SortBy.RECOMMENDED),
   })

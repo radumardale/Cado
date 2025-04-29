@@ -1,10 +1,10 @@
-import AdminSidebar from '@/components/admin/AdminSidebar'
-import React from 'react'
+import { redirect } from '@/i18n/navigation'
+import { getLocale } from 'next-intl/server'
 
-export default function Admin() {
+export default async function Admin() {
+    const locale = await getLocale();
+    redirect({href: "/admin/orders", locale: locale});
   return (
-    <>
-        <AdminSidebar />
-    </>
+    <div>page</div>
   )
 }

@@ -1,3 +1,4 @@
+import { StockState } from "@/lib/enums/StockState";
 import { appRouter } from "@/server";
 import { assert, test } from "vitest";
 
@@ -18,24 +19,23 @@ test.skip("update products", async () => {
     // 3. Update each product's price
     for (const product of productsResponse.products) {
         const productId = product._id.toString();
-
-        const newTitle = {
-            ro: product.title.ro.slice(0, -1),
-            ru: product.title.ru.slice(0, -1)
-        }
         
         const updateRes = await caller.products.updateProduct({
             id: productId,
             data: { 
-                title: newTitle,
+                title: product.title,
                 description: product.description,
                 long_description: product.long_description,
                 price: product.price,
                 ocasions: product.ocasions,
                 categories: product.categories,
                 product_content: product.product_content,
-                stock_availability: product.stock_availability,
-                images: product.images,
+                stock_availability: {
+                    stock: 100,
+                    state: StockState.IN_STOCK
+                },
+                image_description: product.image_description,
+                nr_of_items: product.nr_of_items,
                 sale: product.sale
             }
         });

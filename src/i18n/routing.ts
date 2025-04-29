@@ -40,8 +40,73 @@ export const routing = defineRouting({
     "/checkout": {
       ru: "/checkout",
       ro: "/achitare"
-    }
+    },
+    '/login': {
+      ru: '/login',
+      ro: '/login'
+    },
+    '/admin/orders': {
+      ru: '/admin/orders',
+      ro: '/admin/orders'
+    },
+    '/admin/orders/[id]': {
+      ru: '/admin/orders/[id]',
+      ro: '/admin/orders/[id]'
+    },
+    '/admin/orders/new': {
+      ru: '/admin/orders/new',
+      ro: '/admin/orders/new'
+    },
+    '/admin/products': {
+      ru: '/admin/products',
+      ro: '/admin/products'
+    },
+    '/admin/products/[id]': {
+      ru: '/admin/products/[id]',
+      ro: '/admin/products/[id]'
+    },
+    '/admin/products/new': {
+      ru: '/admin/products/new',
+      ro: '/admin/products/new'
+    },
+    '/admin/clients': {
+      ru: '/admin/clients',
+      ro: '/admin/clients'
+    },
+    '/admin/home-page': {
+      ru: '/admin/home-page',
+      ro: '/admin/home-page'
+    },
+    '/admin/blog-page': {
+      ru: '/admin/blog-page',
+      ro: '/admin/blog-page'
+    },
+    '/admin/catalog-sezon': {
+      ru: '/admin/catalog-sezon',
+      ro: '/admin/catalog-sezon'
+    },
+    '/admin/contact-details': {
+      ru: '/admin/contact-details',
+      ro: '/admin/contact-details'
+    },
   }
 });
 
-export type Pathnames = "/" | "/catalog" | "/about-us" | "/blogs" | "/terms" | "/contacts";
+export type Pathnames = 
+"/" 
+| "/catalog" 
+| "/about-us" 
+| "/blogs" 
+| "/terms" 
+| "/contacts"
+| "/catalog"
+| "/checkout"
+| "/login"
+| "/admin/orders"
+| "/admin/products"
+| "/admin/products/new"
+| "/admin/clients"
+| "/admin/home-page"
+| "/admin/blog-page"
+| "/admin/catalog-sezon"
+| "/admin/contact-details";

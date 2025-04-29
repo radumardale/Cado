@@ -12,8 +12,8 @@ interface CartSidebarInterface {
     setValue: (v: CartInterface[]) => void
 }
 
-
 export default function CartSidebar({items, locale, setSidebarOpen, setValue}: CartSidebarInterface) {
+
   return (
     <motion.div 
         onMouseDown={(e) => {e.stopPropagation(); setSidebarOpen(false)}} 
@@ -51,11 +51,19 @@ export default function CartSidebar({items, locale, setSidebarOpen, setValue}: C
                             items.map((item, index) => {
                                 return (
                                     <div key={index} className='w-full flex gap-2 lg:gap-4'>
-                                        <Image src={item.product.images[0]} alt={item.product.title[locale]} width={129} height={164} className='w-32 aspect-[129/164] object-cover rounded-lg' />
-                                        <div className='flex flex-col justify-between flex-1'>
+                                        <Link href={{pathname: '/catalog/product/[id]', params: {id: item.product.custom_id}}} className='peer'>
+                                            <Image src={item.product.images[0]} alt={item.product.title[locale]} width={129} height={164} className='w-32 aspect-[129/164] object-cover rounded-lg' />
+                                        </Link>
+                                        <div className='flex flex-col justify-between flex-1 peer-hover:[&>div>p]:after:w-full'>
                                             <div>
-                                                <p className='font-manrope text-sm font-semibold mb-4'>{item.product.title[locale]}</p>
-                                                <div className='font-manrope font-semibold py-2 px-4 border border-gray rounded-3xl w-fit'>{item.product.price.toLocaleString()} MDL</div>
+                                                <p className='font-manrope text-sm w-fit font-semibold mb-4 relative after:contetn-[""] after:absolute after:left-0 after:bottom-0 after:w-0 after:h-[1px] after:bg-black after:transition-all after:duration-300'>{item.product.title[locale]}</p>
+                                                <div className={`flex gap-1 items-center`}>
+                                                    {
+                                                        item.product.sale && item.product.sale.active &&
+                                                        <p className='text-gray text-sm lg:text-base leading-4 lg:leading-5 font-semibold line-through'>{item.product.price.toLocaleString()} MDL</p>
+                                                    }
+                                                <div className={`font-manrope font-semibold border border-gray rounded-3xl w-fit py-2 px-4`}>{item.product.sale && item.product.sale.active ? item.product.sale.sale_price.toLocaleString() : item.product.price.toLocaleString()} MDL</div>
+                                                </div>
                                             </div>
                                             <div className="flex justify-between items-end">
                                                 <div className='w-30 flex items-center justify-between font-manrope font-semibold py-1 px-4 border border-gray rounded-3xl'>
@@ -72,11 +80,10 @@ export default function CartSidebar({items, locale, setSidebarOpen, setValue}: C
                                                     <span className={`${item.quantity}`}>{item.quantity}</span>
 
                                                     <button 
-                                                        disabled={item.quantity === item.product.stock_availability} 
+                                                        disabled={item.quantity === item.product.stock_availability.stock} 
                                                         onClick={() => {
                                                             const newItems = [...items];
-                                                            newItems[index].quantity = Math.min(newItems[index].product.stock_availability, newItems[index].quantity + 1);
-                                                            console.log(newItems[index].product)
+                                                            newItems[index].quantity = Math.min(newItems[index].product.stock_availability.stock, newItems[index].quantity + 1);
                                                             setValue(newItems);
                                                         }} 
                                                         className='cursor-pointer disabled:pointer-events-none disabled:text-gray'
@@ -108,7 +115,7 @@ export default function CartSidebar({items, locale, setSidebarOpen, setValue}: C
                     items.length > 0 &&
                     <div className="flex justify-between items-end mb-4">
                         <p>Subtotal:</p>
-                        <p className='font-semibold'>{items.reduce((acc, item) => acc + item.product.price * item.quantity, 0).toLocaleString()} MDL</p>
+                        <p className='font-semibold'>{items.reduce((acc, item) => acc + (item.product.sale.active ? item.product.sale.sale_price : item.product.price) * item.quantity, 0).toLocaleString()} MDL</p>
                     </div>
                 }
                 {

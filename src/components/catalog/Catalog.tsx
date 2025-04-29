@@ -12,14 +12,22 @@ import { useSearchParams } from "next/navigation";
 import Header from "../header/Header";
 import { productsLimit } from "@/lib/constants";
 import PcCatalogSidebar from "./sidebar/PcCatalogSidebar";
+import { useCatalogStore } from "@/states/CatalogState";
 
 export default function Catalog() {
     // All your existing state and params
     const searchParams = useSearchParams();
+    const {data: MinMaxData} = trpc.products.getMinMaxPrice.useQuery();
+
+    const minPrice = useCatalogStore((state) => state.minPrice);
+    const maxPrice = useCatalogStore((state) => state.maxPrice);
+    const setMinPrice = useCatalogStore((state) => state.setMinPrice);
+    const setMaxPrice = useCatalogStore((state) => state.setMaxPrice);
+
     const [category, setCategory] = useState<Categories | null>(searchParams.get("category") as Categories || null);
     const [ocasions, setOcasions] = useState<Ocasions[]>(searchParams.getAll("ocasions") as Ocasions[]);
     const [productContent, setProductContent] = useState<ProductContent[]>(searchParams.getAll("product_content") as ProductContent[]);
-    const [price, setPrice] = useState([Number(searchParams.get("min_price")), searchParams.get("max_price") ? Number(searchParams.get("max_price")) : 5000]);
+    const [price, setPrice] = useState<number[]>([0, 0]);
     const [sortBy, setSortBy] = useState<SortBy>(searchParams.get("sort_by") ? searchParams.get("sort_by") as SortBy : SortBy.RECOMMENDED);
     const [keywords, setKeywords] = useState(searchParams.get("keywords"));
     const [isSidebarOpen, setSidebarOpen] = useState(false);
@@ -33,9 +41,12 @@ export default function Catalog() {
         const newCategory = searchParams.get("category") as Categories || null;
         const newOcasions = searchParams.getAll("ocasions") as Ocasions[];
         const newProductContent = searchParams.getAll("product_content") as ProductContent[];
-        const newMinPrice = Number(searchParams.get("min_price") || price[0]);
-        const newMaxPrice = Number(searchParams.get("max_price") || price[1]);
+        const newMinPrice = searchParams.get("min_price") ? Number(searchParams.get("min_price")) : minPrice;
+        const newMaxPrice = searchParams.get("max_price") ? Number(searchParams.get("max_price")) : maxPrice;
         const newSortBy = searchParams.get("sort_by") as SortBy || sortBy;
+
+        if (MinMaxData?.minPrice) setMinPrice(MinMaxData.minPrice);
+        if (MinMaxData?.maxPrice) setMaxPrice(MinMaxData.maxPrice);
 
         setKeywords(newKeywords);
         setCategory(newCategory);
@@ -43,7 +54,7 @@ export default function Catalog() {
         setProductContent(newProductContent);
         setPrice([newMinPrice, newMaxPrice]);
         setSortBy(newSortBy);
-    }, [searchParams])
+    }, [searchParams, MinMaxData, minPrice, maxPrice]);
     
     const { data, fetchNextPage, hasNextPage, isFetchingNextPage, status } = trpc.products.getProducts.useInfiniteQuery({
         limit: productsLimit,

@@ -7,6 +7,7 @@ import { OrderInterface } from "@/models/order/types/orderInterface";
 import { ActionResponse } from "@/lib/types/ActionResponse";
 import { addOrderRequestSchema } from "@/lib/validation/order/addOrderRequest";
 import connectMongo from "@/lib/connect-mongo";
+import { DeliveryMethod } from "@/models/order/types/deliveryMethod";
 
 export interface addOrderResponse extends ActionResponse {
   order: OrderInterface | null
@@ -17,6 +18,40 @@ export const addOrderProcedure = publicProcedure
   .mutation(async ({ input }): Promise<addOrderResponse> => {
     try {
       await connectMongo();
+
+      let billingAddress;
+      if (input.additional_info.billing_checkbox) {
+            billingAddress = {
+              billing_type: input.additional_info.entity_type,
+              region: input.additional_info.delivery_address.region,
+              city: input.additional_info.delivery_address.city,
+              home_address: input.additional_info.delivery_address.home_address,
+              home_nr: input.additional_info.delivery_address.home_nr,
+              firstname: input.additional_info.user_data.firstname,
+              lastname: input.additional_info.user_data.lastname
+          };
+      } else {
+        billingAddress = input.additional_info.billing_address;
+        Object.assign(billingAddress, {billing_type: input.additional_info.entity_type})
+      }
+
+      const additionalInfo = {
+        user_data: input.additional_info.user_data,
+        billing_address: billingAddress,
+        entity_type: input.additional_info.entity_type
+      }
+
+      if (input.delivery_method === DeliveryMethod.HOME_DELIVERY) {
+        Object.assign(additionalInfo, {delivery_address: input.additional_info.delivery_address})
+      }
+
+      const deliveryDetails = {
+        hours_intervals: input.delivery_details.hours_intervals,
+        message: input.delivery_details.message,
+        comments: input.delivery_details.comments,
+      }
+
+      if (input.delivery_details.delivery_date) Object.assign(deliveryDetails, {delivery_date: new Date(input.delivery_details.delivery_date)})
 
       const client = await Client.findOneAndUpdate(
         { email: input.additional_info.user_data.email }, 
@@ -35,8 +70,11 @@ export const addOrderProcedure = publicProcedure
       const order = await Order.create({
         products: input.products,
         client: client._id,
-        additional_info: input.additional_info,
-        payment_method: input.payment_method
+        additional_info: additionalInfo,
+        payment_method: input.payment_method,
+        delivery_method: input.delivery_method,
+        total_cost: input.total_cost,
+        delivery_details: deliveryDetails
       });
 
       client.orders.push(order._id.toString());

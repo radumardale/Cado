@@ -17,7 +17,7 @@ export const getRecProductsProcedure = publicProcedure
       
       const products = await Product.find()
       .limit(5)
-      .select("_id title price images custom_id stock_availability")
+      .select("_id title price images custom_id stock_availability sale")
       .lean();
 
       if (!products) {

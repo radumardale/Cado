@@ -10,7 +10,7 @@ import { useForm } from 'react-hook-form'
 import { BanknoteIcon, BriefcaseBusiness, CalendarIcon, ChevronDown, Clock, CreditCard, MapPin, Truck, User } from 'lucide-react'
 import { Input } from '../ui/input'
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '../ui/select'
-import { Fragment, useEffect, useState } from 'react'
+import { Fragment, useEffect } from 'react'
 import { Checkbox } from '../ui/checkbox'
 import { ClientEntity } from '@/models/order/types/orderEntity'
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover'
@@ -26,42 +26,82 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { DeliveryRegions, DeliveryRegionsArr } from '@/lib/enums/DeliveryRegions'
 import { useTranslations } from 'next-intl'
 import { DeliveryHours, DeliveryHoursArr } from '@/lib/enums/DeliveryHours'
+import { trpc } from '@/app/_trpc/client'
+import { toast } from 'sonner'
 
 interface CheckoutFormProps {
     items: CartInterface[],
     setDeliveryRegion: (v: DeliveryRegions | null) => void,
     setDeliveryHour: (v: DeliveryHours | null) => void,
+    totalCost: number
 }
 
-export default function CheckoutForm({items, setDeliveryRegion, setDeliveryHour}: CheckoutFormProps) {
+export default function CheckoutForm({items, setDeliveryRegion, setDeliveryHour, totalCost}: CheckoutFormProps) {
     const t = useTranslations();
-    const [isBillingAddress, setBillingAddress] = useState(true);
+    const { mutate, data, isPending } = trpc.order.addOrder.useMutation();
+    
+    useEffect(() => {
+        if (!isPending && data?.success) {
+            toast.success("Comanda a fost plasată cu succes!");
+        } else {
+            toast.error(data?.error);
+        }
+    }, [data, isPending])
 
     const form = useForm<z.infer<typeof addOrderRequestSchema>>({
         resolver: zodResolver(addOrderRequestSchema),
         defaultValues: {
+            products: items.map(item => {
+                return {
+                    product: item.product,
+                    quantity: item.quantity
+                }
+            }),
             delivery_method: DeliveryMethod.HOME_DELIVERY,
             additional_info: {
                 delivery_address: {
                     region: "CHISINAU",
-                    city: undefined,
-                    home_address: undefined
+                    city: "",
+                    home_address: "",
+                    home_nr: ""
                 },
-                entity_type: ClientEntity.Natural
+                entity_type: ClientEntity.Natural,
+                user_data: {
+                    email: "",
+                    tel_number: "",
+                    firstname: "",
+                    lastname: ""
+                },
+                billing_address: {
+                    company_name: "",
+                    firstname: "",
+                    idno: "",
+                    lastname: "",
+                    home_address: "",
+                    home_nr: "",
+                    region: "CHISINAU",
+                    city: "",
+                },
+                billing_checkbox: true,
             },
-            payment_method: OrderPaymentMethod.Paynet
+            payment_method: OrderPaymentMethod.Paynet,
+            termsAccepted: false
         }
-      })      
+    });
 
     function onSubmit(values: z.infer<typeof addOrderRequestSchema>) {
-        addOrderRequestSchema.parse(values);
-        console.log(values)
+        mutate(values);
     }
 
     const deliveryMethod = form.watch("delivery_method");
     const entityType = form.watch("additional_info.entity_type");
     const deliveryRegion = form.watch("additional_info.delivery_address.region");
     const deliveryHour = form.watch("delivery_details.hours_intervals");
+    const isBillingAddress = form.watch("additional_info.billing_checkbox");
+
+    useEffect(() => {
+        form.setValue("total_cost", totalCost);
+    }, [totalCost])
 
     useEffect(() => {
         setDeliveryRegion(deliveryRegion ? deliveryRegion as DeliveryRegions : DeliveryRegions.CHISINAU);
@@ -72,14 +112,28 @@ export default function CheckoutForm({items, setDeliveryRegion, setDeliveryHour}
     }, [deliveryHour])
 
     useEffect(() => {
-        const productIds = items.map(item => item.product._id);
-        form.setValue("products", productIds);
-    }, []);
+        const products = items.map(item => {
+            // Ensuring the product has all required properties including 'en' in title
+            return {
+                product: {
+                    ...item.product,
+                    title: {
+                        ro: item.product.title.ro || '',
+                        ru: item.product.title.ru || '',
+                        en: item.product.title.en || ''
+                    }
+                },
+                quantity: item.quantity
+            }
+        });
+        
+        form.setValue("products", products);
+    }, [items]);
 
     useEffect(() => {
         if (deliveryMethod === DeliveryMethod.HOME_DELIVERY) {
             form.setValue("payment_method", OrderPaymentMethod.Paynet);
-            setBillingAddress(true);
+            form.setValue("additional_info.billing_checkbox", true);
             setDeliveryRegion(DeliveryRegions.CHISINAU);
         }
 
@@ -87,7 +141,7 @@ export default function CheckoutForm({items, setDeliveryRegion, setDeliveryHour}
             form.resetField("additional_info.delivery_address.city");
             form.resetField("additional_info.delivery_address.home_address");
             form.resetField("delivery_details.hours_intervals");
-            setBillingAddress(false);
+            form.setValue("additional_info.billing_checkbox", false);
             setDeliveryRegion(null);
             setDeliveryHour(null);
         }
@@ -104,14 +158,6 @@ export default function CheckoutForm({items, setDeliveryRegion, setDeliveryHour}
             form.resetField("additional_info.billing_address.idno");
         }
     }, [entityType])
-
-    useEffect(() => {
-        if (isBillingAddress) {
-            form.resetField("additional_info.billing_address");
-        } else {
-            form.setValue("additional_info.billing_address.region", 'CHISINAU')
-        }
-    }, [isBillingAddress])
 
   return (
     <div className='col-span-full lg:col-span-7 2xl:col-span-6 lg:col-start-2 2xl:col-start-3 grid grid-cols-8 lg:grid-cols-6 gap-x-2 lg:gap-x-6 h-fit'>
@@ -266,7 +312,7 @@ export default function CheckoutForm({items, setDeliveryRegion, setDeliveryHour}
                                             </SelectTrigger>
                                         </FormControl>  
                                         <SelectContent className="border-gray">
-                                        <SelectGroup className='max-h-[calc(100vh-10rem)] overflow-auto z-10' data-lenis-prevent>
+                                        <SelectGroup className='max-h-[20rem] overflow-auto z-10' data-lenis-prevent>
                                             {
                                                 DeliveryRegionsArr.map((region, index) => {
                                                     return (
@@ -302,7 +348,7 @@ export default function CheckoutForm({items, setDeliveryRegion, setDeliveryHour}
                         <Checkbox 
                             id='billing_address_check' 
                             checked={isBillingAddress} 
-                            onCheckedChange={(checked) => setBillingAddress(checked === true)} 
+                            onCheckedChange={(checked) => form.setValue("additional_info.billing_checkbox", checked === true)} 
                         />
                         <label htmlFor='billing_address_check'>Folosește aceleași date cu cele de la adresa de livrare.</label>
                     </div>
@@ -326,7 +372,7 @@ export default function CheckoutForm({items, setDeliveryRegion, setDeliveryHour}
                                 >
                                 <FormItem className='gap-0 lg:flex-1'>
                                     <FormControl>
-                                    <RadioGroupItem className='' value={ClientEntity.Natural} id="entity-natural" />
+                                        <RadioGroupItem className='' value={ClientEntity.Natural} id="entity-natural" />
                                     </FormControl>
                                     <label 
                                     htmlFor="entity-natural" 
@@ -339,7 +385,7 @@ export default function CheckoutForm({items, setDeliveryRegion, setDeliveryHour}
 
                                 <FormItem className='gap-0 lg:flex-1'>
                                     <FormControl>
-                                    <RadioGroupItem className='' value={ClientEntity.Legal} id="entity-legal" />
+                                        <RadioGroupItem className='' value={ClientEntity.Legal} id="entity-legal" />
                                     </FormControl>
                                     <label 
                                     htmlFor="entity-legal" 
@@ -445,17 +491,20 @@ export default function CheckoutForm({items, setDeliveryRegion, setDeliveryHour}
                                     <FormMessage />
                                         <Select onValueChange={field.onChange} defaultValue={"CHISINAU"} >
                                             <FormControl>
-                                                <SelectTrigger className="cursor-pointer flex h-12 max-h-none items-center px-6 gap-2 border border-gray rounded-3xl text-base text-black  w-full">
+                                                <SelectTrigger className="cursor-pointer flex h-12 max-h-none items-center px-6 gap-2 border border-gray rounded-3xl text-base text-black w-full">
                                                     <SelectValue placeholder="Alege subiectul"/>
                                                     <ChevronDown className='size-5' strokeWidth={1.5}/>
                                                 </SelectTrigger>
                                             </FormControl>  
                                             <SelectContent className="border-gray">
-                                                <SelectGroup>
-                                                    <SelectItem className="text-base cursor-pointer " value={"CHISINAU"}>Chișinău</SelectItem>
-                                                    <SelectItem className="text-base cursor-pointer " value={"CAHUL"}>Cahul</SelectItem>
-                                                    <SelectItem className="text-base cursor-pointer " value={"BALTI"}>Balti</SelectItem>
-                                                    <SelectItem className="text-base cursor-pointer " value={"ANENII NOI"}>Anenii Noi</SelectItem>
+                                                <SelectGroup className='max-h-[20rem] overflow-auto z-10' data-lenis-prevent>
+                                                    {
+                                                        DeliveryRegionsArr.map((region, index) => {
+                                                            return (
+                                                                <SelectItem key={index} className="text-base cursor-pointer" value={DeliveryRegions[region as DeliveryRegions]}>{t(`delivery_regions.${region}`).split(" - ")[0]}</SelectItem>
+                                                            )
+                                                        })
+                                                    }
                                                 </SelectGroup>
                                             </SelectContent>
                                         </Select>
@@ -509,8 +558,8 @@ export default function CheckoutForm({items, setDeliveryRegion, setDeliveryHour}
                                         <PopoverContent className="w-auto p-0" align="start">
                                         <Calendar
                                             mode="single"
-                                            selected={field.value}
-                                            onSelect={field.onChange}
+                                            selected={field.value ? new Date(field.value) : new Date()}
+                                            onSelect={(date) => field.onChange(date ? date.toISOString() : '')}
                                             disabled={(date) =>
                                                 date < new Date()
                                             }

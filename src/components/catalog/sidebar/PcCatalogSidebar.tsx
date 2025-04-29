@@ -10,6 +10,7 @@ import { Categories } from '@/lib/enums/Categories'
 import { useCallback } from 'react'
 import { checkboxUpdateUrlParams, resetUrlParams, updateCategoriesParams } from '@/lib/utils'
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime'
+import { useCatalogStore } from '@/states/CatalogState'
 
 interface CatalogSidebarProps {
   keywordsState: {
@@ -51,15 +52,18 @@ export default function PcCatalogSidebar({priceState, categoriesState, ocasionsS
     );
   }, [productContentState.productContent, productContentState.setProductContent]);
 
+  const minPrice = useCatalogStore((state) => state.minPrice);
+  const maxPrice = useCatalogStore((state) => state.maxPrice);
+
   return (
     <div data-lenis-prevent className="hidden lg:block scroll-bar-custom col-start-1 col-span-3 h-[calc(100vh-13rem)] overflow-y-scroll mt-12 sticky top-[9rem] pr-4">
       <LayoutGroup>
         <AnimatePresence>
         {
-          (categoriesState.category || ocasionsState.ocasions.length > 0 || productContentState.productContent.length > 0 || priceState.price[0] !== 0 || priceState.price[1] !== 5000 || keywordsState.keywords !== null) &&
+          (categoriesState.category || ocasionsState.ocasions.length > 0 || productContentState.productContent.length > 0 || (priceState.price[0] !== minPrice && priceState.price[0] !== 0) || (priceState.price[1] !== maxPrice && priceState.price[1] !== 0) || keywordsState.keywords !== null) &&
             <ActiveFilters
               resetAllFilters={(router: AppRouterInstance) => {
-                priceState.setPrice([0, 5000]);
+                priceState.setPrice([minPrice, maxPrice]);
                 categoriesState.setCategory(null);
                 ocasionsState.setOcasions([]);
                 productContentState.setProductContent([]);
@@ -100,7 +104,7 @@ export default function PcCatalogSidebar({priceState, categoriesState, ocasionsS
 
               price={priceState.price}
               resetPrice={(searchParams: URLSearchParams, router: AppRouterInstance) => {
-                priceState.setPrice([0, 5000]);
+                priceState.setPrice([minPrice, maxPrice]);
 
                 const params = new URLSearchParams(searchParams.toString());
                 params.delete('min_price');

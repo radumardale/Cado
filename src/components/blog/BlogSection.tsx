@@ -43,7 +43,7 @@ export default function BlogSection({id}: BlogSectionInteface) {
                         <Fragment key={index}>
                             <h2 className='font-manrope text-2xl lg:text-[2rem] leading-7 lg:leading-9 uppercase font-semibold my-6 lg:my-8 first-of-type:mt-8'>{section.subtitle[locale]}</h2>
                             <p className='text-sm lg:text-base leading-4 lg:leading-5 whitespace-pre-line'>
-                                {section.content[locale].replace(/\\n/g, '\n')}
+                                {section.content[locale]}
                             </p>
                         </Fragment>
                     )

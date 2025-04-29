@@ -10,9 +10,9 @@ export default function TopHeader() {
                 <p className='text-sm lg:text-base text-gray'>info@cado.md</p>
             </div>
             <div className='flex flex-col lg:flex-row lg:gap-4'>
-                <p className='text-sm lg:text-base text-gray'>+373 (68) 501 809</p>
-                <p className='text-sm lg:text-base text-gray hidden lg:block'>/</p>
                 <p className='text-sm lg:text-base text-gray'>+373 (69) 645 153</p>
+                <p className='text-sm lg:text-base text-gray hidden lg:block'>/</p>
+                <p className='text-sm lg:text-base text-gray'>+373 (68) 501 809</p>
             </div>
         </div>
     </div>

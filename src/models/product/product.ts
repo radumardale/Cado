@@ -8,6 +8,7 @@ import { Categories } from "@/lib/enums/Categories";
 import { Ocasions } from "@/lib/enums/Ocasions";
 import { ProductContent } from "@/lib/enums/ProductContent";
 import { nanoid } from 'nanoid';
+import { StockAvailabilitySchema } from "./types/stockAvailability";
 
 // Product Schema
 const ProductSchema = new mongoose.Schema<ProductInterface>({
@@ -15,7 +16,7 @@ const ProductSchema = new mongoose.Schema<ProductInterface>({
     type: String,
     required: true,
     unique: true,
-    default: nanoid(8)
+    default: () => nanoid(8)
   },
   title: {
     type: ProductInfoSchema,
@@ -37,6 +38,14 @@ const ProductSchema = new mongoose.Schema<ProductInterface>({
     type: ProductInfoSchema,
     required: false
   },
+  image_description: {
+    type: ProductInfoSchema,
+    required: true
+  },
+  nr_of_items: {
+    type: Number,
+    required: true
+  },
   price: {
     type: Number,
     required: true,
@@ -57,7 +66,7 @@ const ProductSchema = new mongoose.Schema<ProductInterface>({
     required: true,
   },
   stock_availability: {
-    type: Number,
+    type: StockAvailabilitySchema,
     required: true,
   },
   images: {
@@ -68,7 +77,7 @@ const ProductSchema = new mongoose.Schema<ProductInterface>({
     type: SaleSchema,
     required: false,
   }
-});
+}, { timestamps: true });
 
 ProductSchema.pre<ProductInterface>('save', function(next) {
   this.normalized_title = {
@@ -79,7 +88,11 @@ ProductSchema.pre<ProductInterface>('save', function(next) {
     ru: this.title.ru
       .normalize('NFD')
       .replace(/[\u0300-\u036f]/g, '')
-      .toLowerCase()
+      .toLowerCase(),
+    en: this.title.en
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase(),
   };
   next();
 });
@@ -96,6 +109,10 @@ ProductSchema.pre('findOneAndUpdate', function(next) {
         .replace(/[\u0300-\u036f]/g, '')
         .toLowerCase(),
       ru: titleData.ru
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .toLowerCase(),
+      en: titleData.en
         .normalize('NFD')
         .replace(/[\u0300-\u036f]/g, '')
         .toLowerCase()

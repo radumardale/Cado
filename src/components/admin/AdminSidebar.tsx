@@ -1,27 +1,36 @@
 'use client'
 
-import { AdminPages, AdminPagesArr, AdminPagesIcons, useAdminPageStore } from '@/states/AdminPageState'
+import { Link } from '@/i18n/navigation'
+import { AdminPages, AdminPagesArr, AdminPagesIcons, AdminPagesLinks } from '@/lib/enums/AdminPages'
 import { useTranslations } from 'next-intl'
 import Image from 'next/image'
-import React from 'react'
+import React, { Fragment } from 'react'
 
-export default function AdminSidebar() {
-  const t = useTranslations('admin.admin_pages');
-  const adminPage = useAdminPageStore((store) => store.page);
+interface AdminSidebarProps {
+  page: AdminPages
+}
+
+export default function AdminSidebar({ page }: AdminSidebarProps) {
+  const t = useTranslations('admin');
 
   return (
-    <div className='col-span-3 bg-black h-screen lg:-ml-16 lg:pl-16 pt-8'>
+    <div className='col-span-3 bg-black min-h-screen pr-6 lg:-ml-16 lg:pl-16 pt-8'>
       <Image src="/logo/logo-blue.svg" alt='logo cado' className='h-12 w-auto' width={196} height={48}/>
-      <p className='font-manrope font-semibold leading-5 text-white mt-16 mb-4'>Magazin online</p>
+      <p className='font-manrope font-semibold leading-5 text-white mt-16 mb-4'>{t(`sidebar.titles.0`)}</p>
       {
-        AdminPagesArr.map((page, index) => {
+        AdminPagesArr.map((link, index) => {
           return(
-            <button key={index} className={`h-12 flex gap-2 items-center pl-6 ${page === adminPage ? "bg-white" : ""}`}>
+            <Fragment key={index}>
               {
-                AdminPagesIcons[page as AdminPages]
+                (index === 3 || index === 6) && <p className='font-manrope font-semibold leading-5 text-white my-4 w-full border-t border-lightgray pt-4'>{t(`sidebar.titles.${index}`)}</p>
               }
-              <p className='text-white leading-5'>{t(page)}</p>
-            </button>
+              <Link href={AdminPagesLinks[link as AdminPages]} className={`h-12 flex gap-2 items-center pl-6 w-full rounded-3xl cursor-pointer transition duration-300 ${link === page ? "bg-white text-black" : "text-white"}`}>
+                {
+                  AdminPagesIcons[link as AdminPages]
+                }
+                <p className='leading-5 transition duration-300'>{t(`admin_pages.${link}.title`)}</p>
+              </Link>
+            </Fragment>
           )
         })
       }

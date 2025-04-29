@@ -3,6 +3,7 @@ enum SortBy {
     PRICE_DESC = 'PRICE_DESC',
     RECOMMENDED = 'RECOMMENDED',
     LATEST = 'LATEST',
+    OLDEST = 'OLDEST'
 }
 
 export default SortBy;

@@ -20,7 +20,8 @@ export default function MobileMenu({setSidebarOpen}: MobileMenuInterface) {
     const pathname = usePathname();
     const [searchText, setSearchText] = useState("");
 
-    const { data } = trpc.search.useQuery(
+    const { data: RecData } = trpc.products.getRecProduct.useQuery();
+    const { data, isLoading } = trpc.search.useQuery(
         { title: searchText },
         { 
           enabled: searchText.length > 1,
@@ -72,7 +73,7 @@ export default function MobileMenu({setSidebarOpen}: MobileMenuInterface) {
                 </Link>
             </>
             :
-            <SearchProducts productsCount={data?.count} products={data?.products} searchText={searchText} closeMenu={() => {setSidebarOpen(false)}}/>
+            <SearchProducts recProducts={RecData?.products} isLoading={isLoading} productsCount={data?.count} products={data?.products} searchText={searchText} closeMenu={() => {setSidebarOpen(false)}}/>
         }
     </motion.div>
   )

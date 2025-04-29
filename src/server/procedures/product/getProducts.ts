@@ -32,14 +32,12 @@ export const getProductsProcedure = publicProcedure
       const aggregationResults = await Product.aggregate([
         {
           $match: {
-        $and: [
-          {
-            price: {
-          $gte: input.price.min,
-          $lte: input.price.max
-            },
-          }
-        ]
+            ...(input.price ? {
+              price: {
+                $gte: input.price.min,
+                $lte: input.price.max
+              }
+            } : {})
           }
         },
         {

@@ -37,14 +37,38 @@
       }
     },
     "ocasions": {
-      "WELCOME_KIT": "Welcome Kit",
-      "MARCH_8": "8 martie",
-      "FEBRUARY_23": "23 februarie",
-      "CHRISTMAS_GIFTS": "Cadouri de Crăciun",
-      "EASTER_GIFTS": "Cadouri de Paște",
-      "FOR_HOME_AND_OFFICE": "Pentru casă și oficiu",
-      "FOR_TEAM": "Pentru echipă",
-      "OTHERS": "Altele"
+      "WELCOME_KIT": {
+        "title": "Welcome Kit",
+        "description": "Seturi de bun venit pentru a face o impresie memorabilă."
+      },
+      "MARCH_8": {
+        "title": "8 martie",
+        "description": "Cadouri speciale pentru a celebra femeile din viața noastră."
+      },
+      "FEBRUARY_23": {
+        "title": "23 februarie",
+        "description": "Cadouri pentru a onora și aprecia bărbații."
+      },
+      "CHRISTMAS_GIFTS": {
+        "title": "Cadouri de Crăciun",
+        "description": "Selecții festive pentru a aduce bucurie în perioada sărbătorilor."
+      },
+      "EASTER_GIFTS": {
+        "title": "Cadouri de Paște",
+        "description": "Idei de cadouri pentru a sărbători Paștele cu stil."
+      },
+      "FOR_HOME_AND_OFFICE": {
+        "title": "Pentru casă și oficiu",
+        "description": "Cadouri practice și elegante pentru spațiul de acasă sau birou."
+      },
+      "FOR_TEAM": {
+        "title": "Pentru echipă",
+        "description": "Cadouri pentru a motiva și aprecia echipa."
+      },
+      "OTHERS": {
+        "title": "Altele",
+        "description": "Opțiuni diverse pentru orice ocazie."
+      }
     },
     "product_content": {
       "ACCESSORIES_FOR_DRINKS": "Accesorii pentru băuturi",
@@ -81,47 +105,41 @@
       "SUPPORT": "Suport"
     },
     "delivery_regions": {
-      "CHISINAU": "Chișinău - 0 (la comenzi de la MDL 500)",
-      "AEROPORT_CHISINAU": "Aeroport Chișinău - MDL 100",
-      "CHISINAU_MUNICIPII": "Chișinău (municipii) - MDL 80",
-      "BALTI": "Bălți - MDL 1,350",
-      "BENDER": "Bender - MDL 680",
-      "BASARABEASCA": "Basarabeasca - MDL 1,170",
-      "BRICENI": "Briceni - MDL 2,340",
-      "BUCOVAT": "Bucovăț - MDL 340",
-      "VULCANESTI": "Vulcănești - MDL 1,790",
-      "GLODENI": "Glodeni - MDL 1,750",
-      "DROCHIA": "Drochia - MDL 1,870",
-      "DUBASARI": "Dubăsari - MDL 500",
-      "EDINET": "Edineț - MDL 2,060",
-      "CAHUL": "Cahul - MDL 1,770",
-      "CALARASI": "Călărași - MDL 470",
-      "CANTEMIR": "Cantemir - MDL 1,240",
-      "CAUSENI": "Căușeni - MDL 700",
-      "COMRAT": "Comrat - MDL 970",
-      "LEOVA": "Leova - MDL 1,220",
-      "LIPCANI": "Lipcani - MDL 2,570",
-      "NISPORENI": "Nisporeni - MDL 770",
-      "ANENII_NOI": "Anenii Noi - MDL 300",
-      "OCNITA": "Ocnița - MDL 2,330",
-      "ORHEI": "Orhei - MDL 435",
-      "REZINA": "Rezina - MDL 1,130",
-      "RIBNITA": "Rîbnița - MDL 1,200",
-      "RISCANI": "Rîșcani - MDL 1,760",
-      "SOROCA": "Soroca - MDL 1,580",
-      "STRASENI": "Strășeni - MDL 240",
-      "TARACLIA": "Taraclia - MDL 1,520",
-      "TVARDITA": "Tvardița - MDL 1,140",
-      "TIRASPOL": "Tiraspol - MDL 750",
-      "UNGHENI": "Ungheni - MDL 1,100",
-      "FALESTI": "Fălești - MDL 1,340",
-      "FLORESTI": "Florești - MDL 1,290",
-      "HINCESTI": "Hîncești - MDL 370",
-      "CEADIR_LUNGA": "Ceadîr-Lunga - MDL 1,290",
-      "CIMISLIA": "Cimișlia - MDL 600",
-      "SOLDANESTI": "Șoldănești - MDL 1,210",
-      "STEFAN_VODA": "Ștefan-Vodă - MDL 950",
-      "IALOVENI": "Ialoveni - MDL 150"
+      "CHISINAU": "Chișinău - 80 MDL",
+      "BALTI": "Bălți - 1,350 MDL",
+      "ANENII_NOI": "Anenii Noi - 300 MDL",
+      "BASARABEASCA": "Basarabeasca - 1,170 MDL",
+      "BENDER": "Bender - 680 MDL",
+      "BRICENI": "Briceni - 2,340 MDL",
+      "CAHUL": "Cahul - 1,770 MDL",
+      "CALARASI": "Călărași - 470 MDL",
+      "CANTEMIR": "Cantemir - 1,240 MDL",
+      "CAUSENI": "Căușeni - 700 MDL",
+      "CEADIR_LUNGA": "Ceadîr-Lunga - 1,290 MDL",
+      "CIMISLIA": "Cimișlia - 600 MDL",
+      "COMRAT": "Comrat - 970 MDL",
+      "DROCHIA": "Drochia - 1,870 MDL",
+      "DUBASARI": "Dubăsari - 500 MDL",
+      "EDINET": "Edineț - 2,060 MDL",
+      "FALESTI": "Fălești - 1,340 MDL",
+      "FLORESTI": "Florești - 1,290 MDL",
+      "GLODENI": "Glodeni - 1,750 MDL",
+      "HINCESTI": "Hîncești - 370 MDL",
+      "IALOVENI": "Ialoveni - 150 MDL",
+      "LEOVA": "Leova - 1,220 MDL",
+      "NISPORENI": "Nisporeni - 770 MDL",
+      "OCNITA": "Ocnița - 2,330 MDL",
+      "ORHEI": "Orhei - 435 MDL",
+      "REZINA": "Rezina - 1,130 MDL",
+      "RIBNITA": "Rîbnița - 1,200 MDL",
+      "RISCANI": "Rîșcani - 1,760 MDL",
+      "SOLDANESTI": "Șoldănești - 1,210 MDL",
+      "SOROCA": "Soroca - 1,580 MDL",
+      "STEFAN_VODA": "Ștefan-Vodă - 950 MDL",
+      "STRASENI": "Strășeni - 240 MDL",
+      "TARACLIA": "Taraclia - 1,520 MDL",
+      "TIRASPOL": "Tiraspol - 750 MDL",
+      "UNGHENI": "Ungheni - 1,100 MDL"
     },
     "delivery_hours": {
       "01:00-05:00": "01:00 - 05:00 - suplimentar +60% pret livrare",
@@ -161,14 +179,42 @@
       }
     },
     "admin" : {
+      "sidebar": {
+        "titles": {
+          "0": "Magazin online",
+          "3": "Conținut pagini",
+          "6": "Contacte"
+        }
+      },
       "admin_pages": {
-        "ORDERS": "Toate comenzile",
-        "PRODUCTS": "Catalog produse",
-        "CLIENTS": "Date clienți",
-        "HOME_PAGE": "Pagina “Acasă”",
-        "BLOG_PAGE": "Pagina “Blog”",
-        "SEASON_CATALOG": "Catalog de sezon",
-        "CONTACT_DETAILS": "Detalii contact"
+        "ORDERS": {
+          "title": "Toate comenzile",
+          "item": "Comanda"
+        },
+        "PRODUCTS": {
+          "title": "Catalog produse",
+          "item": "Produs"
+        },
+        "CLIENTS": {
+          "title": "Date clienți",
+          "item": "Client"
+        },
+        "HOME_PAGE": {
+          "title": "Pagina “Acasă”",
+          "item": "Secțiune"
+        },
+        "BLOG_PAGE": {
+          "title": "Pagina “Blog”",
+          "item": "Articol"
+        },
+        "SEASON_CATALOG": {
+          "title": "Catalog de sezon",
+          "item": "Produs"
+        },
+        "CONTACT_DETAILS": {
+          "title": "Detalii contact",
+          "item": "Contact"
+        }
       }
     },
     "maps": {
@@ -197,5 +243,19 @@
       "ro": "Română",
       "ru": "Rusă",
       "en": "Engleză"
+    },
+    "stock_state": {
+      "IN_STOCK": "ÎN STOC",
+      "ON_COMMAND": "LA COMANDĂ",
+      "NOT_IN_STOCK": "STOC EPUIZAT"
+    },
+    "payment_methods": {
+      "PAYNET": "Achitare online",
+      "CASH": "Achitare în numerar"
+    },
+    "order_status": {
+      "NOT_PAID": "UNPAID",
+      "PAID": "PAID",
+      "DELIVERED": "FINISHED"
     }
   }

@@ -5,6 +5,7 @@ import { easeInOutCubic } from '@/lib/utils';
 import { Categories } from '@/lib/enums/Categories';
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { useCatalogStore } from '@/states/CatalogState';
 
 interface ActiveFiltersInterface {
     categories: Categories[],
@@ -24,6 +25,8 @@ export default function ActiveFilters({categories, updateCategories, ocasions, u
     const t = useTranslations("");
     const router = useRouter();
     const searchParams = useSearchParams();
+    const minPrice = useCatalogStore((state) => state.minPrice);
+    const maxPrice = useCatalogStore((state) => state.maxPrice);
 
   return (
     <motion.div 
@@ -47,7 +50,7 @@ export default function ActiveFilters({categories, updateCategories, ocasions, u
                 }
                 {
                     ocasions.map((value, index) => {
-                        return (<ActiveFiltersButton key={index} title={t("ocasions." + value)} onClick={() => {updateOcasions(value, searchParams, router)}} />)
+                        return (<ActiveFiltersButton key={index} title={t("ocasions." + value + '.title')} onClick={() => {updateOcasions(value, searchParams, router)}} />)
                     })
                 }
                 {
@@ -55,7 +58,7 @@ export default function ActiveFilters({categories, updateCategories, ocasions, u
                         return (<ActiveFiltersButton key={index} title={t("product_content." + value)} onClick={() => {updateProductContent(value, searchParams, router)}} />)
                     })
                 }
-                {(price[0] !== 0 || price[1] !== 5000) && <ActiveFiltersButton title={`${price[0]} - ${price[1]} (MDL)`} onClick={() => {resetPrice(searchParams, router)}}/>}
+                {(price[0] !== minPrice || price[1] !== maxPrice) && <ActiveFiltersButton title={`${price[0]} - ${price[1]} (MDL)`} onClick={() => {resetPrice(searchParams, router)}}/>}
                 <button className='text-gray cursor-pointer p-2' onClick={() => {resetAllFilters(router)}}>
                     <span className='relative after:contetn-[""] after:absolute after:left-0 after:bottom-0 after:w-0 after:h-[1px] after:bg-gray hover:after:w-full after:transition-all after:duration-300'>Resetează</span>
                 </button>

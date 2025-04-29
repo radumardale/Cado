@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 export interface Address {
-    country: string,
+    home_nr: string,
     region: string,
     city: string,
     home_address: string
@@ -13,15 +13,15 @@ export const AddressSchema = new mongoose.Schema<Address>({
         type: String,
         required: true
     },
-    country: {
-        type: String,
-        required: true
-    },
     region: {
         type: String,
         required: true
     },
     home_address: {
+        type: String,
+        required: true
+    },
+    home_nr: {
         type: String,
         required: true
     },

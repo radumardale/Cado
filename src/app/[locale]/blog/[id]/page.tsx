@@ -4,6 +4,7 @@ import Footer from "@/components/footer/Footer";
 import Header from "@/components/header/Header";
 import Faq from "@/components/home/faq/Faq";
 import Recommendations from "@/components/home/recommendations/Recommendations";
+import LinksMenu from "@/components/LinksMenu";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { use } from "react";
 
@@ -28,6 +29,7 @@ export default function AboutUs({params}: {params: Promise<{locale: string, id: 
         <Recommendations />
         <Faq />
         <Footer />
+        <LinksMenu />
     </>
   );
 }

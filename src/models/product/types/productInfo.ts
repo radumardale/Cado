@@ -16,5 +16,9 @@ export const ProductInfoSchema = new mongoose.Schema<ProductInfo>({
       type: String,
       required: true,
     },
-});
+    en: {
+      type: String,
+      required: true,
+    },
+},  { _id: false });
   

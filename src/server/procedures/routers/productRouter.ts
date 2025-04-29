@@ -7,11 +7,15 @@ import { deleteProductProcedure } from "../product/deleteProduct";
 import { getAllProductsProcedure } from "../product/getAllProducts";
 import { getRecProductsProcedure } from "../product/getRecProducts";
 import { getSimilarProducts } from "../product/getSimilarProducts";
+import { getAdminProductsProcedure } from "../product/getAdminProducts";
+import { getMinMaxPriceProcedure } from "../product/getMinMaxPrice";
 
 export const productRouter = router({
     getProducts: getProductsProcedure,
     getAllProducts: getAllProductsProcedure,
+    getAdminProducts: getAdminProductsProcedure,
     getProductById: getProductProcedure,
+    getMinMaxPrice: getMinMaxPriceProcedure,
     createProduct: addProductProcedure,
     updateProduct: updateProductProcedure,
     deleteProduct: deleteProductProcedure,

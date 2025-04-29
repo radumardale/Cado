@@ -11,6 +11,7 @@ import Reviews from "@/components/home/reviews/Reviews";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { use } from "react";
 import { trpc } from "../_trpc/server";
+import LinksMenu from "@/components/LinksMenu";
 
 export async function generateMetadata() {
   const t = await getTranslations('index.meta');
@@ -38,6 +39,7 @@ export default function Home({params}: {params: Promise<{locale: string}>;}) {
         <Blog />
         <Faq />
         <Footer />
+        <LinksMenu />
     </>
   );
 }

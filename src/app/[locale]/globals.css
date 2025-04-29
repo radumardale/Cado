@@ -21,6 +21,7 @@
   --blue5: oklch(0.35 0.0492 257.89); /* #2B3C55 */
   --green: oklch(0.63 0.1371 151.34); /* #3a9f5c */
   --red: oklch(0.66 0.2284 26.18); /* #ff3e3e */
+  --orange: oklch(0.73 0.1659 59.39); /* #f28a1a */
   --background: oklch(95.51% 0 0);
   --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);
@@ -57,6 +58,7 @@
 }
 
 @theme inline {
+  --color-orange: var(--orange);
   --color-green: var(--green);
   --color-red: var(--red);
   --color-darkgray: var(--darkgray);
@@ -232,4 +234,12 @@ body.carousel {
 
 div[data-radix-popper-content-wrapper] {
   z-index: 45 !important;
+}
+
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    margin: 0; 
 }

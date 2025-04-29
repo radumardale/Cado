@@ -9,7 +9,6 @@ import { NextIntlClientProvider } from "next-intl";
 import TrpcProvider from "../_trpc/TrpcProvider";
 import SmoothScroll from "@/components/providers/SmoothScroll";
 import { Toaster } from "@/components/ui/sonner";
-import LinksMenu from "@/components/LinksMenu";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -46,7 +45,6 @@ export default async function RootLayout({
             <TrpcProvider>
               <SmoothScroll>
                 {children} 
-                <LinksMenu />
               </SmoothScroll>
             </TrpcProvider>
           </NextIntlClientProvider>

@@ -9,7 +9,7 @@ export default function Ocasions() {
         <p className='font-manrope font-semibold'>Ocazie</p>
         {
           OcasionsArr.map(ocasion => {
-            return <CustomLink key={ocasion} href="/catalog" ocasion={ocasion} value={t(ocasion)} />
+            return <CustomLink key={ocasion} href="/catalog" ocasion={ocasion} value={t(`${ocasion}.title`)} />
           })
         }
     </div>

@@ -12,6 +12,7 @@ import { checkboxUpdateUrlParams, easeInOutCubic, resetUrlParams, updateCategori
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime'
 import { motion } from 'motion/react'
 import { Plus } from 'lucide-react'
+import { useCatalogStore } from '@/states/CatalogState'
 
 interface CatalogSidebarProps {
   keywordsState: {
@@ -39,6 +40,9 @@ interface CatalogSidebarProps {
 }
 
 export default function CatalogSidebar({priceState, categoriesState, ocasionsState, productContentState, setSidebarOpen, isSidebarOpen, keywordsState}: CatalogSidebarProps) {
+  const minPrice = useCatalogStore((state) => state.minPrice);
+  const maxPrice = useCatalogStore((state) => state.maxPrice);
+
   const updateOcasions = useCallback((value: Ocasions) => {
     ocasionsState.setOcasions(
       ocasionsState.ocasions.includes(value) 
@@ -67,10 +71,10 @@ export default function CatalogSidebar({priceState, categoriesState, ocasionsSta
       <LayoutGroup>
         <AnimatePresence>
         {
-          (categoriesState.category || ocasionsState.ocasions.length > 0 || productContentState.productContent.length > 0 || priceState.price[0] !== 0 || priceState.price[1] !== 5000 || keywordsState.keywords !== null) &&
+          (categoriesState.category || ocasionsState.ocasions.length > 0 || productContentState.productContent.length > 0 || (priceState.price[0] !== minPrice && priceState.price[0] !== 0) || (priceState.price[1] !== maxPrice && priceState.price[1] !== 0) || keywordsState.keywords !== null) &&
             <ActiveFilters
               resetAllFilters={(router: AppRouterInstance) => {
-                priceState.setPrice([0, 5000]);
+                priceState.setPrice([minPrice, maxPrice]);
                 categoriesState.setCategory(null);
                 ocasionsState.setOcasions([]);
                 productContentState.setProductContent([]);
@@ -111,7 +115,7 @@ export default function CatalogSidebar({priceState, categoriesState, ocasionsSta
 
               price={priceState.price}
               resetPrice={(searchParams: URLSearchParams, router: AppRouterInstance) => {
-                priceState.setPrice([0, 5000]);
+                priceState.setPrice([minPrice, maxPrice]);
 
                 const params = new URLSearchParams(searchParams.toString());
                 params.delete('min_price');

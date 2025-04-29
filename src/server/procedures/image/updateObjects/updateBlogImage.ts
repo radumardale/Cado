@@ -20,8 +20,6 @@ export const updateBlogImage = async (props: updateBlogImageProps): Promise<upda
         { new: true, upsert: true }
     );
 
-    console.log(blog);
-
     return {
         blog: blog
     };

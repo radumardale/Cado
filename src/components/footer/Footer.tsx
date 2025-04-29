@@ -41,8 +41,8 @@ export default function Footer() {
 
             <div className='col-start-5 col-span-4 lg:col-span-2 lg:col-start-auto order-3'>
                 <p className='text-white font-manrope text-base lg:text-2xl leading-5 lg:leading-7 font-semibold mb-4 lg:mb-6'>Contacte</p>
-                <a href="tel:+37369645153" className="text-white block text-sm lg:text-base mb-2 lg:mb-4">+373 68 501 809</a>
                 <a href="tel:+37369645153" className="text-white block text-sm lg:text-base mb-2 lg:mb-4">+373 69 645 153</a>
+                <a href="tel:+37369645153" className="text-white block text-sm lg:text-base mb-2 lg:mb-4">+373 68 501 809</a>
                 <a href="tel:+40774075088" className="text-white block text-sm lg:text-base mb-2 lg:mb-4">+40 774 075 088</a>
                 <p className="text-white block text-sm lg:text-base mb-2 lg:mb-4">Suport: info@cado.md</p>
                 <p className="text-white block text-sm lg:text-base">Comenzi: order@cado.md</p>

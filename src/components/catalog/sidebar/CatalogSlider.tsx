@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react'
 import { DualRangeSlider } from '../../ui/slider'
 import { useRouter, useSearchParams } from 'next/navigation';
+import { useCatalogStore } from '@/states/CatalogState';
 
 interface CatalogSliderProps {
   price: number[],
@@ -8,7 +9,10 @@ interface CatalogSliderProps {
 }
 
 export default function CatalogSlider({setPrice, price}: CatalogSliderProps) {
-  const [currPrice, setCurrPrice] = useState([0, 5000]);
+  const minPrice = useCatalogStore((state) => state.minPrice);
+  const maxPrice = useCatalogStore((state) => state.maxPrice);
+
+  const [currPrice, setCurrPrice] = useState([minPrice, maxPrice]);
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -51,8 +55,8 @@ export default function CatalogSlider({setPrice, price}: CatalogSliderProps) {
           // Update URL when slider value is committed (on mouse up)
           updateUrlParams(values);
         }}
-        min={0}
-        max={5000}
+        min={minPrice}
+        max={maxPrice}
         step={1}
       />
     </div>

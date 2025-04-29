@@ -49,7 +49,7 @@ export default function CheckboxList({
                         htmlFor={value} 
                         className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
                     >
-                        {t(value)}
+                        {translationTitle === 'ocasions' ? t(`${value}.title`) : t(value)}
                     </label>
                 </div>
             ))}

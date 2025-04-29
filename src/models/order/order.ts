@@ -1,4 +1,4 @@
-import mongoose, { Schema } from "mongoose";
+import mongoose from "mongoose";
 import { OrderInterface } from "./types/orderInterface";
 import { OrderState } from "./types/orderState";
 import { OrderPaymentMethod } from "./types/orderPaymentMethod";
@@ -6,12 +6,21 @@ import { AdditionalInfoSchema } from "./types/additionalInfo";
 import { NormalAddressSchema } from "./types/normalAddress";
 import { LegalAddressSchema } from "./types/legalAddress";
 import { Client } from "../client/client";
+import { DeliveryMethod } from "./types/deliveryMethod";
+import { nanoid } from "nanoid";
+import { DeliveryDetailsSchema } from "./types/deliveryDetails";
+import { CartProductsSchema } from "./types/cartProducts";
 
 // Order Schema
 const OrderSchema = new mongoose.Schema<OrderInterface>({
+    custom_id: {
+        type: String,
+        required: true,
+        unique: true,
+        default: () => nanoid(8)
+    },
     products: [{
-        type: Schema.Types.ObjectId,
-        ref: "Product",
+        type: CartProductsSchema,
         required: true
     }],
     client: {
@@ -34,7 +43,20 @@ const OrderSchema = new mongoose.Schema<OrderInterface>({
         enum: OrderPaymentMethod,
         required: true
     },
-});
+    delivery_method: {
+        type: String,
+        enum: DeliveryMethod,
+        required: true
+    },
+    total_cost: {
+        type: Number,
+        required: true
+    },
+    delivery_details: {
+        type: DeliveryDetailsSchema,
+        required: false
+    }
+}, {timestamps: true});
 
 interface CompleteOrderI extends OrderInterface {
     _id: string
@@ -50,8 +72,8 @@ OrderSchema.pre<CompleteOrderI>("findOneAndDelete", function(next) {
     next();
 });
 
-OrderSchema.path<mongoose.Schema.Types.Subdocument>('additional_info.billing_address').discriminator('NormalAddress', NormalAddressSchema);
-OrderSchema.path<mongoose.Schema.Types.Subdocument>('additional_info.billing_address').discriminator('LegalAddress', LegalAddressSchema);
+OrderSchema.path<mongoose.Schema.Types.Subdocument>('additional_info.billing_address').discriminator('NATURAL', NormalAddressSchema);
+OrderSchema.path<mongoose.Schema.Types.Subdocument>('additional_info.billing_address').discriminator('LEGAL', LegalAddressSchema);
 
 const Order = mongoose.models.Order || mongoose.model<OrderInterface>("Order", OrderSchema);
 
