@@ -41,33 +41,57 @@
         "title": "Welcome Kit",
         "description": "Seturi de bun venit pentru a face o impresie memorabilă."
       },
+      "FOR_TEAM": {
+        "title": "Pentru echipă",
+        "description": "Cadouri pentru a motiva și aprecia echipa."
+      },
+      "SCHOOL_HOLIDAYS": {
+        "title": "Vacanță școlară",
+        "description": "Cadouri ideale pentru a marca începutul sau sfârșitul anului școlar."
+      },
+      "VALENTINES_DAY": {
+        "title": "Ziua Îndrăgostiților",
+        "description": "Cadouri romantice pentru a celebra iubirea."
+      },
       "MARCH_8": {
         "title": "8 martie",
         "description": "Cadouri speciale pentru a celebra femeile din viața noastră."
       },
-      "FEBRUARY_23": {
-        "title": "23 februarie",
-        "description": "Cadouri pentru a onora și aprecia bărbații."
+      "CHRISTMAS_NEW_YEAR": {
+        "title": "Crăciun și Anul Nou",
+        "description": "Selecții festive pentru a aduce bucurie în perioada sărbătorilor de iarnă."
       },
-      "CHRISTMAS_GIFTS": {
-        "title": "Cadouri de Crăciun",
-        "description": "Selecții festive pentru a aduce bucurie în perioada sărbătorilor."
-      },
-      "EASTER_GIFTS": {
-        "title": "Cadouri de Paște",
+      "EASTER": {
+        "title": "Paște",
         "description": "Idei de cadouri pentru a sărbători Paștele cu stil."
+      },
+      "VIP_GIFTS": {
+        "title": "Cadouri VIP",
+        "description": "Opțiuni premium pentru ocazii speciale și persoane importante."
       },
       "FOR_HOME_AND_OFFICE": {
         "title": "Pentru casă și oficiu",
         "description": "Cadouri practice și elegante pentru spațiul de acasă sau birou."
       },
-      "FOR_TEAM": {
-        "title": "Pentru echipă",
-        "description": "Cadouri pentru a motiva și aprecia echipa."
+      "FOR_TRAVEL": {
+        "title": "Pentru călătorii",
+        "description": "Accesorii și cadouri utile pentru cei pasionați de călătorii."
       },
-      "OTHERS": {
-        "title": "Altele",
-        "description": "Opțiuni diverse pentru orice ocazie."
+      "MINI_GIFTS": {
+        "title": "Mini cadouri",
+        "description": "Cadouri mici dar semnificative pentru orice ocazie."
+      },
+      "GASTRONOMIC": {
+        "title": "Gastronomice",
+        "description": "Delicii culinare și seturi pentru pasionații de gastronomie."
+      },
+      "PROMOTIONAL": {
+        "title": "Promoționale",
+        "description": "Cadouri și articole personalizate pentru promovarea brandului."
+      },
+      "UNIVERSAL": {
+        "title": "Universale",
+        "description": "Cadouri versatile potrivite pentru orice ocazie și recipient."
       }
     },
     "product_content": {

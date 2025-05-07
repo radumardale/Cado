@@ -33,15 +33,15 @@ export default function AdminAddProductForm() {
                 long_description: { ro: "", ru: "", en: "" },
                 image_description: { ro: "", ru: "", en: "" },
                 set_description: { ro: "", ru: "", en: "" },
-                price: 0,
+                price: 1000,
                 images: [],
-                nr_of_items: 0,
+                nr_of_items: 1,
                 categories: [],
                 ocasions: [],
                 product_content: [],
                 stock_availability: {
-                    stock: 0,
-                    state: StockState.NOT_IN_STOCK
+                    stock: 5,
+                    state: StockState.IN_STOCK
                 },
                 sale: {
                     active: false,
