@@ -21,7 +21,6 @@ export function generateStaticParams() {
 }
 
 export default async function RootLayout({
-  children,
   params
 }: {
   children: React.ReactNode;
@@ -45,10 +44,10 @@ export default async function RootLayout({
           <NextIntlClientProvider messages={messages}>
             <TrpcProvider>
               <SmoothScroll>
-                <div>
+                <>
                   <Image width={1920} height={1080} quality={100} priority src="/temp/placeholder.jpg" alt="placeholder" className="fixed w-full h-full object-cover left-0 top-0 hidden md:block"/>
                   <Image width={381} height={844} quality={100} priority src="/temp/placeholder-mob.jpg" alt="placeholder" className="fixed w-full h-full object-cover left-0 top-0 md:hidden"/>
-                </div>
+                </>
               </SmoothScroll>
             </TrpcProvider>
           </NextIntlClientProvider>
