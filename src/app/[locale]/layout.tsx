@@ -45,8 +45,8 @@ export default async function RootLayout({
             <TrpcProvider>
               <SmoothScroll>
                 <>
-                  <Image width={1920} height={1080} quality={100} priority src="/temp/placeholder.jpg" alt="placeholder" className="fixed w-full h-full object-cover left-0 top-0 hidden md:block"/>
-                  <Image width={381} height={844} quality={100} priority src="/temp/placeholder-mob.jpg" alt="placeholder" className="fixed w-full h-full object-cover left-0 top-0 md:hidden"/>
+                  <Image unoptimized width={1920} height={1080} quality={100} priority src="/temp/placeholder.jpg" alt="placeholder" className="fixed w-full h-full object-cover left-0 top-0 hidden md:block"/>
+                  <Image unoptimized width={381} height={844} quality={100} priority src="/temp/placeholder-mob.jpg" alt="placeholder" className="fixed w-full h-full object-cover left-0 top-0 md:hidden"/>
                 </>
               </SmoothScroll>
             </TrpcProvider>
