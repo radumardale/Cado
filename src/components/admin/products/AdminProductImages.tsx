@@ -180,7 +180,7 @@ export default function AdminProductImages({product}: AdminProductImagesProps) {
                                         className=" text-base h-12 w-full px-4 text-center rounded-3xl" 
                                         {...field}
                                         onChange={(e) => field.onChange(Number(e.target.value))}
-                                        value={field.value || 0}/>
+                                        value={field.value.toString() || 0}/>
                                 </FormControl>
                             </FormItem>
                         )}
@@ -200,7 +200,7 @@ export default function AdminProductImages({product}: AdminProductImagesProps) {
                                             className=" text-base h-12 w-full px-2 text-center rounded-3xl" 
                                             {...field} 
                                             onChange={(e) => field.onChange(Number(e.target.value))}
-                                            value={field.value || 0}/>
+                                            value={field.value.toString() || 0}/>
                                         </FormControl>
                                         <span className='font-manrope font-semibold'>MDL</span>
                                     </div>
@@ -221,7 +221,7 @@ export default function AdminProductImages({product}: AdminProductImagesProps) {
                                             className=" text-base h-12 w-full px-2 text-center rounded-3xl" 
                                             {...field}
                                             onChange={(e) => field.onChange(Number(e.target.value))}
-                                            value={field.value || 0}/>
+                                            value={field.value.toString() || 0}/>
                                         </FormControl>
                                         <span className='font-manrope font-semibold'>MDL</span>
                                     </div>
