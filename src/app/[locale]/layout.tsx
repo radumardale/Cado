@@ -9,6 +9,7 @@ import { NextIntlClientProvider } from "next-intl";
 import TrpcProvider from "../_trpc/TrpcProvider";
 import SmoothScroll from "@/components/providers/SmoothScroll";
 import { Toaster } from "@/components/ui/sonner";
+import Image from "next/image";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -44,7 +45,10 @@ export default async function RootLayout({
           <NextIntlClientProvider messages={messages}>
             <TrpcProvider>
               <SmoothScroll>
-                {children} 
+                <div>
+                  <Image width={1920} height={1080} quality={100} priority src="/temp/placeholder.jpg" alt="placeholder" className="fixed w-full h-full object-cover left-0 top-0 hidden md:block"/>
+                  <Image width={381} height={844} quality={100} priority src="/temp/placeholder-mob.jpg" alt="placeholder" className="fixed w-full h-full object-cover left-0 top-0 md:hidden"/>
+                </div>
               </SmoothScroll>
             </TrpcProvider>
           </NextIntlClientProvider>

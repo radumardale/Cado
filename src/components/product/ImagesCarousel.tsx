@@ -80,32 +80,31 @@ export default function ImagesCarousel({setCarouselOpen, product, locale, initia
             onMouseDown={(e) => {e.stopPropagation(); setCarouselOpen(false)}}
         >
             <motion.div 
-                 className='lg:flex-1 h-full lg:h-auto absolute top-0 lg:relative mb-4 w-[calc(100%-2rem)] lg:w-[calc(100%-12rem)] max-w-full cursor-grab box-border' 
+                 className='flex-1 relative top-0 lg:relative mb-4 w-[calc(100%-2rem)] lg:w-[calc(100%-12rem)] max-w-full cursor-grab box-border'
                  onMouseDown={(e) => {e.stopPropagation()}}
                  drag={isDragOver ? "x" : false}
                  dragConstraints={{ left: 0, right: 0 }}
-                 dragElastic={0.05} // Reduced from 0.2 to make it less elastic
-                 dragMomentum={false} // Disable momentum for more control
-                 dragTransition={{ 
-                     bounceStiffness: 600, // Higher stiffness means less bounce
-                     bounceDamping: 30 // Higher damping means faster settle
+                 dragElastic={0.05}
+                 dragMomentum={false}
+                 dragTransition={{
+                     bounceStiffness: 600,
+                     bounceDamping: 30
                  }}
                  onDragEnd={handleDragEnd}
                  style={{ x }}
             >
-                
                 {product.images.map((image, index) => (
                     <motion.div
-                        key={index} 
-                        className='pointer-events-none top-1/2 lg:top-0 -translate-y-1/2 lg:-translate-y-0 lg:h-full w-full lg:w-auto rounded-2xl absolute left-1/2 -translate-x-1/2'
+                        key={index}
+                        className='pointer-events-none top-1/2 lg:top-0 -translate-y-1/2 lg:-translate-y-0 min-h-fit max-h-full lg:h-full w-full lg:w-auto rounded-2xl absolute left-1/2 -translate-x-1/2'
                         style={{ opacity: index === activeImage ? isDragOver ? activeDragOpacity : 1 : index === nextImage ? isDragOver ? nextDragOpacity : 0 : index === prevImage ? isDragOver ? prevDragOpacity : 0 : 0 }}
                     >
-                        <Image    
-                            src={image} 
-                            alt={product.title[locale]} 
-                            width={738} 
-                            height={919} 
-                            className={`h-auto lg:h-full w-auto rounded-2xl lg:max-w-none object-contain ${activeImage === index ? "z-10" : "z-0"}`} 
+                        <Image
+                            src={image}
+                            alt={product.title[locale]}
+                            width={738}
+                            height={919}
+                            className={`max-h-full lg:h-full w-auto mx-auto rounded-2xl lg:max-w-none object-contain ${activeImage === index ? "z-10" : "z-0"}`}
                         />
                     </motion.div>
                 ))}
@@ -117,23 +116,23 @@ export default function ImagesCarousel({setCarouselOpen, product, locale, initia
                     <button 
                         disabled={!isDragOver}
                         key={index} 
-                        onClick={() => {setActiveImage(index)}} 
+                        onClick={() => {setActiveImage(index)}}
                         className={`cursor-pointer relative after:content-[''] after:absolute after:w-full after:h-full after:rounded-lg after:bg-black after:top-0 after:left-0 after:transition after:duration-300 ${activeImage === index ? "after:opacity-0" : "after:opacity-50"}`}
                     >
-                        <Image 
-                            src={image} 
-                            alt={product.title[locale]} 
-                            width={97} 
-                            height={97} 
-                            className='rounded-lg size-24 object-cover' 
+                        <Image
+                            src={image}
+                            alt={product.title[locale]}
+                            width={97}
+                            height={97}
+                            className='rounded-lg size-24 object-cover'
                         />
                     </button>
                 ))}
             </div>
             
-            <button 
-                className='hidden lg:block absolute right-16 top-1/2 -translate-y-1/2 cursor-pointer' 
-                onMouseDown={(e) => {e.stopPropagation()}} 
+            <button
+                className='hidden lg:block absolute right-16 top-1/2 -translate-y-1/2 cursor-pointer'
+                onMouseDown={(e) => {e.stopPropagation()}}
                 onClick={nextSlide}
             >
                 <ArrowRight className='text-white size-8' strokeWidth={1.5} />
