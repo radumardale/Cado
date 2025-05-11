@@ -54,7 +54,7 @@ export default function ProductImages({product}: ProductImagesInterface) {
                     product.images.map((image, index) => {
                         return(
                             <button className={`cursor-pointer w-1/4 aspect-[339/425] lg:w-full ${index >= 4 ? "hidden lg:block" : ""}`}key={index} onClick={() => {setImageIndex(index); setCarouselOpen(true)}}>
-                                <Image src={image} alt={product.title[locale]} width={97} height={121} className='rounded-sm lg:rounded-xl w-full h-full object-cover' />
+                                <Image quality={100} src={image} alt={product.title[locale]} width={254} height={318} className='rounded-sm lg:rounded-xl w-full h-full object-cover' />
                             </button>
                         )
                     })
@@ -65,7 +65,7 @@ export default function ProductImages({product}: ProductImagesInterface) {
                     product.images.map((image, index) => {
                         return(
                             <button key={index} onClick={() => {if (!isDesktop) setCarouselOpen(true)}}>
-                                <Image src={image} alt={product.title[locale]} width={578} height={723} className={`rounded-lg lg:rounded-xl w-full ${index > 0 ? "hidden lg:block" : ""}`} />
+                                <Image priority quality={100} src={image} alt={product.title[locale]} width={1156} height={1446} className={`rounded-lg lg:rounded-xl w-full ${index > 0 ? "hidden lg:block" : ""}`} />
                             </button>
                         )
                     })

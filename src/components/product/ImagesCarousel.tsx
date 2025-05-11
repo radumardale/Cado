@@ -114,10 +114,6 @@ export default function ImagesCarousel({setCarouselOpen, product, locale, initia
             aria-modal="true"
             aria-label="Image carousel"
         >
-            <div className="sr-only" aria-live="polite">
-                Image {activeImage + 1} of {product.images.length}. 
-                Use arrow keys to navigate or Escape to close.
-            </div>
             
             <motion.div 
                  className='flex-1 relative top-0 lg:relative mb-4 w-full max-w-full cursor-grab box-border'
@@ -140,10 +136,11 @@ export default function ImagesCarousel({setCarouselOpen, product, locale, initia
                         style={{ opacity: index === activeImage ? isDragOver ? activeDragOpacity : 1 : index === nextImage ? isDragOver ? nextDragOpacity : 0 : index === prevImage ? isDragOver ? prevDragOpacity : 0 : 0 }}
                     >
                         <Image
+                            quality={100}
                             src={image}
                             alt={`${product.title[locale]} - Image ${index + 1}`}
-                            width={738}
-                            height={919}
+                            width={1476} // Doubled width
+                            height={1838} // Doubled height
                             className={`max-h-full lg:h-full w-auto mx-auto rounded-2xl lg:max-w-none object-contain ${activeImage === index ? "z-10" : "z-0"}`}
                         />
                     </motion.div>
@@ -162,10 +159,11 @@ export default function ImagesCarousel({setCarouselOpen, product, locale, initia
                         aria-current={activeImage === index ? "true" : "false"}
                     >
                         <Image
+                            quality={100}
                             src={image}
                             alt={`${product.title[locale]} thumbnail ${index + 1}`}
-                            width={97}
-                            height={97}
+                            width={194} // Doubled width
+                            height={194} // Doubled height
                             className='rounded-lg size-24 object-cover'
                         />
                     </button>

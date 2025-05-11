@@ -50,57 +50,73 @@ export default function LogoCarousel() {
         };
       }, [isAnimationPlaying]);
 
-    const moveItemsForward = () => {
-      if (isAnimationPlaying) return;
+      // At the beginning of your component
+    const totalItems = steps.length;
 
+    // When initializing steps
+    useEffect(() => {
+    // Make sure the number of positions equals the number of items
+    const initialSteps: LogoCardInterface[] = [];
+    for (let i = 0; i < totalItems; i++) {
+        initialSteps.push(steps[i]);
+    }
+    setSteps(initialSteps);
+    }, [totalItems]);
+
+    const moveItemsForward = () => {
+        if (isAnimationPlaying) return;
+      
         setIsMovingForward(true);
         setSliderInitialized(true);
         setAnimationPlaying(true);
-
+      
         setTimeout(() => {
-            setAnimationPlaying(false);
-        }, 1000)
-
-        setSteps(steps.map((obj) => {
-        const newValue = obj.value + 1;
-        return {
+          setAnimationPlaying(false);
+        }, 1000);
+      
+        // Update using functional update to ensure we have latest state
+        setSteps(prevSteps => prevSteps.map((obj) => {
+          const newValue = (obj.value + 1) % totalItems; // Use modulo for clean wraparound
+          return {
             ...obj,
-            value: newValue > steps.length - 1 ? 0 : newValue
-        };
+            value: newValue
+          };
         }));
-
+      
         if (intervalRef.current) {
-            clearInterval(intervalRef.current);
-          }
-
-      intervalRef.current = setInterval(moveItemsForward, 5000);
-    };
-    
-    const moveItemsBackward = () => {
-      if (isAnimationPlaying) return;
-
+          clearInterval(intervalRef.current);
+        }
+      
+        intervalRef.current = setInterval(moveItemsForward, 5000);
+      };
+      
+      const moveItemsBackward = () => {
+        if (isAnimationPlaying) return;
+      
         setIsMovingForward(false);
         setSliderInitialized(true);
         setAnimationPlaying(true);
-
+      
         setTimeout(() => {
-            setAnimationPlaying(false);
-        }, 1000)
-
-        setSteps(steps.map((obj) => {
-        const newValue = obj.value - 1;
-        return {
+          setAnimationPlaying(false);
+        }, 1000);
+      
+        // Update using functional update
+        setSteps(prevSteps => prevSteps.map((obj) => {
+          // For backward movement with any number of items
+          const newValue = (obj.value - 1 + totalItems) % totalItems;
+          return {
             ...obj,
-            value: newValue < 0 ? steps.length - 1 : newValue
-        };
+            value: newValue
+          };
         }));
-
+      
         if (intervalRef.current) {
-            clearInterval(intervalRef.current);
-          }
-      intervalRef.current = setInterval(moveItemsForward, 5000);
-          
-    };
+          clearInterval(intervalRef.current);
+        }
+        
+        intervalRef.current = setInterval(moveItemsForward, 5000);
+      };
 
   return (
     <>
@@ -115,44 +131,90 @@ export default function LogoCarousel() {
             </button>
             <div className="relative" style={{width: `calc(${(steps.length - 1) * 1.5}rem + ${isDesktop ? "8.5" : "6"}rem)`}}>
                 {
-                    steps.map( (obj, index) => {
-                        return (
-                            <motion.div 
-                                animate={
-                                    isSlideInitialized ? (
-                                        isMovingForward ? (
-                                            obj.value === steps.length - 3 ? {
-                                                x: [null, `${(isDesktop ? 8.5 : 6) * 1.3}rem`, `${obj.value * 1.5}rem`],
-                                            } : {
-                                                x: [`${(obj.value - 1) * 1.5}rem`, `${(obj.value - 1) * 1.5}rem`, `${obj.value * 1.5}rem`],
-                                            }
-                                        ) : ( 
-                                                obj.value === 2 ? {
-                                                    x: [null, `${(isDesktop ? 8.5 : 6) * 1.3 + (obj.value - 1) * 1.5}rem`, `${(steps.length - 1) * 1.5}rem`],
-                                                } : {
-                                                    x: [`${(obj.value + 1) * 1.5}rem`, `${(obj.value + 1) * 1.5}rem`, `${obj.value * 1.5}rem`],
-                                                }
-                                            )
-                                    ) : {
-                                        x: `${obj.value * 1.5}rem`,
-                                        transition: {
-                                            duration: 0
-                                        }
-                                    }
-                                }
-                                style={{zIndex: obj.value}}
-                                key={index}
-                                data-index={obj.value}
-                                transition={{
-                                    duration: 0.8,
-                                    ease: easeInOutCubic,
-                                }} 
-                                className={`size-24 lg:size-34 rounded-2xl overflow-hidden absolute transition-[z-index] delay-300`}
-                            >
-                                <Image src={obj.src} alt='asf' width={120} height={120} className='h-full w-full object-cover' />
-                            </motion.div>
-                        )
-                    })
+                  steps.map((obj, index) => {
+                    // Calculate slide width based on device
+                    const slideWidth = isDesktop ? 8.5 : 6;  // in rem
+                    const gap = 1.5;  // Gap between slides in rem
+                    
+                    // Calculate the total number of slides
+                    const totalSlides = steps.length;
+                    
+                    // Calculate the position based on value (0-indexed)
+                    const normalPosition = obj.value * gap;
+                    
+                    // Calculate positions for edge cases (first/last slides)
+                    const lastSlideIndex = totalSlides - 1;
+                    const wrappingForwardPosition = slideWidth * 1.43;  // Position for wrapping forward
+                    const wrappingBackwardPosition = (slideWidth * 1.25) + ((obj.value - 1) * gap);  // Position for wrapping backward
+                    
+                    // Calculate animation values based on direction and position
+                    let animationValues = {};
+                    
+                    if (isSlideInitialized) {
+                        if (isMovingForward) {
+                            // Moving forward (left to right)
+                            if (obj.value === 0) {
+                                // Item wrapping from end to beginning
+                                animationValues = {
+                                    x: [null, `${wrappingForwardPosition}rem`, `${normalPosition}rem`],
+                                };
+                            } else {
+                                // Standard forward movement
+                                animationValues = {
+                                    x: [`${(obj.value - 1) * gap}rem`, `${(obj.value - 1) * gap}rem`, `${normalPosition}rem`],
+                                };
+                            }
+                        } else {
+                            // Moving backward (right to left)
+                            if (obj.value === lastSlideIndex) {
+                                // Item wrapping from beginning to end
+                                animationValues = {
+                                    x: [null, `${wrappingBackwardPosition}rem`, `${normalPosition}rem`],
+                                };
+                            } else {
+                                // Standard backward movement
+                                animationValues = {
+                                    x: [`${(obj.value + 1) * gap}rem`, `${(obj.value + 1) * gap}rem`, `${normalPosition}rem`],
+                                };
+                            }
+                        }
+                    } else {
+                        // Initial positioning without animation
+                        animationValues = {
+                            x: `${normalPosition}rem`,
+                            transition: {
+                                duration: 0
+                            }
+                        };
+                    }
+                    
+                    // Calculate z-index based on position
+                    // Items in the center have higher z-index
+                    const zIndex = obj.value === lastSlideIndex ? totalSlides + 1 : obj.value + 1;
+                    
+                    return (
+                        <motion.div 
+                            animate={animationValues}
+                            style={{ zIndex: zIndex }}
+                            key={index}
+                            data-index={obj.value}
+                            transition={{
+                                duration: 0.8,
+                                ease: easeInOutCubic,
+                            }} 
+                            className={`size-24 lg:size-34 rounded-2xl overflow-hidden absolute transition-[z-index] delay-300`}
+                        >
+                            <Image 
+                                quality={100} 
+                                src={obj.src} 
+                                alt={`Carousel item ${index + 1}`} 
+                                width={120} 
+                                height={120} 
+                                className='h-full w-full object-cover' 
+                            />
+                        </motion.div>
+                    );
+                })
                 }
             </div>
         </div>

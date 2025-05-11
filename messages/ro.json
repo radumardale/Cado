@@ -5,23 +5,23 @@
     "tags": {
       "FOR_HIM": {
       "title": "Pentru El",
-      "description": "Cadouri care adaugă stil și confort locuinței, de la obiecte decorative la accesorii practice."
+      "description": "Găsește cadouri pentru el care aduc stil și confort - de la accesorii practice la obiecte decorative."
       },
       "FOR_HER": {
       "title": "Pentru Ea",
-      "description": "Seturi pentru momente de relaxare și distracție, de la jocuri interactive la experiențe captivante."
+      "description": "Cadouri pentru ea, ideale în orice ocazii speciale și în momentele de relaxare, distracție și inspirație."
       },
       "FOR_KIDS": {
       "title": "Pentru Copii",
-      "description": "Selecții rafinate de delicii și băuturi premium, potrivite pentru orice ocazie."
+      "description": "Surprinde-i pe cei mici cu cadouri pentru copii - dulciuri, jucării premium și seturi creative."
       },
       "ACCESSORIES": {
       "title": "Accesorii",
-      "description": "Seturi ideale pentru exploratori, cu accesorii esențiale pentru confort și organizare în călătorii."
+      "description": "Alege accesorii cadou ideale pentru ocazii variate - seturi funcționale pentru organizare și stil personal."
       },
       "FLOWERS_AND_BALLOONS": {
       "title": "Flori & Baloane",
-      "description": "Seturi funcționale pentru productivitate și organizare, perfecte pentru spațiul de lucru."
+      "description": "Adaugă culoare cu buchete de flori și baloane - perfecte pentru birou, aniversări sau surprize festive."
       },
       "GIFT_SET": {
       "title": "Seturi cadou",
@@ -30,68 +30,64 @@
       "ALL_PRODUCTS": {
         "title": "Toate produsele",
         "description": "Descoperă întreaga noastră gamă de produse."
-      },
-      "CUSTOM": {
-        "title": "8 martie",
-        "description": "Cadouri care promovează bunăstarea, incluzând produse pentru relaxare, îngrijire personală și echilibru zilnic."
       }
     },
     "ocasions": {
       "WELCOME_KIT": {
         "title": "Welcome Kit",
-        "description": "Seturi de bun venit pentru a face o impresie memorabilă."
+        "description": "Fii pregătit cu un cadou special pentru următorul eveniment din calendar."
       },
       "FOR_TEAM": {
         "title": "Pentru echipă",
-        "description": "Cadouri pentru a motiva și aprecia echipa."
+        "description": "Fii pregătit cu un cadou special pentru următorul eveniment din calendar."
       },
       "SCHOOL_HOLIDAYS": {
         "title": "Vacanță școlară",
-        "description": "Cadouri ideale pentru a marca începutul sau sfârșitul anului școlar."
+        "description": "Fii pregătit cu un cadou special pentru următorul eveniment din calendar."
       },
       "VALENTINES_DAY": {
         "title": "Ziua Îndrăgostiților",
-        "description": "Cadouri romantice pentru a celebra iubirea."
+        "description": "Fii pregătit cu un cadou special pentru următorul eveniment din calendar."
       },
       "MARCH_8": {
         "title": "8 martie",
-        "description": "Cadouri speciale pentru a celebra femeile din viața noastră."
+        "description": "Fii pregătit cu un cadou special pentru următorul eveniment din calendar."
       },
       "CHRISTMAS_NEW_YEAR": {
         "title": "Crăciun și Anul Nou",
-        "description": "Selecții festive pentru a aduce bucurie în perioada sărbătorilor de iarnă."
+        "description": "Fii pregătit cu un cadou special pentru următorul eveniment din calendar."
       },
       "EASTER": {
         "title": "Paște",
-        "description": "Idei de cadouri pentru a sărbători Paștele cu stil."
+        "description": "Fii pregătit cu un cadou special pentru următorul eveniment din calendar."
       },
       "VIP_GIFTS": {
         "title": "Cadouri VIP",
-        "description": "Opțiuni premium pentru ocazii speciale și persoane importante."
+        "description": "Fii pregătit cu un cadou special pentru următorul eveniment din calendar."
       },
       "FOR_HOME_AND_OFFICE": {
         "title": "Pentru casă și oficiu",
-        "description": "Cadouri practice și elegante pentru spațiul de acasă sau birou."
+        "description": "Fii pregătit cu un cadou special pentru următorul eveniment din calendar."
       },
       "FOR_TRAVEL": {
         "title": "Pentru călătorii",
-        "description": "Accesorii și cadouri utile pentru cei pasionați de călătorii."
+        "description": "Fii pregătit cu un cadou special pentru următorul eveniment din calendar."
       },
       "MINI_GIFTS": {
         "title": "Mini cadouri",
-        "description": "Cadouri mici dar semnificative pentru orice ocazie."
+        "description": "Fii pregătit cu un cadou special pentru următorul eveniment din calendar."
       },
       "GASTRONOMIC": {
         "title": "Gastronomice",
-        "description": "Delicii culinare și seturi pentru pasionații de gastronomie."
+        "description": "Fii pregătit cu un cadou special pentru următorul eveniment din calendar."
       },
       "PROMOTIONAL": {
         "title": "Promoționale",
-        "description": "Cadouri și articole personalizate pentru promovarea brandului."
+        "description": "Fii pregătit cu un cadou special pentru următorul eveniment din calendar."
       },
       "UNIVERSAL": {
         "title": "Universale",
-        "description": "Cadouri versatile potrivite pentru orice ocazie și recipient."
+        "description": "Fii pregătit cu un cadou special pentru următorul eveniment din calendar."
       }
     },
     "product_content": {

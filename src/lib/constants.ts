@@ -8,15 +8,19 @@ export const heroImages = [
 
 export const reviewLogos = [
     {
-        src: "/hero/hero1.jpg",
+        src: "/reviews/review-3.jpg",
         value: 0
     },
     {
-        src: "/hero/hero2.jpg",
+        src: "/reviews/review-2.jpg",
         value: 1
     },
     {
-        src: "/hero/hero3.jpg",
+        src: "/reviews/review-1.jpg",
         value: 2
+    },
+    {
+        src: "/reviews/review-4.jpg",
+        value: 3
     }
 ]

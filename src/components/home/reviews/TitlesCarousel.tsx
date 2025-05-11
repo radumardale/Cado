@@ -4,8 +4,9 @@ import { motion } from 'motion/react'
 
 const texts = [
     ["MAIB Moldova", "Bancă comercială"],
-    ["Event Republic", "Republica Kyrgyzstan"],
-    ["MAIB Moldova", "Bancă comercială"],
+    ["Ecaterina Suruceanu", "Antreprenoare"],
+    ["Uniplast", "Producător și distribuitor"],
+    ["Sabina Morari", "Office Manager"],
 ]
 
 interface TitlesCarouselInterface {
@@ -25,14 +26,14 @@ export default function TitlesCarousel({slide, isAnimationPlaying, moveItemsBack
             {
                 texts.map((text, index) => {
                     return(
-                        <motion.div 
+                        <motion.div
                             initial={false}
-                            key={index} 
-                            animate={index === slide ? {opacity: 1, transition: {delay: 0.4, duration: 0.8, ease:easeInOutCubic}} : {opacity: 0, transition: {duration: 0.4, ease:easeInOutCubic}}} 
+                            key={index}
+                            animate={index === slide ? {opacity: 1, transition: {delay: 0.4, duration: 0.8, ease:easeInOutCubic}} : {opacity: 0, transition: {duration: 0.4, ease:easeInOutCubic}}}
                             className='absolute'
                         >
                             <p className='text-sm lg:text-base leading-4 lg:leading-5 text-center font-manrope font-semibold mb-2'>{text[0]}</p>
-                            <p className='text-sm lg:text-base leading-4 lg:leading-5 text-center text-gray'>Bancă comercială</p>
+                            <p className='text-sm lg:text-base leading-4 lg:leading-5 text-center text-gray'>{text[1]}</p>
                         </motion.div>
                     )
                 })

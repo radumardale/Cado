@@ -35,7 +35,14 @@ export default function BlogSection({id}: BlogSectionInteface) {
                 <p className='text-gray font-manrope font-semibold text-sm leading-4 lg:text-base lg:leading-5'>{new Date(data.blog.date).toLocaleDateString(locale, { day: '2-digit', month: '2-digit', year: 'numeric' }).replace(/\//g, '.')}</p>
             </div>
         </div>  
-        <Image src={data.blog.image} alt={data.blog.title[locale]} width={824} height={544} className='w-full aspect-[824/544] object-cover lg:mb-4 rounded-lg lg:rounded-2xl' />
+        <Image 
+            src={data.blog.image} 
+            alt={data.blog.title[locale]} 
+            width={824} 
+            height={544} 
+            className='w-full aspect-[824/544] object-cover lg:mb-4 rounded-lg lg:rounded-2xl' 
+            sizes="(max-width: 1024px) 100vw, 824px" 
+        />
         <>
             {
                 data.blog.sections.map((section, index) => {

@@ -35,7 +35,7 @@ export default function ImageSlide({src, slide, nextSlide, index, direction}: Im
         style={{zIndex: slide === index ? 4 : nextSlide === index ? 3 : 0}}
         className='absolute left-0 top-0 w-full h-full'
     >
-        <Image src={src} alt="hero1" width={1792} height={800} className='w-full h-full object-cover'/>
+        <Image quality={100} priority src={src} alt="hero1" width={3584} height={1600} className='w-full h-full object-cover'/>
     </motion.div>
   )
 }
