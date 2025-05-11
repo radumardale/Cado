@@ -1,9 +1,10 @@
 import { Product } from "@/models/product/product";
 import { ProductInterface } from "@/models/product/types/productInterface";
+import { deleteFromBucket } from "../deleteObjects/deleteFromBucket";
 
 interface updateProductImagesProps {
     id: string,
-    image: string
+    filenames: string[]
 }
 
 interface updateProductResponseInterface {
@@ -11,8 +12,16 @@ interface updateProductResponseInterface {
 }
 
 export const updateProductImages = async (props: updateProductImagesProps): Promise<updateProductResponseInterface> => {
+    const product = await Product.findById(props.id);
+    
+    for (const image of product.images) {
+      if (!props.filenames.includes(image)) {
+        await deleteFromBucket(image);
+      }
+    }
 
-    const product = await Product.findByIdAndUpdate(props.id, { $push: { images: props.image } }, {new: true});
+    product.images = props.filenames;
+    await product.save();
 
     return product;
 }

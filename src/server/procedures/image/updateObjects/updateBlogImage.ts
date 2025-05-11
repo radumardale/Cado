@@ -4,7 +4,7 @@ import { BlogInterface } from "@/models/blog/types/BlogInterface";
 
 interface updateBlogImageProps {
     id: string,
-    image: string
+    filenames: string[]
 }
 
 interface updateBlogResponseInterface {
@@ -16,7 +16,7 @@ export const updateBlogImage = async (props: updateBlogImageProps): Promise<upda
 
     const blog = await Blog.findByIdAndUpdate(
         props.id, 
-        { image: props.image }, 
+        { image: props.filenames }, 
         { new: true, upsert: true }
     );
 

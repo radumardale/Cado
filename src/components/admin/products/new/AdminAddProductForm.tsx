@@ -4,7 +4,7 @@ import {
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { StockState } from '@/lib/enums/StockState'
 import { trpc } from '@/app/_trpc/client'
 import { LoaderCircle } from 'lucide-react'
@@ -12,16 +12,73 @@ import { addProductRequestSchema } from "@/lib/validation/product/addProductRequ
 import AdminProductDetails from "@/components/admin/products/AdminProductDetails"
 import AdminProductImages from "@/components/admin/products/AdminProductImages"
 import { useRouter } from "@/i18n/navigation"
+import { DestinationEnum } from "@/server/procedures/image/generateUploadLinks"
 
 export default function AdminAddProductForm() {
-    const {isSuccess, isPending, mutate, data} = trpc.products.createProduct.useMutation();
+    const {isSuccess, mutate, data} = trpc.products.createProduct.useMutation();
+    const { mutate: UpdateMutate, isSuccess: UpdateIsSuccess, } = trpc.image.updateImage.useMutation();
     const router = useRouter();
+    const [imagesData, setImagesData] = useState<string[]>([]);
+
+    // triggers when form is submitted
+    useEffect(() => {
+        const uploadImagesInOrder = async () => {
+            if (isSuccess && data.product?._id) {
+                
+                const newImageKeys = [];
+                
+                // Upload images sequentially to maintain order
+                for (let i = 0; i < data.imagesLinks.length; i++) {
+                    try {
+                        const dataUrl = data.imagesLinks[i];
+                        const imageData = imagesData[i];
+                        
+                        // Convert base64 to Buffer
+                        const base64Data = imageData.replace(/^data:image\/\w+;base64,/, "");
+                        const buf = Buffer.from(base64Data, 'base64');
+    
+                        // Upload to S3
+                        const response = await fetch(dataUrl, {
+                            method: 'PUT',
+                            body: buf
+                        });
+                        
+                        // Extract key from URL
+                        const extractedKey = dataUrl.split('.com/')[1]?.split('?')[0];
+    
+                        if (response.ok && extractedKey) {
+                            newImageKeys.push(extractedKey);
+                        } else {
+                            console.error(`Failed to upload image ${i+1}`);
+                        }
+                    } catch (error) {
+                        console.error(`Error uploading image ${i+1}:`, error);
+                    }
+                }
+                
+                // Update product with all image keys in the correct order
+                if (newImageKeys.length === data.imagesLinks.length) {
+                    UpdateMutate({
+                        id: data.product._id, 
+                        destination: DestinationEnum.PRODUCT, 
+                        filenames: newImageKeys
+                    });
+                }
+            }
+        };
+    
+        // Call the async function
+        if (isSuccess && data.product?._id) {
+            uploadImagesInOrder();
+        }
+    }, [isSuccess, data, imagesData]);
+
 
     useEffect(() => {
-        if (isSuccess && data.product?._id) {
-            router.push({pathname: "/admin/products/[id]", params: {id: data.product?.custom_id}})
+        if (UpdateIsSuccess && data?.product?.custom_id) {
+            router.push({pathname: "/admin/products/[id]", params: {id: data?.product?.custom_id}})
         }
-    }, [isSuccess])
+    }, [UpdateIsSuccess, data?.product?.custom_id, router]);
 
 
     const form = useForm<z.infer<typeof addProductRequestSchema>>({
@@ -34,7 +91,7 @@ export default function AdminAddProductForm() {
                 image_description: { ro: "", ru: "", en: "" },
                 set_description: { ro: "", ru: "", en: "" },
                 price: 1000,
-                images: [],
+                imagesNumber: 0,
                 nr_of_items: 1,
                 categories: [],
                 ocasions: [],
@@ -58,7 +115,7 @@ export default function AdminAddProductForm() {
     return (
         <>
             {
-                isPending &&
+                UpdateIsSuccess &&
                 <div className='fixed top-0 left-0 w-full h-full bg-pureblack/25 z-10 items-center justify-center'>
                     <div className="flex items-center justify-center h-full w-full">
                         <LoaderCircle className='animate-spin text-white size-20' />
@@ -69,12 +126,11 @@ export default function AdminAddProductForm() {
                 <form 
                     id="update-product-form" 
                     onSubmit={form.handleSubmit(onSubmit)} 
-                    className="col-span-12 grid grid-cols-12 flex-1 overflow-auto gap-x-6"
-                    >
-                    <div data-lenis-prevent className='col-span-7 grid grid-cols-7 overflow-y-auto flex-1 -mr-6 pr-6 mt-16'>
+                    className="col-span-12 grid grid-cols-12 flex-1 overflow-auto gap-x-6">
+                    <div data-lenis-prevent className='col-span-7 grid grid-cols-7 overflow-y-auto flex-1 -mr-6 pr-6 mt-16 scroll-bar-custom'>
                         <AdminProductDetails />
                     </div>
-                    <AdminProductImages product={null} />
+                    <AdminProductImages product={null} imagesData={imagesData} initialImagesData={[]} setImagesData={setImagesData}/>
                 </form>
             </Form>
         </>

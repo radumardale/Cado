@@ -6,11 +6,12 @@ import { ActionResponse } from '@/lib/types/ActionResponse';
 import { updateProductRequestSchema } from '@/lib/validation/product/updateProductRequest';
 import { publicProcedure } from "@/server/trpc";
 import connectMongo from '@/lib/connect-mongo';
-import { appRouter } from '@/server';
+import { DestinationEnum, generateUploadLinks } from '../image/generateUploadLinks';
 
 // Define the response interface for TypeScript type checking
 export interface updateProductResponseInterface extends ActionResponse {
-  product: ProductInterface | null
+  product: ProductInterface | null;
+  imagesLinks: string[];
 }
 
 export const updateProductProcedure = publicProcedure
@@ -19,43 +20,27 @@ export const updateProductProcedure = publicProcedure
     try {
       
       await connectMongo();
-      const caller = appRouter.createCaller({});
-
-      const inputImages = input.data.images;
-      const updatedImages = [];
-      
-      for (const image of inputImages) {
-        if (image.startsWith("https")) {
-          updatedImages.push(image);
-        } else {
-          const imageUrl = await caller.image.updateImage({
-            id: input.id,
-            image: image,
-            destination: "PRODUCT"
-          });
-
-          updatedImages.push(imageUrl.imageUrl);
-        }
-      }
 
       const oldProduct = await Product.findById(input.id).select("images").lean() as any;
+
+      const imagesLinks = [];
+  
+      for (let i = 0; i < input.data.imagesNumber; i++) {
+          const imageUrl = await generateUploadLinks({
+            id: oldProduct._id.toString(),
+            destination: DestinationEnum.PRODUCT
+          });
+  
+          imagesLinks.push(imageUrl.imageUrl);
+      }
 
       if (!oldProduct) {
         return {
           success: false,
           error: "This product does not exist",
-          product: null
+          product: null,
+          imagesLinks: []
         };
-      }
-      
-      for (const image of oldProduct.images) {
-        if (!updatedImages.includes(image)) {
-          await caller.image.deleteImage({
-            id: input.id,
-            image: image,
-            destination: "PRODUCT"
-          })
-        }
       }
 
       const product = await Product.findByIdAndUpdate(
@@ -63,7 +48,6 @@ export const updateProductProcedure = publicProcedure
         {
           $set: {
             ...input.data,
-            images: updatedImages
           }
         },
         { new: true }
@@ -73,20 +57,23 @@ export const updateProductProcedure = publicProcedure
         return {
           success: false,
           error: "This product does not exist",
+          imagesLinks: [],
           product: null
         };
       }
 
       return {
         success: true,
-        product: product
+        product: product,
+        imagesLinks: imagesLinks,
       };
     } catch (error) {
       console.error("Error updating product:", error);
       return {
         success: false,
         error: error instanceof Error ? error.message : "Failed to update product",
-        product: null
+        product: null,
+        imagesLinks: []
       };
     }
   });

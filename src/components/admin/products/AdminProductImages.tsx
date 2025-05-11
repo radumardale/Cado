@@ -16,9 +16,12 @@ import { useRouter } from '@/i18n/navigation'
 
 interface AdminProductImagesProps {
     product: ProductInterface | null | undefined,
+    imagesData: string[],
+    initialImagesData: string[],
+    setImagesData: (v: string[]) => void
 }
 
-export default function AdminProductImages({product}: AdminProductImagesProps) {
+export default function AdminProductImages({ product, imagesData, initialImagesData, setImagesData }: AdminProductImagesProps) {
     const { mutate, isSuccess, isPending } = trpc.products.deleteProduct.useMutation();
     const locale = useLocale();
     const router = useRouter();
@@ -48,14 +51,14 @@ export default function AdminProductImages({product}: AdminProductImagesProps) {
         }
     }, [stockState])
 
-    const handleImageAdded = (imageBase64: string) => {
-        const currentImages = form.getValues('data.images') || [];
-        form.setValue('data.images', [...currentImages, imageBase64], {
-            shouldDirty: true
-        });
-    };
+    useEffect(() => {
+        form.setValue('data.imagesNumber', imagesData.length, {shouldDirty: true});
+    }, [imagesData])
 
-    const images = form.watch('data.images');
+    const handleImageAdded = (imageBase64: string) => {
+        const currentImages = imagesData;
+        setImagesData([...currentImages, imageBase64]);
+    };
 
   return (
     <>
@@ -78,7 +81,7 @@ export default function AdminProductImages({product}: AdminProductImagesProps) {
                 <div className='col-span-full grid grid-cols-4 gap-x-6 h-fit'>
                     <p className='font-manrope text-2xl font-semibold leading-7 mb-6 col-span-full'>Imagini pentru produs</p>
                     <div className='col-span-3'>
-                        {images.length > 0 ?
+                        {imagesData.length > 0 ?
                         (
                             <div className='w-full relative group'>
                                 <div className='absolute left-0 top-0 w-full h-full bg-pureblack rounded-2xl opacity-0 group-hover:opacity-25 transition duration-300'></div>
@@ -86,10 +89,10 @@ export default function AdminProductImages({product}: AdminProductImagesProps) {
                                     strokeWidth={1.5} 
                                     className='text-white size-6 absolute right-2 top-2 opacity-0 cursor-pointer group-hover:opacity-100' 
                                     onClick={() => {
-                                        const currentImages = form.getValues('data.images') || [];
-                                        form.setValue('data.images', currentImages.filter((_, i) => i !== 0), {shouldDirty: true});
+                                        const currentImages = imagesData;
+                                        setImagesData(currentImages.filter((_, i) => i !== 0));
                                     }}/>
-                                <Image src={images[0]} alt={product ? product.title[locale] : "new image"} width={339} height={422} className='w-full rounded-2xl aspect-[339/422] object-cover'/>
+                                <Image unoptimized src={imagesData[0]} alt={product ? product.title[locale] : "new image"} width={339} height={422} className='w-full rounded-2xl aspect-[339/422] object-cover'/>
                             </div>
                         ) :
                         <ProductImageUpload 
@@ -100,10 +103,10 @@ export default function AdminProductImages({product}: AdminProductImagesProps) {
                     </div>
                     <div className='col-span-1 flex flex-col gap-4'>
                         {
-                            images.length > 1 && 
+                            imagesData.length > 1 && 
                             <>
                                 {
-                                    images.map((image, index) => {
+                                    imagesData.map((image, index) => {
                                         if (index === 0) return;
                                         return (
                                             <div key={index} className='w-full relative group'>
@@ -112,17 +115,17 @@ export default function AdminProductImages({product}: AdminProductImagesProps) {
                                                     strokeWidth={1.5} 
                                                     className='text-white size-4 absolute left-1 top-1 opacity-0 cursor-pointer group-hover:opacity-100' 
                                                     onClick={() => {
-                                                        const currentImages = form.getValues('data.images') || [];
+                                                        const currentImages = imagesData
                                                         const updatedImages = [image, ...currentImages.filter((_, i) => i !== index)];
-                                                        form.setValue('data.images', updatedImages, {shouldDirty: true});
+                                                        setImagesData(updatedImages);
                                                     }}
                                                     />
                                                 <X 
                                                     strokeWidth={1.5} 
                                                     className='text-white size-4 absolute right-1 top-0.75 opacity-0 cursor-pointer group-hover:opacity-100' 
                                                     onClick={() => {
-                                                        const currentImages = form.getValues('data.images') || [];
-                                                        form.setValue('data.images', currentImages.filter((_, i) => i !== index), {shouldDirty: true});
+                                                        const currentImages = imagesData;
+                                                        setImagesData(currentImages.filter((_, i) => i !== index));
                                                     }}
                                                     />
                                                 <Image src={image} alt={product ? product.title[locale] : "new image"} width={339} height={422} className='w-full rounded-lg aspect-[339/422] object-cover'/>
@@ -133,7 +136,7 @@ export default function AdminProductImages({product}: AdminProductImagesProps) {
                             </>
                         }
                         {
-                            images.length < 4 && images.length > 0 &&
+                            imagesData.length < 4 && imagesData.length > 0 &&
                             <ProductImageUpload 
                                 onImageAdded={handleImageAdded}
                             />
@@ -255,7 +258,7 @@ export default function AdminProductImages({product}: AdminProductImagesProps) {
                 <button onClick={(e) => {e.preventDefault(); setIsDeleteDialogOpen(true)}} className='disabled:opacity-75 disabled:cursor-default cursor-pointer h-12 px-6 flex justify-center items-center bg-red text-white rounded-3xl hover:opacity-75 transition duration-300'>Șterge produs</button>
 
                 <div className='flex gap-6'>
-                    <button className='cursor-pointer h-12' onClick={(e) => {e.preventDefault(); form.reset();}}>
+                    <button className='cursor-pointer h-12' onClick={(e) => {e.preventDefault(); form.reset(); setImagesData(initialImagesData)}}>
                         <span className='text-gray relative after:content-[""] after:absolute after:left-0 after:bottom-0 after:w-0 after:h-[1px] after:bg-gray hover:after:w-full after:transition-all after:duration-300'>Anulează</span>
                     </button>
                     <button disabled={!isDirty} className='disabled:opacity-75 disabled:cursor-default cursor-pointer h-12 px-6 flex justify-center items-center bg-blue-2 text-white rounded-3xl hover:opacity-75 transition duration-300'>Salvează</button>

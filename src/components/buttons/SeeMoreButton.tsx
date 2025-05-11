@@ -57,7 +57,7 @@ export default function SeeMoreButton({className, href="/catalog", text="Vezi ma
   return (
     <Link href={href} className={`col-span-full flex justify-center ${className}`}>
         <motion.button 
-            initial={false}
+            initial="close"
             variants={buttonVariants} 
             transition={{ease: easeInOutCubic, duration: .4, delay: 0.1}}
             animate={isButtonActive ? "open" : "close"} 
@@ -66,7 +66,7 @@ export default function SeeMoreButton({className, href="/catalog", text="Vezi ma
             onMouseLeave={() => {setButtonActive(false)}}
         >
             <motion.span 
-                initial={false}
+                initial="close"
                 className='whitespace-nowrap ml-6 mr-12'
                 transition={{ease: easeInOutCubic, duration: .4, delay: 0.1}}
                 variants={textVariants}

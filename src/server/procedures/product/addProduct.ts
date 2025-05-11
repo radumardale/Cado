@@ -4,10 +4,11 @@ import { addProductRequestSchema } from '@/lib/validation/product/addProductRequ
 import { ProductInterface } from '@/models/product/types/productInterface';
 import { publicProcedure } from '@/server/trpc';
 import connectMongo from '@/lib/connect-mongo';
-import { appRouter } from '@/server';
+import { DestinationEnum, generateUploadLinks } from '../image/generateUploadLinks';
 
 export interface addProductResponseInterface extends ActionResponse {
   product: ProductInterface | null;
+  imagesLinks: string[];
 }
 
 export const addProductProcedure = publicProcedure
@@ -39,25 +40,24 @@ export const addProductProcedure = publicProcedure
         images: []
       });
       
-      const caller = appRouter.createCaller({});
-      const images = [];
+      const imagesLinks = [];
   
-      for (const image of input.data.images) {
-          const imageUrl = await caller.image.updateImage({
+      for (let i = 0; i < input.data.imagesNumber; i++) {
+          const imageUrl = await generateUploadLinks({
             id: product._id.toString(),
-            image: image,
-            destination: "PRODUCT"
+            destination: DestinationEnum.PRODUCT
           });
   
-          images.push(imageUrl.imageUrl);
+          imagesLinks.push(imageUrl.imageUrl);
       }
 
       // Update images
-      product.images = images;
-      await product.save();
+      // product.images = images;
+      // await product.save();
 
       return {
         success: true,
+        imagesLinks: imagesLinks,
         product: product,
       };
 
@@ -67,6 +67,7 @@ export const addProductProcedure = publicProcedure
         success: false,
         error: error instanceof Error ? error.message : "Failed to create product",
         product: null,
+        imagesLinks: []
       };
     }
   });

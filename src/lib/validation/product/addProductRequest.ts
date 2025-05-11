@@ -20,6 +20,7 @@ export const addProductRequestSchema = z.object({
         product_content: z.array(z.nativeEnum(ProductContent)),
         stock_availability: stockAvailabilitySchema,
         sale: productSaleSchema.optional(),
-        images: z.array(z.string())
+        imagesNumber: z.number()
+        // images: z.array(z.string())
     })
 });
