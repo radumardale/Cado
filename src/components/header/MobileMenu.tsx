@@ -43,7 +43,7 @@ export default function MobileMenu({setSidebarOpen}: MobileMenuInterface) {
             <X className='size-6' strokeWidth={1.5} />
         </button>
         <Link href="/" onClick={() => {if (pathname === "/") setSidebarOpen(false)}}>
-            <Image src="/logo/logo-white.svg" width={228} height={56} alt='logo' className='h-8 w-fit mx-auto mb-4'/>
+            <Image unoptimized src="/logo/logo-white.svg" width={228} height={56} alt='logo' className='h-8 w-fit mx-auto mb-4'/>
         </Link>
         <Searchbar productsCount={0} searchText={searchText} setSearchText={setSearchText} closeMenu={() => {setSidebarOpen(false)}}  />
         { 

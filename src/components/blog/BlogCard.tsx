@@ -20,6 +20,7 @@ export default function BlogCard({src, tag ,title, date, id}: BlogCardInterface)
     <Link href={{pathname: '/blog/[id]', params: {id: id}}} className='cursor-pointer col-span-full lg:col-span-6 group block'>
         <div className="overflow-hidden rounded-lg lg:rounded-2xl mb-2 lg:mb-4 relative before:content-[''] before:absolute before:left-0 before:top-0 before:w-full before:h-full before:bg-pureblack before:opacity-0 group-hover:before:opacity-25 before:rounded-2xl before:transition before:duration-300 before:z-10">
             <Image 
+            unoptimized
             src={src} 
             alt={title} 
             width={920} 

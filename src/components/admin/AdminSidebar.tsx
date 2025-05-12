@@ -15,7 +15,7 @@ export default function AdminSidebar({ page }: AdminSidebarProps) {
 
   return (
     <div className='col-span-3 bg-black min-h-screen pr-6 lg:-ml-16 lg:pl-16 pt-8'>
-      <Image src="/logo/logo-blue.svg" alt='logo cado' className='h-12 w-auto' width={196} height={48}/>
+      <Image unoptimized src="/logo/logo-blue.svg" alt='logo cado' className='h-12 w-auto' width={196} height={48}/>
       <p className='font-manrope font-semibold leading-5 text-white mt-16 mb-4'>{t(`sidebar.titles.0`)}</p>
       {
         AdminPagesArr.map((link, index) => {

@@ -118,7 +118,7 @@ export default function AdminProductImages({ product, imagesData, initialImagesD
                                                         form.setValue("data.imagesChanged", true, {shouldDirty: true});
                                                     }}
                                                     />
-                                                <Image src={image} alt={product ? product.title[locale] : "new image"} width={339} height={339} className='w-full rounded-lg aspect-square object-cover'/>
+                                                <Image unoptimized src={image} alt={product ? product.title[locale] : "new image"} width={339} height={339} className='w-full rounded-lg aspect-square object-cover'/>
                                             </div>
                                         )
                                     })

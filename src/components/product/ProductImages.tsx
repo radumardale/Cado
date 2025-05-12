@@ -39,7 +39,7 @@ export default function ProductImages({product}: ProductImagesInterface) {
             <button className='col-span-full mb-4 aspect-[3/4] w-full cursor-pointer relative' onClick={() => {setCarouselOpen(true)}}>
                 {
                     product.images.map((image, index) => (
-                        <Image key={index} draggable={false} priority quality={100} src={image} alt={product.title[locale]} width={1156} height={1446} className={`${index === imageIndex ? "opacity-100" : "opacity-0"} rounded-lg lg:rounded-xl max-w-full w-full absolute top-1/2 -translate-y-1/2`}/>
+                        <Image unoptimized key={index} draggable={false} priority quality={100} src={image} alt={product.title[locale]} width={1156} height={1446} className={`${index === imageIndex ? "opacity-100" : "opacity-0"} rounded-lg lg:rounded-xl max-w-full w-full absolute top-1/2 -translate-y-1/2`}/>
                     ))
                 }
             </button>
@@ -100,7 +100,7 @@ export default function ProductImages({product}: ProductImagesInterface) {
                         product.images.map((image, index) => (
                             <SwiperSlide key={index} className='aspect-square'>
                                 <button className='cursor-pointer flex-1 aspect-square lg:w-full' onClick={() => {setImageIndex(index)}}>
-                                    <Image quality={100} src={image} alt={product.title[locale]} width={254} height={318} className='rounded-sm lg:rounded-xl w-full h-full object-cover' />
+                                    <Image unoptimized quality={100} src={image} alt={product.title[locale]} width={254} height={318} className='rounded-sm lg:rounded-xl w-full h-full object-cover' />
                                 </button>
                             </SwiperSlide>
                         ))

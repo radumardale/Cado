@@ -26,8 +26,8 @@ export default function ListProductCard({product}: ProductCardInterface) {
                   <span className='font-semibold text-xs lg:text-base leading-3.5 lg:leading-5'>Reducere</span>
               </div>
           }
-          <Image src={product.images[0]} width={1596} height={2396} alt={product.title.ro} className='w-full h-full object-cover object-top rounded-2xl opacity-100 group-hover:opacity-0 z-10 transition duration-300'/>  
-          <Image src={product.images[1]} width={1596} height={2396} alt={product.title.ro} className='absolute left-0 top-0 h-full w-full object-cover object-top rounded-2xl transition duration-300 -z-10'/>  
+          <Image unoptimized src={product.images[0]} width={1596} height={2396} alt={product.title.ro} className='w-full h-full object-cover object-top rounded-2xl opacity-100 group-hover:opacity-0 z-10 transition duration-300'/>  
+          <Image unoptimized src={product.images[1]} width={1596} height={2396} alt={product.title.ro} className='absolute left-0 top-0 h-full w-full object-cover object-top rounded-2xl transition duration-300 -z-10'/>  
         </Link>
         <div className='col-span-full lg:col-span-4 flex flex-col mt-4 lg:mt-0'>
             <p className='font-manrope font-semibold text-2xl'>{product.title[locale]}</p>

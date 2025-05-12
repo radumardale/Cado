@@ -52,7 +52,7 @@ export default function CheckoutCart({items, setValue, deliveryRegion, deliveryH
                             return (
                                 <div key={index} className='w-full flex gap-2 lg:gap-4'>
                                     <Link href={{pathname: '/catalog/product/[id]', params: {id: products[index].custom_id}}} className='peer'>
-                                        <Image src={products[index].images[0]} alt={products[index].title[locale]} width={129} height={164} className='w-32 aspect-[129/164] object-cover rounded-lg peer' />
+                                        <Image unoptimized src={products[index].images[0]} alt={products[index].title[locale]} width={129} height={164} className='w-32 aspect-[129/164] object-cover rounded-lg peer' />
                                     </Link>
                                     <div className='flex flex-col justify-between flex-1 peer-hover:[&>div>p]:after:w-full'>
                                         <div>

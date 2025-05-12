@@ -32,11 +32,11 @@ export default function ProductCard({product, category, section="RECOMMENDATIONS
           }
           <div className='bg-purewhite w-full h-full rounded-lg lg:rounded-2xl flex items-center opacity-100 group-hover:opacity-0 z-10 transition duration-300 relative'>
             <div className='relative'>
-                <Image onLoad={() => setImageLoaded(true)} src={product.images[0]} width={1596} height={2396} alt={product.title.ro} className='w-full object-contain z-10'/>  
+                <Image unoptimized onLoad={() => setImageLoaded(true)} src={product.images[0]} width={1596} height={2396} alt={product.title.ro} className='w-full object-contain z-10'/>  
             </div>
           </div>
           <div className='bg-purewhite w-full h-full absolute left-0 top-0 transition duration-300 -z-10 rounded-lg lg:rounded-2xl'>
-            <Image src={product.images[1] || product.images[0]} width={1596} height={2396} alt={product.title.ro} className={`${isImageLoaded ? "" : "hidden"} absolute left-0 top-1/2 -translate-y-1/2 w-full max-h-full object-contain`}/>  
+            <Image unoptimized src={product.images[1] || product.images[0]} width={1596} height={2396} alt={product.title.ro} className={`${isImageLoaded ? "" : "hidden"} absolute left-0 top-1/2 -translate-y-1/2 w-full max-h-full object-contain`}/>  
           </div>
           <button onClick={(e) => {e.stopPropagation(); addToCart(product, 1, value, setValue, locale)}} className='absolute left-4 -bottom-12 h-12 w-[calc(100%-2rem)] bg-white rounded-3xl font-manrope z-20 opacity-100 transition-all duration-300 group-hover:bottom-4 font-semibold cursor-pointer hover:bg-lightgray'>Adaugă în coș</button>
         </div>

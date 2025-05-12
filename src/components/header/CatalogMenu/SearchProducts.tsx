@@ -45,7 +45,7 @@ export default function SearchProducts({products, productsCount, searchText, clo
             {
                 localCount == 0 &&
                 <div className='absolute left-1/2 top-1/2 -translate-1/2 w-full lg:w-auto px-13 lg:px-0 flex flex-col items-center'>
-                    <Image src="/icons/shopping-bag-sad.svg" alt='sad shopping bag' width={48} height={48} className='size-12' />
+                    <Image unoptimized src="/icons/shopping-bag-sad.svg" alt='sad shopping bag' width={48} height={48} className='size-12' />
                     <p className='mt-2 text-sm leading-4 lg:leading-5 lg:text-base text-center mb-12'>Ups! Nimic nu se potrivește cu ce ai căutat. Încearcă din nou sau vezi toate produsele disponibile.</p>
                     <Link href={'/catalog'} className='font-manrope font-semibold bg-blue-2 rounded-3xl w-fit px-6 py-3.5 flex gap-2 mx-auto cursor-pointer hover:opacity-75 transition duration-300' onClick={() => {router.push({pathname: "/catalog", query: (productsCount !== undefined && productsCount !== null && productsCount > 0) ? {keywords: searchText.split(/\s+/).filter(word => word.length > 1).join("+")} : undefined}); closeMenu()}}>
                         <span className='font-semibold leading-5 font-manrope text-white'>Vezi întreg catalog</span>
@@ -65,8 +65,8 @@ export default function SearchProducts({products, productsCount, searchText, clo
                                             <span className='font-semibold text-xs leading-3.5'>Reducere</span>
                                         </div>
                                     }
-                                    <Image onLoad={() => setImageLoaded(true)} src={product.images[0]} width={798} height={1198} alt={product.title.ro} className='w-full aspect-[339/425] object-cover rounded-lg object-top lg:rounded-2xl opacity-100 group-hover:opacity-0 z-10 transition duration-300'/>  
-                                    <Image src={product.images[1]} width={798} height={1198} alt={product.title.ro} className={`${isImageLoaded ? "" : "hidden"} absolute left-0 top-0 h-full w-full object-cover rounded-lg object-top lg:rounded-2xl transition duration-300 -z-10`}/>  
+                                    <Image unoptimized onLoad={() => setImageLoaded(true)} src={product.images[0]} width={798} height={1198} alt={product.title.ro} className='w-full aspect-[339/425] object-cover rounded-lg object-top lg:rounded-2xl opacity-100 group-hover:opacity-0 z-10 transition duration-300'/>  
+                                    <Image unoptimized src={product.images[1]} width={798} height={1198} alt={product.title.ro} className={`${isImageLoaded ? "" : "hidden"} absolute left-0 top-0 h-full w-full object-cover rounded-lg object-top lg:rounded-2xl transition duration-300 -z-10`}/>  
                                     <button onClick={(e) => {e.stopPropagation(); addToCart(product, 1, value, setValue, locale)}} className='absolute left-2 -bottom-10 h-10 w-[calc(100%-1rem)] bg-white rounded-3xl font-manrope z-20 opacity-100 transition-all duration-300 group-hover:bottom-2 font-semibold cursor-pointer hover:bg-lightgray text-sm'>Adaugă în coș</button>
                                 </div>
                                 <Link href={{pathname: "/catalog/product/[id]", params: {id: product.custom_id}}} className='group cursor-pointer flex flex-col flex-1 justify-between'>

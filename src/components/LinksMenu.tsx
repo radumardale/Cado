@@ -45,7 +45,7 @@ export default function LinksMenu() {
             className={`${isMenuOpen ? "" : "pointer-events-none"} absolute left-0 -top-36`}
             >
                 <Link href="#" className='size-14 flex items-center justify-center bg-blue-2 rounded-full mb-4 shadow-sm border border-white'>
-                    <Image src="/icons/telegram.svg" alt="telegram logo" height={28} width={28} className='size-7 text-white'/>
+                    <Image unoptimized src="/icons/telegram.svg" alt="telegram logo" height={28} width={28} className='size-7 text-white'/>
                 </Link>
         </motion.div>
         <motion.div 
@@ -54,7 +54,7 @@ export default function LinksMenu() {
             className={`${isMenuOpen ? "" : "pointer-events-none"} absolute left-0 -top-18`}
             >
                 <Link href="#" className='size-14 flex items-center justify-center bg-blue-2 rounded-full mb-4 shadow-sm border border-white'>
-                    <Image src="/icons/whatsapp.svg" alt="telegram logo" height={28} width={28} className='size-7 text-white'/>
+                    <Image unoptimized src="/icons/whatsapp.svg" alt="telegram logo" height={28} width={28} className='size-7 text-white'/>
                 </Link>
         </motion.div>
         <div className='size-16 3xl:size-14 flex items-center justify-center bg-blue-2 rounded-full relative cursor-pointer group shadow-sm border border-white' onClick={() => {setMenuOpen(!isMenuOpen)}}>
