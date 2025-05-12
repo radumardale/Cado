@@ -15,6 +15,7 @@ export const addProductRequestSchema = z.object({
         set_description: productInfoSchema.optional(),
         price: z.number().min(0, "Price cannot be below 0"),
         nr_of_items: z.number(),
+        imagesChanged: z.boolean().optional(),
         categories: z.array(z.nativeEnum(Categories)),
         ocasions: z.array(z.nativeEnum(Ocasions)),
         product_content: z.array(z.nativeEnum(ProductContent)),

@@ -52,12 +52,15 @@ export default function AdminProductImages({ product, imagesData, initialImagesD
     }, [stockState])
 
     useEffect(() => {
-        form.setValue('data.imagesNumber', imagesData.length, {shouldDirty: true});
+        if (form.getValues("data.imagesNumber") !== imagesData.filter(image => !image.startsWith("https")).length) {
+            form.setValue('data.imagesNumber', imagesData.filter(image => !image.startsWith("https")).length, {shouldDirty: true});
+        }
     }, [imagesData])
 
     const handleImageAdded = (imageBase64: string) => {
         const currentImages = imagesData;
         setImagesData([...currentImages, imageBase64]);
+        form.setValue("data.imagesChanged", true, {shouldDirty: true});
     };
 
   return (
@@ -80,44 +83,30 @@ export default function AdminProductImages({ product, imagesData, initialImagesD
             <div className='col-span-full grid grid-cols-4 gap-x-6 h-fit'>
                 <div className='col-span-full grid grid-cols-4 gap-x-6 h-fit'>
                     <p className='font-manrope text-2xl font-semibold leading-7 mb-6 col-span-full'>Imagini pentru produs</p>
-                    <div className='col-span-3'>
-                        {imagesData.length > 0 ?
-                        (
-                            <div className='w-full relative group'>
-                                <div className='absolute left-0 top-0 w-full h-full bg-pureblack rounded-2xl opacity-0 group-hover:opacity-25 transition duration-300'></div>
-                                <X 
-                                    strokeWidth={1.5} 
-                                    className='text-white size-6 absolute right-2 top-2 opacity-0 cursor-pointer group-hover:opacity-100' 
-                                    onClick={() => {
-                                        const currentImages = imagesData;
-                                        setImagesData(currentImages.filter((_, i) => i !== 0));
-                                    }}/>
-                                <Image unoptimized src={imagesData[0]} alt={product ? product.title[locale] : "new image"} width={339} height={422} className='w-full rounded-2xl aspect-[339/422] object-cover'/>
-                            </div>
-                        ) :
-                        <ProductImageUpload 
-                            big
-                            onImageAdded={handleImageAdded}
-                        />
-                    }
-                    </div>
-                    <div className='col-span-1 flex flex-col gap-4'>
+                    <div className='col-span-4 grid grid-cols-4 gap-4'>
+                        {
+                            imagesData.length > 0 &&
+                            <ProductImageUpload 
+                                onImageAdded={handleImageAdded}
+                            />
+                        }
                         {
                             imagesData.length > 1 && 
                             <>
                                 {
                                     imagesData.map((image, index) => {
-                                        if (index === 0) return;
                                         return (
-                                            <div key={index} className='w-full relative group'>
+                                            <div key={index} className='col-span-1 relative group'>
                                                 <div className='absolute left-0 top-0 w-full h-full bg-pureblack rounded-lg opacity-0 group-hover:opacity-25 transition duration-300'></div>
-                                                <Pin 
+                                                <Pin
+                                                    fill={index === 0 ? "white" : "none"}
                                                     strokeWidth={1.5} 
-                                                    className='text-white size-4 absolute left-1 top-1 opacity-0 cursor-pointer group-hover:opacity-100' 
+                                                    className={`text-white size-4 absolute left-1 top-1 opacity-0 group-hover:opacity-100 ${index === 0 ? "" : "cursor-pointer"}`}
                                                     onClick={() => {
                                                         const currentImages = imagesData
                                                         const updatedImages = [image, ...currentImages.filter((_, i) => i !== index)];
                                                         setImagesData(updatedImages);
+                                                        form.setValue("data.imagesChanged", true, {shouldDirty: true});
                                                     }}
                                                     />
                                                 <X 
@@ -126,24 +115,19 @@ export default function AdminProductImages({ product, imagesData, initialImagesD
                                                     onClick={() => {
                                                         const currentImages = imagesData;
                                                         setImagesData(currentImages.filter((_, i) => i !== index));
+                                                        form.setValue("data.imagesChanged", true, {shouldDirty: true});
                                                     }}
                                                     />
-                                                <Image src={image} alt={product ? product.title[locale] : "new image"} width={339} height={422} className='w-full rounded-lg aspect-[339/422] object-cover'/>
+                                                <Image src={image} alt={product ? product.title[locale] : "new image"} width={339} height={339} className='w-full rounded-lg aspect-square object-cover'/>
                                             </div>
                                         )
                                     })
                                 }
                             </>
                         }
-                        {
-                            imagesData.length < 4 && imagesData.length > 0 &&
-                            <ProductImageUpload 
-                                onImageAdded={handleImageAdded}
-                            />
-                        }
                     </div>
                 </div>
-                <div className='col-span-full mt-4 h-fit grid grid-cols-4 gap-x-6 gap-y-4'>
+                <div className='col-span-full mt-8 h-fit grid grid-cols-4 gap-x-6 gap-y-4'>
                     <FormField
                         control={form.control}
                         name="data.stock_availability.state"
@@ -258,8 +242,26 @@ export default function AdminProductImages({ product, imagesData, initialImagesD
                 <button onClick={(e) => {e.preventDefault(); setIsDeleteDialogOpen(true)}} className='disabled:opacity-75 disabled:cursor-default cursor-pointer h-12 px-6 flex justify-center items-center bg-red text-white rounded-3xl hover:opacity-75 transition duration-300'>Șterge produs</button>
 
                 <div className='flex gap-6'>
-                    <button className='cursor-pointer h-12' onClick={(e) => {e.preventDefault(); form.reset(); setImagesData(initialImagesData)}}>
-                        <span className='text-gray relative after:content-[""] after:absolute after:left-0 after:bottom-0 after:w-0 after:h-[1px] after:bg-gray hover:after:w-full after:transition-all after:duration-300'>Anulează</span>
+                    <button 
+                        className='cursor-pointer h-12' 
+                        onClick={(e) => {
+                            e.preventDefault(); 
+                            setImagesData(initialImagesData);
+                            
+                            const currentValues = form.getValues();
+                            form.reset({
+                                ...currentValues,
+                                data: {
+                                    ...currentValues.data,
+                                    imagesNumber: initialImagesData.filter(img => !img.startsWith("https")).length,
+                                    imagesChanged: false
+                                }
+                            });
+                        }}
+                    >
+                        <span className='text-gray relative after:content-[""] after:absolute after:left-0 after:bottom-0 after:w-0 after:h-[1px] after:bg-gray hover:after:w-full after:transition-all after:duration-300'>
+                            Anulează
+                        </span>
                     </button>
                     <button disabled={!isDirty} className='disabled:opacity-75 disabled:cursor-default cursor-pointer h-12 px-6 flex justify-center items-center bg-blue-2 text-white rounded-3xl hover:opacity-75 transition duration-300'>Salvează</button>
                 </div>

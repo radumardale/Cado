@@ -26,7 +26,7 @@ export default function ProductContent({product}: ProductContentInterface) {
     }, [])
 
     return (
-        <div className='col-span-full lg:col-span-5 pb-24 lg:pb-31 lg:mt-16 lg:sticky lg:h-screen top-25 flex flex-col justify-between'>
+        <div className='col-span-full lg:col-span-6 pb-24 lg:pb-31 lg:mt-16 top-25 h-fit'>
             <div>
                 <h1 className='font-manrope text-2xl lg:text-[2rem] font-semibold leading-7 lg:leading-9'>{product.title[locale]}</h1>
                 <div className="flex items-center gap-4 my-4">
@@ -45,13 +45,13 @@ export default function ProductContent({product}: ProductContentInterface) {
                 <p className='text-sm leading-4 lg:leading-5 whitespace-pre-line mb-4 lg:mb-8 lg:text-base'>{product.description[locale]}</p>
                 {
                     product.stock_availability.state !== StockState.NOT_IN_STOCK &&
-                    <div className="grid grid-cols-5 gap-x-6 col-span-5">
+                    <div className="grid grid-cols-6 gap-x-6 col-span-5 mb-8">
                         <div className='col-span-full lg:col-span-2 flex justify-between font-manrope font-semibold py-2 px-6 border border-gray rounded-3xl mb-2 lg:mb-0'>
                             <button disabled={productQuantity === 1} className='cursor-pointer disabled:pointer-events-none disabled:text-gray' onClick={() => {setProductQuantity(productQuantity - 1 <= 0 ? productQuantity : productQuantity - 1)}}><Minus strokeWidth={1.5} className='w-6' /></button>
                             <span className='text-2xl leading-7'>{productQuantity}</span>
                             <button disabled={productQuantity === product.stock_availability.stock} onClick={() => {setProductQuantity(productQuantity + 1 > maxStock ? productQuantity : productQuantity + 1)}} className='cursor-pointer disabled:pointer-events-none disabled:text-gray'><Plus strokeWidth={1.5} className='w-6' /></button>
                         </div>
-                        <button onClick={() => {addToCart(product, productQuantity, value, setValue, locale)}} className='h-12 col-span-full lg:col-span-3 bg-blue-2 text-white rounded-3xl font-manrope font-semibold cursor-pointer border hover:opacity-75 transition duration-300'>Adaugă în coș</button>
+                        <button onClick={() => {addToCart(product, productQuantity, value, setValue, locale)}} className='h-12 col-span-full lg:col-span-4 bg-blue-2 text-white rounded-3xl font-manrope font-semibold cursor-pointer border hover:opacity-75 transition duration-300'>Adaugă în coș</button>
                     </div>
                 }
             </div>

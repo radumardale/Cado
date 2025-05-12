@@ -16,6 +16,7 @@ export enum Ocasions {
 };
 
 export const OcasionsArr = Object.values(Ocasions).filter(value => typeof value === 'string') as string[];
+export const MenuOcasionsArr = ["WELCOME_KIT", "VALENTINES_DAY", "MARCH_8", "CHRISTMAS_NEW_YEAR", "EASTER", "FOR_HOME_AND_OFFICE", "UNIVERSAL"];
 
 // Define the translation interface for Ocasions
 interface OcasionTranslation {

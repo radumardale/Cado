@@ -28,15 +28,17 @@ import { useTranslations } from 'next-intl'
 import { DeliveryHours, DeliveryHoursArr } from '@/lib/enums/DeliveryHours'
 import { trpc } from '@/app/_trpc/client'
 import { toast } from 'sonner'
+import { ProductInterface } from '@/models/product/types/productInterface'
 
 interface CheckoutFormProps {
     items: CartInterface[],
     setDeliveryRegion: (v: DeliveryRegions | null) => void,
     setDeliveryHour: (v: DeliveryHours | null) => void,
-    totalCost: number
+    totalCost: number,
+    products: ProductInterface[]
 }
 
-export default function CheckoutForm({items, setDeliveryRegion, setDeliveryHour, totalCost}: CheckoutFormProps) {
+export default function CheckoutForm({items, setDeliveryRegion, setDeliveryHour, totalCost, products}: CheckoutFormProps) {
     const t = useTranslations();
     const { mutate, data, isPending } = trpc.order.addOrder.useMutation();
     
@@ -53,12 +55,7 @@ export default function CheckoutForm({items, setDeliveryRegion, setDeliveryHour,
     const form = useForm<z.infer<typeof addOrderRequestSchema>>({
         resolver: zodResolver(addOrderRequestSchema),
         defaultValues: {
-            products: items.map(item => {
-                return {
-                    product: item.product,
-                    quantity: item.quantity
-                }
-            }),
+            products: [],
             delivery_method: DeliveryMethod.HOME_DELIVERY,
             additional_info: {
                 delivery_address: {
@@ -90,10 +87,27 @@ export default function CheckoutForm({items, setDeliveryRegion, setDeliveryHour,
             termsAccepted: false
         }
     });
-
     function onSubmit(values: z.infer<typeof addOrderRequestSchema>) {
         mutate(values);
     }
+
+    useEffect(() => {
+        const updatedProducts = products.map(product => {
+            const cartItem = items.find(item => item.productId === product.custom_id);
+            return {
+                product: {
+                    ...product,
+                    title: {
+                        ro: product.title?.ro || '',
+                        ru: product.title?.ru || '',
+                        en: product.title?.en || '' // Ensure 'en' is included
+                    }
+                },
+                quantity: cartItem?.quantity || 1
+            };
+        });
+        form.setValue("products", updatedProducts || []);
+    }, [products, items, form]);
 
     const deliveryMethod = form.watch("delivery_method");
     const entityType = form.watch("additional_info.entity_type");
@@ -112,25 +126,6 @@ export default function CheckoutForm({items, setDeliveryRegion, setDeliveryHour,
     useEffect(() => {
         setDeliveryHour(deliveryHour ? deliveryHour as DeliveryHours : null);
     }, [deliveryHour])
-
-    useEffect(() => {
-        const products = items.map(item => {
-            // Ensuring the product has all required properties including 'en' in title
-            return {
-                product: {
-                    ...item.product,
-                    title: {
-                        ro: item.product.title.ro || '',
-                        ru: item.product.title.ru || '',
-                        en: item.product.title.en || ''
-                    }
-                },
-                quantity: item.quantity
-            }
-        });
-        
-        form.setValue("products", products);
-    }, [items]);
 
     useEffect(() => {
         if (deliveryMethod === DeliveryMethod.HOME_DELIVERY) {
@@ -276,30 +271,6 @@ export default function CheckoutForm({items, setDeliveryRegion, setDeliveryHour,
                 {
                     deliveryMethod === DeliveryMethod.HOME_DELIVERY && 
                     <>
-                         <FormField
-                            control={form.control}
-                            name="additional_info.delivery_address.home_address"
-                            render={({ field }) => (
-                                <FormItem className="col-span-full lg:col-span-3 mt-2 lg:mt-4">
-                                    <FormMessage />
-                                    <FormControl className="border  rounded-3xl border-gray shadow-none p-0 text-black placeholder:text-black focus-visible:outline-none">
-                                        <Input className="h-12 w-full px-6 rounded-3xl text-base text-black" placeholder="Adresa* (stradă, număr, etc.)" {...field} />
-                                    </FormControl>
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            control={form.control}
-                            name="additional_info.delivery_address.home_nr"
-                            render={({ field }) => (
-                                <FormItem className="col-span-full lg:col-span-3 mt-2 lg:mt-4">
-                                    <FormMessage />
-                                    <FormControl className="border  rounded-3xl border-gray shadow-none p-0 text-black placeholder:text-black focus-visible:outline-none">
-                                        <Input className="h-12 w-full px-6 rounded-3xl text-base text-black" placeholder="Număr casă/apartament" {...field} />
-                                    </FormControl>
-                                </FormItem>
-                            )}
-                        />
                        <FormField
                         control={form.control}
                         name="additional_info.delivery_address.region"
@@ -327,7 +298,7 @@ export default function CheckoutForm({items, setDeliveryRegion, setDeliveryHour,
                                     </Select>
                             </FormItem>
                         )}
-                    />
+                        />
                         <FormField
                             control={form.control}
                             name="additional_info.delivery_address.city"
@@ -336,6 +307,30 @@ export default function CheckoutForm({items, setDeliveryRegion, setDeliveryHour,
                                     <FormMessage />
                                     <FormControl className="border  rounded-3xl border-gray shadow-none p-0 text-black placeholder:text-black focus-visible:outline-none">
                                         <Input className="h-12 w-full px-6 rounded-3xl text-base text-black" placeholder="Oraș*" {...field} />
+                                    </FormControl>
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="additional_info.delivery_address.home_address"
+                            render={({ field }) => (
+                                <FormItem className="col-span-full lg:col-span-3 mt-2 lg:mt-4">
+                                    <FormMessage />
+                                    <FormControl className="border  rounded-3xl border-gray shadow-none p-0 text-black placeholder:text-black focus-visible:outline-none">
+                                        <Input className="h-12 w-full px-6 rounded-3xl text-base text-black" placeholder="Adresa* (stradă, număr, etc.)" {...field} />
+                                    </FormControl>
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="additional_info.delivery_address.home_nr"
+                            render={({ field }) => (
+                                <FormItem className="col-span-full lg:col-span-3 mt-2 lg:mt-4">
+                                    <FormMessage />
+                                    <FormControl className="border  rounded-3xl border-gray shadow-none p-0 text-black placeholder:text-black focus-visible:outline-none">
+                                        <Input className="h-12 w-full px-6 rounded-3xl text-base text-black" placeholder="Număr casă/apartament" {...field} />
                                     </FormControl>
                                 </FormItem>
                             )}
@@ -459,32 +454,6 @@ export default function CheckoutForm({items, setDeliveryRegion, setDeliveryHour,
                                 />
                             </Fragment>
                         }
-
-                         <FormField
-                            control={form.control}
-                            name="additional_info.billing_address.home_address"
-                            render={({ field }) => (
-                                <FormItem className="col-span-full lg:col-span-3 mt-2 lg:mt-4">
-                                    <FormMessage />
-                                    <FormControl className="border  rounded-3xl border-gray shadow-none p-0 text-black placeholder:text-black focus-visible:outline-none">
-                                        <Input className="h-12 w-full px-6 rounded-3xl text-base text-black" placeholder="Adresa* (stradă, număr, etc.)" {...field} />
-                                    </FormControl>
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            control={form.control}
-                            name="additional_info.billing_address.home_nr"
-                            render={({ field }) => (
-                                <FormItem className="col-span-full lg:col-span-3 mt-2 lg:mt-4">
-                                    <FormMessage />
-                                    <FormControl className="border  rounded-3xl border-gray shadow-none p-0 text-black placeholder:text-black focus-visible:outline-none">
-                                        <Input className="h-12 w-full px-6 rounded-3xl text-base text-black" placeholder="Număr casă/apartament" {...field} />
-                                    </FormControl>
-                                </FormItem>
-                            )}
-                        />
-
                         <FormField
                             control={form.control}
                             name="additional_info.billing_address.region"
@@ -525,6 +494,30 @@ export default function CheckoutForm({items, setDeliveryRegion, setDeliveryHour,
                                     </FormItem>
                                 )}
                             />
+                         <FormField
+                            control={form.control}
+                            name="additional_info.billing_address.home_address"
+                            render={({ field }) => (
+                                <FormItem className="col-span-full lg:col-span-3 mt-2 lg:mt-4">
+                                    <FormMessage />
+                                    <FormControl className="border  rounded-3xl border-gray shadow-none p-0 text-black placeholder:text-black focus-visible:outline-none">
+                                        <Input className="h-12 w-full px-6 rounded-3xl text-base text-black" placeholder="Adresa* (stradă, număr, etc.)" {...field} />
+                                    </FormControl>
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="additional_info.billing_address.home_nr"
+                            render={({ field }) => (
+                                <FormItem className="col-span-full lg:col-span-3 mt-2 lg:mt-4">
+                                    <FormMessage />
+                                    <FormControl className="border  rounded-3xl border-gray shadow-none p-0 text-black placeholder:text-black focus-visible:outline-none">
+                                        <Input className="h-12 w-full px-6 rounded-3xl text-base text-black" placeholder="Număr casă/apartament" {...field} />
+                                    </FormControl>
+                                </FormItem>
+                            )}
+                        />
                         </>
                 }
 

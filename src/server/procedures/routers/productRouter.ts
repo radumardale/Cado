@@ -9,12 +9,14 @@ import { getRecProductsProcedure } from "../product/getRecProducts";
 import { getSimilarProducts } from "../product/getSimilarProducts";
 import { getAdminProductsProcedure } from "../product/getAdminProducts";
 import { getMinMaxPriceProcedure } from "../product/getMinMaxPrice";
+import { getProductsByIdsProcedure } from "../product/getProductsByIds";
 
 export const productRouter = router({
     getProducts: getProductsProcedure,
     getAllProducts: getAllProductsProcedure,
     getAdminProducts: getAdminProductsProcedure,
     getProductById: getProductProcedure,
+    getProductsByIds: getProductsByIdsProcedure,
     getMinMaxPrice: getMinMaxPriceProcedure,
     createProduct: addProductProcedure,
     updateProduct: updateProductProcedure,

@@ -17,13 +17,13 @@ export default function AdditionalInfo({product, locale}: AdditionalInfoInterfac
         {
             product.nr_of_items > 1 && 
             <Accordion open={activeIndex == 0} setActiveIndex={() => {setActiveIndex(activeIndex === 0 ? -1 : 0)}} title="Cadoul include">
-                <p className={`[display:-webkit-box] [-webkit-box-orient:vertical] overflow-hidden text-sm lg:text-base leading-4 lg:leading-5 whitespace-pre-line`}>
+                <p className={`text-sm lg:text-base leading-4 lg:leading-5`}>
                     {product.set_description[locale]}
                 </p>
             </Accordion>
         }
         <Accordion open={activeIndex == 1} setActiveIndex={() => {setActiveIndex(activeIndex === 1 ? -1 : 1)}} title="Descriere">
-                <p className={`[display:-webkit-box] [-webkit-box-orient:vertical] overflow-hidden text-sm lg:text-base leading-4 lg:leading-5 whitespace-pre-line`} style={{WebkitLineClamp: `calc(${window.innerHeight} / (1.25 * var(--current-rem)) / 4.3)`}}>
+                <p className={`text-sm lg:text-base leading-4 lg:leading-5`}>
                     {product.long_description[locale]}
                 </p>
         </Accordion>

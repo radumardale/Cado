@@ -1,9 +1,12 @@
+import { trpc } from '@/app/_trpc/client';
 import { Link } from '@/i18n/navigation';
 import { CartInterface } from '@/lib/types/CartInterface';
 import { easeInOutCubic } from '@/lib/utils';
+import { ProductInterface } from '@/models/product/types/productInterface';
 import { Minus, Plus, ShoppingBag, X } from 'lucide-react';
 import { motion } from 'motion/react';
 import Image from 'next/image';
+import { useEffect, useState } from 'react';
 
 interface CartSidebarInterface {
     setSidebarOpen: (v: boolean) => void,
@@ -13,6 +16,28 @@ interface CartSidebarInterface {
 }
 
 export default function CartSidebar({items, locale, setSidebarOpen, setValue}: CartSidebarInterface) {
+    const { data, isLoading } = trpc.products.getProductsByIds.useQuery({ids: items.map(item => item.productId)});
+    const [products, setProducts] = useState<ProductInterface[]>([]);
+
+    useEffect(() => {
+        if (!isLoading && data?.products) {
+            setProducts(data.products);
+            const validProductIds = data?.products?.map((product: ProductInterface) => product.custom_id) || [];
+            const filteredItems = items.filter(item => validProductIds.includes(item.productId));
+            if (filteredItems.length !== items.length) {
+                setValue(filteredItems);
+            }
+
+            const updatedItems = filteredItems.map(item => {
+                const product = data.products.find((product: ProductInterface) => product.custom_id === item.productId);
+                if (product && item.quantity > product.stock_availability.stock) {
+                    return { ...item, quantity: product.stock_availability.stock };
+                }
+                return item;
+            });
+            setValue(updatedItems);
+        }
+    }, [data, isLoading])
 
   return (
     <motion.div 
@@ -49,20 +74,25 @@ export default function CartSidebar({items, locale, setSidebarOpen, setValue}: C
                     <div data-lenis-prevent className='lg:pl-10 lg:pr-8 flex flex-col gap-6 flex-1 overflow-y-auto scroll-bar-custom'>
                         {
                             items.map((item, index) => {
+                                // const product = products.find((product: ProductInterface) => product.custom_id === item.productId) || {} as ProductInterface;
+                                const product = products[index];
+
+                                if (!product) return;
+
                                 return (
                                     <div key={index} className='w-full flex gap-2 lg:gap-4'>
-                                        <Link href={{pathname: '/catalog/product/[id]', params: {id: item.product.custom_id}}} className='peer'>
-                                            <Image src={item.product.images[0]} alt={item.product.title[locale]} width={129} height={164} className='w-32 aspect-[129/164] object-cover rounded-lg' />
+                                        <Link href={{pathname: '/catalog/product/[id]', params: {id: item.productId}}} className='peer'>
+                                            <Image src={product.images[0]} alt={product.title[locale]} width={129} height={164} className='w-32 aspect-[129/164] object-cover rounded-lg' />
                                         </Link>
-                                        <div className='flex flex-col justify-between flex-1 peer-hover:[&>div>p]:after:w-full'>
+                                    <div className='flex flex-col justify-between flex-1 peer-hover:[&>div>p]:after:w-full'>
                                             <div>
-                                                <p className='font-manrope text-sm w-fit font-semibold mb-4 relative after:contetn-[""] after:absolute after:left-0 after:bottom-0 after:w-0 after:h-[1px] after:bg-black after:transition-all after:duration-300'>{item.product.title[locale]}</p>
+                                                <p className='font-manrope text-sm w-fit font-semibold mb-4 relative after:contetn-[""] after:absolute after:left-0 after:bottom-0 after:w-0 after:h-[1px] after:bg-black after:transition-all after:duration-300'>{product.title[locale]}</p>
                                                 <div className={`flex gap-1 items-center`}>
                                                     {
-                                                        item.product.sale && item.product.sale.active &&
-                                                        <p className='text-gray text-sm lg:text-base leading-4 lg:leading-5 font-semibold line-through'>{item.product.price.toLocaleString()} MDL</p>
+                                                        product.sale && product.sale.active &&
+                                                        <p className='text-gray text-sm lg:text-base leading-4 lg:leading-5 font-semibold line-through'>{product.price.toLocaleString()} MDL</p>
                                                     }
-                                                <div className={`font-manrope font-semibold border border-gray rounded-3xl w-fit py-2 px-4`}>{item.product.sale && item.product.sale.active ? item.product.sale.sale_price.toLocaleString() : item.product.price.toLocaleString()} MDL</div>
+                                                <div className={`font-manrope font-semibold border border-gray rounded-3xl w-fit py-2 px-4`}>{product.sale && product.sale.active ? product.sale.sale_price.toLocaleString() : product.price.toLocaleString()} MDL</div>
                                                 </div>
                                             </div>
                                             <div className="flex justify-between items-end">
@@ -80,10 +110,10 @@ export default function CartSidebar({items, locale, setSidebarOpen, setValue}: C
                                                     <span className={`${item.quantity}`}>{item.quantity}</span>
 
                                                     <button 
-                                                        disabled={item.quantity === item.product.stock_availability.stock} 
+                                                        disabled={item.quantity === product.stock_availability.stock} 
                                                         onClick={() => {
                                                             const newItems = [...items];
-                                                            newItems[index].quantity = Math.min(newItems[index].product.stock_availability.stock, newItems[index].quantity + 1);
+                                                            newItems[index].quantity = Math.min(product.stock_availability.stock, newItems[index].quantity + 1);
                                                             setValue(newItems);
                                                         }} 
                                                         className='cursor-pointer disabled:pointer-events-none disabled:text-gray'
@@ -112,14 +142,14 @@ export default function CartSidebar({items, locale, setSidebarOpen, setValue}: C
             }
             <div className='absolute left-0 w-full bottom-6 lg:bottom-16 px-4 lg:px-16'>
                 {
-                    items.length > 0 &&
+                    items.length > 0 && products.length > 0 &&
                     <div className="flex justify-between items-end mb-4">
                         <p>Subtotal:</p>
-                        <p className='font-semibold'>{items.reduce((acc, item) => acc + (item.product.sale.active ? item.product.sale.sale_price : item.product.price) * item.quantity, 0).toLocaleString()} MDL</p>
+                        <p className='font-semibold'>{items.reduce((acc, item, index) => acc + (products[index].sale.active ? products[index].sale.sale_price : products[index].price) * item.quantity, 0).toLocaleString()} MDL</p>
                     </div>
                 }
                 {
-                    items.length > 0 ?
+                    items.length > 0  ?
                     <Link href="/checkout">
                         <button className='h-12 w-full bg-blue-2 text-white rounded-3xl font-manrope font-semibold cursor-pointer border hover:opacity-75 transition duration-300'>Spre achitare</button>
                     </Link> :

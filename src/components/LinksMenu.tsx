@@ -57,7 +57,7 @@ export default function LinksMenu() {
                     <Image src="/icons/whatsapp.svg" alt="telegram logo" height={28} width={28} className='size-7 text-white'/>
                 </Link>
         </motion.div>
-        <div className='size-14 flex items-center justify-center bg-blue-2 rounded-full relative cursor-pointer group shadow-sm border border-white' onClick={() => {setMenuOpen(!isMenuOpen)}}>
+        <div className='size-16 3xl:size-14 flex items-center justify-center bg-blue-2 rounded-full relative cursor-pointer group shadow-sm border border-white' onClick={() => {setMenuOpen(!isMenuOpen)}}>
             <MessageCircle className={`size-7 text-white transition-all duration-300 fill-transparent ${isMenuOpen ? "fill-white" : "group-hover:fill-white"}`} strokeWidth={1.5} />
             <Plus className={`absolute left-1/2 top-1/2 -translate-1/2 size-4 transition duration-300 ${isMenuOpen ? "rotate-45 text-blue-2" : "group-hover:text-blue-2 text-white"}`} strokeWidth={2} />
         </div>

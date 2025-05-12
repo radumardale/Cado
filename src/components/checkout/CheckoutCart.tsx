@@ -4,6 +4,7 @@ import { Link } from "@/i18n/navigation";
 import { DeliveryHours, getDeliveryAdditionalRate } from "@/lib/enums/DeliveryHours";
 import { DeliveryRegions, getDeliveryPrice } from "@/lib/enums/DeliveryRegions";
 import { CartInterface } from "@/lib/types/CartInterface";
+import { ProductInterface } from "@/models/product/types/productInterface";
 import { Minus, Plus, ShoppingBag } from "lucide-react";
 import { useLocale } from "next-intl";
 import Image from "next/image";
@@ -14,10 +15,11 @@ interface CheckoutCartProps {
     setValue: Dispatch<SetStateAction<CartInterface[]>>,
     deliveryRegion: DeliveryRegions | null,
     deliveryHour: DeliveryHours | null,
-    setTotalCost: (v: number) => void
+    setTotalCost: (v: number) => void,
+    products: ProductInterface[]
 }
 
-export default function CheckoutCart({items, setValue, deliveryRegion, deliveryHour, setTotalCost}: CheckoutCartProps) {
+export default function CheckoutCart({items, setValue, deliveryRegion, deliveryHour, setTotalCost, products}: CheckoutCartProps) {
     const [mounted, setMounted] = useState(false);
     const [deliveryPrice, setDeliveryPrice] = useState(deliveryRegion ? getDeliveryPrice(deliveryRegion) : null)
     const [deliveryHourRate, setDeliveryHourRate] = useState(deliveryHour ? getDeliveryAdditionalRate(deliveryHour) : null);
@@ -32,8 +34,8 @@ export default function CheckoutCart({items, setValue, deliveryRegion, deliveryH
     }, [deliveryHour])
 
     useEffect(() => {
-        setTotalCost(items.reduce((acc, item) => acc + (item.product.sale.active ? item.product.sale.sale_price : item.product.price) * item.quantity, 0) + (deliveryPrice ? deliveryPrice + (deliveryHourRate ? deliveryHourRate * deliveryPrice : 0) : 0));
-    }, [items, deliveryHourRate, deliveryPrice])
+        if (products.length > 0) setTotalCost(items.reduce((acc, item, index) => acc + (products[index].sale.active ? products[index].sale.sale_price : products[index].price) * item.quantity, 0) + (deliveryPrice ? deliveryPrice + (deliveryHourRate ? deliveryHourRate * deliveryPrice : 0) : 0));
+    }, [items, deliveryHourRate, deliveryPrice, products])
 
     useEffect(() => {
         setMounted(true);
@@ -43,24 +45,24 @@ export default function CheckoutCart({items, setValue, deliveryRegion, deliveryH
     <div className='col-span-full lg:col-start-10 2xl:col-start-10 lg:col-span-5 2xl:col-span-4 lg:sticky left-0 lg:h-screen -mb-7 pb-16 lg:pb-31 top-25 flex flex-col justify-between'>
         <p className='font-manrope text-2xl font-semibold leading-7 mb-4 lg:mb-6'>Sumarul comenzii</p>
         {
-            items.length > 0 && mounted ?
+            items.length > 0 && mounted && products.length > 0 ?
                 <div data-lenis-prevent className='flex flex-col pr-2 gap-6 flex-1 lg:overflow-y-auto scroll-bar-custom mb-16 lg:mb-8'>
                     {
                         items.map((item, index) => {
                             return (
                                 <div key={index} className='w-full flex gap-2 lg:gap-4'>
-                                    <Link href={{pathname: '/catalog/product/[id]', params: {id: item.product.custom_id}}} className='peer'>
-                                        <Image src={item.product.images[0]} alt={item.product.title[locale]} width={129} height={164} className='w-32 aspect-[129/164] object-cover rounded-lg peer' />
+                                    <Link href={{pathname: '/catalog/product/[id]', params: {id: products[index].custom_id}}} className='peer'>
+                                        <Image src={products[index].images[0]} alt={products[index].title[locale]} width={129} height={164} className='w-32 aspect-[129/164] object-cover rounded-lg peer' />
                                     </Link>
                                     <div className='flex flex-col justify-between flex-1 peer-hover:[&>div>p]:after:w-full'>
                                         <div>
-                                            <p className='font-manrope text-sm leading-4 w-fit font-semibold mb-4 relative after:contetn-[""] after:absolute after:left-0 after:bottom-0 after:w-0 after:h-[1px] after:bg-black after:transition-all after:duration-300'>{item.product.title[locale]}</p>
+                                            <p className='font-manrope text-sm leading-4 w-fit font-semibold mb-4 relative after:contetn-[""] after:absolute after:left-0 after:bottom-0 after:w-0 after:h-[1px] after:bg-black after:transition-all after:duration-300'>{products[index].title[locale]}</p>
                                             <div className={`flex gap-1 items-center`}>
                                                 {
-                                                    item.product.sale && item.product.sale.active &&
-                                                    <p className='text-gray text-sm lg:text-base leading-4 lg:leading-5 font-semibold line-through'>{item.product.price.toLocaleString()} MDL</p>
+                                                    products[index].sale && products[index].sale.active &&
+                                                    <p className='text-gray text-sm lg:text-base leading-4 lg:leading-5 font-semibold line-through'>{products[index].price.toLocaleString()} MDL</p>
                                                 }
-                                                <div className={`font-manrope font-semibold border border-gray rounded-3xl w-fit py-2 px-4`}>{item.product.sale && item.product.sale.active ? item.product.sale.sale_price.toLocaleString() : item.product.price.toLocaleString()} MDL</div>
+                                                <div className={`font-manrope font-semibold border border-gray rounded-3xl w-fit py-2 px-4`}>{products[index].sale && products[index].sale.active ? products[index].sale.sale_price.toLocaleString() : products[index].price.toLocaleString()} MDL</div>
                                             </div>
                                         </div>
                                         <div className="flex justify-between items-end">
@@ -78,10 +80,10 @@ export default function CheckoutCart({items, setValue, deliveryRegion, deliveryH
                                                 <span>{item.quantity}</span>
 
                                                 <button 
-                                                    disabled={item.quantity === item.product.stock_availability.stock} 
+                                                    disabled={item.quantity === products[index].stock_availability.stock} 
                                                     onClick={() => {
                                                         const newItems = [...items];
-                                                        newItems[index].quantity = Math.min(newItems[index].product.stock_availability.stock, newItems[index].quantity + 1);
+                                                        newItems[index].quantity = Math.min(products[index].stock_availability.stock, newItems[index].quantity + 1);
                                                         setValue(newItems);
                                                     }} 
                                                     className='cursor-pointer disabled:pointer-events-none disabled:text-gray'
@@ -110,14 +112,14 @@ export default function CheckoutCart({items, setValue, deliveryRegion, deliveryH
             </div>
         }
         {
-            mounted && items.length > 0 &&
+            mounted && items.length > 0 && products.length > 0 &&
             <>
                 {
                     deliveryPrice !== null &&
                     <>
                         <div className="flex justify-between items-end mb-2">
                             <p>Subtotal:</p>
-                            <p>{mounted && items.reduce((acc, item) => acc + (item.product.sale.active ? item.product.sale.sale_price : item.product.price) * item.quantity, 0).toLocaleString()} MDL</p>
+                            <p>{mounted && items.reduce((acc, item, index) => acc + (products[index].sale.active ? products[index].sale.sale_price : products[index].price) * item.quantity, 0).toLocaleString()} MDL</p>
                         </div>
                         <div className="flex justify-between items-end mb-2 lg:mb-4">
                             <p>Livrare:</p>
@@ -134,7 +136,7 @@ export default function CheckoutCart({items, setValue, deliveryRegion, deliveryH
                 }
                 <div className="flex justify-between items-end mb-4">
                     <p>Total:</p>
-                    <p className='font-semibold'>{mounted && (items.reduce((acc, item) => acc + (item.product.sale.active ? item.product.sale.sale_price : item.product.price) * item.quantity, 0) + (deliveryPrice ? deliveryPrice + (deliveryHourRate ? deliveryHourRate * deliveryPrice : 0) : 0)).toLocaleString()} MDL</p>
+                    <p className='font-semibold'>{mounted && (items.reduce((acc, item, index) => acc + (products[index].sale.active ? products[index].sale.sale_price : products[index].price) * item.quantity, 0) + (deliveryPrice ? deliveryPrice + (deliveryHourRate ? deliveryHourRate * deliveryPrice : 0) : 0)).toLocaleString()} MDL</p>
                 </div>
             </>
         }

@@ -1,5 +1,5 @@
 import CustomLink from '@/components/CustomLink'
-import { OcasionsArr } from '@/lib/enums/Ocasions'
+import { MenuOcasionsArr } from '@/lib/enums/Ocasions'
 import { useTranslations } from 'next-intl'
 
 export default function Ocasions() {
@@ -8,7 +8,7 @@ export default function Ocasions() {
     <div className="flex flex-col gap-4 col-span-2">
         <p className='font-manrope font-semibold'>Ocazie</p>
         {
-          OcasionsArr.map(ocasion => {
+          MenuOcasionsArr.map(ocasion => {
             return <CustomLink key={ocasion} href="/catalog" ocasion={ocasion} value={t(`${ocasion}.title`)} />
           })
         }

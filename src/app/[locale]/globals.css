@@ -71,6 +71,7 @@
   --color-darkblue: var(--darkblue);
   --color-gray: var(--gray);
   --color-white: var(--white);
+  --color-purewhite: oklch(1 0 0);
   --color-lightgray: var(--lightgray);
   --color-black: var(--black);
   --color-background: var(--background);
@@ -109,6 +110,7 @@
   --font-weight-semibold: 650;
   --breakpoint-lg: 1024px;
   --breakpoint-2xl: 1636px;
+  --breakpoint-3xl: 1900px;
   --container-3xl: 2048px;
   --text-3xl: 2.5rem;
   --animate-shake: shake 0.35s ease-in-out;

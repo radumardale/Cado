@@ -80,7 +80,7 @@ export const resetUrlParams = (router: AppRouterInstance, keepParams: string[] =
 
 export const addToCart = (product: ProductInterface, quantity: number = 1, value: CartInterface[], setValue: (v: CartInterface[]) => void, locale: string) => {
   // Check if the product already exists in the current cart state
-  const existingProductIndex = value.findIndex((item) => item.product.custom_id === product.custom_id);
+  const existingProductIndex = value.findIndex((item) => item.productId === product.custom_id);
   
   // Create a new cart array to avoid direct mutation
   let newCart: CartInterface[];
@@ -97,7 +97,7 @@ export const addToCart = (product: ProductInterface, quantity: number = 1, value
     newCart = [
       ...value,
       {
-        product: product,
+        productId: product.custom_id,
         quantity: quantity
       }
     ];

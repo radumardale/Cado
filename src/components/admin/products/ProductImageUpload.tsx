@@ -72,7 +72,7 @@ export default function ProductImageUpload({
   return (
     <div 
       {...getRootProps()} 
-      className={`w-full ${big ? "rounded-2xl" : "rounded-lg"} aspect-[339/422] bg-[#F0F0F0] border border-dashed flex justify-center items-center cursor-pointer hover:border-black transition duration-300 group ${isDragActive ? "border-black" : "border-gray"}`}
+      className={`w-full ${big ? "rounded-2xl" : "rounded-lg"} aspect-square bg-[#F0F0F0] border border-dashed flex justify-center items-center cursor-pointer hover:border-black transition duration-300 group ${isDragActive ? "border-black" : "border-gray"}`}
     >
       <input {...getInputProps()} />
       

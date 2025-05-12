@@ -23,7 +23,7 @@ interface AdminProductFormProps {
 export default function AdminUpdateProductForm({id}: AdminProductFormProps) {
     const { data } = trpc.products.getProductById.useQuery({id: id});
     const {isSuccess, isPending, mutate, data: MutatedData} = trpc.products.updateProduct.useMutation();
-    const { mutate: UpdateMutate, isSuccess: UpdateIsSuccess, } = trpc.image.updateImage.useMutation();
+    const { mutate: UpdateMutate, isSuccess: UpdateIsSuccess, data: UpdateData } = trpc.image.updateImage.useMutation();
     const [initialImagesData, setInitialImagesData] = useState<string[]>([]);
     const [imagesData, setImagesData] = useState<string[]>([]);
 
@@ -39,6 +39,7 @@ export default function AdminUpdateProductForm({id}: AdminProductFormProps) {
                 set_description: { ro: "", ru: "", en: "" },
                 price: 1000,
                 imagesNumber: 0,
+                imagesChanged: false,
                 nr_of_items: 1,
                 categories: [],
                 ocasions: [],
@@ -62,7 +63,8 @@ export default function AdminUpdateProductForm({id}: AdminProductFormProps) {
                 const newImageKeys = [];
                 
                 // Upload images sequentially to maintain order
-                for (let i = 0; i < MutatedData.imagesLinks.length; i++) {
+                let j = 0;
+                for (let i = 0; i < imagesData.length; i++) {
                     if (imagesData[i].startsWith("https")) {
                         const extractedKey = imagesData[i].split('.net/')[1]?.split('?')[0];
                         newImageKeys.push(extractedKey);
@@ -70,7 +72,8 @@ export default function AdminUpdateProductForm({id}: AdminProductFormProps) {
                     }
 
                     try {
-                        const dataUrl = MutatedData.imagesLinks[i];
+                        const dataUrl = MutatedData.imagesLinks[j];
+                        j++;
                         const imageData = imagesData[i];
                         
                         if (!dataUrl || !imageData) {
@@ -120,6 +123,9 @@ export default function AdminUpdateProductForm({id}: AdminProductFormProps) {
                         ...MutatedData.product
                     }
                 });
+                form.resetField("data.imagesChanged");
+                form.resetField("data.imagesNumber");
+                setInitialImagesData(MutatedData.product?.images || []);
             }
         };
     
@@ -127,11 +133,12 @@ export default function AdminUpdateProductForm({id}: AdminProductFormProps) {
         if (isSuccess && MutatedData) {
             uploadImagesInOrder();
         }
-    }, [isSuccess, MutatedData, imagesData, form]);
+    }, [isSuccess, MutatedData, form]);
 
     useEffect(() => {
         if (UpdateIsSuccess) {
             toast.success("Produsul a fost actualizat cu succes!");
+            setInitialImagesData(UpdateData.images || []);
         }
     }, [UpdateIsSuccess])
     
@@ -146,7 +153,8 @@ export default function AdminUpdateProductForm({id}: AdminProductFormProps) {
                     image_description: data?.product.image_description,
                     set_description: data?.product.set_description,
                     price: data?.product.price,
-                    imagesNumber: data?.product.images.length,
+                    imagesNumber: data?.product.images.filter(image => !image.startsWith("https")).length || 0,
+                    imagesChanged: false,
                     nr_of_items: data?.product.nr_of_items || 0,
                     categories: data?.product.categories,
                     ocasions: data?.product.ocasions,
@@ -164,6 +172,7 @@ export default function AdminUpdateProductForm({id}: AdminProductFormProps) {
             setImagesData(data?.product.images || []);
             setInitialImagesData(data?.product.images || []);
         }
+
     }, [data?.product, form]);
     
     function onSubmit(values: z.infer<typeof updateProductRequestSchema>) {
