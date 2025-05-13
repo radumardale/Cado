@@ -103,6 +103,12 @@ export default function AdminAddProductForm() {
                 sale: {
                     active: false,
                     sale_price: 0
+                },
+                optional_info: {
+                    weight: "",
+                    dimensions: "",
+                    color: { ro: "", ru: "", en: "" },
+                    material: { ro: "", ru: "", en: "" },
                 }
             }
         }

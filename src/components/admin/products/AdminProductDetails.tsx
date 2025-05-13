@@ -306,6 +306,110 @@ export default function AdminProductDetails() {
                 />
                 <div className='h-[1px] col-span-full bg-lightgray mt-8 mb-2'></div>
                 <p className='col-span-full font-manrope font-semibold'>Caracteristici</p>
+                <FormField
+                    control={form.control}
+                    name="data.optional_info.weight"
+                    render={({ field }) => (
+                        <FormItem className="text-black col-span-3">
+                            <FormLabel className="font-semibold font-manrope leading-5">Greutate</FormLabel>
+                            <FormMessage className='top-7' />
+                            <FormControl className="border rounded-3xl border-gray shadow-none p-0 text-black placeholder:text-black focus-visible:outline-none">
+                                <Input className=" text-base h-12 w-full px-6 rounded-3xl" placeholder="Greutate*" {...field} />
+                            </FormControl>
+                        </FormItem>
+                    )}
+                />
+                <FormField
+                    control={form.control}
+                    name="data.optional_info.dimensions"
+                    render={({ field }) => (
+                        <FormItem className="text-black col-span-3">
+                            <FormLabel className="font-semibold font-manrope leading-5">Dimensiuni</FormLabel>
+                            <FormMessage className='top-7' />
+                            <FormControl className="border rounded-3xl border-gray shadow-none p-0 text-black placeholder:text-black focus-visible:outline-none">
+                                <Input className=" text-base h-12 w-full px-6 rounded-3xl" placeholder="Dimensiuni*" {...field} />
+                            </FormControl>
+                        </FormItem>
+                    )}
+                />
+                <FormField
+                    control={form.control}
+                    name="data.optional_info.material.ro"
+                    render={({ field }) => (
+                        <FormItem className="text-black col-span-3">
+                            <FormLabel className="font-semibold font-manrope leading-5">Material</FormLabel>
+                            <FormMessage className='top-7' />
+                            <FormControl className="border rounded-3xl border-gray shadow-none p-0 text-black placeholder:text-black focus-visible:outline-none">
+                                <Input className=" text-base h-12 w-full px-6 rounded-3xl" placeholder="Material*" {...field} />
+                            </FormControl>
+                        </FormItem>
+                    )}
+                />
+                <FormField
+                    control={form.control}
+                    name="data.optional_info.color.ro"
+                    render={({ field }) => (
+                        <FormItem className="text-black col-span-3">
+                            <FormLabel className="font-semibold font-manrope leading-5">Culoare</FormLabel>
+                            <FormMessage className='top-7' />
+                            <FormControl className="border rounded-3xl border-gray shadow-none p-0 text-black placeholder:text-black focus-visible:outline-none">
+                                <Input className=" text-base h-12 w-full px-6 rounded-3xl" placeholder="Culoare*" {...field} />
+                            </FormControl>
+                        </FormItem>
+                    )}
+                />
+                <FormField
+                    control={form.control}
+                    name="data.optional_info.material.ru"
+                    render={({ field }) => (
+                        <FormItem className="text-black col-span-3">
+                            <FormLabel className="font-semibold font-manrope leading-5">Материал</FormLabel>
+                            <FormMessage className='top-7' />
+                            <FormControl className="border rounded-3xl border-gray shadow-none p-0 text-black placeholder:text-black focus-visible:outline-none">
+                                <Input className=" text-base h-12 w-full px-6 rounded-3xl" placeholder="Материал*" {...field} />
+                            </FormControl>
+                        </FormItem>
+                    )}
+                />
+                <FormField
+                    control={form.control}
+                    name="data.optional_info.color.ru"
+                    render={({ field }) => (
+                        <FormItem className="text-black col-span-3">
+                            <FormLabel className="font-semibold font-manrope leading-5">Цвет</FormLabel>
+                            <FormMessage className='top-7' />
+                            <FormControl className="border rounded-3xl border-gray shadow-none p-0 text-black placeholder:text-black focus-visible:outline-none">
+                                <Input className=" text-base h-12 w-full px-6 rounded-3xl" placeholder="Цвет*" {...field} />
+                            </FormControl>
+                        </FormItem>
+                    )}
+                />
+                 <FormField
+                    control={form.control}
+                    name="data.optional_info.material.en"
+                    render={({ field }) => (
+                        <FormItem className="text-black col-span-3">
+                            <FormLabel className="font-semibold font-manrope leading-5">Material</FormLabel>
+                            <FormMessage className='top-7' />
+                            <FormControl className="border rounded-3xl border-gray shadow-none p-0 text-black placeholder:text-black focus-visible:outline-none">
+                                <Input className=" text-base h-12 w-full px-6 rounded-3xl" placeholder="Material*" {...field} />
+                            </FormControl>
+                        </FormItem>
+                    )}
+                />
+                <FormField
+                    control={form.control}
+                    name="data.optional_info.color.en"
+                    render={({ field }) => (
+                        <FormItem className="text-black col-span-3 mb-4">
+                            <FormLabel className="font-semibold font-manrope leading-5">Color</FormLabel>
+                            <FormMessage className='top-7' />
+                            <FormControl className="border rounded-3xl border-gray shadow-none p-0 text-black placeholder:text-black focus-visible:outline-none">
+                                <Input className=" text-base h-12 w-full px-6 rounded-3xl" placeholder="Color*" {...field} />
+                            </FormControl>
+                        </FormItem>
+                    )}
+                />
                 <ProductTagsSearchbar handleAddCategory={handleAddCategory} handleAddOcasion={handleAddOcasion} handleAddProductContent={handleAddProductContent} />
                 <div className='col-span-full gap-y-4 grid grid-cols-4 my-4'>
                     {

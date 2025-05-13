@@ -84,8 +84,8 @@ export default function CartSidebar({items, locale, setSidebarOpen, setValue}: C
 
                                 return (
                                     <div key={index} className='w-full flex gap-2 lg:gap-4'>
-                                        <Link href={{pathname: '/catalog/product/[id]', params: {id: item.productId}}} className='peer'>
-                                            <Image unoptimized src={product.images[0]} alt={product.title[locale]} width={129} height={164} className='w-32 aspect-[129/164] object-cover rounded-lg' />
+                                        <Link href={{pathname: '/catalog/product/[id]', params: {id: item.productId}}} className='peer bg-purewhite rounded-lg'>
+                                            <Image unoptimized src={product.images[0]} alt={product.title[locale]} width={129} height={164} className='w-32 aspect-[129/164] object-contain' />
                                         </Link>
                                     <div className='flex flex-col justify-between flex-1 peer-hover:[&>div>p]:after:w-full'>
                                             <div>

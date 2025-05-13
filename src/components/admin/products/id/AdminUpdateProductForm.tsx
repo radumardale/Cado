@@ -51,6 +51,12 @@ export default function AdminUpdateProductForm({id}: AdminProductFormProps) {
                 sale: {
                     active: false,
                     sale_price: 0
+                },
+                optional_info: {
+                    weight: "",
+                    dimensions: "",
+                    color: { ro: "", ru: "", en: "" },
+                    material: { ro: "", ru: "", en: "" },
                 }
             }
         }
@@ -125,7 +131,7 @@ export default function AdminUpdateProductForm({id}: AdminProductFormProps) {
                 });
                 form.resetField("data.imagesChanged");
                 form.resetField("data.imagesNumber");
-                setInitialImagesData(MutatedData.product?.images || []);
+                // setInitialImagesData(MutatedData.product?.images || []);
             }
         };
     
@@ -139,6 +145,7 @@ export default function AdminUpdateProductForm({id}: AdminProductFormProps) {
         if (UpdateIsSuccess) {
             toast.success("Produsul a fost actualizat cu succes!");
             setInitialImagesData(UpdateData.images || []);
+            console.log(UpdateData.images);
         }
     }, [UpdateIsSuccess])
     
@@ -153,19 +160,25 @@ export default function AdminUpdateProductForm({id}: AdminProductFormProps) {
                     image_description: data?.product.image_description,
                     set_description: data?.product.set_description,
                     price: data?.product.price,
-                    imagesNumber: data?.product.images.filter(image => !image.startsWith("https")).length || 0,
+                    imagesNumber: 0,
                     imagesChanged: false,
-                    nr_of_items: data?.product.nr_of_items || 0,
-                    categories: data?.product.categories,
-                    ocasions: data?.product.ocasions,
-                    product_content: data?.product.product_content,
+                    nr_of_items: data?.product.nr_of_items || 1,
+                    categories: data?.product.categories || [],
+                    ocasions: data?.product.ocasions || [],
+                    product_content: data?.product.product_content || [],
                     stock_availability: {
-                        stock: data?.product.stock_availability.stock,
-                        state: data?.product.stock_availability.state
+                        stock: data?.product.stock_availability?.stock || 5,
+                        state: data?.product.stock_availability?.state || StockState.IN_STOCK
                     },
                     sale: data?.product.sale || {
                         active: false,
                         sale_price: 0
+                    },
+                    optional_info: {
+                        weight: data?.product.optional_info?.weight || "",
+                        dimensions: data?.product.optional_info?.dimensions || "",
+                        color: data?.product.optional_info?.color || { ro: "", ru: "", en: "" },
+                        material: data?.product.optional_info?.material || { ro: "", ru: "", en: "" },
                     }
                 }
             });

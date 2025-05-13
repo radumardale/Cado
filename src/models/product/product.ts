@@ -9,6 +9,7 @@ import { Ocasions } from "@/lib/enums/Ocasions";
 import { ProductContent } from "@/lib/enums/ProductContent";
 import { nanoid } from 'nanoid';
 import { StockAvailabilitySchema } from "./types/stockAvailability";
+import { OptionalInfoSchema } from "./types/optionalInfo";
 
 // Product Schema
 const ProductSchema = new mongoose.Schema<ProductInterface>({
@@ -76,6 +77,10 @@ const ProductSchema = new mongoose.Schema<ProductInterface>({
   sale: {
     type: SaleSchema,
     required: false,
+  },
+  optional_info: {
+    type: OptionalInfoSchema,
+    required: false
   }
 }, { timestamps: true });
 

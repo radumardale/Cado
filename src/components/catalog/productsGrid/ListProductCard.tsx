@@ -45,9 +45,9 @@ export default function ListProductCard({product}: ProductCardInterface) {
             
             <div className='hidden lg:block'>
                 <p className='font-manrope font-semibold mb-4 mt-8'>Descriere</p>
-                <p className='text-black mb-6'>Setul cadou „Christmas Fairytale” este o alegere excelentă pentru cei dragi, familie, prieteni sau parteneri de afaceri.Este ideal pentru a crea amintiri speciale de Crăciun și a oferi un sentiment unic de bucurie și recunoștință. De asemenea, este perfect pentru companii care doresc să impresioneze partenerii sau echipa.</p>
+                <p className='text-black mb-6 whitespace-pre-wrap'>{product.description[locale]}</p>
                 {
-                  product.set_description &&
+                  product.nr_of_items > 1 &&
                   <>
                     <p className='font-manrope font-semibold mb-4'>Cadoul include</p>
                     <p className='text-black whitespace-pre-line'> {product.set_description[locale]}</p>
@@ -55,12 +55,15 @@ export default function ListProductCard({product}: ProductCardInterface) {
                 }
             </div>
             <div className='lg:hidden my-4'>
-                <Accordion open={activeIndex === 0} setActiveIndex={() => {setActiveIndex(activeIndex === 0 ? -1 : 0)}} title='Descriere' >
-                  <p>Setul cadou „Christmas Fairytale” este o alegere excelentă pentru cei dragi, familie, prieteni sau parteneri de afaceri. Este ideal pentru a crea amintiri speciale de Crăciun și a oferi un sentiment unic de bucurie și recunoștință. De asemenea, este perfect pentru companii care doresc să impresioneze partenerii sau echipa.</p>
+                <Accordion last={product.nr_of_items <= 1} open={activeIndex === 0} setActiveIndex={() => {setActiveIndex(activeIndex === 0 ? -1 : 0)}} title='Descriere' >
+                  <p className='whitespace-pre-line'>{product.description[locale]}</p>
                 </Accordion>
-                <Accordion last open={activeIndex === 1} setActiveIndex={() => {setActiveIndex(activeIndex === 1 ? -1 : 1)}}  title='Cadoul include' >
-                  <p>Setul cadou „Christmas Fairytale” este o alegere excelentă pentru cei dragi, familie, prieteni sau parteneri de afaceri. Este ideal pentru a crea amintiri speciale de Crăciun și a oferi un sentiment unic de bucurie și recunoștință. De asemenea, este perfect pentru companii care doresc să impresioneze partenerii sau echipa.</p>
-                </Accordion>
+                {
+                  product.nr_of_items > 1 &&
+                  <Accordion last open={activeIndex === 1} setActiveIndex={() => {setActiveIndex(activeIndex === 1 ? -1 : 1)}}  title='Cadoul include' >
+                    <p className='whitespace-pre-line'>{product.description[locale]}</p>
+                  </Accordion>
+                }
             </div>
         </div>
         <div className='col-span-full lg:col-span-3 relative flex flex-col items-end justify-end gap-2'>

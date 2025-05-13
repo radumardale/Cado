@@ -5,6 +5,7 @@ import { Ocasions } from "@/lib/enums/Ocasions";
 import { ProductContent } from "@/lib/enums/ProductContent";
 import { StockAvailability } from "./stockAvailability";
 import { Schema } from "mongoose";
+import { OptionalInfo } from "./optionalInfo";
 
 export interface ProductInterface {
     _id: string,
@@ -24,6 +25,7 @@ export interface ProductInterface {
     images: string[],
     sale: ProductSale,
     relevance: number,
+    optional_info: OptionalInfo
 }
 
 export interface OrderProductInterface {

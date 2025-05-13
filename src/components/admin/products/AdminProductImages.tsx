@@ -248,15 +248,11 @@ export default function AdminProductImages({ product, imagesData, initialImagesD
                             e.preventDefault(); 
                             setImagesData(initialImagesData);
                             
-                            const currentValues = form.getValues();
-                            form.reset({
-                                ...currentValues,
-                                data: {
-                                    ...currentValues.data,
-                                    imagesNumber: initialImagesData.filter(img => !img.startsWith("https")).length,
-                                    imagesChanged: false
-                                }
+                            form.reset(undefined, {
+                                keepValues: false,
                             });
+                            form.setValue("data.imagesNumber", initialImagesData.filter(img => !img.startsWith("https")).length);
+                            form.setValue("data.imagesChanged", false);
                         }}
                     >
                         <span className='text-gray relative after:content-[""] after:absolute after:left-0 after:bottom-0 after:w-0 after:h-[1px] after:bg-gray hover:after:w-full after:transition-all after:duration-300'>

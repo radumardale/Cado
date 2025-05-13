@@ -5,6 +5,7 @@ import { Categories } from '@/lib/enums/Categories';
 import { Ocasions } from '@/lib/enums/Ocasions';
 import { ProductContent } from '@/lib/enums/ProductContent';
 import { stockAvailabilitySchema } from './types/stockAvailability';
+import { optionalInfoSchema } from './types/optionalInfo';
 
 export const addProductRequestSchema = z.object({
     data: z.object({
@@ -21,7 +22,7 @@ export const addProductRequestSchema = z.object({
         product_content: z.array(z.nativeEnum(ProductContent)),
         stock_availability: stockAvailabilitySchema,
         sale: productSaleSchema.optional(),
-        imagesNumber: z.number()
-        // images: z.array(z.string())
+        imagesNumber: z.number(),
+        optional_info: optionalInfoSchema
     })
 });
