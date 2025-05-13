@@ -43,7 +43,7 @@ export default function CheckoutForm({items, setDeliveryRegion, setDeliveryHour,
     const { mutate, data, isPending } = trpc.order.addOrder.useMutation();
     
     useEffect(() => {
-        if (!isPending) {
+        if (!isPending && data?.success) {
             if (data?.success) {
                 toast.success("Comanda a fost plasată cu succes!");
             } else {

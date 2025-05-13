@@ -11,6 +11,7 @@
   --black: oklch(25.82% 0.0318 258.31);
   --white: oklch(98.51% 0 0);
   --lightgray: oklch(82.66% 0 0);
+  --lightergray: oklch(0.9 0 0);
   --gray: oklch(66% 0 0);
   --darkgray: oklch(47.84% 0 0);
   --darkblue: oklch(0.26 0.0318 258.31); /* #1a2433 */
@@ -73,6 +74,7 @@
   --color-white: var(--white);
   --color-purewhite: oklch(1 0 0);
   --color-lightgray: var(--lightgray);
+  --color-lightergray: var(--lightergray);
   --color-black: var(--black);
   --color-background: var(--background);
   --color-foreground: var(--foreground);

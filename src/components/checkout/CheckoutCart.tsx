@@ -49,20 +49,23 @@ export default function CheckoutCart({items, setValue, deliveryRegion, deliveryH
                 <div data-lenis-prevent className='flex flex-col pr-2 gap-6 flex-1 lg:overflow-y-auto scroll-bar-custom mb-16 lg:mb-8'>
                     {
                         items.map((item, index) => {
+                            const product = products.find((product: ProductInterface) => product.custom_id === item.productId) || undefined;
+                            if (!product) return;
+
                             return (
                                 <div key={index} className='w-full flex gap-2 lg:gap-4'>
-                                    <Link href={{pathname: '/catalog/product/[id]', params: {id: products[index].custom_id}}} className='peer'>
-                                        <Image unoptimized src={products[index].images[0]} alt={products[index].title[locale]} width={129} height={164} className='w-32 aspect-[129/164] object-cover rounded-lg peer' />
+                                    <Link href={{pathname: '/catalog/product/[id]', params: {id: product.custom_id}}} className='peer'>
+                                        <Image unoptimized src={product.images[0]} alt={product.title[locale]} width={129} height={164} className='w-32 aspect-[129/164] object-cover rounded-lg peer' />
                                     </Link>
                                     <div className='flex flex-col justify-between flex-1 peer-hover:[&>div>p]:after:w-full'>
                                         <div>
-                                            <p className='font-manrope text-sm leading-4 w-fit font-semibold mb-4 relative after:contetn-[""] after:absolute after:left-0 after:bottom-0 after:w-0 after:h-[1px] after:bg-black after:transition-all after:duration-300'>{products[index].title[locale]}</p>
+                                            <p className='font-manrope text-sm leading-4 w-fit font-semibold mb-4 relative after:contetn-[""] after:absolute after:left-0 after:bottom-0 after:w-0 after:h-[1px] after:bg-black after:transition-all after:duration-300'>{product.title[locale]}</p>
                                             <div className={`flex gap-1 items-center`}>
                                                 {
-                                                    products[index].sale && products[index].sale.active &&
-                                                    <p className='text-gray text-sm lg:text-base leading-4 lg:leading-5 font-semibold line-through'>{products[index].price.toLocaleString()} MDL</p>
+                                                    product.sale && product.sale.active &&
+                                                    <p className='text-gray text-sm lg:text-base leading-4 lg:leading-5 font-semibold line-through'>{product.price.toLocaleString()} MDL</p>
                                                 }
-                                                <div className={`font-manrope font-semibold border border-gray rounded-3xl w-fit py-2 px-4`}>{products[index].sale && products[index].sale.active ? products[index].sale.sale_price.toLocaleString() : products[index].price.toLocaleString()} MDL</div>
+                                                <div className={`font-manrope font-semibold border border-gray rounded-3xl w-fit py-2 px-4`}>{product.sale && product.sale.active ? product.sale.sale_price.toLocaleString() : product.price.toLocaleString()} MDL</div>
                                             </div>
                                         </div>
                                         <div className="flex justify-between items-end">
@@ -80,10 +83,10 @@ export default function CheckoutCart({items, setValue, deliveryRegion, deliveryH
                                                 <span>{item.quantity}</span>
 
                                                 <button 
-                                                    disabled={item.quantity === products[index].stock_availability.stock} 
+                                                    disabled={item.quantity === product.stock_availability.stock} 
                                                     onClick={() => {
                                                         const newItems = [...items];
-                                                        newItems[index].quantity = Math.min(products[index].stock_availability.stock, newItems[index].quantity + 1);
+                                                        newItems[index].quantity = Math.min(product.stock_availability.stock, newItems[index].quantity + 1);
                                                         setValue(newItems);
                                                     }} 
                                                     className='cursor-pointer disabled:pointer-events-none disabled:text-gray'

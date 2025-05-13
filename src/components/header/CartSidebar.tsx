@@ -74,9 +74,7 @@ export default function CartSidebar({items, locale, setSidebarOpen, setValue}: C
                     <div data-lenis-prevent className='lg:pl-10 lg:pr-8 flex flex-col gap-6 flex-1 overflow-y-auto scroll-bar-custom'>
                         {
                             items.map((item, index) => {
-                                // const product = products.find((product: ProductInterface) => product.custom_id === item.productId) || {} as ProductInterface;
-                                const product = products[index];
-
+                                const product = products.find((product: ProductInterface) => product.custom_id === item.productId) || undefined;
                                 if (!product) return;
 
                                 return (

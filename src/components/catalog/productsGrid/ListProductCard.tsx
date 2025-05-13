@@ -15,22 +15,26 @@ interface ProductCardInterface {
 export default function ListProductCard({product}: ProductCardInterface) {
     const locale = useLocale();
     const [value, setValue] = useLocalStorage<CartInterface[]>("cart", []);
-    const [activeIndex, setActiveIndex] = useState(0);
+    const [activeIndex, setActiveIndex] = useState(-1);
 
   return (
-    <div className='col-span-full grid grid-cols-8 lg:grid-cols-10 gap-x-2 lg:gap-x-6 lg:not-last:border-b lg:not-last:border-gray lg:not-last:pb-6 not-last:mb-2 lg:not-last:mb-0'>
-        <Link href={{pathname: '/catalog/product/[id]', params: {id: product.custom_id}}} className='relative col-span-full lg:col-span-3 group aspect-[339/425] h-full max-w-full'>
+    <div className='col-span-full grid grid-cols-8 lg:grid-cols-10 gap-x-2 lg:gap-x-6 not-last:border-b not-last:border-lightgray lg:not-last:border-gray not-last:pb-4 lg:not-last:pb-6 not-last:mb-6 lg:not-last:mb-0'>
+        <Link href={{pathname: '/catalog/product/[id]', params: {id: product.custom_id}}} className='relative col-span-full lg:col-span-3 group aspect-[4/5] h-full max-w-full'>
           {
               product.sale && product.sale.active &&
               <div className='absolute top-2 lg:top-4 right-2 lg:right-4 h-8 lg:h-12 flex items-center justify-center bg-red px-4 lg:px-6 rounded-3xl text-white z-[5]'>
                   <span className='font-semibold text-xs lg:text-base leading-3.5 lg:leading-5'>Reducere</span>
               </div>
           }
-          <Image unoptimized src={product.images[0]} width={1596} height={2396} alt={product.title.ro} className='w-full h-full object-cover object-top rounded-2xl opacity-100 group-hover:opacity-0 z-10 transition duration-300'/>  
-          <Image unoptimized src={product.images[1]} width={1596} height={2396} alt={product.title.ro} className='absolute left-0 top-0 h-full w-full object-cover object-top rounded-2xl transition duration-300 -z-10'/>  
+          <div className='bg-purewhite w-full h-full rounded-lg lg:rounded-2xl overflow-hidden opacity-100 group-hover:opacity-0 z-10 transition duration-300 relative'>
+            <Image unoptimized src={product.images[0]} width={1596} height={2396} alt={product.title.ro} className='max-w-full w-fit max-h-full object-contain z-10 absolute left-1/2 top-1/2 -translate-1/2'/>  
+          </div>
+          <div className='bg-purewhite w-full h-full absolute left-0 top-0 transition duration-300 -z-10 rounded-lg lg:rounded-2xl overflow-hidden'>
+            <Image unoptimized src={product.images[1] || product.images[0]} width={1596} height={2396} alt={product.title.ro} className={`absolute left-0 top-1/2 -translate-y-1/2 max-w-full max-h-full object-contain`}/>  
+          </div>
         </Link>
         <div className='col-span-full lg:col-span-4 flex flex-col mt-4 lg:mt-0'>
-            <p className='font-manrope font-semibold text-2xl'>{product.title[locale]}</p>
+            <p className='font-manrope font-semibold lg:text-2xl'>{product.title[locale]}</p>
             <div className="flex gap-1 items-center mt-2 lg:hidden">
                 {
                     product.sale && product.sale.active &&

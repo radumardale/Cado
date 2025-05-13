@@ -114,6 +114,9 @@ export default function ImagesCarousel({setCarouselOpen, product, locale, initia
             aria-modal="true"
             aria-label="Image carousel"
         >
+            <div className="lg:hidden absolute top-4 left-4 z-10 bg-black/75 text-white px-6 py-2 rounded-3xl font-manrope font-semibold">
+                {(activeImage || 0) + 1} / {product.images.length}
+            </div>
             
             <motion.div 
                  className='flex-1 relative top-0 lg:relative mb-4 w-full max-w-full cursor-grab box-border'
@@ -132,7 +135,7 @@ export default function ImagesCarousel({setCarouselOpen, product, locale, initia
                 {product.images.map((image, index) => (
                     <motion.div
                         key={index}
-                        className='pointer-events-none w-full rounded-2xl absolute h-full flex justify-center items-center'
+                        className='pointer-events-none w-full rounded-lg lg:rounded-2xl absolute h-full flex justify-center items-center'
                         style={{ opacity: index === activeImage ? isDragOver ? activeDragOpacity : 1 : index === nextImage ? isDragOver ? nextDragOpacity : 0 : index === prevImage ? isDragOver ? prevDragOpacity : 0 : 0 }}
                     >
                         <Image
@@ -141,14 +144,14 @@ export default function ImagesCarousel({setCarouselOpen, product, locale, initia
                             alt={`${product.title[locale]} - Image ${index + 1}`}
                             width={1476} // Doubled width
                             height={1838} // Doubled height
-                            className={`max-h-full lg:h-full w-auto mx-auto rounded-2xl lg:max-w-none object-contain ${activeImage === index ? "z-10" : "z-0"}`}
+                            className={`max-h-full lg:h-full w-auto mx-auto rounded-lg lg:rounded-2xl lg:max-w-none object-contain ${activeImage === index ? "z-10" : "z-0"}`}
                         />
                     </motion.div>
                 ))}
                 
             </motion.div>
 
-            <div className="flex gap-4 justify-center" onMouseDown={(e) => {e.stopPropagation()}}>
+            <div className="hidden gap-4 justify-center lg:flex" onMouseDown={(e) => {e.stopPropagation()}}>
                 {product.images.map((image, index) => (
                     <button 
                         disabled={!isDragOver}
