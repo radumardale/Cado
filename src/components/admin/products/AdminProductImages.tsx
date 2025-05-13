@@ -84,46 +84,38 @@ export default function AdminProductImages({ product, imagesData, initialImagesD
                 <div className='col-span-full grid grid-cols-4 gap-x-6 h-fit'>
                     <p className='font-manrope text-2xl font-semibold leading-7 mb-6 col-span-full'>Imagini pentru produs</p>
                     <div className='col-span-4 grid grid-cols-4 gap-4'>
+                        <ProductImageUpload 
+                            onImageAdded={handleImageAdded}
+                        />
                         {
-                            imagesData.length > 0 &&
-                            <ProductImageUpload 
-                                onImageAdded={handleImageAdded}
-                            />
-                        }
-                        {
-                            imagesData.length > 1 && 
-                            <>
-                                {
-                                    imagesData.map((image, index) => {
-                                        return (
-                                            <div key={index} className='col-span-1 relative group'>
-                                                <div className='absolute left-0 top-0 w-full h-full bg-pureblack rounded-lg opacity-0 group-hover:opacity-25 transition duration-300'></div>
-                                                <Pin
-                                                    fill={index === 0 ? "white" : "none"}
-                                                    strokeWidth={1.5} 
-                                                    className={`text-white size-4 absolute left-1 top-1 opacity-0 group-hover:opacity-100 ${index === 0 ? "" : "cursor-pointer"}`}
-                                                    onClick={() => {
-                                                        const currentImages = imagesData
-                                                        const updatedImages = [image, ...currentImages.filter((_, i) => i !== index)];
-                                                        setImagesData(updatedImages);
-                                                        form.setValue("data.imagesChanged", true, {shouldDirty: true});
-                                                    }}
-                                                    />
-                                                <X 
-                                                    strokeWidth={1.5} 
-                                                    className='text-white size-4 absolute right-1 top-0.75 opacity-0 cursor-pointer group-hover:opacity-100' 
-                                                    onClick={() => {
-                                                        const currentImages = imagesData;
-                                                        setImagesData(currentImages.filter((_, i) => i !== index));
-                                                        form.setValue("data.imagesChanged", true, {shouldDirty: true});
-                                                    }}
-                                                    />
-                                                <Image unoptimized src={image} alt={product ? product.title[locale] : "new image"} width={339} height={339} className='w-full rounded-lg aspect-square object-cover'/>
-                                            </div>
-                                        )
-                                    })
-                                }
-                            </>
+                            imagesData.map((image, index) => {
+                                return (
+                                    <div key={index} className='col-span-1 relative group'>
+                                        <div className='absolute left-0 top-0 w-full h-full bg-pureblack rounded-lg opacity-0 group-hover:opacity-25 transition duration-300'></div>
+                                        <Pin
+                                            fill={index === 0 ? "white" : "none"}
+                                            strokeWidth={1.5} 
+                                            className={`text-white size-4 absolute left-1 top-1 opacity-0 group-hover:opacity-100 ${index === 0 ? "" : "cursor-pointer"}`}
+                                            onClick={() => {
+                                                const currentImages = imagesData
+                                                const updatedImages = [image, ...currentImages.filter((_, i) => i !== index)];
+                                                setImagesData(updatedImages);
+                                                form.setValue("data.imagesChanged", true, {shouldDirty: true});
+                                            }}
+                                            />
+                                        <X 
+                                            strokeWidth={1.5} 
+                                            className='text-white size-4 absolute right-1 top-0.75 opacity-0 cursor-pointer group-hover:opacity-100' 
+                                            onClick={() => {
+                                                const currentImages = imagesData;
+                                                setImagesData(currentImages.filter((_, i) => i !== index));
+                                                form.setValue("data.imagesChanged", true, {shouldDirty: true});
+                                            }}
+                                            />
+                                        <Image unoptimized src={image} alt={product ? product.title[locale] : "new image"} width={339} height={339} className='w-full rounded-lg aspect-square object-cover'/>
+                                    </div>
+                                )
+                            })
                         }
                     </div>
                 </div>

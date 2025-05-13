@@ -87,7 +87,7 @@ export default function AdditionalInfo({product, locale}: AdditionalInfoInterfac
                 }
             </div>
             {
-                product.set_description && <p className='text-sm lg:text-base leading-4 lg:leading-5 mt-4 font-semibold'>Numărul obiectelor în cadou: 8</p>
+                product.nr_of_items > 1 && <p className='text-sm lg:text-base leading-4 lg:leading-5 mt-4 font-semibold'>Numărul obiectelor în cadou: {product.nr_of_items}</p>
             }
             <p className='text-sm lg:text-base leading-4 lg:leading-5 mt-4 font-semibold'>ID produs: <span className='font-normal'>{product.custom_id}</span></p>
         </Accordion>

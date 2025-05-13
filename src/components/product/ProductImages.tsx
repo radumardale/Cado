@@ -119,7 +119,7 @@ export default function ProductImages({ product }: ProductImagesInterface) {
         )}
       </AnimatePresence>
       <div className="col-span-full lg:col-start-2 lg:col-span-5 grid grid-cols-5 lg:grid-cols-5 mt-2 lg:mt-16 gap-x-6 mb-4 lg:mb-31 relative h-fit cursor-pointer -ml-4 w-[calc(100%+2rem)] lg:mx-0 lg:w-full px-4 lg:px-0 overflow-hidden lg:overflow-visible">
-        <div className="absolute top-2 lg:top-4 left-6 lg:left-4 z-10 bg-black/75 text-white px-6 py-2 rounded-3xl font-manrope font-semibold">
+        <div className="absolute top-2 lg:top-4 left-6 lg:left-4 bg-black/75 text-white px-6 py-2 rounded-3xl font-manrope font-semibold z-20">
           {imageIndex + 1} / {product.images.length}
         </div>
         <div className="w-full h-full col-span-full overflow-hidden rounded-lg lg:rounded-2xl">
