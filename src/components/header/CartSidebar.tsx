@@ -16,11 +16,16 @@ interface CartSidebarInterface {
 }
 
 export default function CartSidebar({items, locale, setSidebarOpen, setValue}: CartSidebarInterface) {
-    const { data, isLoading } = trpc.products.getProductsByIds.useQuery({ids: items.map(item => item.productId)});
+    const { data, isLoading, isSuccess } = trpc.products.getProductsByIds.useQuery({ids: items.map(item => item.productId)});
     const [products, setProducts] = useState<ProductInterface[]>([]);
 
     useEffect(() => {
-        if (!isLoading && data?.products) {
+        if (!isLoading) {
+            if (!data?.products && !isSuccess) {
+                setValue([]);
+                return;
+            }
+
             setProducts(data.products);
             const validProductIds = data?.products?.map((product: ProductInterface) => product.custom_id) || [];
             const filteredItems = items.filter(item => validProductIds.includes(item.productId));

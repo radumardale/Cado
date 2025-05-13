@@ -139,6 +139,7 @@ export default function ImagesCarousel({setCarouselOpen, product, locale, initia
                         style={{ opacity: index === activeImage ? isDragOver ? activeDragOpacity : 1 : index === nextImage ? isDragOver ? nextDragOpacity : 0 : index === prevImage ? isDragOver ? prevDragOpacity : 0 : 0 }}
                     >
                         <Image
+                            unoptimized
                             quality={100}
                             src={image}
                             alt={`${product.title[locale]} - Image ${index + 1}`}
@@ -162,6 +163,7 @@ export default function ImagesCarousel({setCarouselOpen, product, locale, initia
                         aria-current={activeImage === index ? "true" : "false"}
                     >
                         <Image
+                            unoptimized
                             quality={100}
                             src={image}
                             alt={`${product.title[locale]} thumbnail ${index + 1}`}

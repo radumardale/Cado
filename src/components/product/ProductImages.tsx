@@ -145,9 +145,6 @@ export default function ProductImages({ product }: ProductImagesInterface) {
             }}
             style={{ x }}
           >
-            {/* <div className="lg:hidden absolute top-2 left-2 z-10 bg-black/75 text-white px-6 py-2 rounded-3xl font-manrope font-semibold">
-              {imageIndex + 1} / {product.images.length}
-            </div> */}
             {product.images.map((image, index) => (
               <motion.div
                 key={index}
@@ -170,6 +167,7 @@ export default function ProductImages({ product }: ProductImagesInterface) {
                 }}
               >
                 <Image
+                unoptimized
                   quality={100}
                   src={image}
                   alt={`${product.title[locale]} - Image ${index + 1}`}
