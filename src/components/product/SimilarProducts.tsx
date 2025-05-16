@@ -12,7 +12,7 @@ interface SimiliarProductsInterface {
 
 export default function SimiliarProducts({category}: SimiliarProductsInterface) {
     const { data, isLoading } = trpc.products.getSimilarProducts.useQuery({category: category});
-    const [isDesktop, setIsDesktop] = useState(false);
+    const [isDesktop, setIsDesktop] = useState<boolean | null>(null);
   
     // Check screen size on mount and window resize
     useEffect(() => {

@@ -32,7 +32,7 @@ export const getProductsProcedure = publicProcedure
       const aggregationResults = await Product.aggregate([
         {
           $match: {
-            ...(input.price ? {
+            ...(input.price && input.price.min !== 0 && input.price.max !== 0 ? {
               price: {
                 $gte: input.price.min,
                 $lte: input.price.max

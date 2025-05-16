@@ -1,5 +1,3 @@
-/* eslint-disable  @typescript-eslint/no-explicit-any */
-
 import { publicProcedure } from "../../trpc";
 import { Product } from '@/models/product/product';
 import { ActionResponse } from "@/lib/types/ActionResponse";

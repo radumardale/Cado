@@ -1,12 +1,12 @@
-import { trpc } from "@/app/_trpc/server";
 import BlogSection from "@/components/blog/BlogSection";
 import Footer from "@/components/footer/Footer";
 import Header from "@/components/header/Header";
 import Faq from "@/components/home/faq/Faq";
 import Recommendations from "@/components/home/recommendations/Recommendations";
 import LinksMenu from "@/components/LinksMenu";
+import { serverHelper } from "@/server";
+import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import { getTranslations, setRequestLocale } from "next-intl/server";
-import { use } from "react";
 
 export async function generateMetadata() {
   const t = await getTranslations('index.meta');
@@ -17,19 +17,22 @@ export async function generateMetadata() {
   };
 }
 
-export default function AboutUs({params}: {params: Promise<{locale: string, id: string}>;}) {
-  const {locale, id} = use(params);
+export default async function AboutUs({params}: {params: Promise<{locale: string, id: string}>;}) {
+  const {locale, id} = await params;
   setRequestLocale(locale);
-  trpc.blog.getBlogById.prefetch({id: id});
+
+  const helpers = serverHelper;
+  await helpers.blog.getBlogById.prefetch({ id });
+  const dehydratedState = JSON.parse(JSON.stringify(dehydrate(helpers.queryClient)));
 
   return (
-    <>
-        <Header />
-        <BlogSection id={id}/>
-        <Recommendations />
-        <Faq />
-        <Footer />
-        <LinksMenu />
-    </>
+    <HydrationBoundary state={dehydratedState}>
+      <Header />
+      <BlogSection id={id}/>
+      <Recommendations />
+      <Faq />
+      <Footer />
+      <LinksMenu />
+    </HydrationBoundary>
   );
 }

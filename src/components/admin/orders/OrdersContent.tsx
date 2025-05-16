@@ -15,16 +15,18 @@ export default function OrdersContent() {
     const observerRef = useRef<HTMLDivElement>(null);
     const [queryText, setQueryText] = useState('');
 
-    const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = trpc.order.getAllOrders.useInfiniteQuery({
-        limit: productsLimit,
-        searchQuery: queryText.length > 2 ? queryText.split(" ").join("+") : undefined,
-        startDate: startDate ? startDate.toISOString() : undefined,
-        endDate: endDate ? endDate.toISOString() : undefined,
-        sortBy: sortBy
-    },
-    { 
-        getNextPageParam: (lastPage) => lastPage.nextCursor,
-    });
+    const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = trpc.order.getAllOrders.useInfiniteQuery(
+        {
+          limit: productsLimit,
+          searchQuery: queryText.length > 2 ? queryText.split(" ").join("+") : undefined,
+          startDate: startDate ? startDate.toISOString() : undefined,
+          endDate: endDate ? endDate.toISOString() : undefined,
+          sortBy: sortBy
+        },
+        { 
+          getNextPageParam: (lastPage) => lastPage.nextCursor,
+        }
+      );
 
     const [queryProducts, setQueryProducts] = useState(data?.pages.flatMap(page => page.orders) || []);
 

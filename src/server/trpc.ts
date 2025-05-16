@@ -1,8 +1,11 @@
 import { initTRPC } from "@trpc/server";
 import { getServerSession } from "next-auth";
 import { cache } from "react";
+import superjson from 'superjson';
 
-const t = initTRPC.create();
+const t = initTRPC.create({
+  transformer: superjson
+});
 
 export const createTRPCContext = cache(async () => {
   try {

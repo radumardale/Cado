@@ -116,7 +116,9 @@ const { data, isLoading } = trpc.order.getOrderById.useQuery({id: id});
           products: products,
           delivery_method: data?.order.delivery_method || DeliveryMethod.HOME_DELIVERY,
           delivery_details: {
-            delivery_date: data?.order.delivery_details?.delivery_date || "",
+            delivery_date: data?.order.delivery_details?.delivery_date instanceof Date
+              ? data.order.delivery_details.delivery_date.toISOString()
+              : data?.order.delivery_details?.delivery_date || "",
             hours_intervals: data?.order.delivery_details?.hours_intervals || "",
             message: data?.order.delivery_details?.message || "",
             comments: data?.order.delivery_details?.comments || ""

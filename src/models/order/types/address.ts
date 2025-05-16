@@ -23,6 +23,6 @@ export const AddressSchema = new mongoose.Schema<Address>({
     },
     home_nr: {
         type: String,
-        required: true
+        required: false
     },
 });

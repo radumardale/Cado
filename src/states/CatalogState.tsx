@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { devtools, persist } from 'zustand/middleware'
+import { devtools } from 'zustand/middleware'
 
 interface CatalogState {
   minPrice: number,
@@ -10,7 +10,6 @@ interface CatalogState {
 
 export const useCatalogStore = create<CatalogState>()(
   devtools(
-    persist(
       (set) => ({
         minPrice: 0,
         setMinPrice: (value) => set({minPrice: value}),
@@ -21,5 +20,4 @@ export const useCatalogStore = create<CatalogState>()(
         name: "catalog-storage"
       }
     ),
-  ),
 )

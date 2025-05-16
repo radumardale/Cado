@@ -29,8 +29,13 @@ export default function ProductImages({ product }: ProductImagesInterface) {
   const [isDrag, setIsDrag] = useState(false);
   const [isFirstSlide, setIsFirstSlide] = useState(true);
   const [isLastSlide, setIsLastSlide] = useState(false);
+  const [swiperLoaded, setSwiperLoaded] = useState(false);
+  const hasMultipleImages = product.images.length > 1;
 
-  // Add an effect to update these states when the Swiper instance is available
+  useEffect(() => {
+    setSwiperLoaded(true);
+  }, []);
+
   useEffect(() => {
     if (!swiperRef.current?.swiper) return;
 
@@ -55,46 +60,77 @@ export default function ProductImages({ product }: ProductImagesInterface) {
     };
   }, [swiperRef.current?.swiper]);
 
-  // Motion values for drag and opacity
-  const x = useMotionValue(0);
+// Motion values for drag and opacity - improved for 2-image case
+const x = useMotionValue(0);
 
-  const prevDragOpacity = useTransform(x, [0, 10], [0, 1]);
+const prevDragOpacity = useTransform(
+  x, 
+  [0, 10], 
+  [0, 1]
+);
 
-  const nextDragOpacity = useTransform(x, [-10, 0], [1, 0]);
+const nextDragOpacity = useTransform(
+  x, 
+  [-10, 0], 
+  [1, 0]
+);
 
-  const activeDragOpacity = useTransform(x, [-10, 0, 10], [0, 1, 0]);
+const activeDragOpacity = useTransform(
+  x, 
+  [-10, 0, 10], 
+  [0, 1, 0]
+);
 
-  // Update prev/next indexes when active changes
-  useEffect(() => {
-    setDragOver(false);
-    setTimeout(() => {
-      setDragOver(true);
+useEffect(() => {
+  if (!hasMultipleImages) return; // Don't animate if there's only 1 image
+  
+  setDragOver(false);
+  setTimeout(() => {
+    setDragOver(true);
+    
+    // For 2 images, next is always the other image
+    if (product.images.length === 2) {
+      setNextImage(imageIndex === 0 ? 1 : 0);
+      setPrevImage(imageIndex === 0 ? 1 : 0);
+    } else {
+      // For 3+ images, use modular arithmetic
       setNextImage((imageIndex + 1) % product.images.length);
-      setPrevImage(
-        imageIndex - 1 < 0 ? product.images.length - 1 : imageIndex - 1
-      );
-    }, 300);
-  }, [imageIndex, product.images.length]);
+      setPrevImage(imageIndex - 1 < 0 ? product.images.length - 1 : imageIndex - 1);
+    }
+  }, 300);
+}, [imageIndex, product.images.length, hasMultipleImages]);
 
-  const handleDragEnd = (
-    event: MouseEvent | TouchEvent | PointerEvent,
-    info: PanInfo
-  ) => {
-    const threshold = 150;
-
-    if (info.offset.x > threshold) {
+const handleDragEnd = (
+  event: MouseEvent | TouchEvent | PointerEvent,
+  info: PanInfo
+) => {
+  if (!hasMultipleImages) return; // Don't handle drag for single image
+  
+  const threshold = 150;
+  
+  if (info.offset.x > threshold) {
+    // For 2 images, when dragging right, always go to the other image
+    if (product.images.length === 2) {
+      setImageIndex(imageIndex === 0 ? 1 : 0);
+    } else {
       setImageIndex(prevImage);
-    } else if (info.offset.x < -threshold) {
+    }
+  } else if (info.offset.x < -threshold) {
+    // For 2 images, when dragging left, always go to the other image
+    if (product.images.length === 2) {
+      setImageIndex(imageIndex === 0 ? 1 : 0);
+    } else {
       setImageIndex(nextImage);
     }
-
-    setTimeout(() => {
-      setIsDrag(false);
-    }, 50);
-
-    // Reset the drag position
-    x.set(0);
-  };
+  }
+  
+  setTimeout(() => {
+    setIsDrag(false);
+  }, 50);
+  
+  // Reset the drag position
+  x.set(0);
+};
 
   useEffect(() => {
     if (isCarouselOpen) {
@@ -105,7 +141,7 @@ export default function ProductImages({ product }: ProductImagesInterface) {
       window.document.body.classList.remove("carousel");
     }
   }, [isCarouselOpen]);
-
+ 
   return (
     <>
       <AnimatePresence>
@@ -146,39 +182,42 @@ export default function ProductImages({ product }: ProductImagesInterface) {
             style={{ x }}
           >
             {product.images.map((image, index) => (
-              <motion.div
-                key={index}
-                className="pointer-events-none w-full rounded-2xl absolute h-full flex justify-center items-center"
-                style={{
-                  opacity:
-                    index === imageIndex
-                      ? isDragOver
-                        ? activeDragOpacity
-                        : 1
-                      : index === nextImage
-                      ? isDragOver
-                        ? nextDragOpacity
-                        : 0
-                      : index === prevImage
-                      ? isDragOver
-                        ? prevDragOpacity
-                        : 0
-                      : 0,
-                }}
-              >
-                <Image
-                unoptimized
-                  quality={100}
-                  src={image}
-                  alt={`${product.title[locale]} - Image ${index + 1}`}
-                  width={1476} // Doubled width
-                  height={1838} // Doubled height
-                  className={`max-h-full lg:h-full w-auto mx-auto max-w-full object-contain ${
-                    imageIndex === index ? "z-10" : "z-0"
-                  }`}
-                />
-              </motion.div>
-            ))}
+  <motion.div
+    key={index}
+    className="pointer-events-none w-full rounded-2xl absolute h-full flex justify-center items-center"
+    style={{
+      opacity: index === imageIndex 
+        ? isDragOver 
+          ? activeDragOpacity 
+          : 1 
+        : (
+          // For 2 images, the other image should always be both prev and next
+          product.images.length === 2 
+            ? (index !== imageIndex ? (isDragOver ? (x.get() > 0 ? prevDragOpacity : nextDragOpacity) : 0) : 0)
+            : (
+              // For 3+ images, use the regular logic
+              index === nextImage 
+                ? isDragOver ? nextDragOpacity : 0 
+                : index === prevImage 
+                  ? isDragOver ? prevDragOpacity : 0 
+                  : 0
+            )
+        )
+    }}
+  >
+    <Image
+      onDragStart={(e) => e.preventDefault()}
+      quality={100}
+      src={image}
+      alt={`${product.title[locale]} - Image ${index + 1}`}
+      width={1476}
+      height={1838}
+      className={`max-h-full w-auto mx-auto lg:max-w-none object-contain ${
+        imageIndex === index ? "z-10" : "z-0"
+      }`}
+    />
+  </motion.div>
+))}
           </motion.div>
         </div>
 
@@ -219,6 +258,31 @@ export default function ProductImages({ product }: ProductImagesInterface) {
               </button>
             </>
           )}
+          {
+            !swiperLoaded ?
+            <div className="flex w-[calc(100%+1.5rem)] h-auto">
+              {product.images.map((image, index) => (
+              <div key={index} className="aspect-square max-w-1/5 pr-6">
+                <button
+                  className="cursor-pointer flex-1 aspect-square lg:w-full"
+                  onClick={() => {
+                    setImageIndex(index);
+                  }}
+                >
+                  <Image
+                    unoptimized
+                    quality={100}
+                    src={image}
+                    alt={product.title[locale]}
+                    width={254}
+                    height={318}
+                    className="rounded-sm lg:rounded-2xl w-full h-full object-cover"
+                  />
+                </button>
+              </div>
+            ))}
+            </div>
+            :
           <Swiper
             ref={swiperRef}
             slidesPerView={5}
@@ -232,7 +296,7 @@ export default function ProductImages({ product }: ProductImagesInterface) {
                 spaceBetween: 16 * 1.5,
               },
             }}
-            className={`h-auto w-full`}
+            className={`h-auto w-full flex`}
             speed={400}
             style={
               {
@@ -262,6 +326,7 @@ export default function ProductImages({ product }: ProductImagesInterface) {
               </SwiperSlide>
             ))}
           </Swiper>
+          }
         </div>
       </div>
     </>

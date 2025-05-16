@@ -33,6 +33,10 @@ export const routing = defineRouting({
       ru: "/contacts",
       ro: "/contacte"
     },
+    '/confirmation/[id]': {
+      ru: "/confirmation/[id]",
+      ro: "/confirmation/[id]"
+    },
   '/catalog/product/[id]': {
       ru: '/catalog/product/[id]',
       ro: '/catalog/produs/[id]',

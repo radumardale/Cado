@@ -37,7 +37,13 @@ export default function OrdersForm() {
             console.log(MutatedData);
             if (MutatedData) form.reset({
                 id: MutatedData.order?._id,
-                ...MutatedData.order
+                ...MutatedData.order,
+                delivery_details: {
+                    ...MutatedData.order?.delivery_details,
+                    delivery_date: MutatedData.order?.delivery_details?.delivery_date
+                        ? new Date(MutatedData.order.delivery_details.delivery_date).toISOString()
+                        : undefined,
+                },
             });
         }
     }, [isSuccess])

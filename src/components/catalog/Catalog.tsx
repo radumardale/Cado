@@ -56,19 +56,20 @@ export default function Catalog() {
         setSortBy(newSortBy);
     }, [searchParams, MinMaxData, minPrice, maxPrice]);
     
-    const { data, fetchNextPage, hasNextPage, isFetchingNextPage, status } = trpc.products.getProducts.useInfiniteQuery({
+    const queryData = {
         limit: productsLimit,
         title: keywords,
         category: category,
         ocasions: ocasions,
         productContent: productContent,
         price: {
-            min: price[0],
-            max: price[1]
+            min: price[0] === 0 && price[1] === 0 ? (MinMaxData?.minPrice || 0) : price[0],
+            max: price[0] === 0 && price[1] === 0 ? (MinMaxData?.maxPrice || 0) : price[1]
         },
         sortBy: sortBy
-    },
-    {
+    };
+
+    const { data, fetchNextPage, hasNextPage, isFetchingNextPage, status } = trpc.products.getProducts.useInfiniteQuery(queryData, {
         getNextPageParam: (lastPage) => lastPage.nextCursor,
     });
     

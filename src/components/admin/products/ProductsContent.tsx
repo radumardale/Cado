@@ -18,7 +18,7 @@ export default function ProductsContent() {
     const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = trpc.products.getAdminProducts.useInfiniteQuery({
         limit: productsLimit,
         title: queryText.length > 2 ? queryText.split(" ").join("+") : null,
-        sortBy: sortBy
+        sortBy: sortBy,
     },
     { 
         getNextPageParam: (lastPage) => lastPage.nextCursor,
@@ -45,13 +45,11 @@ export default function ProductsContent() {
     useEffect(() => {
         const observer = new IntersectionObserver(
             (entries) => {
-                // If the element is visible and we have more pages to load
                 if (entries[0].isIntersecting && hasNextPage && !isFetchingNextPage) {
                     fetchNextPage();
                 }
             },
             {
-                // Trigger when element is 90% visible
                 threshold: 0.1,
                 rootMargin: "0px 0px 200px 0px" // Preload when within 200px of viewport
             }

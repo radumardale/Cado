@@ -16,18 +16,18 @@ export default function AdditionalInfo({product, locale}: AdditionalInfoInterfac
     <div className='mt-12 lg:mt-0'>
         {
             product.nr_of_items > 1 && 
-            <Accordion open={activeIndex == 0} setActiveIndex={() => {setActiveIndex(activeIndex === 0 ? -1 : 0)}} title="Cadoul include">
+            <Accordion productAccordion open={activeIndex == 0} setActiveIndex={() => {setActiveIndex(activeIndex === 0 ? -1 : 0)}} title="Cadoul include">
                 <p className={`text-sm lg:text-base leading-4 lg:leading-5`}>
                     {product.set_description[locale]}
                 </p>
             </Accordion>
         }
-        <Accordion open={activeIndex == 1} setActiveIndex={() => {setActiveIndex(activeIndex === 1 ? -1 : 1)}} title="Descriere">
+        <Accordion productAccordion open={activeIndex == 1} setActiveIndex={() => {setActiveIndex(activeIndex === 1 ? -1 : 1)}} title="Descriere">
                 <p className={`text-sm lg:text-base leading-4 lg:leading-5`}>
                     {product.long_description[locale]}
                 </p>
         </Accordion>
-        <Accordion last open={activeIndex == 2} setActiveIndex={() => {setActiveIndex(activeIndex === 2 ? -1 : 2)}} title="Caracteristici">
+        <Accordion productAccordion last open={activeIndex == 2} setActiveIndex={() => {setActiveIndex(activeIndex === 2 ? -1 : 2)}} title="Caracteristici">
             {
                 product.optional_info && product.optional_info.material[locale] !== "" &&
                 <div className='flex gap-x-1 not-first:mt-4'>

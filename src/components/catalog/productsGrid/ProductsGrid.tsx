@@ -1,10 +1,8 @@
 import { ProductInterface } from '@/models/product/types/productInterface'
-import React, { Fragment, useEffect, useState } from 'react'
+import React, { Fragment, useState } from 'react'
 import ProductCard from './ProductCard'
 import Controls from './Controls'
 import ListProductCard from './ListProductCard'
-import { motion, useAnimate } from 'motion/react'
-import { easeInOutCubic } from '@/lib/utils'
 import LoadingGrid from './LoadingGrid'
 import SortBy from '@/lib/enums/SortBy'
 import { Categories } from '@/lib/enums/Categories'
@@ -23,19 +21,11 @@ interface ProductsGridProps {
 
 export default function ProductsGrid({products, loading, setSortBy, sortBy, category, setSidebarOpen, isSidebarOpen, searchText, countProducts}: ProductsGridProps) {
     const [gridLayout, setGridLayout] = useState(true);
-    const [scope, animate] = useAnimate()
-
-    useEffect(() => {
-        if (loading) return;
-        const controls = animate( scope.current, { y: [20, 0], opacity: [0, 1] }, {ease: easeInOutCubic, duration: .3} );
-    
-        return () => controls.stop();
-      }, [gridLayout, loading])
 
   return (
-    <motion.div className='col-span-full lg:col-start-4 lg:col-span-10 2xl:col-span-12 grid grid-cols-8 lg:grid-cols-12 mt-16 lg:mt-12 gap-x-2 lg:gap-y-6 lg:gap-6 h-fit'>
+    <div className='col-span-full lg:col-start-4 lg:col-span-10 2xl:col-span-12 grid grid-cols-8 lg:grid-cols-12 mt-16 lg:mt-12 gap-x-2 lg:gap-y-6 lg:gap-6 h-fit'>
         <Controls gridLayout={gridLayout} setGridLayout={setGridLayout} setSortBy={setSortBy} sortBy={sortBy} setSidebarOpen={setSidebarOpen} isSidebarOpen={isSidebarOpen} searchText={searchText} countProducts={countProducts}/>
-        <div ref={scope} className='col-span-full grid grid-cols-8 lg:grid-cols-12 gap-x-2 gap-y-6 lg:gap-6'>
+        <div className='col-span-full grid grid-cols-8 lg:grid-cols-12 gap-x-2 gap-y-6 lg:gap-6'>
             {
                 loading ? 
                 (
@@ -62,6 +52,6 @@ export default function ProductsGrid({products, loading, setSortBy, sortBy, cate
                 )
             }
         </div>
-    </motion.div>
+    </div>
   )
 }

@@ -4,7 +4,6 @@ export enum TermsSections {
     PAYMENT_AND_SECURITY = "PAYMENT_AND_SECURITY",
     ORDERS = "ORDERS",
     RETURN = "RETURN",
-    DELIVERY = "DELIVERY",
     SUPPORT = "SUPPORT"
   };
 

@@ -4,7 +4,8 @@ import { imageRouter } from './procedures/routers/imageRouter';
 import { orderRouter } from './procedures/routers/orderRouter';
 import { searchProductProcedure } from './procedures/search/searchProduct';
 import { blogRouter } from './procedures/routers/blogRouter';
-
+import { createServerSideHelpers } from '@trpc/react-query/server';
+import superjson from 'superjson';
 
 export const appRouter = router({
   products: productRouter,
@@ -15,3 +16,9 @@ export const appRouter = router({
 });
 
 export type AppRouter = typeof appRouter;
+
+export const serverHelper = createServerSideHelpers({
+  router: appRouter,
+  ctx: {},
+  transformer: superjson
+});
