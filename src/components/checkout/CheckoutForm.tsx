@@ -20,7 +20,7 @@ import { format } from 'date-fns'
 import { Calendar } from '../ui/calendar'
 import { Textarea } from '../ui/textarea'
 import { OrderPaymentMethod } from '@/models/order/types/orderPaymentMethod'
-import { Link } from '@/i18n/navigation'
+import { Link, useRouter } from '@/i18n/navigation'
 import { CartInterface } from '@/lib/types/CartInterface'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { DeliveryRegions, DeliveryRegionsArr } from '@/lib/enums/DeliveryRegions'
@@ -41,11 +41,13 @@ interface CheckoutFormProps {
 export default function CheckoutForm({items, setDeliveryRegion, setDeliveryHour, totalCost, products}: CheckoutFormProps) {
     const t = useTranslations();
     const { mutate, data, isPending } = trpc.order.addOrder.useMutation();
+    const router = useRouter();
     
     useEffect(() => {
         if (!isPending && data?.success) {
             if (data?.success) {
                 toast.success("Comanda a fost plasată cu succes!");
+                router.push({pathname: "/confirmation/[id]", params: {id: data?.order?.custom_id || ""}})
             } else {
                 toast.error(data?.error);
             }
@@ -210,7 +212,7 @@ export default function CheckoutForm({items, setDeliveryRegion, setDeliveryHour,
                 {
                     deliveryMethod === DeliveryMethod.PICKUP && 
                     <>
-                        <p className=' text-2xl font-semibold leading-7 mb-2 lg:mb-6 col-span-full mt-8 lg:mt-12'>Punct de ridicare</p>
+                        <p className=' text-2xl font-semibold leading-7 mb-2 col-span-full mt-8 lg:mt-12'>Punct de ridicare</p>
                         <p className='col-span-full'>Ridicarea comenzii este posibilă pe <span className='font-semibold'>str. Alecu Russo 15, of. 59, Chișinău,  Luni-Vineri 9:00 - 16:00 </span> </p>
                     </>
                 }

@@ -22,7 +22,7 @@ export default function ProductCard({product, category, section="RECOMMENDATIONS
     const [isImageLoaded, setImageLoaded] = useState(false);
 
   return (
-    <div className={`flex flex-col ${newLine ? "col-start-1 lg:col-start-1" : ""} col-span-4 lg:col-span-3 group`} onClick={() => {router.push({pathname: "/catalog/product/[id]", params: {id: product.custom_id}, query: category ? {category: category} : {}})}}>
+    <div className={`flex flex-col h-full ${newLine ? "col-start-1 lg:col-start-1" : ""} col-span-4 lg:col-span-3 group`} onClick={() => {router.push({pathname: "/catalog/product/[id]", params: {id: product.custom_id}, query: category ? {category: category} : {}})}}>
         <div className='relative overflow-hidden before:content-[""] before:absolute before:left-0 before:top-0 before:w-full before:h-full before:bg-pureblack before:opacity-0 group-hover:before:opacity-25 before:rounded-lg before:lg:rounded-2xl before:transition before:duration-300 before:z-10 mb-4 aspect-[339/425]'>
           {
               product.sale && product.sale.active &&

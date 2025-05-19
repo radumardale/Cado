@@ -10,6 +10,7 @@ import { useSearchParams } from 'next/navigation'
 import { Categories } from '@/lib/enums/Categories'
 import SimiliarProducts from './SimilarProducts'
 import { Skeleton } from '../ui/skeleton'
+import 'swiper/css';
 
 interface ProductInfoInterface {
     id: string,

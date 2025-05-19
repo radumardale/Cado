@@ -1,6 +1,8 @@
 import ConfirmationContent from '@/components/confirmation/ConfirmationContent';
 import { HydrationBoundary, dehydrate } from '@tanstack/react-query';
 import { serverHelper } from '@/server';
+import Footer from '@/components/footer/Footer';
+import Header from '@/components/header/Header';
 
 export default async function OrderConfirmationPage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
@@ -11,7 +13,9 @@ export default async function OrderConfirmationPage({ params }: { params: Promis
 
     return (
         <HydrationBoundary state={dehydratedState}>
+            <Header />
             <ConfirmationContent id={id} />
+            <Footer />
         </HydrationBoundary>
     );
 }

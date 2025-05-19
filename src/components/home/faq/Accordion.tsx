@@ -41,7 +41,7 @@ export default function Accordion({title, children, last = false, open, setActiv
 
     const accordionVariants = {
         close: {
-            height: productAccordion ? "4rem" : textRef.current ? `calc(${textHeight}px + 2rem)` : '3.75rem'
+            height: productAccordion ? "4rem" : textRef.current ? `calc(${textHeight}px + 2rem)` : 'auto'
         },
         open: {
             height: 'auto'
@@ -49,8 +49,13 @@ export default function Accordion({title, children, last = false, open, setActiv
     }
 
   return (
-    <motion.div style={{height: textRef.current ? `calc(${textHeight}px + 2rem)` : 'auto'}} className={`overflow-hidden col-span-full lg:col-start-4 lg:col-span-9 ${last ? "border-y border-lightgray" : "border-t border-lightgray"}`} transition={{ease: easeInOutCubic, duration: .4}} variants={accordionVariants} animate={open ? "open" : "close"} initial={false}>
-        <div style={{height: productAccordion ? "4rem" : textRef.current ? `calc(${textHeight}px + 2rem)` : 'auto'}} className='flex items-center justify-between cursor-pointer mb-2 gap-4' onClick={setActiveIndex}>
+    <motion.div 
+        style={{height: textRef.current ? `calc(${textHeight}px + 2rem)` : 'auto'}} 
+        className={`overflow-hidden col-span-full lg:col-start-4 lg:col-span-9 ${last ? "border-y border-lightgray" : "border-t border-lightgray"}`} transition={{ease: easeInOutCubic, duration: .4}} variants={accordionVariants} animate={open ? "open" : "close"} initial={false}>
+        <div 
+            style={{height: productAccordion ? "4rem" : textRef.current ? `calc(${textHeight}px + 2rem)` : 'auto'}} 
+            className={`flex items-center justify-between cursor-pointer mb-2 gap-4 ${!textRef.current ? "py-4" : ""}`}
+            onClick={setActiveIndex}>
             <p ref={textRef} className='font-semibold font-manrope text-base lg:text-2xl'>{title}</p>
             <Plus color={COLORS.black} className={`min-w-5 min-h-5 max-h-5 max-w-5 w-fit transition duration-300 ${open ? "rotate-45" : ""}`} />
         </div>

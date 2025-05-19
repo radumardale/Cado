@@ -1,13 +1,17 @@
 'use client'
 
 import { Menu } from 'lucide-react'
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useLenis } from 'lenis/react';
 import { AnimatePresence } from 'motion/react';
 import MobileMenu from './MobileMenu';
 
-export default function MobileMenuIcon() {
-    const [isSidebarOpen, setSidebarOpen] = useState(false);
+interface MobileMenuIconProps {
+    isSidebarOpen: boolean;
+    setSidebarOpen: (v: boolean) => void;
+}
+
+export default function MobileMenuIcon({isSidebarOpen, setSidebarOpen}: MobileMenuIconProps) {
     const lenis = useLenis();
 
     useEffect(() => {

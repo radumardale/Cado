@@ -65,8 +65,12 @@ export default function SearchProducts({products, productsCount, searchText, clo
                                             <span className='font-semibold text-xs leading-3.5'>Reducere</span>
                                         </div>
                                     }
-                                    <Image unoptimized onLoad={() => setImageLoaded(true)} src={product.images[0]} width={798} height={1198} alt={product.title.ro} className='w-full aspect-[339/425] object-cover rounded-lg object-top lg:rounded-2xl opacity-100 group-hover:opacity-0 z-10 transition duration-300'/>  
-                                    <Image unoptimized src={product.images[1]} width={798} height={1198} alt={product.title.ro} className={`${isImageLoaded ? "" : "hidden"} absolute left-0 top-0 h-full w-full object-cover rounded-lg object-top lg:rounded-2xl transition duration-300 -z-10`}/>  
+                                    <div className='w-full aspect-[339/425] bg-purewhite rounded-lg lg:rounded-2xl opacity-100 group-hover:opacity-0 overflow-hidden transition duration-300 z-10 flex items-center'>
+                                        <Image unoptimized onLoad={() => setImageLoaded(true)} src={product.images[0]} width={798} height={1198} alt={product.title.ro} className='w-full max-h-full object-contain'/>  
+                                    </div>
+                                    <div className='absolute left-0 top-0 h-full w-full rounded-lg lg:rounded-2xl transition duration-300 -z-10 bg-purewhite flex items-center'>
+                                        <Image unoptimized src={product.images[1] || product.images[0]} width={798} height={1198} alt={product.title.ro} className={`${isImageLoaded ? "" : "hidden"} w-full max-h-full object-contain`}/>  
+                                    </div>
                                     <button onClick={(e) => {e.stopPropagation(); addToCart(product, 1, value, setValue, locale)}} className='absolute left-2 -bottom-10 h-10 w-[calc(100%-1rem)] bg-white rounded-3xl font-manrope z-20 opacity-100 transition-all duration-300 group-hover:bottom-2 font-semibold cursor-pointer hover:bg-lightgray text-sm'>Adaugă în coș</button>
                                 </div>
                                 <Link href={{pathname: "/catalog/product/[id]", params: {id: product.custom_id}}} className='group cursor-pointer flex flex-col flex-1 justify-between'>

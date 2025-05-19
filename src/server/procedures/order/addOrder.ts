@@ -3,11 +3,32 @@
 import { publicProcedure } from "@/server/trpc";
 import { Client } from "@/models/client/client";
 import { Order } from "@/models/order/order";
-import { OrderInterface } from "@/models/order/types/orderInterface";
+import { OrderInterface, ResOrderInterface } from "@/models/order/types/orderInterface";
 import { ActionResponse } from "@/lib/types/ActionResponse";
 import { addOrderRequestSchema } from "@/lib/validation/order/addOrderRequest";
 import connectMongo from "@/lib/connect-mongo";
-import { DeliveryMethod } from "@/models/order/types/deliveryMethod";
+import { DeliveryMethod  } from "@/models/order/types/deliveryMethod";
+import nodemailer from 'nodemailer';
+import { render } from "@react-email/components";
+import OrderConfirmation from "@/components/emails/OrderConfirmation";
+
+const mailConfig = {
+    service: "gmail",
+    host: "smtp.gmail.com",
+    port: 587,
+    secure: false,
+    auth: {
+        user: process.env.EMAIL_ADDRESS,
+        pass: process.env.EMAIL_PASSWORD
+    }
+};
+
+const subjectLang = new Map([
+  ["en", "TRIP REMINDER | World Wide Travel"],
+  ["ro", "REAMINTIRE DE CĂLĂTORIE | World Wide Travel"],
+  ["fr", "RAPPEL DE VOYAGE | World Wide Travel"],
+  ["ru", "НАПОМИНАНИЕ О ПОЕЗДКЕ | World Wide Travel"]
+])
 
 export interface addOrderResponse extends ActionResponse {
   order: OrderInterface | null
@@ -32,7 +53,7 @@ export const addOrderProcedure = publicProcedure
           };
       } else {
         billingAddress = input.additional_info.billing_address;
-        Object.assign(billingAddress, {billing_type: input.additional_info.entity_type})
+        Object.assign(billingAddress, {billing_type: input.additional_info.entity_type});
       }
 
       const additionalInfo = {
@@ -79,6 +100,35 @@ export const addOrderProcedure = publicProcedure
 
       client.orders.push(order._id.toString());
       await client.save();
+
+      // Send email
+      const transporter = nodemailer.createTransport(mailConfig);
+
+      const productsWithSale = input.products.map(item => ({
+        ...item,
+        product: {
+          ...item.product,
+          sale: item.product.sale || { active: false, sale_price: 0 }
+        }
+      }));
+
+      const emailHtml = await render(OrderConfirmation({
+        order: order.toObject() as ResOrderInterface,
+        products: productsWithSale,
+        locale: "ro",
+        paymentMethodName: input.payment_method,
+        regionName: input.additional_info.delivery_address?.region || "",
+        baseUrl: process.env.BASE_URL,
+      }));
+
+      const data = {
+          from: process.env.FROM_EMAIL_ADDRESS,
+          to: input.additional_info.user_data.email,
+          subject: subjectLang.get("ro"),
+          html: emailHtml
+      }
+
+      await transporter.sendMail(data);
 
       return {
         success: true,

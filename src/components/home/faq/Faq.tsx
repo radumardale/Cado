@@ -1,18 +1,11 @@
 'use client'
 
-import { useState } from 'react'
-import Accordion from './Accordion'
 import SeeMoreButton from '@/components/buttons/SeeMoreButton'
 import { useTranslations } from 'next-intl';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 
 export default function Faq() {
-    const [activeIndex, setActiveIndex] = useState(0);
-
     const t = useTranslations("index.faq");
-
-    const setCurrActiveIndex = (index: number) => {
-        setActiveIndex(index);
-    }
 
   return (
     <>
@@ -20,8 +13,13 @@ export default function Faq() {
         {
             Array.from({ length: 5 }).map((_, index) => {
                 return (
-                    <Accordion key={index} open={activeIndex == index} setActiveIndex={() => {setCurrActiveIndex(activeIndex === index ? -1 : index)}} title={t(`${index}.title`)}>
-                        <p className='text-sm lg:text-base'>{t(`${index}.description`)}</p>
+                    <Accordion key={index} type="single" collapsible className={`col-span-full lg:col-start-4 lg:col-span-9  ${index === 4 ? "border-y border-lightgray" : "border-t border-lightgray"}`}>
+                        <AccordionItem value="item-1">
+                            <AccordionTrigger className='font-semibold font-manrope text-base lg:text-2xl cursor-pointer'>{t(`${index}.title`)}</AccordionTrigger>
+                            <AccordionContent className='text-base'>
+                                {t(`${index}.description`)}
+                            </AccordionContent>
+                        </AccordionItem>
                     </Accordion>
                 )
             })

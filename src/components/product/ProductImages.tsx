@@ -212,7 +212,7 @@ const handleDragEnd = (
       alt={`${product.title[locale]} - Image ${index + 1}`}
       width={1476}
       height={1838}
-      className={`max-h-full w-auto mx-auto lg:max-w-none object-contain ${
+      className={`max-h-full w-auto mx-auto max-w-full object-contain ${
         imageIndex === index ? "z-10" : "z-0"
       }`}
     />
@@ -262,7 +262,7 @@ const handleDragEnd = (
             !swiperLoaded ?
             <div className="flex w-[calc(100%+1.5rem)] h-auto">
               {product.images.map((image, index) => (
-              <div key={index} className="aspect-square max-w-1/5 pr-6">
+              <div key={index} className="max-w-1/5 pr-6">
                 <button
                   className="cursor-pointer flex-1 aspect-square lg:w-full"
                   onClick={() => {

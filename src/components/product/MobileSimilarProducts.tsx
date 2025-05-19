@@ -43,7 +43,7 @@ export default function MobileSimilarProducts({isLoading, data}: MobileSimilarPr
                         <></> :
                         <>
                             {data.products.map((product: ProductInterface, index: number) => (
-                                <SwiperSlide key={index} className='pr-2 lg:pr-6 mb-1'>
+                                <SwiperSlide key={index} className='pr-2 lg:pr-6 mb-1 max-h-none h-auto'>
                                     <ProductCard category={null} key={index} product={product} />
                                 </SwiperSlide>
                             ))}

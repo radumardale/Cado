@@ -9,9 +9,9 @@ import Hero from "@/components/home/hero/Hero";
 import Recommendations from "@/components/home/recommendations/Recommendations";
 import Reviews from "@/components/home/reviews/Reviews";
 import { getTranslations, setRequestLocale } from "next-intl/server";
-import { use } from "react";
-import { trpc } from "../_trpc/server";
 import LinksMenu from "@/components/LinksMenu";
+import { serverHelper } from "@/server";
+import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 
 export async function generateMetadata() {
   const t = await getTranslations('index.meta');
@@ -22,14 +22,16 @@ export async function generateMetadata() {
   };
 }
 
-export default function Home({params}: {params: Promise<{locale: string}>;}) {
-  const {locale} = use(params);
+export default async function Home({params}: {params: Promise<{locale: string}>;}) {
+  const {locale} = await params;
   setRequestLocale(locale);
-  trpc.products.getRecProduct.prefetch();
-  trpc.blog.getLimitedBlogs.prefetch({limit: 6});
+  const helpers = serverHelper;
+  await helpers.products.getRecProduct.prefetch();
+  await helpers.blog.getLimitedBlogs.prefetch({limit: 6});
+  const dehydratedState = JSON.parse(JSON.stringify(dehydrate(helpers.queryClient)));
 
   return (
-    <>
+    <HydrationBoundary state={dehydratedState}>
         <Header />
         <Hero />
         <CategoriesGrid />
@@ -40,6 +42,6 @@ export default function Home({params}: {params: Promise<{locale: string}>;}) {
         <Faq />
         <Footer />
         <LinksMenu />
-    </>
+    </HydrationBoundary>
   );
 }

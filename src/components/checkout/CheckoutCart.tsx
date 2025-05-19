@@ -34,7 +34,10 @@ export default function CheckoutCart({items, setValue, deliveryRegion, deliveryH
     }, [deliveryHour])
 
     useEffect(() => {
-        if (products.length > 0) setTotalCost(items.reduce((acc, item, index) => acc + (products[index].sale.active ? products[index].sale.sale_price : products[index].price) * item.quantity, 0) + (deliveryPrice ? deliveryPrice + (deliveryHourRate ? deliveryHourRate * deliveryPrice : 0) : 0));
+        if (products.length > 0) setTotalCost(items.reduce((acc, item) => {
+            const product = products.find(product => product.custom_id === item.productId);
+            return acc + (product && product.sale.active ? product.sale.sale_price : product?.price || 0) * item.quantity;
+        }, 0) + (deliveryPrice ? deliveryPrice + (deliveryHourRate ? deliveryHourRate * deliveryPrice : 0) : 0));
     }, [items, deliveryHourRate, deliveryPrice, products])
 
     useEffect(() => {
@@ -122,7 +125,12 @@ export default function CheckoutCart({items, setValue, deliveryRegion, deliveryH
                     <>
                         <div className="flex justify-between items-end mb-2">
                             <p>Subtotal:</p>
-                            <p>{mounted && items.reduce((acc, item, index) => acc + (products[index].sale.active ? products[index].sale.sale_price : products[index].price) * item.quantity, 0).toLocaleString()} MDL</p>
+                            <p>
+                                {mounted && items.reduce((acc, item) => {
+                                    const product = products.find(product => product.custom_id === item.productId);
+                                    return acc + (product && product.sale.active ? product.sale.sale_price : product?.price || 0) * item.quantity;
+                                }, 0).toLocaleString()} MDL
+                            </p>
                         </div>
                         <div className="flex justify-between items-end mb-2 lg:mb-4">
                             <p>Livrare:</p>
@@ -139,7 +147,12 @@ export default function CheckoutCart({items, setValue, deliveryRegion, deliveryH
                 }
                 <div className="flex justify-between items-end mb-4">
                     <p>Total:</p>
-                    <p className='font-semibold'>{mounted && (items.reduce((acc, item, index) => acc + (products[index].sale.active ? products[index].sale.sale_price : products[index].price) * item.quantity, 0) + (deliveryPrice ? deliveryPrice + (deliveryHourRate ? deliveryHourRate * deliveryPrice : 0) : 0)).toLocaleString()} MDL</p>
+                    <p>
+                        {mounted && (items.reduce((acc, item) => {
+                            const product = products.find(product => product.custom_id === item.productId);
+                            return acc + (product && product.sale.active ? product.sale.sale_price : product?.price || 0) * item.quantity;
+                        }, 0) + (deliveryPrice ? deliveryPrice + (deliveryHourRate ? deliveryHourRate * deliveryPrice : 0) : 0)).toLocaleString()} MDL
+                    </p>
                 </div>
             </>
         }

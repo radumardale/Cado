@@ -33,7 +33,7 @@ export default function MobileRecommendations({isLoading, data, indProductSectio
                     ref={swiperRef}
                     slidesPerView={2}
                     loop={true}
-                    className="h-auto"
+                    className="h-auto items-stretch"
                     speed={400}
                     style={{
                         "--swiper-transition-timing-function": "cubic-bezier(0.65, 0, 0.35, 1)"
@@ -44,7 +44,7 @@ export default function MobileRecommendations({isLoading, data, indProductSectio
                         <></> :
                         <>
                             {data.products.map((product: ProductInterface, index: number) => (
-                                <SwiperSlide key={index} className='pr-2 lg:pr-6 mb-1'>
+                                <SwiperSlide key={index} className='pr-2 lg:pr-6 mb-1 h-auto'>
                                     <ProductCard category={null} key={index} product={product} />
                                 </SwiperSlide>
                             ))}

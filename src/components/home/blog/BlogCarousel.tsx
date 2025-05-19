@@ -15,6 +15,7 @@ export default function BlogCarousel() {
     const swiperRef = useRef<SwiperRef>(null);
     const locale = useLocale();
     const [slidesPerView, setSlidesPerView] = useState(2); // Default to mobile view
+    const [isMounted, setIsMounted] = useState(false);
     
     const updateSlidesPerView = () => {
         setSlidesPerView(window.innerWidth >= 1024 ? 4 : 2);
@@ -26,6 +27,7 @@ export default function BlogCarousel() {
         
         // Add resize listener
         window.addEventListener('resize', updateSlidesPerView);
+        setIsMounted(true);
         
         // Clean up
         return () => {
@@ -46,37 +48,53 @@ export default function BlogCarousel() {
             <BlogTitle goToNextSlide={goToNextSlide} goToPreviousSlide={goToPreviousSlide}/>
             <div className='col-span-8 lg:col-span-15 -mr-4 lg:-mr-16 overflow-hidden mb-24 lg:mb-42'>
                 <div className='-mr-12 lg:-mr-18 rounded-tl-2xl mt-8'>
-                    <Swiper
-                        modules={[Autoplay]}
-                        autoplay={{
-                            delay: 5000,
-                        }}
-                        ref={swiperRef}
-                        slidesPerView={slidesPerView}
-                        loop={true}
-                        className="h-auto"
-                        speed={400}
-                        style={{
-                            "--swiper-transition-timing-function": "cubic-bezier(0.65, 0, 0.35, 1)"
-                        } as React.CSSProperties}
-                    >
-                        {
-                            isLoading || !data?.blogs ? 
-                            <></> :
-                            <>
-                                {data.blogs.map((blog, index) => (
-                                    <SwiperSlide key={index} className='pr-2 lg:pr-6 mb-1'>
-                                        <BlogCard 
-                                            id={blog._id} 
-                                            src={blog.image} 
-                                            tag={blog.tag} 
-                                            title={blog.title[locale]} 
-                                        />
-                                    </SwiperSlide>
-                                ))}
-                            </>
-                        }
-                    </Swiper>
+                    {
+                        !isMounted ?
+                        <div className='flex'>
+                            {data?.blogs?.map((blog, index) => (
+                                <div key={index} className='pr-2 lg:pr-6 mb-1 min-w-1/2 lg:min-w-1/4'>
+                                    <BlogCard 
+                                        id={blog._id} 
+                                        src={blog.image} 
+                                        tag={blog.tag} 
+                                        title={blog.title[locale]} 
+                                    />
+                                </div>
+                            ))}
+                        </div>
+                        :
+                        <Swiper
+                            modules={[Autoplay]}
+                            autoplay={{
+                                delay: 5000,
+                            }}
+                            ref={swiperRef}
+                            slidesPerView={slidesPerView}
+                            loop={true}
+                            className="h-auto"
+                            speed={400}
+                            style={{
+                                "--swiper-transition-timing-function": "cubic-bezier(0.65, 0, 0.35, 1)"
+                            } as React.CSSProperties}
+                        >
+                            {
+                                isLoading || !data?.blogs ? 
+                                <></> :
+                                <>
+                                    {data.blogs.map((blog, index) => (
+                                        <SwiperSlide key={index} className='pr-2 lg:pr-6 mb-1'>
+                                            <BlogCard 
+                                                id={blog._id} 
+                                                src={blog.image} 
+                                                tag={blog.tag} 
+                                                title={blog.title[locale]} 
+                                            />
+                                        </SwiperSlide>
+                                    ))}
+                                </>
+                            }
+                        </Swiper>
+                    }
                 </div>
             </div>
         </>

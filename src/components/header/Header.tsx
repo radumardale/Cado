@@ -30,6 +30,7 @@ export default function Header({category, breadcrumbs = false, productInfo}: Hea
     const [isCatalogButtonActive, setCatalogButtonActive] = useState(false);
     const [isCatalogMenuActive, setIsCatalogMenuActive] = useState(false);
     const [isCatalogMenuOpen, setIsCatalogMenuOpen] = useState(false);
+    const [isSidebarOpen, setSidebarOpen] = useState(false);
     const closeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
     const [isDesktop, setIsDesktop] = useState(false);
     const [isMounted, setMounted] = useState(false);
@@ -91,10 +92,10 @@ export default function Header({category, breadcrumbs = false, productInfo}: Hea
                             <div className='absolute bottom-[.1rem] left-0 w-full h-[1px] bg-lightgray px-16 lg:block hidden'></div>
                             <div className='lg:col-start-2 2xl:col-start-2 col-span-8 lg:col-span-11 2xl:col-span-13 h-14 lg:h-[5.1rem] flex justify-between items-center relative w-full border-b border-lightgray lg:border-none'>
                                 <div className="flex gap-4 items-center lg:hidden">
-                                    <MobileMenuIcon />
+                                    <MobileMenuIcon isSidebarOpen={isSidebarOpen} setSidebarOpen={setSidebarOpen}/>
                                     <LangIcon />
                                 </div>
-                                <Link href="/">
+                                <Link href="/" className='max-w-[14vw]'>
                                     <Image unoptimized src="/logo/logo-white.svg" width={228} height={56} alt='logo' className='h-8 lg:h-14 w-fit'/>
                                 </Link>
                                 <div className='hidden gap-8 items-center absolute left-1/2 -translate-x-1/2 lg:flex'>
@@ -105,7 +106,7 @@ export default function Header({category, breadcrumbs = false, productInfo}: Hea
                                     <CustomLink className='text-black font-semibold font-manrope h-5' href="/contacts" value='Contacte'/>
                                 </div>
                                 <div className="flex gap-4 items-center">
-                                    <button className='cursor-pointer h-6' onClick={() => setIsCatalogMenuOpen(true)}>
+                                    <button className='cursor-pointer h-6' onClick={() => {if (isDesktop) setIsCatalogMenuOpen(true); else setSidebarOpen(true);}}>
                                         <Search color={COLORS.black} className='size-6' strokeWidth={1.25}/>
                                     </button>
                                     <div className='hidden lg:block h-6'>
