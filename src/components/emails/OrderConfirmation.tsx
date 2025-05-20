@@ -1,280 +1,574 @@
 import {
-  Body,
-  Head,
-  Html,
-  Preview,
-  Font,
-} from "@react-email/components";
-import { Tailwind } from "@react-email/tailwind";
-import {
-  ResOrderInterface,
-} from "@/models/order/types/orderInterface";
-import { DeliveryRegions, getDeliveryPrice } from "@/lib/enums/DeliveryRegions";
-import { DeliveryMethod } from "@/models/order/types/deliveryMethod";
-import { CircleCheckBig } from "lucide-react";
-
-// Define the props interface
-interface OrderConfirmationEmailProps {
-  order: ResOrderInterface;
-  locale: string;
-  paymentMethodName: string;
-  regionName: string;
-  baseUrl?: string;
-}
-
-export const OrderConfirmationEmail = ({
-  order,
-  locale,
-  baseUrl = "https://cado-henna.vercel.app",
-}: OrderConfirmationEmailProps) => {
-
-  return (
-    <Html>
-      <Head>
-        <Font
-          fontFamily="Manrope"
-          fallbackFontFamily="Verdana"
-          webFont={{
-            url: `${baseUrl}/fonts/Manrope-Bold.ttf`,
-            format: "woff2",
-          }}
-        />
-        <Font
-          fontFamily="Roboto-Bold"
-          fallbackFontFamily="Verdana"
-          webFont={{
-            url: `${baseUrl}/fonts/Roboto-Bold.ttf`,
-            format: "woff2",
-          }}
-        />
-        <Font
-          fontFamily="Roboto"
-          fallbackFontFamily="Verdana"
-          webFont={{
-            url: `${baseUrl}/fonts/Roboto-Regular.ttf`,
-            format: "woff2",
-          }}
-        />
-      </Head>
-      <Preview>Comanda #{order.custom_id} a fost preluată</Preview>
-      <Tailwind
-        config={{
-          theme: {
-            extend: {
-              colors: {
-                blue: "#8AA1C4",
-                green: "#3A9F5C",
-                gray: "#929292",
-                lightgray: "#C6C6C6",
-                black: "#1A2433",
-                white: "#fafafa",
-                purewhite: "#ffffff",
-              },
-              fontFamily: {
-                manrope: "Manrope",
-                roboto: "Roboto",
-                "roboto-bold": "Roboto-Bold"
-              },
-              fontSize: {
-                sm: "0.875rem",
-              },
-            },
-          },
-        }}
-      >
-        <Body className="max-w-[800px] mx-auto">
-            <div className="flex justify-center" style={{justifyContent: "center"}}>
-                <img src={`${baseUrl}/logo/logo-white.png`} alt="logo" className="h-14 mt-8 mb-12" />
-            </div>
-          <div className="flex justify-center border-t border-b-0 border-x-0 border-solid border-lightgray pt-4">
-            <CircleCheckBig
-              strokeWidth={1.5}
-              className="text-green size-12 mx-auto mb-6"
-            />
-          </div>
-          <p className="font-manrope font-semibold uppercase text-center text-[2rem] leading-9 mb-6 mt-0">
-            Mulțumim MULT! <br /> comanda{" "}
-            <span className="underline">#{order?.custom_id}</span> a fost
-            preluată
-          </p>
-          <p className="text-center mb-12 mt-0">
-            Am trimis un e-mail la adresa{" "}
-            <span className="font-roboto-bold">
-              {order?.additional_info.user_data.email}
-            </span>{" "}
-            cu confirmarea și factura comenzii. <br />
-            <br /> Dacă nu ai primit e-mailul în două minute, te rugăm să
-            verifici și folderul spam.
-          </p>
-          <div className="border-solid border-t border-x-0 border-b-0 border-lightgray pt-4 mb-12">
-            <p className="font-manrope font-semibold mb-4 mt-0">
-              Sumarul comenzii
-            </p>
-            <div className="grid col-span-full grid-cols-2 gap-6">
-              {order?.products.map((product, index) => (
-                <div key={index} className="w-full flex gap-4">
-                  <div className="peer bg-purewhite rounded-lg">
-                    <img
-                      src={product.product.images[0]}
-                      alt={product.product.title[locale]}
-                      width={129}
-                      height={164}
-                      className="w-32 aspect-[129/164] object-contain peer"
-                    />
-                  </div>
-                  <div className="flex flex-col justify-between flex-1 peer-hover:[&>div>p]:after:w-full">
-                    <div>
-                      <p className='font-manrope text-sm leading-5 w-fit font-semibold mb-4 mt-0 relative after:contetn-[""] after:absolute after:left-0 after:bottom-0 after:w-0 after:h-[1px] after:bg-black after:transition-all after:duration-300'>
-                        {product.product.title[locale]}
+    Html,
+    Head,
+    Preview,
+    Font,
+  } from "@react-email/components";
+  import {
+    ResOrderInterface,
+  } from "@/models/order/types/orderInterface";
+  import { DeliveryRegions, getDeliveryPrice } from "@/lib/enums/DeliveryRegions";
+  import { DeliveryMethod } from "@/models/order/types/deliveryMethod";
+  
+  // Define the props interface
+  interface OrderConfirmationEmailProps {
+    order: ResOrderInterface;
+    locale: string;
+    paymentMethodName: string;
+    regionName: string;
+    baseUrl?: string;
+  }
+  
+  export default function OrderConfirmationEmail ({
+    order,
+    locale,
+    paymentMethodName,
+    baseUrl = "https://cado-henna.vercel.app",
+  }: OrderConfirmationEmailProps) {
+    return (
+      <Html>
+        <Head>
+          <Font
+            fontFamily="Manrope"
+            fallbackFontFamily="Verdana"
+            webFont={{
+              url: `${baseUrl}/fonts/Manrope-Medium.ttf`,
+              format: "truetype",
+            }}
+          />
+          <Font
+            fontFamily="Roboto-Bold"
+            fallbackFontFamily="Verdana"
+            webFont={{
+              url: `${baseUrl}/fonts/Roboto-Bold.ttf`,
+              format: "truetype",
+            }}
+          />
+          <Font
+            fontFamily="Roboto"
+            fallbackFontFamily="Verdana"
+            webFont={{
+              url: `${baseUrl}/fonts/Roboto-Regular.ttf`,
+              format: "truetype",
+            }}
+          />
+          <style>
+            {`
+              body {
+                font-family: 'Roboto', Verdana, sans-serif;
+                margin: 0;
+                padding: 0;
+                -webkit-font-smoothing: antialiased;
+              }
+              .manrope {
+                font-family: 'Manrope', Verdana, sans-serif;
+              }
+              .roboto-bold {
+                font-family: 'Roboto-Bold', Verdana, sans-serif;
+                font-weight: bold;
+              }
+            `}
+          </style>
+        </Head>
+        <Preview>Comanda #{order.custom_id} a fost preluată</Preview>
+        
+        <body style={{ margin: "0", padding: "0", backgroundColor: "#ffffff" }}>
+          <table width="100%" cellPadding={0} cellSpacing={0} border={0} role="presentation">
+            <tr>
+              <td align="center" style={{ padding: "0" }}>
+                <table width="100%" cellPadding="0" cellSpacing="0" border={0} role="presentation" style={{ maxWidth: "800px", margin: "0 auto" }}>
+                  {/* Header with logo */}
+                  <tr>
+                    <td align="center" style={{ padding: "32px 0 48px" }}>
+                      <img 
+                        src={`${baseUrl}/logo/logo-white.png`} 
+                        alt="logo" 
+                        height="56" 
+                        style={{ height: "56px" }}
+                      />
+                    </td>
+                  </tr>
+                  
+                  {/* Divider */}
+                  <tr>
+                    <td style={{ borderTop: "1px solid #C6C6C6", padding: "16px 0 0" }}>
+                      <table width="100%" cellPadding="0" cellSpacing="0" border={0} role="presentation">
+                        <tr>
+                          <td align="center" style={{ padding: "0 0 24px" }}>
+                            <img 
+                              src={`${baseUrl}/icons/check.png`} 
+                              alt="Success" 
+                              width="48" 
+                              height="48"
+                              style={{ 
+                                width: "48px", 
+                                height: "48px", 
+                                color: "#3A9F5C" // Fallback if image doesn't load
+                              }}
+                            />
+                          </td>
+                        </tr>
+                      </table>
+                    </td>
+                  </tr>
+                  
+                  {/* Thank you message */}
+                  <tr>
+                    <td align="center" style={{ padding: "0 20px" }}>
+                      <p 
+                        style={{ 
+                          fontFamily: "'Manrope', Verdana, sans-serif", 
+                          fontWeight: "600", 
+                          textTransform: "uppercase", 
+                          fontSize: "32px", 
+                          lineHeight: "36px", 
+                          textAlign: "center", 
+                          marginBottom: "24px",
+                          marginTop: "0"
+                        }}
+                      >
+                        Mulțumim MULT!<br />
+                        comanda <span style={{ textDecoration: "underline" }}>#{order?.custom_id}</span> a fost preluată
                       </p>
-                      <div className={`flex gap-1 items-center`}>
-                        {product.product.sale &&
-                          product.product.sale.active && (
-                            <p className="text-gray text-base leading-5 font-semibold line-through mt-0">
-                              {product.product.price.toLocaleString()} MDL
+                    </td>
+                  </tr>
+                  
+                  {/* Email sent info */}
+                  <tr>
+                    <td align="center" style={{ padding: "0 20px 48px" }}>
+                      <p style={{ textAlign: "center", margin: "0" }}>
+                        Am trimis un e-mail la adresa <span style={{ fontFamily: "'Roboto-Bold', Verdana, sans-serif", fontWeight: "bold" }}>{order?.additional_info.user_data.email}</span> cu confirmarea și factura comenzii.<br /><br />
+                        Dacă nu ai primit e-mailul în două minute, te rugăm să verifici și folderul spam.
+                      </p>
+                    </td>
+                  </tr>
+                  
+                  {/* Order Summary */}
+                  <tr>
+                    <td style={{ borderTop: "1px solid #C6C6C6", paddingTop: "16px", paddingBottom: "48px" }}>
+                      <table width="100%" cellPadding="0" cellSpacing="0" border={0} role="presentation">
+                        <tr>
+                          <td style={{ padding: "0 0 16px" }}>
+                            <p 
+                              style={{ 
+                                fontFamily: "'Manrope', Verdana, sans-serif", 
+                                fontWeight: "600", 
+                                margin: "0"
+                              }}
+                            >
+                              Sumarul comenzii
                             </p>
+                          </td>
+                        </tr>
+                        
+                        {/* Products */}
+                        {order?.products.map((product, index) => (
+                          <tr key={index}>
+                            <td style={{ padding: "12px 0" }}>
+                              <table width="100%" cellPadding="0" cellSpacing="0" border={0} role="presentation">
+                                <tr>
+                                  <td width="129" valign="top" style={{ paddingRight: "16px" }}>
+                                    <div style={{ backgroundColor: "#ffffff", borderRadius: "8px", overflow: "hidden", width: "129px", height: "164px" }}>
+                                      <img
+                                        src={product.product.images[0]}
+                                        alt={product.product.title[locale]}
+                                        width="129"
+                                        height="164"
+                                        style={{ 
+                                          width: "129px", 
+                                          height: "164px", 
+                                          objectFit: "contain", 
+                                          display: "block"
+                                        }}
+                                      />
+                                    </div>
+                                  </td>
+                                  <td valign="top">
+                                    <table width="100%" cellPadding="0" cellSpacing="0" border={0} role="presentation">
+                                      <tr>
+                                        <td style={{ paddingBottom: "16px" }}>
+                                          <p 
+                                            style={{ 
+                                              fontFamily: "'Manrope', Verdana, sans-serif", 
+                                              fontSize: "14px", 
+                                              lineHeight: "20px", 
+                                              fontWeight: "600", 
+                                              margin: "0"
+                                            }}
+                                          >
+                                            {product.product.title[locale]}
+                                          </p>
+                                        </td>
+                                      </tr>
+                                      <tr>
+                                        <td style={{ paddingBottom: "16px" }}>
+                                          <table cellPadding="0" cellSpacing="0" border={0} role="presentation">
+                                            <tr>
+                                              {product.product.sale && product.product.sale.active && (
+                                                <td style={{ paddingRight: "8px" }}>
+                                                  <p 
+                                                    style={{ 
+                                                      color: "#929292", 
+                                                      fontSize: "16px", 
+                                                      lineHeight: "20px", 
+                                                      fontWeight: "600", 
+                                                      textDecoration: "line-through", 
+                                                      margin: "0"
+                                                    }}
+                                                  >
+                                                    {product.product.price.toLocaleString()} MDL
+                                                  </p>
+                                                </td>
+                                              )}
+                                              <td>
+                                                <div 
+                                                  style={{ 
+                                                    fontFamily: "'Manrope', Verdana, sans-serif", 
+                                                    fontWeight: "600", 
+                                                    border: "1px solid #929292", 
+                                                    borderRadius: "24px", 
+                                                    padding: "8px 16px", 
+                                                    display: "inline-block"
+                                                  }}
+                                                >
+                                                  {product.product.sale && product.product.sale.active
+                                                    ? product.product.sale.sale_price.toLocaleString()
+                                                    : product.product.price.toLocaleString()}{" "}
+                                                  MDL
+                                                </div>
+                                              </td>
+                                            </tr>
+                                          </table>
+                                        </td>
+                                      </tr>
+                                      <tr>
+                                        <td>
+                                          <p style={{ color: "#929292", margin: "0" }}>
+                                            Cantitatea: {product.quantity}
+                                          </p>
+                                        </td>
+                                      </tr>
+                                    </table>
+                                  </td>
+                                </tr>
+                              </table>
+                            </td>
+                          </tr>
+                        ))}
+                      </table>
+                    </td>
+                  </tr>
+                  
+                  {/* Price Summary */}
+                  <tr>
+                    <td style={{ borderTop: "1px solid #C6C6C6", paddingTop: "16px", paddingBottom: '48px' }}>
+                      <table width="100%" cellPadding="0" cellSpacing="0" border={0} role="presentation">
+                        {order?.delivery_method === DeliveryMethod.HOME_DELIVERY && (
+                          <tr>
+                            <td style={{ paddingBottom: "16px" }}>
+                              <table width="100%" cellPadding="0" cellSpacing="0" border={0} role="presentation">
+                                <tr>
+                                  <td>
+                                    <p style={{ margin: "0" }}>Subtotal:</p>
+                                  </td>
+                                  <td align="right">
+                                    <p style={{ margin: "0" }}>
+                                      {order?.products
+                                        .reduce(
+                                          (acc, item) =>
+                                            acc +
+                                            ((item.product.sale?.active
+                                              ? item.product.sale.sale_price
+                                              : item.product.price) || 0) *
+                                              item.quantity,
+                                          0
+                                        )
+                                        .toLocaleString()}{" "}
+                                      MDL
+                                    </p>
+                                  </td>
+                                </tr>
+                              </table>
+                            </td>
+                          </tr>
+                        )}
+                        
+                        {order?.delivery_method === DeliveryMethod.HOME_DELIVERY &&
+                          order?.additional_info.delivery_address?.region && (
+                            <tr>
+                              <td style={{ paddingBottom: "16px" }}>
+                                <table width="100%" cellPadding="0" cellSpacing="0" border={0} role="presentation">
+                                  <tr>
+                                    <td>
+                                      <p style={{ margin: "0" }}>Livrare:</p>
+                                    </td>
+                                    <td align="right">
+                                      <p style={{ margin: "0" }}>
+                                        {getDeliveryPrice(
+                                          order?.additional_info.delivery_address
+                                            .region as DeliveryRegions
+                                        )}{" "}
+                                        MDL
+                                      </p>
+                                    </td>
+                                  </tr>
+                                </table>
+                              </td>
+                            </tr>
                           )}
-                        <div
-                          className={`font-manrope font-semibold border-solid border border-gray rounded-3xl w-fit py-2 px-4`}
-                        >
-                          {product.product.sale && product.product.sale.active
-                            ? product.product.sale.sale_price.toLocaleString()
-                            : product.product.price.toLocaleString()}{" "}
-                          MDL
-                        </div>
-                      </div>
-                    </div>
-                    <p className="text-gray my-0">
-                      Cantitatea: {product.quantity}
-                    </p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-          <div className="border-t border-x-0 border-b-0 border-solid border-lightgray pt-4 mb-12 flex flex-col gap-4">
-            {order?.delivery_method === DeliveryMethod.HOME_DELIVERY && (
-              <div className="flex justify-between">
-                <p className="m-0">Subtotal:</p>
-                <p className="m-0">
-                  {order?.products
-                    .reduce(
-                      (acc, item) =>
-                        acc +
-                        ((item.product.sale?.active
-                          ? item.product.sale.sale_price
-                          : item.product.price) || 0) *
-                          item.quantity,
-                      0
-                    )
-                    .toLocaleString()}{" "}
-                  MDL
-                </p>
-              </div>
-            )}
-            {order?.delivery_method === DeliveryMethod.HOME_DELIVERY &&
-              order?.additional_info.delivery_address?.region && (
-                <div className="flex justify-between">
-                  <p className="m-0">Livrare:</p>
-                  <p className="m-0">
-                    {getDeliveryPrice(
-                      order?.additional_info.delivery_address
-                        .region as DeliveryRegions
-                    )}{" "}
-                    MDL
-                  </p>
-                </div>
-              )}
-            <div className="flex justify-between">
-              <p className="m-0">Total:</p>
-              <p className="font-roboto-bold mt-0">
-                {order?.total_cost.toLocaleString()} MDL
-              </p>
-            </div>
-          </div>
-          <div className="border-solid border-t border-x-0 border-b-0 border-lightgray pt-4 grid grid-cols-2 gap-x-6 gap-y-8">
-            <div className="flex flex-col gap-2">
-              <p className="font-manrope font-semibold mb-2 mt-0">
-                Detalii de contact
-              </p>
-              <p className="m-0">
-                {order?.additional_info.user_data.firstname}{" "}
-                {order?.additional_info.user_data.lastname}
-              </p>
-              <p className="m-0">
-                Email: {order?.additional_info.user_data.email}
-              </p>
-              <p className="m-0">
-                Metodă de plată: {order?.additional_info.user_data.tel_number}
-              </p>
-            </div>
-            <div className="flex flex-col gap-2">
-              <p className="font-manrope font-semibold mb-2 mt-0">
-                Datalii comandă
-              </p>
-              <p className="m-0">
-                Data:{" "}
-                {order?.createdAt
-                  ? new Date(order.createdAt).toLocaleDateString("ro-RO", {
-                      day: "2-digit",
-                      month: "2-digit",
-                      year: "numeric",
-                    })
-                  : "Data indisponibilă"}
-              </p>
-              <p className="m-0">Metodă de plată: {order?.payment_method}</p>
-            </div>
-            {order?.delivery_method === DeliveryMethod.HOME_DELIVERY &&
-              order?.additional_info.delivery_address && (
-                <div className="flex flex-col gap-2">
-                  <p className="font-manrope font-semibold mb-2 mt-0">
-                    Adresa de livrare
-                  </p>
-                  <p className="m-0">
-                    {order?.additional_info.user_data.firstname}{" "}
-                    {order?.additional_info.user_data.lastname}
-                  </p>
-                  <p className="m-0">
-                    {order?.additional_info.delivery_address.home_address}{" "}
-                    {order?.additional_info.delivery_address.home_nr}
-                  </p>
-                  <p className="m-0">
-                    {
-                      order?.additional_info.delivery_address.region.split(
-                        " - "
-                      )[0]
-                    }
-                    , {order?.additional_info.delivery_address.city}
-                  </p>
-                  <p className="m-0">Republica Moldova</p>
-                </div>
-              )}
-            <div className="flex flex-col gap-2">
-              <p className="font-manrope font-semibold mb-2 mt-0">
-                Adresa de facturare
-              </p>
-              <p className="m-0">
-                {order?.additional_info.user_data.firstname}{" "}
-                {order?.additional_info.user_data.lastname}
-              </p>
-              <p className="m-0">
-                {order?.additional_info.billing_address.home_address}{" "}
-                {order?.additional_info.billing_address.home_nr}
-              </p>
-              <p className="m-0">
-                {order?.additional_info.billing_address.region.split(" - ")[0]},{" "}
-                {order?.additional_info.billing_address.city}
-              </p>
-              <p className="m-0">Republica Moldova</p>
-            </div>
-          </div>
-          <div className="bg-blue px-6 pt-12 pb-6 mt-12 text-purewhite">
-            <p className="m-0">Dacă ai întrebări, te rugăm să ne <a href={`${baseUrl}/contacts`} target="_blank" className="text-white">contactezi.</a> Pentru mai multe informații despre drepturile tale legale privind anulările, te rugăm să consulți <a href={`${baseUrl}/contacts`} target="_blank" className="text-white">politica noastră de retur.</a> <br/><br/><br/> DIM EXPRES S.R.L. <br/> Adresă juridică și poștală: mun. Chișinău, str. Alecu Russo, nr. 15, of. 59, Moldova <br/> Cod fiscal: 1015600006586 <br/> Director General: Irina Cecan <br/><br/><br/> © 2025 CADO. Toate drepturile rezervate.</p>
-          </div>
-        </Body>
-      </Tailwind>
-    </Html>
-  );
-};
-
-export default OrderConfirmationEmail;
+                        
+                        <tr>
+                          <td>
+                            <table width="100%" cellPadding="0" cellSpacing="0" border={0} role="presentation">
+                              <tr>
+                                <td>
+                                  <p style={{ margin: "0" }}>Total:</p>
+                                </td>
+                                <td align="right">
+                                  <p style={{ 
+                                    fontFamily: "'Roboto-Bold', Verdana, sans-serif",
+                                    fontWeight: "bold",
+                                    margin: "0" 
+                                  }}>
+                                    {order?.total_cost.toLocaleString()} MDL
+                                  </p>
+                                </td>
+                              </tr>
+                            </table>
+                          </td>
+                        </tr>
+                      </table>
+                    </td>
+                  </tr>
+                  
+                  {/* Contact and Order Details */}
+                  <tr>
+                    <td style={{ borderTop: "1px solid #C6C6C6", paddingTop: "16px", paddingBottom: '48px' }}>
+                      <table width="100%" cellPadding="0" cellSpacing="0" border={0} role="presentation">
+                        <tr>
+                          <td style={{ paddingBottom: "32px" }}>
+                            <table width="100%" cellPadding="0" cellSpacing="0" border={0} role="presentation">
+                              <tr>
+                                {/* Contact Details */}
+                                <td width="50%" valign="top" style={{ paddingRight: "12px" }}>
+                                  <table width="100%" cellPadding="0" cellSpacing="0" border={0} role="presentation">
+                                    <tr>
+                                      <td style={{ paddingBottom: "8px" }}>
+                                        <p style={{ 
+                                          fontFamily: "'Manrope', Verdana, sans-serif",
+                                          fontWeight: "600",
+                                          margin: "0"
+                                        }}>
+                                          Detalii de contact
+                                        </p>
+                                      </td>
+                                    </tr>
+                                    <tr>
+                                      <td style={{ paddingBottom: "4px" }}>
+                                        <p style={{ margin: "0" }}>
+                                          {order?.additional_info.user_data.firstname}{" "}
+                                          {order?.additional_info.user_data.lastname}
+                                        </p>
+                                      </td>
+                                    </tr>
+                                    <tr>
+                                      <td style={{ paddingBottom: "4px" }}>
+                                        <p style={{ margin: "0" }}>
+                                          Email: {order?.additional_info.user_data.email}
+                                        </p>
+                                      </td>
+                                    </tr>
+                                    <tr>
+                                      <td>
+                                        <p style={{ margin: "0" }}>
+                                          Telefon: {order?.additional_info.user_data.tel_number}
+                                        </p>
+                                      </td>
+                                    </tr>
+                                  </table>
+                                </td>
+                                
+                                {/* Order Details */}
+                                <td width="50%" valign="top" style={{ paddingLeft: "12px" }}>
+                                  <table width="100%" cellPadding="0" cellSpacing="0" border={0} role="presentation">
+                                    <tr>
+                                      <td style={{ paddingBottom: "8px" }}>
+                                        <p style={{ 
+                                          fontFamily: "'Manrope', Verdana, sans-serif",
+                                          fontWeight: "600",
+                                          margin: "0"
+                                        }}>
+                                          Detalii comandă
+                                        </p>
+                                      </td>
+                                    </tr>
+                                    <tr>
+                                      <td style={{ paddingBottom: "4px" }}>
+                                        <p style={{ margin: "0" }}>
+                                          Data:{" "}
+                                          {order?.createdAt
+                                            ? new Date(order.createdAt).toLocaleDateString("ro-RO", {
+                                                day: "2-digit",
+                                                month: "2-digit",
+                                                year: "numeric",
+                                              })
+                                            : "Data indisponibilă"}
+                                        </p>
+                                      </td>
+                                    </tr>
+                                    <tr>
+                                      <td>
+                                        <p style={{ margin: "0" }}>Metodă de plată: {paymentMethodName}</p>
+                                      </td>
+                                    </tr>
+                                  </table>
+                                </td>
+                              </tr>
+                            </table>
+                          </td>
+                        </tr>
+                        
+                        <tr>
+                          <td>
+                            <table width="100%" cellPadding="0" cellSpacing="0" border={0} role="presentation">
+                              <tr>
+                                {/* Delivery Address */}
+                                {order?.delivery_method === DeliveryMethod.HOME_DELIVERY &&
+                                  order?.additional_info.delivery_address && (
+                                    <td width="50%" valign="top" style={{ paddingRight: "12px" }}>
+                                      <table width="100%" cellPadding="0" cellSpacing="0" border={0} role="presentation">
+                                        <tr>
+                                          <td style={{ paddingBottom: "8px" }}>
+                                            <p style={{ 
+                                              fontFamily: "'Manrope', Verdana, sans-serif",
+                                              fontWeight: "600",
+                                              margin: "0"
+                                            }}>
+                                              Adresa de livrare
+                                            </p>
+                                          </td>
+                                        </tr>
+                                        <tr>
+                                          <td style={{ paddingBottom: "4px" }}>
+                                            <p style={{ margin: "0" }}>
+                                              {order?.additional_info.user_data.firstname}{" "}
+                                              {order?.additional_info.user_data.lastname}
+                                            </p>
+                                          </td>
+                                        </tr>
+                                        <tr>
+                                          <td style={{ paddingBottom: "4px" }}>
+                                            <p style={{ margin: "0" }}>
+                                              {order?.additional_info.delivery_address.home_address}{" "}
+                                              {order?.additional_info.delivery_address.home_nr}
+                                            </p>
+                                          </td>
+                                        </tr>
+                                        <tr>
+                                          <td style={{ paddingBottom: "4px" }}>
+                                            <p style={{ margin: "0" }}>
+                                              {typeof order?.additional_info.delivery_address.region === 'string' ? 
+                                                order?.additional_info.delivery_address.region.split(" - ")[0] : 
+                                                order?.additional_info.delivery_address.region
+                                              },
+                                              {" "}{order?.additional_info.delivery_address.city}
+                                            </p>
+                                          </td>
+                                        </tr>
+                                        <tr>
+                                          <td>
+                                            <p style={{ margin: "0" }}>Republica Moldova</p>
+                                          </td>
+                                        </tr>
+                                      </table>
+                                    </td>
+                                  )}
+                                
+                                {/* Billing Address */}
+                                <td width={order?.delivery_method === DeliveryMethod.HOME_DELIVERY ? "50%" : "100%"} valign="top" style={{ paddingLeft: order?.delivery_method === DeliveryMethod.HOME_DELIVERY ? "12px" : "0" }}>
+                                  <table width="100%" cellPadding="0" cellSpacing="0" border={0} role="presentation">
+                                    <tr>
+                                      <td style={{ paddingBottom: "8px" }}>
+                                        <p style={{ 
+                                          fontFamily: "'Manrope', Verdana, sans-serif",
+                                          fontWeight: "600",
+                                          margin: "0"
+                                        }}>
+                                          Adresa de facturare
+                                        </p>
+                                      </td>
+                                    </tr>
+                                    <tr>
+                                      <td style={{ paddingBottom: "4px" }}>
+                                        <p style={{ margin: "0" }}>
+                                          {order?.additional_info.user_data.firstname}{" "}
+                                          {order?.additional_info.user_data.lastname}
+                                        </p>
+                                      </td>
+                                    </tr>
+                                    <tr>
+                                      <td style={{ paddingBottom: "4px" }}>
+                                        <p style={{ margin: "0" }}>
+                                          {order?.additional_info.billing_address.home_address}{" "}
+                                          {order?.additional_info.billing_address.home_nr}
+                                        </p>
+                                      </td>
+                                    </tr>
+                                    <tr>
+                                      <td style={{ paddingBottom: "4px" }}>
+                                        <p style={{ margin: "0" }}>
+                                          {typeof order?.additional_info.billing_address.region === 'string' ? 
+                                            order?.additional_info.billing_address.region.split(" - ")[0] : 
+                                            order?.additional_info.billing_address.region
+                                          },
+                                          {" "}{order?.additional_info.billing_address.city}
+                                        </p>
+                                      </td>
+                                    </tr>
+                                    <tr>
+                                      <td>
+                                        <p style={{ margin: "0" }}>Republica Moldova</p>
+                                      </td>
+                                    </tr>
+                                  </table>
+                                </td>
+                              </tr>
+                            </table>
+                          </td>
+                        </tr>
+                      </table>
+                    </td>
+                  </tr>
+                  
+                  {/* Footer */}
+                  <tr>
+                    <td style={{ backgroundColor: "#8AA1C4", padding: "48px 24px 24px", marginTop: "48px", color: "#ffffff" }}>
+                      <table width="100%" cellPadding="0" cellSpacing="0" border={0} role="presentation">
+                        <tr>
+                          <td>
+                            <p style={{ margin: "0", lineHeight: "1.5" }}>
+                              Dacă ai întrebări, te rugăm să ne <a href={`${baseUrl}/contacts`} target="_blank" style={{ color: "#ffffff" }}>contactezi.</a> Pentru mai multe informații despre drepturile tale legale privind anulările, te rugăm să consulți <a href={`${baseUrl}/contacts`} target="_blank" style={{ color: "#ffffff" }}>politica noastră de retur.</a>
+                              <br/><br/><br/>
+                              DIM EXPRES S.R.L.
+                              <br/>
+                              Adresă juridică și poștală: mun. Chișinău, str. Alecu Russo, nr. 15, of. 59, Moldova
+                              <br/>
+                              Cod fiscal: 1015600006586
+                              <br/>
+                              Director General: Irina Cecan
+                              <br/><br/><br/>
+                              © 2025 CADO. Toate drepturile rezervate.
+                            </p>
+                          </td>
+                        </tr>
+                      </table>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+          </table>
+        </body>
+      </Html>
+    );
+  }
