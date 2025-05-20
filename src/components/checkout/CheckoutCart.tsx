@@ -147,7 +147,7 @@ export default function CheckoutCart({items, setValue, deliveryRegion, deliveryH
                 }
                 <div className="flex justify-between items-end mb-4">
                     <p>Total:</p>
-                    <p>
+                    <p className="font-semibold">
                         {mounted && (items.reduce((acc, item) => {
                             const product = products.find(product => product.custom_id === item.productId);
                             return acc + (product && product.sale.active ? product.sale.sale_price : product?.price || 0) * item.quantity;
