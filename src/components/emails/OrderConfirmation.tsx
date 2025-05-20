@@ -138,7 +138,7 @@ import { CartProducts } from "@/models/order/types/cartProducts";
           <Container style={container}>
             <Section style={header}>
               <Img
-                src={`${baseUrl}/logo/logo-white.svg`}
+                src={`${baseUrl}/logo/logo-white.png`}
                 width="120"
                 height="50"
                 alt="Logo"
