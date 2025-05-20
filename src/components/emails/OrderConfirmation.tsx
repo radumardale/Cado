@@ -27,25 +27,6 @@ export const OrderConfirmationEmail = ({
   locale,
   baseUrl = "https://cado-henna.vercel.app",
 }: OrderConfirmationEmailProps) => {
-  // Format date
-  const formattedDate = order.createdAt
-    ? new Date(order.createdAt).toLocaleDateString("ro-RO", {
-        day: "2-digit",
-        month: "2-digit",
-        year: "numeric",
-      })
-    : "Data indisponibilă";
-
-  // Calculate subtotal
-  const subtotal = order.products.reduce(
-    (acc, item) =>
-      acc +
-      ((item.product.sale?.active
-        ? item.product.sale.sale_price
-        : item.product.price) || 0) *
-        item.quantity,
-    0
-  );
 
   return (
     <Html>

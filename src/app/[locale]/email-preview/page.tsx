@@ -128,31 +128,6 @@ export default function EmailPreviewPage() {
         }
       };
       
-      const mockProducts = [
-        {
-          product: {
-            _id: 'prod1',
-            custom_id: 'prod1',
-            title: { ro: 'Buchet de flori', ru: 'Букет цветов', en: 'Flower Bouquet' },
-            price: 350,
-            sale: { active: true, sale_price: 300 },
-            images: ['https://example.com/image1.jpg']
-          },
-          quantity: 1
-        },
-        {
-          product: {
-            _id: 'prod2',
-            custom_id: 'prod2',
-            title: { ro: 'Aranjament floral', ru: 'Цветочная композиция', en: 'Floral Arrangement' },
-            price: 500,
-            sale: { active: false, sale_price: 0 },
-            images: ['https://example.com/image2.jpg']
-          },
-          quantity: 2
-        }
-      ];
-      
       // Render the email
       const emailHtml = await render(
         <OrderConfirmationEmail

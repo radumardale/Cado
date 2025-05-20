@@ -104,17 +104,8 @@ export const addOrderProcedure = publicProcedure
       // Send email
       const transporter = nodemailer.createTransport(mailConfig);
 
-      const productsWithSale = input.products.map(item => ({
-        ...item,
-        product: {
-          ...item.product,
-          sale: item.product.sale || { active: false, sale_price: 0 }
-        }
-      }));
-
       const emailHtml = await render(OrderConfirmation({
         order: order.toObject() as ResOrderInterface,
-        products: productsWithSale,
         locale: "ro",
         paymentMethodName: input.payment_method,
         regionName: input.additional_info.delivery_address?.region || "",
