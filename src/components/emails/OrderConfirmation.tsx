@@ -29,14 +29,6 @@ import {
       <Html>
         <Head>
           <Font
-            fontFamily="Manrope"
-            fallbackFontFamily="Verdana"
-            webFont={{
-              url: `${baseUrl}/fonts/Manrope-Medium.ttf`,
-              format: "truetype",
-            }}
-          />
-          <Font
             fontFamily="Roboto-Bold"
             fallbackFontFamily="Verdana"
             webFont={{
@@ -60,8 +52,8 @@ import {
                 padding: 0;
                 -webkit-font-smoothing: antialiased;
               }
-              .manrope {
-                font-family: 'Manrope', Verdana, sans-serif;
+              .arial {
+                font-family: 'Arial', Verdana, sans-serif;
               }
               .roboto-bold {
                 font-family: 'Roboto-Bold', Verdana, sans-serif;
@@ -117,10 +109,10 @@ import {
                     <td align="center" style={{ padding: "0 20px" }}>
                       <p 
                         style={{ 
-                          fontFamily: "'Manrope', Verdana, sans-serif", 
+                          fontFamily: "'Arial', Verdana, sans-serif", 
                           fontWeight: "600", 
                           textTransform: "uppercase", 
-                          fontSize: "32px", 
+                          fontSize: "24px", 
                           lineHeight: "36px", 
                           textAlign: "center", 
                           marginBottom: "24px",
@@ -145,205 +137,205 @@ import {
                   
                   {/* Order Summary */}
                   <tr>
-                    <td style={{ borderTop: "1px solid #C6C6C6", paddingTop: "16px", paddingBottom: "48px" }}>
+                    <td style={{ borderTop: "1px solid #C6C6C6", paddingTop: "16px", paddingBottom: "48px", paddingLeft: "24px", paddingRight: "24px" }}>
                       <table width="100%" cellPadding="0" cellSpacing="0" border={0} role="presentation">
-                        <tr>
-                          <td style={{ padding: "0 0 16px" }}>
-                            <p 
+                      <tr>
+                        <td style={{ padding: "0 0 16px" }}>
+                        <p 
+                          style={{ 
+                          fontFamily: "'Arial', Verdana, sans-serif", 
+                          fontWeight: "600", 
+                          margin: "0"
+                          }}
+                        >
+                          Sumarul comenzii
+                        </p>
+                        </td>
+                      </tr>
+                      
+                      {/* Products */}
+                      {order?.products.map((product, index) => (
+                        <tr key={index}>
+                        <td style={{ padding: "12px 0" }}>
+                          <table width="100%" cellPadding="0" cellSpacing="0" border={0} role="presentation">
+                          <tr>
+                            <td width="129" valign="top" style={{ paddingRight: "16px" }}>
+                            <div style={{ backgroundColor: "#ffffff", borderRadius: "8px", overflow: "hidden", width: "129px", height: "164px" }}>
+                              <img
+                              src={product.product.images[0]}
+                              alt={product.product.title[locale]}
+                              width="129"
+                              height="164"
                               style={{ 
-                                fontFamily: "'Manrope', Verdana, sans-serif", 
-                                fontWeight: "600", 
-                                margin: "0"
+                                width: "129px", 
+                                height: "164px", 
+                                objectFit: "contain", 
+                                display: "block"
                               }}
-                            >
-                              Sumarul comenzii
-                            </p>
-                          </td>
-                        </tr>
-                        
-                        {/* Products */}
-                        {order?.products.map((product, index) => (
-                          <tr key={index}>
-                            <td style={{ padding: "12px 0" }}>
-                              <table width="100%" cellPadding="0" cellSpacing="0" border={0} role="presentation">
+                              />
+                            </div>
+                            </td>
+                            <td valign="top">
+                            <table width="100%" cellPadding="0" cellSpacing="0" border={0} role="presentation">
+                              <tr>
+                              <td style={{ paddingBottom: "16px" }}>
+                                <p 
+                                style={{ 
+                                  fontFamily: "'Arial', Verdana, sans-serif", 
+                                  fontSize: "14px", 
+                                  lineHeight: "20px", 
+                                  fontWeight: "600", 
+                                  margin: "0"
+                                }}
+                                >
+                                {product.product.title[locale]}
+                                </p>
+                              </td>
+                              </tr>
+                              <tr>
+                              <td style={{ paddingBottom: "16px" }}>
+                                <table cellPadding="0" cellSpacing="0" border={0} role="presentation">
                                 <tr>
-                                  <td width="129" valign="top" style={{ paddingRight: "16px" }}>
-                                    <div style={{ backgroundColor: "#ffffff", borderRadius: "8px", overflow: "hidden", width: "129px", height: "164px" }}>
-                                      <img
-                                        src={product.product.images[0]}
-                                        alt={product.product.title[locale]}
-                                        width="129"
-                                        height="164"
-                                        style={{ 
-                                          width: "129px", 
-                                          height: "164px", 
-                                          objectFit: "contain", 
-                                          display: "block"
-                                        }}
-                                      />
-                                    </div>
+                                  {product.product.sale && product.product.sale.active && (
+                                  <td style={{ paddingRight: "8px" }}>
+                                    <p 
+                                    style={{ 
+                                      color: "#929292", 
+                                      fontSize: "16px", 
+                                      lineHeight: "20px", 
+                                      fontWeight: "600", 
+                                      textDecoration: "line-through", 
+                                      margin: "0"
+                                    }}
+                                    >
+                                    {product.product.price.toLocaleString()} MDL
+                                    </p>
                                   </td>
-                                  <td valign="top">
-                                    <table width="100%" cellPadding="0" cellSpacing="0" border={0} role="presentation">
-                                      <tr>
-                                        <td style={{ paddingBottom: "16px" }}>
-                                          <p 
-                                            style={{ 
-                                              fontFamily: "'Manrope', Verdana, sans-serif", 
-                                              fontSize: "14px", 
-                                              lineHeight: "20px", 
-                                              fontWeight: "600", 
-                                              margin: "0"
-                                            }}
-                                          >
-                                            {product.product.title[locale]}
-                                          </p>
-                                        </td>
-                                      </tr>
-                                      <tr>
-                                        <td style={{ paddingBottom: "16px" }}>
-                                          <table cellPadding="0" cellSpacing="0" border={0} role="presentation">
-                                            <tr>
-                                              {product.product.sale && product.product.sale.active && (
-                                                <td style={{ paddingRight: "8px" }}>
-                                                  <p 
-                                                    style={{ 
-                                                      color: "#929292", 
-                                                      fontSize: "16px", 
-                                                      lineHeight: "20px", 
-                                                      fontWeight: "600", 
-                                                      textDecoration: "line-through", 
-                                                      margin: "0"
-                                                    }}
-                                                  >
-                                                    {product.product.price.toLocaleString()} MDL
-                                                  </p>
-                                                </td>
-                                              )}
-                                              <td>
-                                                <div 
-                                                  style={{ 
-                                                    fontFamily: "'Manrope', Verdana, sans-serif", 
-                                                    fontWeight: "600", 
-                                                    border: "1px solid #929292", 
-                                                    borderRadius: "24px", 
-                                                    padding: "8px 16px", 
-                                                    display: "inline-block"
-                                                  }}
-                                                >
-                                                  {product.product.sale && product.product.sale.active
-                                                    ? product.product.sale.sale_price.toLocaleString()
-                                                    : product.product.price.toLocaleString()}{" "}
-                                                  MDL
-                                                </div>
-                                              </td>
-                                            </tr>
-                                          </table>
-                                        </td>
-                                      </tr>
-                                      <tr>
-                                        <td>
-                                          <p style={{ color: "#929292", margin: "0" }}>
-                                            Cantitatea: {product.quantity}
-                                          </p>
-                                        </td>
-                                      </tr>
-                                    </table>
+                                  )}
+                                  <td>
+                                  <div 
+                                    style={{ 
+                                    fontFamily: "'Arial', Verdana, sans-serif", 
+                                    fontWeight: "600", 
+                                    border: "1px solid #929292", 
+                                    borderRadius: "24px", 
+                                    padding: "8px 16px", 
+                                    display: "inline-block"
+                                    }}
+                                  >
+                                    {product.product.sale && product.product.sale.active
+                                    ? product.product.sale.sale_price.toLocaleString()
+                                    : product.product.price.toLocaleString()}{" "}
+                                    MDL
+                                  </div>
                                   </td>
                                 </tr>
-                              </table>
+                                </table>
+                              </td>
+                              </tr>
+                              <tr>
+                              <td>
+                                <p style={{ color: "#929292", margin: "0" }}>
+                                Cantitatea: {product.quantity}
+                                </p>
+                              </td>
+                              </tr>
+                            </table>
                             </td>
                           </tr>
-                        ))}
+                          </table>
+                        </td>
+                        </tr>
+                      ))}
                       </table>
                     </td>
                   </tr>
                   
                   {/* Price Summary */}
                   <tr>
-                    <td style={{ borderTop: "1px solid #C6C6C6", paddingTop: "16px", paddingBottom: '48px' }}>
+                    <td style={{ borderTop: "1px solid #C6C6C6", paddingTop: "16px", paddingBottom: '48px', paddingLeft: "24px", paddingRight: "24px" }}>
                       <table width="100%" cellPadding="0" cellSpacing="0" border={0} role="presentation">
-                        {order?.delivery_method === DeliveryMethod.HOME_DELIVERY && (
+                      {order?.delivery_method === DeliveryMethod.HOME_DELIVERY && (
+                        <tr>
+                        <td style={{ paddingBottom: "16px" }}>
+                          <table width="100%" cellPadding="0" cellSpacing="0" border={0} role="presentation">
                           <tr>
-                            <td style={{ paddingBottom: "16px" }}>
-                              <table width="100%" cellPadding="0" cellSpacing="0" border={0} role="presentation">
-                                <tr>
-                                  <td>
-                                    <p style={{ margin: "0" }}>Subtotal:</p>
-                                  </td>
-                                  <td align="right">
-                                    <p style={{ margin: "0" }}>
-                                      {order?.products
-                                        .reduce(
-                                          (acc, item) =>
-                                            acc +
-                                            ((item.product.sale?.active
-                                              ? item.product.sale.sale_price
-                                              : item.product.price) || 0) *
-                                              item.quantity,
-                                          0
-                                        )
-                                        .toLocaleString()}{" "}
-                                      MDL
-                                    </p>
-                                  </td>
-                                </tr>
-                              </table>
+                            <td>
+                            <p style={{ margin: "0" }}>Subtotal:</p>
+                            </td>
+                            <td align="right">
+                            <p style={{ margin: "0" }}>
+                              {order?.products
+                              .reduce(
+                                (acc, item) =>
+                                acc +
+                                ((item.product.sale?.active
+                                  ? item.product.sale.sale_price
+                                  : item.product.price) || 0) *
+                                  item.quantity,
+                                0
+                              )
+                              .toLocaleString()}{" "}
+                              MDL
+                            </p>
                             </td>
                           </tr>
-                        )}
-                        
-                        {order?.delivery_method === DeliveryMethod.HOME_DELIVERY &&
-                          order?.additional_info.delivery_address?.region && (
-                            <tr>
-                              <td style={{ paddingBottom: "16px" }}>
-                                <table width="100%" cellPadding="0" cellSpacing="0" border={0} role="presentation">
-                                  <tr>
-                                    <td>
-                                      <p style={{ margin: "0" }}>Livrare:</p>
-                                    </td>
-                                    <td align="right">
-                                      <p style={{ margin: "0" }}>
-                                        {getDeliveryPrice(
-                                          order?.additional_info.delivery_address
-                                            .region as DeliveryRegions
-                                        )}{" "}
-                                        MDL
-                                      </p>
-                                    </td>
-                                  </tr>
-                                </table>
-                              </td>
-                            </tr>
-                          )}
-                        
+                          </table>
+                        </td>
+                        </tr>
+                      )}
+                      
+                      {order?.delivery_method === DeliveryMethod.HOME_DELIVERY &&
+                        order?.additional_info.delivery_address?.region && (
                         <tr>
-                          <td>
-                            <table width="100%" cellPadding="0" cellSpacing="0" border={0} role="presentation">
-                              <tr>
-                                <td>
-                                  <p style={{ margin: "0" }}>Total:</p>
-                                </td>
-                                <td align="right">
-                                  <p style={{ 
-                                    fontFamily: "'Roboto-Bold', Verdana, sans-serif",
-                                    fontWeight: "bold",
-                                    margin: "0" 
-                                  }}>
-                                    {order?.total_cost.toLocaleString()} MDL
-                                  </p>
-                                </td>
-                              </tr>
-                            </table>
+                          <td style={{ paddingBottom: "16px" }}>
+                          <table width="100%" cellPadding="0" cellSpacing="0" border={0} role="presentation">
+                            <tr>
+                            <td>
+                              <p style={{ margin: "0" }}>Livrare:</p>
+                            </td>
+                            <td align="right">
+                              <p style={{ margin: "0" }}>
+                              {getDeliveryPrice(
+                                order?.additional_info.delivery_address
+                                .region as DeliveryRegions
+                              )}{" "}
+                              MDL
+                              </p>
+                            </td>
+                            </tr>
+                          </table>
                           </td>
                         </tr>
+                        )}
+                      
+                      <tr>
+                        <td>
+                        <table width="100%" cellPadding="0" cellSpacing="0" border={0} role="presentation">
+                          <tr>
+                          <td>
+                            <p style={{ margin: "0" }}>Total:</p>
+                          </td>
+                          <td align="right">
+                            <p style={{ 
+                            fontFamily: "'Roboto-Bold', Verdana, sans-serif",
+                            fontWeight: "bold",
+                            margin: "0" 
+                            }}>
+                            {order?.total_cost.toLocaleString()} MDL
+                            </p>
+                          </td>
+                          </tr>
+                        </table>
+                        </td>
+                      </tr>
                       </table>
                     </td>
                   </tr>
                   
                   {/* Contact and Order Details */}
                   <tr>
-                    <td style={{ borderTop: "1px solid #C6C6C6", paddingTop: "16px", paddingBottom: '48px' }}>
+                    <td style={{ borderTop: "1px solid #C6C6C6", paddingTop: "16px", paddingBottom: '48px', paddingLeft: "24px", paddingRight: "24px" }}>
                       <table width="100%" cellPadding="0" cellSpacing="0" border={0} role="presentation">
                         <tr>
                           <td style={{ paddingBottom: "32px" }}>
@@ -355,7 +347,7 @@ import {
                                     <tr>
                                       <td style={{ paddingBottom: "8px" }}>
                                         <p style={{ 
-                                          fontFamily: "'Manrope', Verdana, sans-serif",
+                                          fontFamily: "'Arial', Verdana, sans-serif",
                                           fontWeight: "600",
                                           margin: "0"
                                         }}>
@@ -394,7 +386,7 @@ import {
                                     <tr>
                                       <td style={{ paddingBottom: "8px" }}>
                                         <p style={{ 
-                                          fontFamily: "'Manrope', Verdana, sans-serif",
+                                          fontFamily: "'Arial', Verdana, sans-serif",
                                           fontWeight: "600",
                                           margin: "0"
                                         }}>
@@ -440,7 +432,7 @@ import {
                                         <tr>
                                           <td style={{ paddingBottom: "8px" }}>
                                             <p style={{ 
-                                              fontFamily: "'Manrope', Verdana, sans-serif",
+                                              fontFamily: "'Arial', Verdana, sans-serif",
                                               fontWeight: "600",
                                               margin: "0"
                                             }}>
@@ -490,7 +482,7 @@ import {
                                     <tr>
                                       <td style={{ paddingBottom: "8px" }}>
                                         <p style={{ 
-                                          fontFamily: "'Manrope', Verdana, sans-serif",
+                                          fontFamily: "'Arial', Verdana, sans-serif",
                                           fontWeight: "600",
                                           margin: "0"
                                         }}>
@@ -547,7 +539,7 @@ import {
                         <tr>
                           <td>
                             <p style={{ margin: "0", lineHeight: "1.5" }}>
-                              Dacă ai întrebări, te rugăm să ne <a href={`${baseUrl}/contacts`} target="_blank" style={{ color: "#ffffff" }}>contactezi.</a> Pentru mai multe informații despre drepturile tale legale privind anulările, te rugăm să consulți <a href={`${baseUrl}/contacts`} target="_blank" style={{ color: "#ffffff" }}>politica noastră de retur.</a>
+                              Dacă ai întrebări, te rugăm să ne <a href={`${baseUrl}/contacts`} target="_blank" style={{ color: "#ffffff" }}>contactezi.</a> Pentru mai multe informații despre drepturile tale legale privind anulările, te rugăm să consulți <a href={`${baseUrl}/terms`} target="_blank" style={{ color: "#ffffff" }}>politica noastră de retur.</a>
                               <br/><br/><br/>
                               DIM EXPRES S.R.L.
                               <br/>

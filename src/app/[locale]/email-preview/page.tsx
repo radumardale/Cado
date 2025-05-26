@@ -89,6 +89,9 @@ export default function EmailPreviewPage() {
         // Client information
         client: {
           email: "john.doe@example.com",
+          firstname: "John",
+          lastname: "Doe",
+          tel_number: "+37369123456",
           orders: []
         },
         

@@ -62,10 +62,10 @@ export default function AdminProductDetails() {
 
   return (
     <>
-        <div className='col-start-2 col-span-6 flex justify-between items-center mb-6'>
+        <div className='xl:col-start-2 col-span-7 xl:col-span-6 flex justify-between items-center mb-6'>
             <p className='font-manrope text-2xl font-semibold leading-7'>Detalii produs</p>
         </div>
-            <div className="col-start-2 col-span-6 grid grid-cols-6 gap-x-6 gap-y-4 pb-8">
+            <div className="xl:col-start-2 col-span-7 xl:col-span-6 grid grid-cols-6 gap-x-6 gap-y-4 pb-8">
                 <FormField
                     control={form.control}
                     name="data.title.ro"

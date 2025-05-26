@@ -56,7 +56,7 @@ export default function PcCatalogSidebar({priceState, categoriesState, ocasionsS
   const maxPrice = useCatalogStore((state) => state.maxPrice);
 
   return (
-    <div data-lenis-prevent className="hidden lg:block scroll-bar-custom col-start-1 col-span-3 h-[calc(100vh-13rem)] overflow-y-scroll mt-12 sticky top-[9rem] pr-4">
+    <div data-lenis-prevent className="hidden lg:block scroll-bar-custom col-start-1 col-span-3 h-[calc(100vh-13rem)] overflow-y-scroll mt-12 sticky top-[9rem] pr-2 xl:pr-4">
       <LayoutGroup>
         <AnimatePresence>
         {

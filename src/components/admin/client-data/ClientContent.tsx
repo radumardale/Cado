@@ -2,29 +2,29 @@
 
 import { trpc } from '@/app/_trpc/client';
 import { productsLimit } from '@/lib/constants';
-import { useProductsSearchStore } from '@/states/admin/ProductsSearchState';
 import React, { useEffect, useRef, useState } from 'react'
-import ProductsGrid from './ProductsGrid';
-import ProductsTable from './ProductsTable';
+import ClientTable from './ClientTable';
+import { useClientSearchStore } from '@/states/admin/ClientsSearchState';
 
-export default function ProductsContent() {
+export default function ClientContent() {
     const closeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-    const searchText = useProductsSearchStore((store) => store.search);
-    const sortBy = useProductsSearchStore((store) => store.sortBy);
-    const gridLayout = useProductsSearchStore((store) => store.gridLayout);
+    const searchText = useClientSearchStore((store) => store.search);
+    const sortBy = useClientSearchStore((store) => store.sortBy);
     const observerRef = useRef<HTMLDivElement>(null);
     const [queryText, setQueryText] = useState('');
 
-    const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = trpc.products.getAdminProducts.useInfiniteQuery({
-        limit: productsLimit,
-        title: queryText.length > 2 ? queryText.split(" ").join("+") : null,
-        sortBy: sortBy,
-    },
-    { 
-        getNextPageParam: (lastPage) => lastPage.nextCursor,
-    });
+    const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = trpc.getAllClients.useInfiniteQuery(
+        {
+          limit: productsLimit,
+          searchQuery: queryText.length > 2 ? queryText.split(" ").join("+") : undefined,
+          sortBy: sortBy
+        },
+        { 
+          getNextPageParam: (lastPage) => lastPage.nextCursor,
+        }
+      );
 
-    const [queryProducts, setQueryProducts] = useState(data?.pages.flatMap(page => page.products) || []);
+    const [queryClients, setQueryClients] = useState(data?.pages.flatMap(page => page.clients) || []);
 
     useEffect(() => {
         if (closeTimeoutRef?.current) clearTimeout(closeTimeoutRef?.current);
@@ -39,7 +39,7 @@ export default function ProductsContent() {
     }, [searchText])
 
     useEffect(() => {
-        if (data?.pages) setQueryProducts(data.pages.flatMap(page => page.products));
+        if (data?.pages) setQueryClients(data.pages.flatMap(page => page.clients));
     }, [data?.pages])
 
     useEffect(() => {
@@ -68,11 +68,7 @@ export default function ProductsContent() {
 
   return (
     <>
-        {
-            gridLayout ? 
-            <ProductsGrid queryProducts={queryProducts}/> :
-            <ProductsTable queryProducts={queryProducts}/>
-        }
+        <ClientTable queryClients={queryClients}/>
         <div 
             ref={observerRef} 
             className="col-span-full lg:col-span-12 flex justify-center"

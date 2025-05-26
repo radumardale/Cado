@@ -16,7 +16,7 @@ export default function Recommendations({indProductSection = false}: Recommendat
     const { data, isLoading } = trpc.products.getRecProduct.useQuery();
     const [isDesktop, setIsDesktop] = useState(false);
     const [isMounted, setIsMounted] = useState(false);
-  
+
     // Check screen size on mount and window resize
     useEffect(() => {
         const checkScreenSize = () => {

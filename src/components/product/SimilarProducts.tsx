@@ -9,11 +9,12 @@ import { ProductInterface } from '@/models/product/types/productInterface';
 import ProductCard from '../catalog/productsGrid/ProductCard';
 
 interface SimiliarProductsInterface {
-    category: Categories
+    category: Categories,
+    productId: string
 }
 
-export default function SimiliarProducts({category}: SimiliarProductsInterface) {
-    const { data, isLoading } = trpc.products.getSimilarProducts.useQuery({category: category});
+export default function SimiliarProducts({category, productId}: SimiliarProductsInterface) {
+    const { data, isLoading } = trpc.products.getSimilarProducts.useQuery({category: category, productId});
     const [isDesktop, setIsDesktop] = useState<boolean | null>(null);
     const [isMounted, setIsMounted] = useState(false);
   

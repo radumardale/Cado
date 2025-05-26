@@ -53,7 +53,7 @@ export default function LangSidebar({setSidebarOpen}: LangSidebarInterface) {
                     <X className='size-6 lg:size-8' strokeWidth={1.5} />
                 </button>
             </div>
-            <div className='lg:px-12'>
+            <div className='xl:px-12'>
                 <p className='leading-5 mb-6'>Metodele de livrare și condițiile de vânzare vor fi actualizate atunci când schimbați țara.</p>
                 <Select 
                     defaultValue={country ? country : "md"}

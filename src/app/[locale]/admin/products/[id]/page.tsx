@@ -20,7 +20,7 @@ export default async function AdminProductPage({
     return (
         <>
             <AdminSidebar page={AdminPages.PRODUCTS} />
-            <div className='col-span-12 grid grid-cols-12 h-screen gap-x-6'>
+            <div className='col-span-full xl:col-span-12 grid grid-cols-12 h-screen gap-x-6'>
                 <AdminHeader id={"#" + id} href='/admin/products' page={AdminPages.PRODUCTS} />
                 <HydrationBoundary state={dehydratedState}>
                   <AdminUpdateProductForm id={id}/>

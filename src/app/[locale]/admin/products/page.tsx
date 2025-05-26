@@ -21,7 +21,7 @@ export default async function AdminProducts() {
   return (
     <>
         <AdminSidebar page={AdminPages.PRODUCTS} />
-        <div className='col-span-12 grid grid-cols-12 h-fit gap-x-6'>
+        <div className='col-span-full xl:col-span-12 grid grid-cols-12 h-fit gap-x-6'>
           <AdminHeader href='/admin/products' page={AdminPages.PRODUCTS} />
           <ProductsFilter />
           <HydrationBoundary state={dehydratedState}>

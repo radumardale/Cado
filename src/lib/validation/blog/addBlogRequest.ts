@@ -6,9 +6,8 @@ import { sectionSchema } from './types/sectionSchema';
 export const addBlogRequestSchema = z.object({
     data: z.object({
       title: productInfoSchema,
+      image: z.boolean(),
       tag: z.nativeEnum(BlogTags),
-      date: z.date(),
-      reading_length: z.number().positive("Reading length must be a positive number"),
       sections: z.array(sectionSchema)
     })
   });

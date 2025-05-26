@@ -19,6 +19,9 @@ export default function ImagesCarousel({setCarouselOpen, product, locale, initia
     const [nextImage, setNextImage] = useState((initialActive + 1) % product.images.length);
     const [prevImage, setPrevImage] = useState(initialActive - 1 < 0 ? product.images.length - 1 : initialActive - 1);
     const [isDragOver, setDragOver] = useState(true);
+    const [isDrag, setIsDrag] = useState(false);
+
+    const hasMultipleImages = product.images.length > 1;
 
     // Motion values for drag and opacity
     const x = useMotionValue(0);
@@ -43,26 +46,79 @@ export default function ImagesCarousel({setCarouselOpen, product, locale, initia
     
     // Navigation functions
     const nextSlide = useCallback(() => {
-        setActiveImage(nextImage);
-    }, [nextImage]);
+        // For 2 images, next is always the other image
+        if (product.images.length === 2) {
+            setActiveImage(activeImage === 0 ? 1 : 0);
+        } else {
+            setActiveImage(nextImage);
+        }
+    }, [activeImage, nextImage, product.images.length]);
     
     const prevSlide = useCallback(() => {
-        setActiveImage(prevImage);
-    }, [prevImage]);
+        // For 2 images, prev is always the other image
+        if (product.images.length === 2) {
+            setActiveImage(activeImage === 0 ? 1 : 0);
+        } else {
+            setActiveImage(prevImage);
+        }
+    }, [activeImage, prevImage, product.images.length]);
 
     const closeCarousel = useCallback(() => {
+        if (isDrag) return;
         setCarouselOpen(false);
     }, [setCarouselOpen]);
     
     // Update prev/next indexes when active changes
     useEffect(() => {
-        setDragOver(false)
+        if (!hasMultipleImages) return;
+        
+        setDragOver(false);
         setTimeout(() => {
             setDragOver(true);
-            setNextImage((activeImage + 1) % product.images.length);
-            setPrevImage(activeImage - 1 < 0 ? product.images.length - 1 : activeImage - 1);
-        }, 300)
-    }, [activeImage, product.images.length]);
+            
+            // For 2 images, next is always the other image
+            if (product.images.length === 2) {
+                setNextImage(activeImage === 0 ? 1 : 0);
+                setPrevImage(activeImage === 0 ? 1 : 0);
+            } else {
+                // For 3+ images, use modular arithmetic
+                setNextImage((activeImage + 1) % product.images.length);
+                setPrevImage(activeImage - 1 < 0 ? product.images.length - 1 : activeImage - 1);
+            }
+        }, 300);
+    }, [activeImage, product.images.length, hasMultipleImages]);
+
+    const handleDragEnd = (
+        event: MouseEvent | TouchEvent | PointerEvent,
+        info: PanInfo
+    ) => {
+        if (!hasMultipleImages) return; // Don't handle drag for single image
+        
+        const threshold = 150;
+        
+        if (info.offset.x > threshold) {
+            // For 2 images, when dragging right, always go to the other image
+            if (product.images.length === 2) {
+                setActiveImage(activeImage === 0 ? 1 : 0);
+            } else {
+                setActiveImage(prevImage);
+            }
+        } else if (info.offset.x < -threshold) {
+            // For 2 images, when dragging left, always go to the other image
+            if (product.images.length === 2) {
+                setActiveImage(activeImage === 0 ? 1 : 0);
+            } else {
+                setActiveImage(nextImage);
+            }
+        }
+        
+        setTimeout(() => {
+            setIsDrag(false);
+        }, 50);
+        
+        // Reset the drag position
+        x.set(0);
+    };
     
     // Handle keyboard navigation
     useEffect(() => {
@@ -89,19 +145,6 @@ export default function ImagesCarousel({setCarouselOpen, product, locale, initia
             document.body.removeAttribute('tabindex');
         };
     }, [nextSlide, prevSlide, closeCarousel]);
-    
-    const handleDragEnd = (event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
-        const threshold = 150;
-        
-        if (info.offset.x > threshold) {
-            setActiveImage(prevImage);
-        } else if (info.offset.x < -threshold) {
-            setActiveImage(nextImage);
-        }
-
-        // Reset the drag position
-        x.set(0);
-    };
 
     return (
         <motion.div 
@@ -119,9 +162,9 @@ export default function ImagesCarousel({setCarouselOpen, product, locale, initia
             </div>
             
             <motion.div 
-                 className='flex-1 relative top-0 lg:relative mb-4 w-full max-w-full cursor-grab box-border'
+                 className='flex-1 relative top-0 lg:relative mb-4 w-full lg:w-[calc(100%-10rem)] max-w-full cursor-grab box-border'
                  onMouseDown={(e) => {e.stopPropagation()}}
-                 drag={isDragOver ? "x" : false}
+                 drag={isDragOver && hasMultipleImages ? "x" : false}
                  dragConstraints={{ left: 0, right: 0 }}
                  dragElastic={0.05}
                  dragMomentum={false}
@@ -130,22 +173,43 @@ export default function ImagesCarousel({setCarouselOpen, product, locale, initia
                      bounceDamping: 30
                  }}
                  onDragEnd={handleDragEnd}
+                 onDragStart={() => {
+                    setIsDrag(true);
+                }}
                  style={{ x }}
             >
                 {product.images.map((image, index) => (
                     <motion.div
                         key={index}
                         className='pointer-events-none w-full rounded-lg lg:rounded-2xl absolute h-full flex justify-center items-center'
-                        style={{ opacity: index === activeImage ? isDragOver ? activeDragOpacity : 1 : index === nextImage ? isDragOver ? nextDragOpacity : 0 : index === prevImage ? isDragOver ? prevDragOpacity : 0 : 0 }}
+                        style={{
+                            opacity: index === activeImage 
+                                ? isDragOver 
+                                    ? activeDragOpacity 
+                                    : 1 
+                                : (
+                                    // For 2 images, the other image should be visible when dragging in either direction
+                                    product.images.length === 2 
+                                        ? (index !== activeImage ? (isDragOver ? (x.get() > 0 ? prevDragOpacity : nextDragOpacity) : 0) : 0)
+                                        : (
+                                            // For 3+ images, use the regular logic
+                                            index === nextImage 
+                                                ? isDragOver ? nextDragOpacity : 0 
+                                                : index === prevImage 
+                                                    ? isDragOver ? prevDragOpacity : 0 
+                                                    : 0
+                                        )
+                                )
+                        }}
                     >
                         <Image
                             unoptimized
                             quality={100}
                             src={image}
                             alt={`${product.title[locale]} - Image ${index + 1}`}
-                            width={1476} // Doubled width
-                            height={1838} // Doubled height
-                            className={`max-h-full lg:h-full w-auto mx-auto rounded-lg lg:rounded-2xl lg:max-w-none object-contain ${activeImage === index ? "z-10" : "z-0"}`}
+                            width={1476}
+                            height={1838}
+                            className={`max-h-full lg:h-full w-auto max-w-full mx-auto rounded-lg lg:rounded-2xl object-contain ${activeImage === index ? "z-10" : "z-0"}`}
                         />
                     </motion.div>
                 ))}

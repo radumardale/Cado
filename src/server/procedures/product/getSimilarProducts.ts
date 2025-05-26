@@ -11,48 +11,71 @@ export interface getProductResponseInterface extends ActionResponse {
 }
 
 export const getSimilarProducts = publicProcedure
-    .input(getRecProductsRequestSchema)
+  .input(getRecProductsRequestSchema)
   .query(async ({input}): Promise<getProductResponseInterface> => {
     try {
-
       await connectMongo();
 
+      const excludeFilter = input.productId ? { custom_id: { $ne: input.productId } } : {};
+
       const products = await Product.aggregate([
+        // Filter out the current product
+        { $match: excludeFilter },
+        
+        // Calculate relevance score - higher is better
         {
-          $project: {
-            "description": 0,
-            "long_description": 0,
-            "set_description": 0,
-            "ocasions": 0,
-            "product_content": 0,
-          }
-        },
-        {
-          $set: {
+          $addFields: {
             relevance: {
-              $cond: [
-                {$in: [input.category, "$categories"]},
-                0,
-                1
+              $sum: [
+                // Category match - highest priority (score 5)
+                {
+                  $cond: [
+                    { $in: [input.category, "$categories"] },
+                    5,  // Higher score for category match
+                    0
+                  ]
+                },
+                // Random factor for tie-breaking - low priority (score 0-1)
+                { $rand: {} }
               ]
             }
           }
         },
+        
+        // Only include products with some relevance
+        { $match: { relevance: { $gt: 0 } } },
+        
+        // Remove fields we don't need
         {
-          $limit: 5
+          $project: {
+            description: 0,
+            long_description: 0,
+            set_description: 0
+          }
         },
+        
+        // Sort by relevance (descending)
         {
           $sort: {
             relevance: -1
           }
+        },
+        
+        // Take the top 5
+        {
+          $limit: 5
         }
       ]);
       
-      if (!products) {
+      if (!products || products.length === 0) {
+        // Fall back to returning any 5 products if no similar ones found
+        const fallbackProducts = await Product.find(excludeFilter)
+          .select("-description -long_description -set_description")
+          .limit(5);
+        
         return {
-          success: false,
-          error: "This product does not exist",
-          products: null
+          success: true,
+          products: fallbackProducts
         };
       }
 
@@ -61,10 +84,10 @@ export const getSimilarProducts = publicProcedure
         products: products
       };
     } catch (error) {
-      console.error("Error fetching product:", error);
+      console.error("Error fetching similar products:", error);
       return {
         success: false,
-        error: error instanceof Error ? error.message : "Failed to fetch product",
+        error: error instanceof Error ? error.message : "Failed to fetch similar products",
         products: null
       };
     }

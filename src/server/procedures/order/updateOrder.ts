@@ -54,10 +54,15 @@ export const updateOrderProcedure = publicProcedure
 
       if (input.delivery_details.delivery_date) Object.assign(deliveryDetails, {delivery_date: new Date(input.delivery_details.delivery_date)})
 
-      // Find or create client
       const client = await Client.findOneAndUpdate(
-        { email: input.additional_info.user_data.email }, 
-        {}, 
+        { 
+          email: input.additional_info.user_data.email,
+        }, 
+        {
+          firstname: input.additional_info.user_data.firstname,
+          lastname: input.additional_info.user_data.lastname,
+          tel_number: input.additional_info.user_data.tel_number,
+        }, 
         { upsert: true, new: true }
       );
 
@@ -80,7 +85,6 @@ export const updateOrderProcedure = publicProcedure
           delivery_method: input.delivery_method,
           total_cost: input.total_cost || 0,
           delivery_details: deliveryDetails,
-          // state: input.state
         },
         { new: true }
       );

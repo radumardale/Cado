@@ -6,6 +6,7 @@ import { searchProductProcedure } from './procedures/search/searchProduct';
 import { blogRouter } from './procedures/routers/blogRouter';
 import { createServerSideHelpers } from '@trpc/react-query/server';
 import superjson from 'superjson';
+import { getAllClientsProcedure } from './procedures/clients/getAllClients';
 
 export const appRouter = router({
   products: productRouter,
@@ -13,6 +14,7 @@ export const appRouter = router({
   order: orderRouter,
   blog: blogRouter,
   search: searchProductProcedure,
+  getAllClients: getAllClientsProcedure
 });
 
 export type AppRouter = typeof appRouter;

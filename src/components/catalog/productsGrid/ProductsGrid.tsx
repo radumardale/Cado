@@ -11,7 +11,6 @@ interface ProductsGridProps {
     products: ProductInterface[],
     loading: boolean,
     setSortBy: (v: SortBy) => void,
-    sortBy: SortBy,
     category: Categories | null,
     setSidebarOpen: (v: boolean) => void,
     isSidebarOpen: boolean,
@@ -19,12 +18,12 @@ interface ProductsGridProps {
     countProducts: number
 }
 
-export default function ProductsGrid({products, loading, setSortBy, sortBy, category, setSidebarOpen, isSidebarOpen, searchText, countProducts}: ProductsGridProps) {
+export default function ProductsGrid({products, loading, setSortBy, category, setSidebarOpen, isSidebarOpen, searchText, countProducts}: ProductsGridProps) {
     const [gridLayout, setGridLayout] = useState(true);
 
   return (
     <div className='col-span-full lg:col-start-4 lg:col-span-10 2xl:col-span-12 grid grid-cols-8 lg:grid-cols-12 mt-16 lg:mt-12 gap-x-2 lg:gap-y-6 lg:gap-6 h-fit'>
-        <Controls gridLayout={gridLayout} setGridLayout={setGridLayout} setSortBy={setSortBy} sortBy={sortBy} setSidebarOpen={setSidebarOpen} isSidebarOpen={isSidebarOpen} searchText={searchText} countProducts={countProducts}/>
+        <Controls gridLayout={gridLayout} setGridLayout={setGridLayout} setSortBy={setSortBy} setSidebarOpen={setSidebarOpen} isSidebarOpen={isSidebarOpen} searchText={searchText} countProducts={countProducts}/>
         <div className='col-span-full grid grid-cols-8 lg:grid-cols-12 gap-x-2 gap-y-6 lg:gap-6'>
             {
                 loading ? 

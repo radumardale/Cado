@@ -18,10 +18,10 @@ export default function Collaboration() {
 
 const CollaborationCard = ({index, title, description}: {index: number, title: string, description: string}) => {
     return(
-        <div className='rounded-2xl lg:rounded-3xl lg:aspect-square col-span-full lg:col-span-3 relative flex flex-col justify-end lg:gap-3 2xl:gap-4 p-4 lg:p-6 2xl:p-8' style={{backgroundColor: `var(--blue${index})`}}>
+        <div className='rounded-2xl lg:rounded-3xl xl:aspect-square col-span-full lg:col-span-3 relative flex flex-col justify-start xl:justify-end lg:gap-3 2xl:gap-4 p-4 lg:p-6 2xl:p-8' style={{backgroundColor: `var(--blue${index})`}}>
             <div className="flex items-center mb-4 gap-6">
-                <span className='lg:absolute left-8 top-12 text-white font-manrope text-[4rem] lg:text-[5rem] 2xl:text-8xl leading-14 lg:leading-9 font-semibold'>{index}</span>
-                <p className='text-white font-manrope text-2xl 2xl:text-[2rem] font-semibold leading-7 2xl:leading-9 uppercase'>{title.split("|")[0]} <br/> {title.split("|")[1]}</p>
+                <span className='lg:absolute left-8 top-12 text-white font-manrope text-[4rem] lg:hidden xl:block xl:text-[5rem] 2xl:text-8xl leading-14 lg:leading-8 xl:leading-9 font-semibold'>{index}</span>
+                <p className='text-white font-manrope text-2xl 2xl:text-[2rem] font-semibold leading-7 2xl:leading-9 uppercase whitespace-nowrap overflow-hidden text-ellipsis'>{title.split("|")[0]} <br/> {title.split("|")[1]}</p>
             </div>
             <p className='text-white text-sm leading-4 lg:leading-5 lg:text-base'>{description}</p>
         </div>  

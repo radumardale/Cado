@@ -9,10 +9,11 @@ import { cn } from '@/lib/utils'
 import { CalendarIcon } from 'lucide-react'
 import { format } from 'date-fns'
 import { Calendar } from '@/components/ui/calendar'
+import { SelectItem } from '@/components/ui/select';
+import SortBy from '@/lib/enums/SortBy';
 
 
 export default function OrdersFilter() {
-    const sortBy = useOrdersSearchStore((store) => store.sortBy);
     const setSortBy = useOrdersSearchStore((store) => store.setSortBy);
     const searchText = useOrdersSearchStore((store) => store.search);
     const setSearchText = useOrdersSearchStore((store) => store.setSearch);
@@ -25,7 +26,12 @@ export default function OrdersFilter() {
     <>
         <Searchbar className='col-span-5 mt-16' searchText={searchText} setSearchText={setSearchText}/>
         <div className='mt-16 col-span-7 flex gap-1 lg:gap-2 justify-end items-center'>
-            <ControlsSortSelect setSortBy={setSortBy} currentSort={sortBy}/>
+            <ControlsSortSelect setSortBy={setSortBy}>
+              <SelectItem className="text-base cursor-pointer font-semibold font-manrope" value={SortBy.LATEST}>Comenzi noi</SelectItem>
+              <SelectItem className="text-base cursor-pointer font-semibold font-manrope" value={SortBy.OLDEST}>Comenzi vechi</SelectItem>
+              <SelectItem className="text-base cursor-pointer font-semibold font-manrope" value={SortBy.PRICE_ASC}>Preț: Mic la Mare</SelectItem>
+              <SelectItem className="text-base cursor-pointer font-semibold font-manrope" value={SortBy.PRICE_DESC}>Preț: Mare la Mic</SelectItem>
+            </ControlsSortSelect>
             <Popover>
               <PopoverTrigger asChild>
                 <Button

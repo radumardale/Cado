@@ -35,7 +35,9 @@ export default function ProductsTable({queryProducts}: ProductsTableProps) {
                     <Link href={{pathname: "/admin/products/[id]", params: {id: product.custom_id}}} key={index} className='grid grid-cols-12 col-span-12 gap-x-6 h-18 border border-gray hover:border-black transition duration-300 rounded-3xl items-center mb-4 last-of-type:mb-6'>
                         <p className='pl-6 w-[calc(100%+1.5rem)] col-span-1 z-50'>{product.custom_id}</p>
                         <div className='col-span-2 translate-x-1/2 w-[calc(50%-.75rem)]'>
-                            <Image unoptimized src={product.images[0]} alt={product.title[locale]} width={96} height={128} className='w-12 h-16 rounded-sm object-cover' />
+                            <div className='bg-purewhite w-fit rounded-sm'>
+                                <Image unoptimized src={product.images[0]} alt={product.title[locale]} width={96} height={128} className='w-12 h-16 rounded-sm object-contain' />
+                            </div>
                         </div>
                         <p className='col-span-4 font-semibold -translate-x-1/8 w-[112.5%]'>{product.title[locale]}</p>
                         <div className='col-span-2 font-semibold flex gap-0'>

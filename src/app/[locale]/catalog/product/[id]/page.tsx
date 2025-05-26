@@ -24,7 +24,7 @@ export default async function Product({params}: {params: Promise<{locale: string
     const helpers = serverHelper;
     const data = await helpers.products.getProductById.fetch({ id });
     await helpers.products.getRecProduct.prefetch();
-    await helpers.products.getSimilarProducts.prefetch({category: data?.product?.categories[0] || Categories.FOR_HIM})
+    await helpers.products.getSimilarProducts.prefetch({category: data?.product?.categories[0] || Categories.FOR_HIM, productId: data?.product?.custom_id || ""})
     const dehydratedState = JSON.parse(JSON.stringify(dehydrate(helpers.queryClient)));
 
     return (

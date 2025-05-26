@@ -95,7 +95,7 @@ export default function OrdersForm() {
                 </div>
             </div>
         }
-        <div className='lg:col-span-6 lg:col-start-2 grid grid-cols-6 gap-x-2 lg:gap-x-6 flex-1 pb-16'>
+        <div className='col-span-7 xl:col-span-6 col-start-1 xl:col-start-2 grid grid-cols-6 gap-x-2 lg:gap-x-6 flex-1 pb-16'>
                 <form id="order-update-form" onSubmit={form.handleSubmit(onSubmit)} className='col-span-full grid grid-cols-6 gap-x-6'>
                     <p className='text-2xl font-semibold leading-7 mb-4 lg:mb-6 col-span-full font-manrope'>Metoda de expediere</p>
 

@@ -8,7 +8,6 @@ import {
   Select,
   SelectContent,
   SelectGroup,
-  SelectItem,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
@@ -17,10 +16,10 @@ import SortBy from "@/lib/enums/SortBy"
 
 interface ControlsSortSelectInterface {
   setSortBy: (v: SortBy) => void,
-  currentSort?: SortBy
+  children: React.ReactNode
 }
 
-export function ControlsSortSelect({setSortBy, currentSort = SortBy.RECOMMENDED}: ControlsSortSelectInterface) {
+export function ControlsSortSelect({setSortBy, children}: ControlsSortSelectInterface) {
   const router = useRouter();
   const searchParams = useSearchParams();
   
@@ -51,7 +50,6 @@ export function ControlsSortSelect({setSortBy, currentSort = SortBy.RECOMMENDED}
 
   return (
     <Select 
-      defaultValue={currentSort}
       onValueChange={handleSortChange}
     >
       <SelectTrigger className="cursor-pointer flex h-12 max-h-none items-center px-6 gap-2 border border-gray rounded-3xl lg:mr-4 text-base text-black font-manrope font-semibold">
@@ -60,10 +58,7 @@ export function ControlsSortSelect({setSortBy, currentSort = SortBy.RECOMMENDED}
       </SelectTrigger>
       <SelectContent className="border-gray">
         <SelectGroup>
-          <SelectItem className="text-base cursor-pointer font-semibold font-manrope" value={SortBy.RECOMMENDED}>Recomandate</SelectItem>
-          <SelectItem className="text-base cursor-pointer font-semibold font-manrope" value={SortBy.LATEST}>Produse noi</SelectItem>
-          <SelectItem className="text-base cursor-pointer font-semibold font-manrope" value={SortBy.PRICE_ASC}>Preț: Mic la Mare</SelectItem>
-          <SelectItem className="text-base cursor-pointer font-semibold font-manrope" value={SortBy.PRICE_DESC}>Preț: Mare la Mic</SelectItem>
+          {children}
         </SelectGroup>
       </SelectContent>
     </Select>

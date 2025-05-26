@@ -9,7 +9,6 @@ import { dehydrate, HydrationBoundary } from '@tanstack/react-query'
 import React from 'react'
 
 export default async function AdminOrders() {
-
   const helpers = serverHelper;
   await helpers.order.getAllOrders.prefetchInfinite({
     limit: 8,
@@ -20,11 +19,11 @@ export default async function AdminOrders() {
   return (
     <>
         <AdminSidebar page={AdminPages.ORDERS} />
-        <div className='col-span-12 grid grid-cols-12 h-fit gap-x-6'>  
+        <div className='col-span-full xl:col-span-12 grid grid-cols-12 h-fit gap-x-6'>  
           <AdminHeader href='/admin/orders' page={AdminPages.ORDERS} />
           <OrdersFilter />
           <HydrationBoundary state={dehydratedState}>
-            <OrdersContent /> 
+            <OrdersContent />
           </HydrationBoundary>
         </div>
     </>

@@ -73,17 +73,25 @@ export const routing = defineRouting({
       ru: '/admin/products/new',
       ro: '/admin/products/new'
     },
-    '/admin/clients': {
-      ru: '/admin/clients',
-      ro: '/admin/clients'
+    '/admin/client-data': {
+      ru: '/admin/client-data',
+      ro: '/admin/client-data'
     },
     '/admin/home-page': {
       ru: '/admin/home-page',
       ro: '/admin/home-page'
     },
-    '/admin/blog-page': {
-      ru: '/admin/blog-page',
-      ro: '/admin/blog-page'
+    '/admin/blog': {
+      ru: '/admin/blog',
+      ro: '/admin/blog'
+    },
+    '/admin/blog/[id]': {
+      ru: '/admin/blog/[id]',
+      ro: '/admin/blog/[id]'
+    },
+    '/admin/blog/new': {
+      ru: '/admin/blog/new',
+      ro: '/admin/blog/new'
     },
     '/admin/catalog-sezon': {
       ru: '/admin/catalog-sezon',
@@ -109,8 +117,9 @@ export type Pathnames =
 | "/admin/orders"
 | "/admin/products"
 | "/admin/products/new"
-| "/admin/clients"
+| "/admin/client-data"
 | "/admin/home-page"
-| "/admin/blog-page"
+| "/admin/blog"
+| "/admin/blog/new"
 | "/admin/catalog-sezon"
 | "/admin/contact-details";

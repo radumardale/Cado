@@ -156,7 +156,6 @@ export default function Catalog() {
                     }}
                 />
                 <ProductsGrid 
-                    sortBy={sortBy}
                     products={allProducts} 
                     loading={status === "pending"}
                     setSortBy={setSortBy}

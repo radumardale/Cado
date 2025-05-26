@@ -68,7 +68,7 @@ export default function ProductInfo({id}: ProductInfoInterface) {
             </div>
             {
                 data?.product?.categories[0] &&
-                <SimiliarProducts category={categoryParam || data?.product?.categories[0]} />
+                <SimiliarProducts category={categoryParam || data?.product?.categories[0]} productId={data.product.custom_id}/>
             }
         </>
     )

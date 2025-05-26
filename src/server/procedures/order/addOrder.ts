@@ -24,10 +24,10 @@ const mailConfig = {
 };
 
 const subjectLang = new Map([
-  ["en", "TRIP REMINDER | World Wide Travel"],
-  ["ro", "REAMINTIRE DE CĂLĂTORIE | World Wide Travel"],
-  ["fr", "RAPPEL DE VOYAGE | World Wide Travel"],
-  ["ru", "НАПОМИНАНИЕ О ПОЕЗДКЕ | World Wide Travel"]
+  ["en", "ORDER CONFIRMATION | CADO"],
+  ["ro", "CONFIRMARE COMANDA | CADO"],
+  ["fr", "CONFIRMATION DE COMMANDE | CADO"],
+  ["ru", "ПОДТВЕРЖДЕНИЕ ЗАКАЗА | CADO"]
 ])
 
 export interface addOrderResponse extends ActionResponse {
@@ -75,8 +75,14 @@ export const addOrderProcedure = publicProcedure
       if (input.delivery_details.delivery_date) Object.assign(deliveryDetails, {delivery_date: new Date(input.delivery_details.delivery_date)})
 
       const client = await Client.findOneAndUpdate(
-        { email: input.additional_info.user_data.email }, 
-        {}, 
+        { 
+          email: input.additional_info.user_data.email,
+        }, 
+        {
+          firstname: input.additional_info.user_data.firstname,
+          lastname: input.additional_info.user_data.lastname,
+          tel_number: input.additional_info.user_data.tel_number,
+        }, 
         { upsert: true, new: true }
       );
 

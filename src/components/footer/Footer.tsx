@@ -57,19 +57,19 @@ export default function Footer() {
             <div className='col-span-3 order-4 lg:order-5 mt-8 lg:mt-0'>
                 <p className='text-white font-manrope text-base lg:text-2xl leading-5 lg:leading-7 font-semibold mb-4 lg:mb-6'>Urmărește-ne</p>
                 <div className="flex gap-2 lg:gap-4 flex-wrap">
-                    <NextLink href="/" className='border border-white bg-white lg:bg-transparent lg:hover:bg-white min-w-8 min-h-8 flex justify-center items-center rounded-full footer-link'>
+                    <NextLink href="https://www.instagram.com/cado.md_ro?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target='_blank' className='border border-white bg-white lg:bg-transparent lg:hover:bg-white min-w-8 min-h-8 flex justify-center items-center rounded-full footer-link'>
                         <Image unoptimized src="/icons/instagram.svg" alt="instagram logo" width={16} height={16} className='size-4' />
                     </NextLink>
-                    <NextLink href="/" className='border border-white bg-white lg:bg-transparent lg:hover:bg-white min-w-8 min-h-8 flex justify-center items-center rounded-full footer-link'>
+                    <NextLink href="/" target='_blank' className='border border-white bg-white lg:bg-transparent lg:hover:bg-white min-w-8 min-h-8 flex justify-center items-center rounded-full footer-link'>
                         <Image unoptimized src="/icons/facebook.svg" alt="facebook logo" width={16} height={16} className='size-4' />
                     </NextLink>
-                    <NextLink href="/" className='border border-white bg-white lg:bg-transparent lg:hover:bg-white min-w-8 min-h-8 flex justify-center items-center rounded-full footer-link'>
+                    <NextLink href="/" target='_blank' className='border border-white bg-white lg:bg-transparent lg:hover:bg-white min-w-8 min-h-8 flex justify-center items-center rounded-full footer-link'>
                         <Image unoptimized src="/icons/tiktok.svg" alt="tiktok logo" width={16} height={16} className='size-4' />
                     </NextLink>
-                    <NextLink href="/" className='border border-white bg-white lg:bg-transparent lg:hover:bg-white min-w-8 min-h-8 flex justify-center items-center rounded-full footer-link'>
+                    <NextLink href="https://www.pinterest.com/infocadomd/" target='_blank' className='border border-white bg-white lg:bg-transparent lg:hover:bg-white min-w-8 min-h-8 flex justify-center items-center rounded-full footer-link'>
                         <Image unoptimized src="/icons/pinterest.svg" alt="pinterest logo" width={16} height={16} className='size-4' />
                     </NextLink>
-                    <NextLink href="/" className='border border-white bg-white lg:bg-transparent lg:hover:bg-white min-w-8 min-h-8 flex justify-center items-center rounded-full footer-link'>
+                    <NextLink href="/" target='_blank' className='border border-white bg-white lg:bg-transparent lg:hover:bg-white min-w-8 min-h-8 flex justify-center items-center rounded-full footer-link'>
                         <Image unoptimized src="/icons/linkedin.svg" alt="linkedin logo" width={16} height={16} className='size-4' />
                     </NextLink>
                 </div>
@@ -84,7 +84,7 @@ export default function Footer() {
         <Image unoptimized src="/footer/ribbon-screen.png" alt="footer ribbon" width={1920} height={326} className='col-span-full -ml-22 lg:ml-0 w-[calc(100%+11rem)] lg:w-full max-w-none lg:max-w-full'/>
         <div className="col-span-full lg:col-start-2 lg:col-span-13 pt-4 lg:pt-0 gap-2 lg:gap-0 pb-6 lg:pb-0 flex lg:justify-between flex-col lg:flex-row items-center lg:h-12 border-t border-lightgray lg:px-15">
             <div className='flex'>
-                <p className='text-white lg:mr-6 text-sm leading-4 lg:leading-5 lg:text-base'>© 2025 “TOP GIFTS & EVENTS” S.R.L.</p>
+                <p className='text-white lg:mr-6 text-sm leading-4 lg:leading-5 lg:text-base'>© 2025 &quot;DIM EXPRES&quot; S.R.L</p>
                 <Link href="/terms" className='text-white hidden lg:block'>Termeni & Condiții</Link>
             </div>
             <div className="flex items-center gap-2 group">

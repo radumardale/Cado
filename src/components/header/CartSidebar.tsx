@@ -76,7 +76,7 @@ export default function CartSidebar({items, locale, setSidebarOpen, setValue}: C
             </div>
             {
                 items.length > 0 ?
-                    <div data-lenis-prevent className='lg:pl-10 lg:pr-8 flex flex-col gap-6 flex-1 overflow-y-auto scroll-bar-custom'>
+                    <div data-lenis-prevent className='xl:pl-10 lg:pr-4 xl:pr-8 flex flex-col gap-6 flex-1 overflow-y-auto scroll-bar-custom'>
                         {
                             items.map((item, index) => {
                                 const product = products.find((product: ProductInterface) => product.custom_id === item.productId) || undefined;
@@ -143,12 +143,15 @@ export default function CartSidebar({items, locale, setSidebarOpen, setValue}: C
                     <p className='text-center text-sm leading-4 lg:leading-5 lg:text-base'>Coșul dvs. este gol. Vizitați magazinul pentru inspirație și recomandări personalizate.</p>
                 </div>
             }
-            <div className='absolute left-0 w-full bottom-6 lg:bottom-16 px-4 lg:px-16'>
+            <div className='absolute left-0 w-full bottom-6 lg:bottom-16 px-4 lg:pl-6 lg:pr-14 xl:px-16'>
                 {
                     items.length > 0 && products.length > 0 &&
                     <div className="flex justify-between items-end mb-4">
                         <p>Subtotal:</p>
-                        <p className='font-semibold'>{items.reduce((acc, item, index) => acc + (products[index].sale.active ? products[index].sale.sale_price : products[index].price) * item.quantity, 0).toLocaleString()} MDL</p>
+                        <p className='font-semibold'>{items.reduce((acc, item) => {
+                            const product = products.find(product => product.custom_id === item.productId);
+                            return acc + (product?.sale.active ? product.sale.sale_price : (product?.price || 0)) * item.quantity;
+                        }, 0).toLocaleString()} MDL</p>
                     </div>
                 }
                 {
