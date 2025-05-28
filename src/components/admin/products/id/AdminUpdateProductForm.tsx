@@ -14,7 +14,6 @@ import AdminProductImages from '../AdminProductImages'
 import { trpc } from '@/app/_trpc/client'
 import { LoaderCircle } from 'lucide-react'
 import { toast } from 'sonner'
-import { DestinationEnum } from "@/server/procedures/image/generateUploadLinks"
 
 interface AdminProductFormProps {
     id: string
@@ -23,7 +22,7 @@ interface AdminProductFormProps {
 export default function AdminUpdateProductForm({id}: AdminProductFormProps) {
     const { data } = trpc.products.getProductById.useQuery({id: id});
     const {isSuccess, isPending, mutate, data: MutatedData} = trpc.products.updateProduct.useMutation();
-    const { mutate: UpdateMutate, isSuccess: UpdateIsSuccess, data: UpdateData } = trpc.image.updateImage.useMutation();
+    const { mutate: UpdateMutate, isSuccess: UpdateIsSuccess, data: UpdateData } = trpc.image.uploadProductImages.useMutation();
     const [initialImagesData, setInitialImagesData] = useState<string[]>([]);
     const [imagesData, setImagesData] = useState<string[]>([]);
 
@@ -116,7 +115,6 @@ export default function AdminUpdateProductForm({id}: AdminProductFormProps) {
                     if (MutatedData.product?._id) {
                         UpdateMutate({
                             id: MutatedData.product._id,
-                            destination: DestinationEnum.PRODUCT,
                             filenames: newImageKeys
                         });
                     }
@@ -131,7 +129,6 @@ export default function AdminUpdateProductForm({id}: AdminProductFormProps) {
                 });
                 form.resetField("data.imagesChanged");
                 form.resetField("data.imagesNumber");
-                // setInitialImagesData(MutatedData.product?.images || []);
             }
         };
     
@@ -145,7 +142,6 @@ export default function AdminUpdateProductForm({id}: AdminProductFormProps) {
         if (UpdateIsSuccess) {
             toast.success("Produsul a fost actualizat cu succes!");
             setInitialImagesData(UpdateData.images || []);
-            console.log(UpdateData.images);
         }
     }, [UpdateIsSuccess])
     

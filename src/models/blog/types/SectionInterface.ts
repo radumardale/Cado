@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 
 export interface SectionInterface {
     subtitle: ProductInfo,
-    content: ProductInfo
+    content: ProductInfo,
 }
 
 // Normal Address Schema

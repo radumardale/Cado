@@ -1,8 +1,10 @@
 import { router } from '../../trpc';
 import { deleteImageProcedure } from '../image/deleteImage';
-import { uploadImageProcedure } from '../image/uploadImage';
+import { UploadBlogImagesProcedure } from '../image/uploadBlogImages';
+import { UploadProductImagesProcedure } from '../image/uploadProductImages';
 
 export const imageRouter = router({
     deleteImage: deleteImageProcedure,
-    updateImage: uploadImageProcedure,
+    uploadProductImages: UploadProductImagesProcedure,
+    uploadBlogImages: UploadBlogImagesProcedure
 });

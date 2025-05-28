@@ -4,6 +4,7 @@ import { Blog } from '@/models/blog/blog';
 import { publicProcedure } from '@/server/trpc';
 import { deleteMultipleFromBucket } from '../image/deleteObjects/deleteMultipleFromBucket';
 import { deleteBlogRequestSchema } from '@/lib/validation/blog/deleteBlogRequest';
+import { SectionImagesInterface } from '@/models/blog/types/SectionImagesInterface';
 
 export const deleteBlogProcedure = publicProcedure
   .input(deleteBlogRequestSchema)
@@ -16,6 +17,10 @@ export const deleteBlogProcedure = publicProcedure
       // If the blog has images, delete them from storage
       if (blog && blog.image) {
         await deleteMultipleFromBucket([blog.image]);
+      }
+
+      if (blog && blog.section_images) {
+        await deleteMultipleFromBucket(blog.section_images.map((obj: SectionImagesInterface) => obj.image));
       }
 
       if (!blog) {

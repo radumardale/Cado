@@ -4,7 +4,6 @@ import { useForm, useFormState } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect, useState } from 'react';
 import { ChevronDown, LoaderCircle, Plus, X } from 'lucide-react';
-import { updateBlogRequestSchema } from '@/lib/validation/blog/updateBlogRequest';
 import { type z } from 'zod';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
@@ -18,68 +17,53 @@ import { useTranslations } from 'next-intl';
 import BlogImageUpload from '../BlogImageUpload';
 import { SectionImagesInterface } from '@/models/blog/types/SectionImagesInterface';
 import { toast } from 'sonner';
+import { addBlogRequestSchema } from '@/lib/validation/blog/addBlogRequest';
 import { useRouter } from '@/i18n/navigation';
 
-interface AdminBlogFormProps {
-  id: string;
-}
+export default function NewAdminBlogForm() {
+    const {isSuccess, mutate, data: MutatedData, isPending} = trpc.blog.createBlog.useMutation();
+    const { mutate: UpdateMutate, isSuccess: UpdateIsSuccess, data } = trpc.image.uploadBlogImages.useMutation();
 
-export default function AdminBlogForm({ id }: AdminBlogFormProps) {
-    const { data } = trpc.blog.getBlogById.useQuery({id: id});
-    const {isSuccess, mutate, data: MutatedData, isPending} = trpc.blog.updateBlog.useMutation();
-    const { mutate: UpdateMutate, isSuccess: UpdateIsSuccess, data: UpdateData } = trpc.image.uploadBlogImages.useMutation();
-    const { mutate: DeleteMutate, isSuccess: DeleteIsSuccess, isPending: DeleteIsPending } = trpc.blog.deleteBlog.useMutation();
-    const router = useRouter();
+    const [selectedImage, setSelectedImage] = useState<string | null>(null);
+    const [sectionsImages, setSectionImages] = useState<SectionImagesInterface[]>([]);
 
-    const [selectedImage, setSelectedImage] = useState<string | null>(data?.blog?.image || null);
-    const [initialSelectedImage, setInitialSelectedImage] = useState<string | null>(data?.blog?.image || null);
-
-    const [sectionsImages, setSectionImages] = useState<SectionImagesInterface[]>(data?.blog?.section_images || []);
-    const [initialSectionsImages, setInitialSectionImages] = useState<SectionImagesInterface[]>(data?.blog?.section_images || []);
-
-    // const router = useRouter();
     const [isMounted, setIsMounted] = useState(false);
-    const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
     const blogTagsT = useTranslations("blog_tags");
+    const router = useRouter();
   
     useEffect(() => {
         setIsMounted(true);
     }, [])
 
     useEffect(() => {
-        if (!DeleteIsSuccess && DeleteIsPending) router.push("/admin/blog")
-    }, [DeleteIsSuccess, DeleteIsPending])
-
-    useEffect(() => {
-        if (UpdateIsSuccess) {
-            toast.success("Produsul a fost actualizat cu succes!");
-            setInitialSectionImages(UpdateData.sectionImages);
-            setSectionImages(UpdateData.sectionImages);
-
-            setInitialSelectedImage(UpdateData.mainImage);
-            setSelectedImage(UpdateData.mainImage);
+        console.log(data)
+        if (UpdateIsSuccess && MutatedData?.blog?._id) {
+            console.log(MutatedData);
+            router.push({pathname: "/admin/blog/[id]", params: {id: MutatedData?.blog?._id}})
         }
-    }, [UpdateIsSuccess])
+    }, [UpdateIsSuccess, MutatedData?.blog?._id, router]);
 
   // Initialize form with appropriate default values based on mode
-  const form = useForm<z.infer<typeof updateBlogRequestSchema>>({
-    resolver: zodResolver(updateBlogRequestSchema),
+const form = useForm<z.infer<typeof addBlogRequestSchema>>({
+    resolver: zodResolver(addBlogRequestSchema),
     defaultValues: {
-        id: data?.blog?._id,
-        data: {
-              title: {
-                ro: data?.blog?.title.ro || '',
-                ru: data?.blog?.title.ru || '',
-                en: data?.blog?.title.en || '',
-              },
-              isImageNew: false,
-              tag: data?.blog?.tag || BlogTags.NEWS,
-              sections: data?.blog?.sections || [],
-              sectionsImagesCount: 0,
-              imagesChanged: false,
-          }
-      } 
-  });
+            data: {
+                title: {
+                    ro: '',
+                    ru: '',
+                    en: '',
+                },
+                isImageNew: false,
+                tag: BlogTags.NEWS,
+                sections: [{
+                    subtitle: { ro: '', ru: '', en: '' },
+                    content: { ro: '', ru: '', en: '' }
+                }],
+                sectionsImagesCount: 0,
+                imagesChanged: false,
+            }
+        } 
+});
 
   useEffect(() => {
     if (form.getValues("data.sectionsImagesCount") !== sectionsImages.filter(obj => !obj.image.startsWith("https")).length) {
@@ -179,8 +163,7 @@ export default function AdminBlogForm({ id }: AdminBlogFormProps) {
                     }
                 }
 
-                // Update product with image keys if all uploads succeeded
-                if (newImageKeys.length > 0) {
+                if (newImageKeys.length > 0 || newMainImageKey) {
                     // If we have the product ID, update the images
                     if (MutatedData.blog?._id) {
                         UpdateMutate({
@@ -203,7 +186,6 @@ export default function AdminBlogForm({ id }: AdminBlogFormProps) {
             
              // Reset form with updated product data
              form.reset({
-                id: MutatedData.blog?._id,
                 data: {
                     ...MutatedData.blog,
                     isImageNew: false,
@@ -218,7 +200,7 @@ export default function AdminBlogForm({ id }: AdminBlogFormProps) {
     }, [isSuccess, MutatedData, form]);
 
 
-  const onSubmit = (values: z.infer<typeof updateBlogRequestSchema>) => {
+  const onSubmit = (values: z.infer<typeof addBlogRequestSchema>) => {
     mutate(values);
   };
 
@@ -234,28 +216,6 @@ const handleMainImageAdded = (imageBase64: string) => {
             <div className='fixed top-0 left-0 w-full h-full bg-pureblack/25 z-10 items-center justify-center'>
                 <div className="flex items-center justify-center h-full w-full">
                     <LoaderCircle className='animate-spin text-white size-20' />
-                </div>
-            </div>
-        }
-         {
-            isDeleteDialogOpen && 
-            <div className='fixed top-0 left-0 w-full h-full bg-black/75 z-50 flex justify-center items-center' onMouseDown={() => {setIsDeleteDialogOpen(false)}}>
-                <div className='p-8 rounded-3xl bg-white' onMouseDown={(e) => {e.stopPropagation()}}>
-                    <p className='text-lg'>Ești sigur că vrei să ștergi articolul?</p>
-                    <div className='flex gap-6 ml-36 mt-12'>
-                        <button className='cursor-pointer h-12' onClick={(e) => {e.preventDefault(); setIsDeleteDialogOpen(false);}}>
-                            <span className='relative after:content-[""] after:absolute after:left-0 after:bottom-0 after:w-0 after:h-[1px] after:bg-black hover:after:w-full after:transition-all after:duration-300'>Anulează</span>
-                        </button>
-                        <button 
-                            onClick={(e) => {
-                                e.preventDefault(); 
-                                DeleteMutate({id: data?.blog?._id || ""});
-                            }} 
-                            className='disabled:opacity-75 disabled:cursor-default cursor-pointer h-12 px-6 flex justify-center items-center bg-red text-white rounded-3xl hover:opacity-75 transition duration-300'
-                            >
-                                Da, șterge
-                            </button>
-                    </div>
                 </div>
             </div>
         }
@@ -485,9 +445,7 @@ const handleMainImageAdded = (imageBase64: string) => {
                 <p>Adaugă paragraf</p>
             </button>
 
-            <div className='mt-12 pt-4 border-t border-lightgray col-span-full flex justify-between'>
-                <button onClick={(e) => {e.preventDefault(); setIsDeleteDialogOpen(true)}} className='disabled:opacity-75 disabled:cursor-default cursor-pointer h-12 px-6 flex justify-center items-center bg-red text-white rounded-3xl hover:opacity-75 transition duration-300'>Șterge articol</button>
-
+            <div className='mt-12 pt-4 border-t border-lightgray col-span-full flex justify-end'>
                 <div className='flex gap-6'>
                     <button 
                         className='cursor-pointer h-12' 
@@ -495,28 +453,15 @@ const handleMainImageAdded = (imageBase64: string) => {
                             e.preventDefault(); 
                             
                             form.reset();
-                            form.setValue("data.sections", data?.blog?.sections?.map(section => ({
-                                subtitle: {
-                                    ro: section.subtitle.ro || '',
-                                    ru: section.subtitle.ru || '',
-                                    en: section.subtitle.en || ''
-                                },
-                                content: {
-                                    ro: section.content.ro || '',
-                                    ru: section.content.ru || '',
-                                    en: section.content.en || ''
-                                }
-                            })) || [{subtitle: {ro: '', en: '', ru: ''}, content: {ro: '', ru: '', en: ''}}]);
-
-                            setSectionImages(initialSectionsImages);
-                            setSelectedImage(initialSelectedImage);
+                            setSectionImages([]);
+                            setSelectedImage(null);
                         }}
                     >
                         <span className='text-gray relative after:content-[""] after:absolute after:left-0 after:bottom-0 after:w-0 after:h-[1px] after:bg-gray hover:after:w-full after:transition-all after:duration-300'>
                             Anulează
                         </span>
                     </button>
-                    <button type="submit" onClick={() => {console.log("submit")}} disabled={!isDirty} className='disabled:opacity-75 disabled:cursor-default cursor-pointer h-12 px-6 flex justify-center items-center bg-blue-2 text-white rounded-3xl hover:opacity-75 transition duration-300'>Salvează</button>
+                    <button type="submit" disabled={!isDirty} className='disabled:opacity-75 disabled:cursor-default cursor-pointer h-12 px-6 flex justify-center items-center bg-blue-2 text-white rounded-3xl hover:opacity-75 transition duration-300'>Salvează</button>
                 </div>
             </div>
         </form>

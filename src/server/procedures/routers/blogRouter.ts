@@ -1,6 +1,6 @@
 import { router } from '../../trpc';
 import { getBlogProcedure } from "../blog/getBlog";
-import { addBlogProcedure } from "../blog/addBlog";
+import { createBlogProcedure } from "../blog/addBlog";
 import { updateBlogProcedure } from "../blog/updateBlog";
 import { deleteBlogProcedure } from "../blog/deleteBlog";
 import { getLimitedBlogsProcedure } from '../blog/getLimitedBlogs';
@@ -10,7 +10,7 @@ export const blogRouter = router({
     getLimitedBlogs: getLimitedBlogsProcedure,
     getAllBlogs: getAllBlogsProcedure,
     getBlogById: getBlogProcedure,
-    createBlog: addBlogProcedure,
+    createBlog: createBlogProcedure,
     updateBlog: updateBlogProcedure,
     deleteBlog: deleteBlogProcedure
 });

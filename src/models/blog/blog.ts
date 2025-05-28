@@ -3,6 +3,7 @@ import { ProductInfoSchema } from "../product/types/productInfo";
 import { BlogInterface } from "./types/BlogInterface";
 import { BlogTags } from "@/lib/enums/BlogTags";
 import { SectionSchema } from "./types/SectionInterface";
+import { SectionImagesSchema } from "./types/SectionImagesInterface";
 
 // Product Schema
 const BlogSchema = new mongoose.Schema<BlogInterface>({
@@ -21,16 +22,18 @@ const BlogSchema = new mongoose.Schema<BlogInterface>({
   },
   date: {
     type: Date,
-    required: false
-  },
-  reading_length: {
-    type: Number,
-    required: true,
+    required: false,
+    default: new Date()
   },
   sections: {
     type: [SectionSchema],
     required: true,
   },
+  section_images: {
+    type: [SectionImagesSchema],
+    required: true,
+    default: []
+  }
 });
 
 const Blog = mongoose.models.Blog || mongoose.model<BlogInterface>("Blog", BlogSchema);

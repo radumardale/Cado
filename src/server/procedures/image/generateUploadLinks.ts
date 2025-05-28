@@ -39,8 +39,6 @@ export const generateUploadLinks = async ({id, destination} : GenerateUploadLink
         });
   
         // Upload new image
-        // const data = image.replace(/^data:image\/\w+;base64,/, "");
-        // const buf = Buffer.from(data, 'base64');
         const hash = crypto.randomBytes(4).toString('hex');
         const fileName = `${destination}/${id}/${hash}.png`;
   

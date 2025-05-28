@@ -12,11 +12,10 @@ import { addProductRequestSchema } from "@/lib/validation/product/addProductRequ
 import AdminProductDetails from "@/components/admin/products/AdminProductDetails"
 import AdminProductImages from "@/components/admin/products/AdminProductImages"
 import { useRouter } from "@/i18n/navigation"
-import { DestinationEnum } from "@/server/procedures/image/generateUploadLinks"
 
 export default function AdminAddProductForm() {
     const {isSuccess, mutate, data} = trpc.products.createProduct.useMutation();
-    const { mutate: UpdateMutate, isSuccess: UpdateIsSuccess, } = trpc.image.updateImage.useMutation();
+    const { mutate: UpdateMutate, isSuccess: UpdateIsSuccess, } = trpc.image.uploadProductImages.useMutation();
     const router = useRouter();
     const [imagesData, setImagesData] = useState<string[]>([]);
 
@@ -60,7 +59,6 @@ export default function AdminAddProductForm() {
                 if (newImageKeys.length === data.imagesLinks.length) {
                     UpdateMutate({
                         id: data.product._id, 
-                        destination: DestinationEnum.PRODUCT, 
                         filenames: newImageKeys
                     });
                 }

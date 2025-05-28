@@ -31,7 +31,7 @@ export default function BlogSection({id}: BlogSectionInteface) {
         <div className="flex justify-between items-center mb-10 lg:mb-12">
             <div className='h-8 lg:h-12 flex items-center px-6 text-white w-fit rounded-3xl font-semibold text-xs leading-3 lg:text-base lg:leading-5' style={{backgroundColor: `var(${getTagColor(data.blog.tag)})`}} >{t(data.blog.tag)}</div>
             <div className="flex gap-2 lg:gap-4">
-                <p className='font-manrope font-semibold text-sm leading-4 lg:text-base lg:leading-5'>{data.blog.reading_length} MIN. READ</p>
+                <p className='font-manrope font-semibold text-sm leading-4 lg:text-base lg:leading-5'>{data.blog.sections.length} MIN. READ</p>
                 <p className='text-gray font-manrope font-semibold text-sm leading-4 lg:text-base lg:leading-5'>{new Date(data.blog.date).toLocaleDateString(locale, { day: '2-digit', month: '2-digit', year: 'numeric' }).replace(/\//g, '.')}</p>
             </div>
         </div>  
