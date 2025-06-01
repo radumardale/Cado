@@ -173,9 +173,7 @@ export default function AdminBlogForm({ id }: AdminBlogFormProps) {
                     }
                 }
 
-                // Update product with image keys if all uploads succeeded
-                if (newImageKeys.length > 0) {
-                    // If we have the product ID, update the images
+                if (newImageKeys.length > 0 || newMainImageKey) {
                     if (MutatedData.blog?._id) {
                         UpdateMutate({
                             id: MutatedData.blog._id,

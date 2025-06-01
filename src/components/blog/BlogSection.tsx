@@ -46,12 +46,16 @@ export default function BlogSection({id}: BlogSectionInteface) {
         <>
             {
                 data.blog.sections.map((section, index) => {
+                    const image = data.blog?.section_images.find(section => section.index === index)
                     return (
                         <Fragment key={index}>
                             <h2 className='font-manrope text-2xl lg:text-[2rem] leading-7 lg:leading-9 uppercase font-semibold my-6 lg:my-8 first-of-type:mt-8'>{section.subtitle[locale]}</h2>
                             <p className='text-sm lg:text-base leading-4 lg:leading-5 whitespace-pre-line'>
                                 {section.content[locale]}
                             </p>
+                            {
+                               image && <Image className='w-full aspect-[824/544] object-cover lg:mb-4 rounded-lg lg:rounded-2xl mt-8' unoptimized src={image.image} alt='blog' width={708} height={464}/>
+                            }
                         </Fragment>
                     )
                 })

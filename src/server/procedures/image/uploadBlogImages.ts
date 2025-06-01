@@ -53,7 +53,7 @@ export const UploadBlogImagesProcedure = publicProcedure
     return {
       success: true,
       sectionImages: newSectionImages,
-      mainImage: input.newMainImageKey ? input.newMainImageKey : blog.image
+      mainImage: blog.image
     };
 
     } catch (error: any) {
