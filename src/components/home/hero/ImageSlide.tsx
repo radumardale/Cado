@@ -3,16 +3,19 @@ import React from 'react'
 import { motion } from 'motion/react'
 import { easeInOutCubic } from '@/lib/utils'
 import { carousellDirection } from './Hero'
+import { Link } from '@/i18n/navigation'
+import { Ocasions } from '@/lib/enums/Ocasions'
 
 interface ImageSlideInterface {
     src: string,
     slide: number,
     nextSlide: number,
     index: number,
-    direction: carousellDirection
+    direction: carousellDirection,
+    ocasion?: Ocasions
 }
 
-export default function ImageSlide({src, slide, nextSlide, index, direction}: ImageSlideInterface) {
+export default function ImageSlide({src, slide, nextSlide, index, direction, ocasion}: ImageSlideInterface) {
 
     const slideVariants = {
         initial: {
@@ -35,7 +38,14 @@ export default function ImageSlide({src, slide, nextSlide, index, direction}: Im
         style={{zIndex: slide === index ? 4 : nextSlide === index ? 3 : 0}}
         className='absolute left-0 top-0 w-full h-full'
     >
-        <Image unoptimized quality={100} priority src={src} alt="hero1" width={3584} height={1600} className='w-full h-full object-cover'/>
+        {
+            ocasion ?
+            <Link href={{pathname: "/catalog", query: {ocasions: ocasion}}} className='w-full h-full'>
+                <Image unoptimized quality={100} priority src={src} alt="hero1" width={3584} height={1600} className='w-full h-full object-cover'/>
+            </Link>
+            :
+            <Image unoptimized quality={100} priority src={src} alt="hero1" width={3584} height={1600} className='w-full h-full object-cover'/>
+        }
     </motion.div>
   )
 }

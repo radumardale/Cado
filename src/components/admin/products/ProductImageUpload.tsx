@@ -29,9 +29,8 @@ export default function ProductImageUpload({
     try {
       setIsProcessing(true);
       
-      // Validate file size (limit to 5MB)
-      if (file.size > 10 * 1024 * 1024) {
-        toast.error("Imaginea trebuie să fie mai mică de 10MB");
+      if (file.size > 500 * 1024 * 1024) {
+        toast.error("Imaginea trebuie să fie mai mică de 500MB");
         return;
       }
       

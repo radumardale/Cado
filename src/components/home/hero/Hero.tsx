@@ -1,9 +1,9 @@
 'use client'
 
-import { heroImages } from '@/lib/constants';
 import { useEffect, useRef, useState } from 'react'
 import ImageSlide from './ImageSlide';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
+import { trpc } from '@/app/_trpc/client';
 
 export enum carousellDirection {
   "FORWARD",
@@ -11,6 +11,7 @@ export enum carousellDirection {
 }
 
 export default function Hero() {
+    const { data } = trpc.home_banner.getAllHomeBanners.useQuery();
     const [slide, setSlide] = useState(-1);
     const [nextSlideState, setNextSlideState] = useState(0);
     const [slideNumber, setSlideNumber] = useState(0);
@@ -18,17 +19,21 @@ export default function Hero() {
     const [direction, setDirection] = useState<carousellDirection>(carousellDirection.FORWARD);
     const intervalRef = useRef<NodeJS.Timeout>(null);
 
+    // Get banners array from data, with fallback to empty array
+    const banners = data?.banners || [];
+    const totalBanners = banners.length;
+
     const nextSlide = () => {
-      if (isAnimationPlaying) return;
+      if (isAnimationPlaying || totalBanners === 0) return;
   
       if (intervalRef.current) {
         clearInterval(intervalRef.current);
       }
   
       setSlide(nextSlideState);
-      setSlideNumber(slideNumber + 1 > heroImages.length - 1 ? 0 : slideNumber + 1);
+      setSlideNumber(slideNumber + 1 > totalBanners - 1 ? 0 : slideNumber + 1);
       setIsAnimationPlaying(true);
-      setNextSlideState(nextSlideState + 1 > heroImages.length - 1 ? 0 : nextSlideState + 1);
+      setNextSlideState(nextSlideState + 1 > totalBanners - 1 ? 0 : nextSlideState + 1);
       setDirection(carousellDirection.FORWARD);
       
       setTimeout(() => {
@@ -39,7 +44,7 @@ export default function Hero() {
     }
 
     const previousSlide = () => {
-      if (isAnimationPlaying) return;
+      if (isAnimationPlaying || totalBanners === 0) return;
   
       if (intervalRef.current) {
         clearInterval(intervalRef.current);
@@ -48,8 +53,8 @@ export default function Hero() {
       setIsAnimationPlaying(true);
       
       setSlide(nextSlideState);
-      setSlideNumber(slideNumber === 0 ? heroImages.length - 1 : slideNumber - 1);
-      setNextSlideState(nextSlideState === 0 ? heroImages.length - 1 : nextSlideState - 1);
+      setSlideNumber(slideNumber === 0 ? totalBanners - 1 : slideNumber - 1);
+      setNextSlideState(nextSlideState === 0 ? totalBanners - 1 : nextSlideState - 1);
       setDirection(carousellDirection.BACKWARDS);
 
       setTimeout(() => {
@@ -60,7 +65,7 @@ export default function Hero() {
     }
 
     const setToSlide = (nextSlideNum: number) => {
-      if (isAnimationPlaying) return;
+      if (isAnimationPlaying || totalBanners === 0) return;
 
       if (nextSlideNum - slideNumber > 0) {
         setDirection(carousellDirection.FORWARD);
@@ -79,7 +84,7 @@ export default function Hero() {
       }
 
       setIsAnimationPlaying(true);
-  
+
       setTimeout(() => {
         setIsAnimationPlaying(false);
       }, 1000);
@@ -88,37 +93,64 @@ export default function Hero() {
     }
 
     useEffect(() => {
-      // Initial interval setup
-      intervalRef.current = setInterval(nextSlide, 5000);
-  
-      // Cleanup
+      // Only start auto-scroll if there are banners
+      if (totalBanners > 0) {
+        intervalRef.current = setInterval(nextSlide, 5000);
+      }
+
       return () => {
         if (intervalRef.current) {
           clearInterval(intervalRef.current);
         }
       };
-    }, [isAnimationPlaying]);
+    }, [totalBanners]); // Re-run when banners data changes
 
-  return (
-    <div className='col-span-full aspect-[358/362] lg:aspect-[112/50] overflow-hidden rounded-2xl lg:rounded-3xl relative mb-16 lg:mb-32 lg:mt-0 mt-3'>
-      <ArrowRight className='absolute top-1/2 -translate-y-1/2 right-2 lg:right-6 z-20 text-blue-4 cursor-pointer' onClick={nextSlide}/>
-      <ArrowLeft className='absolute top-1/2 -translate-y-1/2 left-2 lg:left-6 z-20 text-blue-4 cursor-pointer' onClick={previousSlide}/>
-      <div className="flex gap-4 lg:gap-6 absolute w-full lg:w-fit left-1/2 -translate-x-1/2 bottom-2 lg:bottom-6 z-20 px-4 lg:px-0">
-        {
-          heroImages.map((image, index) => {
-             return (
+    // Don't render if no banners
+    if (totalBanners === 0) {
+      return (
+        <div className='col-span-full overflow-hidden rounded-2xl lg:rounded-3xl relative mb-16 lg:mb-32 lg:mt-0 mt-3 aspect-[358/362] lg:aspect-[112/50] bg-gray-200 flex items-center justify-center'>
+          <p className="text-gray-500">No banners available</p>
+        </div>
+      );
+    }
+
+    return (
+      <div className='col-span-full overflow-hidden rounded-2xl lg:rounded-3xl relative mb-16 lg:mb-32 lg:mt-0 mt-3'>
+        {/* Navigation arrows - only show if more than 1 banner */}
+        {totalBanners > 1 && (
+          <>
+            <ArrowRight className='absolute top-1/2 -translate-y-1/2 right-2 lg:right-6 z-20 text-blue-4 cursor-pointer' onClick={nextSlide}/>
+            <ArrowLeft className='absolute top-1/2 -translate-y-1/2 left-2 lg:left-6 z-20 text-blue-4 cursor-pointer' onClick={previousSlide}/>
+          </>
+        )}
+        
+        {/* Dots indicator - only show if more than 1 banner */}
+        {totalBanners > 1 && (
+          <div className="flex gap-4 lg:gap-6 absolute w-full lg:w-fit left-1/2 -translate-x-1/2 bottom-2 lg:bottom-6 z-20 px-4 lg:px-0">
+            {banners.map((_, index) => (
               <div key={index} className='lg:py-4 cursor-pointer flex-1 lg:flex-auto' onClick={() => {setToSlide(index)}}>
-                <button className={`h-0.5 w-full lg:w-18 pointer-events-none transition duration-200 rounded-2xl ${slideNumber === index ? "bg-blue-4" : "bg-gray"}`}></button>
+                <button className={`h-0.5 w-full lg:w-18 pointer-events-none transition duration-200 rounded-2xl ${
+                  slideNumber === index ? "bg-blue-4" : "bg-gray"
+                }`}></button>
               </div>
-            )
-          })
-        }
+            ))}
+          </div>
+        )}
+        
+        {/* Banner slides */}
+        <div className='aspect-[358/362] lg:aspect-[112/50] relative w-full'>
+          {banners.map((banner, index) => (
+            <ImageSlide 
+              ocasion={banner.ocasion}
+              key={banner._id || index} 
+              src={banner.image} 
+              index={index} 
+              slide={slide} 
+              nextSlide={nextSlideState} 
+              direction={direction}
+            />
+          ))}
+        </div>
       </div>
-      {
-        heroImages.map((image, index) => {
-          return <ImageSlide key={index} src={image} index={index} slide={slide} nextSlide={nextSlideState} direction={direction}/>
-        })
-      }
-    </div>
-  )
+    )
 }

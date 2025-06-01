@@ -111,7 +111,14 @@ export const addOrderProcedure = publicProcedure
       const transporter = nodemailer.createTransport(mailConfig);
 
       const emailHtml = await render(OrderConfirmation({
-        order: order.toObject() as ResOrderInterface,
+        order: { 
+          ...order.toObject(), 
+          _id: order._id.toString(),
+          additional_info: {
+            ...order.additional_info,
+            billing_checkbox: input.additional_info.billing_checkbox
+          }
+        } as unknown as ResOrderInterface,
         locale: "ro",
         paymentMethodName: input.payment_method,
         regionName: input.additional_info.delivery_address?.region || "",

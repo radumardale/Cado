@@ -7,6 +7,8 @@ import { blogRouter } from './procedures/routers/blogRouter';
 import { createServerSideHelpers } from '@trpc/react-query/server';
 import superjson from 'superjson';
 import { getAllClientsProcedure } from './procedures/clients/getAllClients';
+import { homeRouter } from './procedures/routers/homeRouter';
+import { homeOcasionRouter } from './procedures/routers/homeOcasionRouter';
 
 export const appRouter = router({
   products: productRouter,
@@ -14,6 +16,8 @@ export const appRouter = router({
   order: orderRouter,
   blog: blogRouter,
   search: searchProductProcedure,
+  home_banner: homeRouter,
+  homeOcasion: homeOcasionRouter,
   getAllClients: getAllClientsProcedure
 });
 

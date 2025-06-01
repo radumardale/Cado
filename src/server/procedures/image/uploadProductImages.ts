@@ -21,6 +21,14 @@ export const UploadProductImagesProcedure = publicProcedure
 
     const product = await Product.findById(input.id);
     
+    if (!product) {
+      return {
+        success: false,
+        images: [],
+        error: 'Product not found'
+      };
+    }
+    
     for (const image of product.images) {
       if (!newImageUrls.includes(image)) {
         await deleteFromBucket(image);

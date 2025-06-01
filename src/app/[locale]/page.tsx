@@ -28,6 +28,8 @@ export default async function Home({params}: {params: Promise<{locale: string}>;
   const helpers = serverHelper;
   await helpers.products.getRecProduct.prefetch();
   await helpers.blog.getLimitedBlogs.prefetch({limit: 6});
+  await helpers.home_banner.getAllHomeBanners.prefetch();
+  await helpers.homeOcasion.getHomeOcasion.prefetch();
   const dehydratedState = JSON.parse(JSON.stringify(dehydrate(helpers.queryClient)));
 
   return (

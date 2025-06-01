@@ -13,7 +13,6 @@ export const deleteProductProcedure = publicProcedure
         await connectMongo();
         
         const product = await Product.findByIdAndDelete(input.id);
-        await deleteMultipleFromBucket(product.images);
 
       if (!product) {
         return {
@@ -21,6 +20,8 @@ export const deleteProductProcedure = publicProcedure
           error: "This product does not exist",
         };
       }
+
+        await deleteMultipleFromBucket(product.images);
 
       return {
         success: true,

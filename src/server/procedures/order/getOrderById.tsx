@@ -50,7 +50,7 @@ export const getOrderByIdProcedure = publicProcedure
             as: "productDetails"
           }
         },
-        { $limit: 1 } // Only need the first (and only) matching document
+        { $limit: 1 }
       ]);
 
       // Extract the order from results

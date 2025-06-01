@@ -7,7 +7,8 @@ import crypto from 'crypto';
 
 export enum DestinationEnum {
     PRODUCT = "PRODUCT",
-    BLOG = "BLOG"
+    BLOG = "BLOG",
+    BANNER = "BANNER"
 }
 
 interface GenerateUploadLinksProps {

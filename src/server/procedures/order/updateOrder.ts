@@ -3,14 +3,13 @@
 import { publicProcedure } from "@/server/trpc";
 import { Client } from "@/models/client/client";
 import { Order } from "@/models/order/order";
-import { ResOrderInterface } from "@/models/order/types/orderInterface";
 import { ActionResponse } from "@/lib/types/ActionResponse";
 import { updateOrderRequestSchema } from '@/lib/validation/order/updateOrderRequest';
 import connectMongo from "@/lib/connect-mongo";
 import { DeliveryMethod } from "@/models/order/types/deliveryMethod";
 
 export interface updateOrderResponse extends ActionResponse {
-  order: ResOrderInterface | null
+  order: any | null
 }
 
 export const updateOrderProcedure = publicProcedure
@@ -107,7 +106,7 @@ export const updateOrderProcedure = publicProcedure
 
       // Add the billing_checkbox field to the response
       if (plainOrder.additional_info) {
-        plainOrder.additional_info.billing_checkbox = input.additional_info.billing_checkbox;
+        (plainOrder.additional_info as any).billing_checkbox = input.additional_info.billing_checkbox;
       }
       
       return {

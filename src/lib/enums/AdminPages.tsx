@@ -24,6 +24,6 @@ export const AdminPagesLinks: Record<AdminPages, Pathnames> = {
   [AdminPages.ORDERS]: '/admin/orders',
   [AdminPages.PRODUCTS]: '/admin/products',
   [AdminPages.CLIENTS]: '/admin/client-data',
-  [AdminPages.HOME_PAGE]: '/admin/home-page',
+  [AdminPages.HOME_PAGE]: '/admin/home',
   [AdminPages.BLOG_PAGE]: '/admin/blog',
 };

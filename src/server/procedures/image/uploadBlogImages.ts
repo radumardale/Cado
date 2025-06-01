@@ -26,6 +26,15 @@ export const UploadBlogImagesProcedure = publicProcedure
 
     const blog = await Blog.findById(input.id);
 
+    if (!blog) {
+      return {
+        success: false,
+        sectionImages: [],
+        mainImage: "",
+        error: 'Blog not found'
+      };
+    }
+
     const newSectionImagesUrls = input.filenames.map(filename => filename.image);
     for (const obj of blog.section_images) {
         if (!newSectionImagesUrls.includes(obj.image)) {

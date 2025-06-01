@@ -1,3 +1,5 @@
+'use client'
+
 import { Link, useRouter } from '@/i18n/navigation';
 import { Categories } from '@/lib/enums/Categories';
 import { CartInterface } from '@/lib/types/CartInterface';

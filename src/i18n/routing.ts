@@ -77,9 +77,9 @@ export const routing = defineRouting({
       ru: '/admin/client-data',
       ro: '/admin/client-data'
     },
-    '/admin/home-page': {
-      ru: '/admin/home-page',
-      ro: '/admin/home-page'
+    '/admin/home': {
+      ru: '/admin/home',
+      ro: '/admin/home'
     },
     '/admin/blog': {
       ru: '/admin/blog',
@@ -118,7 +118,7 @@ export type Pathnames =
 | "/admin/products"
 | "/admin/products/new"
 | "/admin/client-data"
-| "/admin/home-page"
+| "/admin/home"
 | "/admin/blog"
 | "/admin/blog/new"
 | "/admin/catalog-sezon"

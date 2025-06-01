@@ -43,9 +43,9 @@ export default function Recommendations({indProductSection = false}: Recommendat
                     <div className='-mr-12 lg:mr-0 rounded-tl-2xl lg:col-span-full'>
                         <div className='w-full lg:col-span-full lg:grid lg:grid-cols-15 lg:gap-x-6 flex flex-nowrap'>
                             {
-                                data?.products.map((product: ProductInterface, index: number) => (
+                                data?.products.map((product: {product: ProductInterface}, index: number) => (
                                     <div className='min-w-1/2 lg:min-w-0 pr-2 lg:pr-0 lg:col-span-3 h-auto mb-1 lg:mb-0' key={index}>
-                                        <ProductCard category={null} product={product} />
+                                        <ProductCard category={null} product={product.product} />
                                     </div>
                                 ))
                             }

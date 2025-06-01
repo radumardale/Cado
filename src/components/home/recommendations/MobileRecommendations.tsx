@@ -14,8 +14,10 @@ interface MobileRecommendationsProps {
     data: {
         success: boolean;
         error?: string | undefined;
-        products?: ProductInterface[];
-    } | undefined,
+        products?: {
+            product: ProductInterface
+        }[];
+    } | undefined
     indProductSection: boolean;
 }
 
@@ -43,9 +45,9 @@ export default function MobileRecommendations({isLoading, data, indProductSectio
                         isLoading || !data?.products ? 
                         <></> :
                         <>
-                            {data.products.map((product: ProductInterface, index: number) => (
+                            {data.products.map((product: {product: ProductInterface}, index: number) => (
                                 <SwiperSlide key={index} className='pr-2 lg:pr-6 mb-1 h-auto'>
-                                    <ProductCard category={null} key={index} product={product} />
+                                    <ProductCard category={null} key={index} product={product.product} />
                                 </SwiperSlide>
                             ))}
                         </>

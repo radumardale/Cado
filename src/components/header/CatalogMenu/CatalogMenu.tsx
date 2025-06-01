@@ -15,9 +15,9 @@ interface CatalogMenuProps {
 
 export default function CatalogMenu({setIsCatalogMenuActive}: CatalogMenuProps) {
   const closeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const recProducts = trpc.products.getRecProduct.useQuery()
   const [searchText, setSearchText] = useState('');
   const [queryText, setQueryText] = useState('');
-  const recProducts = trpc.products.getRecProduct.useQuery()
   const { data, isLoading } = trpc.search.useQuery(
     { title: queryText },
     { 

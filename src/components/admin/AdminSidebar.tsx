@@ -2,7 +2,7 @@
 
 import { Link } from '@/i18n/navigation'
 import { AdminPages, AdminPagesArr, AdminPagesIcons, AdminPagesLinks } from '@/lib/enums/AdminPages'
-import { X } from 'lucide-react'
+import { ChevronRight, X } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import Image from 'next/image'
 import React, { Fragment, useState } from 'react'
@@ -21,7 +21,9 @@ export default function AdminSidebar({ page }: AdminSidebarProps) {
         <X strokeWidth={1.5} className='size-6 text-white'/>
       </button>
       <div className='sticky top-8 h-screen'>
-        <button onClick={() => {setIsOpen(true)}} className='absolute h-16 w-4 bg-black -right-16 translate-x-full top-1/2 -translate-y-1/2 rounded-r-lg cursor-pointer xl:hidden'></button>
+        <button onClick={() => {setIsOpen(!isOpen)}} className='absolute h-16 w-6 bg-black -right-16 translate-x-full top-1/2 -translate-y-1/2 rounded-r-lg cursor-pointer xl:hidden'>
+          <ChevronRight className={`text-white size-6 transition duration-300 ${isOpen ? "rotate-180" : ""}`} strokeWidth={1.5}/>
+        </button>
         <Link href="/" className='w-fit'>
           <Image unoptimized src="/logo/logo-blue.svg" alt='logo cado' className='h-12 w-auto' width={196} height={48}/>
         </Link>

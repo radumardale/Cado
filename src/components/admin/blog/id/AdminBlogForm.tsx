@@ -37,14 +37,8 @@ export default function AdminBlogForm({ id }: AdminBlogFormProps) {
     const [sectionsImages, setSectionImages] = useState<SectionImagesInterface[]>(data?.blog?.section_images || []);
     const [initialSectionsImages, setInitialSectionImages] = useState<SectionImagesInterface[]>(data?.blog?.section_images || []);
 
-    // const router = useRouter();
-    const [isMounted, setIsMounted] = useState(false);
     const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
     const blogTagsT = useTranslations("blog_tags");
-  
-    useEffect(() => {
-        setIsMounted(true);
-    }, [])
 
     useEffect(() => {
         if (!DeleteIsSuccess && DeleteIsPending) router.push("/admin/blog")
@@ -317,7 +311,7 @@ const handleMainImageAdded = (imageBase64: string) => {
                                 form.setValue("data.isImageNew", true, {shouldDirty: true});
                             }}
                         />
-                        <Image src={selectedImage} alt='image' className='aspect-[3/2] rounded-2xl object-cover' width={703} height={464}/>
+                        <Image unoptimized src={selectedImage} alt='image' className='aspect-[3/2] rounded-2xl object-cover' width={703} height={464}/>
                     </div>
                 }
         </>
@@ -330,7 +324,7 @@ const handleMainImageAdded = (imageBase64: string) => {
                     render={({ field }) => (
                         <FormItem className='flex-1'> 
                             <FormMessage />
-                                <Select onValueChange={field.onChange} value={isMounted ? field.value : BlogTags.NEWS}>
+                                <Select onValueChange={field.onChange} value={field.value}>
                                     <FormControl>
                                         <SelectTrigger className="text-base cursor-pointer flex h-12 max-h-none items-center px-6 gap-2 border border-gray rounded-3xl text-black w-full">
                                             <SelectValue placeholder="Alege disponibilitate stoc" />
@@ -463,7 +457,7 @@ const handleMainImageAdded = (imageBase64: string) => {
                                             // form.setValue("data.sectionsImagesCount", form.getValues("data.sectionsImagesCount") - 1, {shouldDirty: true});
                                         }}
                                     />
-                                    <Image src={sectionImage.image} alt='image' className='aspect-[3/2] rounded-2xl object-cover' width={703} height={464}/>
+                                    <Image unoptimized src={sectionImage.image} alt='image' className='aspect-[3/2] rounded-2xl object-cover' width={703} height={464}/>
                                 </div>
                             }
                         </div>

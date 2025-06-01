@@ -1,3 +1,5 @@
+'use client'
+
 import LoadingGrid from '@/components/catalog/productsGrid/LoadingGrid'
 import ProductCard from '@/components/catalog/productsGrid/ProductCard'
 import { ProductInterface } from '@/models/product/types/productInterface'
@@ -9,7 +11,9 @@ interface PCRecommendationsProps {
     data: {
         success: boolean;
         error?: string | undefined;
-        products?: ProductInterface[];
+        products?: {
+            product: ProductInterface
+        }[];
     } | undefined
 }
 
@@ -18,8 +22,8 @@ export default function PCRecommendations({indProductSection, isLoading, data}: 
         <div className={`${indProductSection ? "mb-42" : "mb-8"} col-span-full grid grid-cols-15 gap-x-6`}>
                 {
                     isLoading || !data?.products ? <LoadingGrid gridLayout={true} length={5} /> :
-                    data?.products.map((product: ProductInterface, index: number) => (
-                            <ProductCard category={null} key={index} product={product} />
+                    data?.products.map((product: {product: ProductInterface}, index: number) => (
+                            <ProductCard category={null} key={index} product={product.product} />
                     ))
                 }
         </div>

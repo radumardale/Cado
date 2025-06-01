@@ -22,7 +22,7 @@ import { useRouter } from '@/i18n/navigation';
 
 export default function NewAdminBlogForm() {
     const {isSuccess, mutate, data: MutatedData, isPending} = trpc.blog.createBlog.useMutation();
-    const { mutate: UpdateMutate, isSuccess: UpdateIsSuccess, data } = trpc.image.uploadBlogImages.useMutation();
+    const { mutate: UpdateMutate, isSuccess: UpdateIsSuccess } = trpc.image.uploadBlogImages.useMutation();
 
     const [selectedImage, setSelectedImage] = useState<string | null>(null);
     const [sectionsImages, setSectionImages] = useState<SectionImagesInterface[]>([]);
@@ -36,36 +36,33 @@ export default function NewAdminBlogForm() {
     }, [])
 
     useEffect(() => {
-        console.log(data)
         if (UpdateIsSuccess && MutatedData?.blog?._id) {
-            console.log(MutatedData);
             router.push({pathname: "/admin/blog/[id]", params: {id: MutatedData?.blog?._id}})
         }
     }, [UpdateIsSuccess, MutatedData?.blog?._id, router]);
 
-  // Initialize form with appropriate default values based on mode
 const form = useForm<z.infer<typeof addBlogRequestSchema>>({
     resolver: zodResolver(addBlogRequestSchema),
     defaultValues: {
-            data: {
-                title: {
-                    ro: '',
-                    ru: '',
-                    en: '',
-                },
-                isImageNew: false,
-                tag: BlogTags.NEWS,
-                sections: [{
-                    subtitle: { ro: '', ru: '', en: '' },
-                    content: { ro: '', ru: '', en: '' }
-                }],
-                sectionsImagesCount: 0,
-                imagesChanged: false,
-            }
-        } 
+        data: {
+            title: {
+                ro: '',
+                ru: '',
+                en: '',
+            },
+            isImageNew: false,
+            tag: BlogTags.NEWS,
+            sections: [{
+                subtitle: { ro: '', ru: '', en: '' },
+                content: { ro: '', ru: '', en: '' }
+            }],
+            sectionsImagesCount: 0,
+            imagesChanged: false,
+        }
+    } 
 });
 
-  useEffect(() => {
+useEffect(() => {
     if (form.getValues("data.sectionsImagesCount") !== sectionsImages.filter(obj => !obj.image.startsWith("https")).length) {
         form.setValue('data.sectionsImagesCount', sectionsImages.filter(obj => !obj.image.startsWith("https")).length, {shouldDirty: true});
     }
@@ -277,7 +274,7 @@ const handleMainImageAdded = (imageBase64: string) => {
                                 form.setValue("data.isImageNew", true, {shouldDirty: true});
                             }}
                         />
-                        <Image src={selectedImage} alt='image' className='aspect-[3/2] rounded-2xl object-cover' width={703} height={464}/>
+                        <Image unoptimized src={selectedImage} alt='image' className='aspect-[3/2] rounded-2xl object-cover' width={703} height={464}/>
                     </div>
                 }
         </>
@@ -315,7 +312,6 @@ const handleMainImageAdded = (imageBase64: string) => {
                     const handleSectionImageAdded = (imageBase64: string) => {
                         
                         setSectionImages([...sectionsImages, { image: imageBase64, index }])
-                        // form.setValue("data.sectionsImagesCount", form.getValues("data.sectionsImagesCount") + 1, {shouldDirty: true});
                         form.setValue("data.imagesChanged", true, {shouldDirty: true});
                     };
                     const sectionImage = sectionsImages.find(section => section.index === index);
@@ -420,10 +416,9 @@ const handleMainImageAdded = (imageBase64: string) => {
                                         onClick={() => {
                                             setSectionImages(sectionsImages.filter(section => section.index !== index));
                                             form.setValue("data.imagesChanged", true, {shouldDirty: true});
-                                            // form.setValue("data.sectionsImagesCount", form.getValues("data.sectionsImagesCount") - 1, {shouldDirty: true});
                                         }}
                                     />
-                                    <Image src={sectionImage.image} alt='image' className='aspect-[3/2] rounded-2xl object-cover' width={703} height={464}/>
+                                    <Image unoptimized src={sectionImage.image} alt='image' className='aspect-[3/2] rounded-2xl object-cover' width={703} height={464}/>
                                 </div>
                             }
                         </div>

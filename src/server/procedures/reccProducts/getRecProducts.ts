@@ -1,9 +1,9 @@
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 
 import { publicProcedure } from "../../trpc";
-import { Product } from '@/models/product/product';
 import { ActionResponse } from "@/lib/types/ActionResponse";
 import connectMongo from "@/lib/connect-mongo";
+import { ReccProduct } from "@/models/reccProduct/ReccProduct";
 
 export interface getProductResponseInterface extends ActionResponse {
   products: any
@@ -15,9 +15,14 @@ export const getRecProductsProcedure = publicProcedure
 
       await connectMongo();
       
-      const products = await Product.find()
-      .limit(5)
-      .select("_id title price images custom_id stock_availability sale")
+      const products = await ReccProduct.find()
+      .populate({
+        path: 'product',
+        select: '_id title price images custom_id stock_availability sale'
+      })
+      .sort({
+        index: 1
+      })
       .lean();
 
       if (!products) {

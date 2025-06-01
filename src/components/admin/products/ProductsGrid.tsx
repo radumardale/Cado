@@ -1,3 +1,5 @@
+'use client'
+
 import { Link, useRouter } from '@/i18n/navigation';
 import { ProductInterface } from '@/models/product/types/productInterface';
 import { Plus } from 'lucide-react'
