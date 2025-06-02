@@ -1,20 +1,29 @@
+// trpc.ts
 import { initTRPC } from "@trpc/server";
 import { getServerSession } from "next-auth";
 import { cache } from "react";
 import superjson from 'superjson';
+import type { NextRequest } from 'next/server';
 
-const t = initTRPC.create({
-  transformer: superjson
-});
-
-export const createTRPCContext = cache(async () => {
+// Update context to include req/res for caching
+export const createTRPCContext = cache(async (opts?: { req?: NextRequest }) => {
   try {
     const session = await getServerSession();
-    return { session };
+    return { 
+      session,
+      req: opts?.req
+    };
   } catch (error) {
     console.error("Session error:", error);
-    return { session: null };
+    return { 
+      session: null,
+      req: opts?.req
+    };
   }
+});
+
+const t = initTRPC.context<Awaited<ReturnType<typeof createTRPCContext>>>().create({
+  transformer: superjson
 });
 
 export const router = t.router;

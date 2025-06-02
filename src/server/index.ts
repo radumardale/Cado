@@ -25,6 +25,9 @@ export type AppRouter = typeof appRouter;
 
 export const serverHelper = createServerSideHelpers({
   router: appRouter,
-  ctx: {},
+  ctx: {
+    session: null,
+    req: undefined
+  },
   transformer: superjson
 });
