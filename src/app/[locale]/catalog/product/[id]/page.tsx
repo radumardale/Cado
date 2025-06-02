@@ -45,7 +45,6 @@ export async function generateMetadata() {
                 : Promise.resolve()
         ]);
         
-        // Remove unnecessary serialization
         const dehydratedState = JSON.parse(JSON.stringify(dehydrate(helpers.queryClient)));
 
         return (
