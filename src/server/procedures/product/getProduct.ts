@@ -22,7 +22,7 @@ export const getProductProcedure = publicProcedure
 
       await connectMongo();
       
-      const product = await Product.findOne({custom_id: input.id});
+      const product = await Product.findOne({custom_id: input.id}).lean(); 
 
       if (!product) {
         return {
@@ -32,9 +32,11 @@ export const getProductProcedure = publicProcedure
         };
       }
 
+      const serializedProduct = JSON.parse(JSON.stringify(product));
+
       return {
         success: true,
-        product: product
+        product: serializedProduct as ProductInterface
       };
     } catch (error) {
       console.error("Error fetching product:", error);
