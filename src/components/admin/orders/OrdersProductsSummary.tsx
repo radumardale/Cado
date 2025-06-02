@@ -19,22 +19,21 @@ export default function OrdersProductsSummary() {
     const locale = useLocale();
     const router = useRouter();
     const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+    const DEFAULT_ORDERS_QUERY = {
+        limit: 8,
+        sortBy: SortBy.LATEST,
+    } as const;
+    
     const { mutate } = trpc.order.deleteOrder.useMutation({
         onMutate: async (deletedOrderId) => {
-            // Define the exact same parameters used in server prefetch
-            const queryInput = {
-                limit: 8,
-                sortBy: SortBy.LATEST,
-            };
-    
-            // Cancel any outgoing refetches for this specific query
-            await utils.order.getAllOrders.cancel(queryInput);
+            // Cancel ongoing requests
+            await utils.order.getAllOrders.cancel(DEFAULT_ORDERS_QUERY);
             
-            // Snapshot the previous value with the correct input
-            const previousOrders = utils.order.getAllOrders.getData(queryInput);
+            // Get current data
+            const previousOrders = utils.order.getAllOrders.getData(DEFAULT_ORDERS_QUERY);
             
-            // Update the cache with the SAME input parameters as server prefetch
-            utils.order.getAllOrders.setData(queryInput, (old) => {
+            // Optimistically update
+            utils.order.getAllOrders.setData(DEFAULT_ORDERS_QUERY, (old) => {
                 if (!old) return old;
                 return {
                     ...old,
@@ -42,23 +41,18 @@ export default function OrdersProductsSummary() {
                 };
             });
             
-            return { previousOrders, queryInput };
+            return { previousOrders };
         },
         onSuccess: () => {
             router.push("/admin/orders");
         },
         onError: (err, deletedOrderId, context) => {
-            // Restore with the same input parameters
-            if (context?.queryInput) {
-                utils.order.getAllOrders.setData(context.queryInput, context.previousOrders);
-            }
+            // Rollback on error
+            utils.order.getAllOrders.setData(DEFAULT_ORDERS_QUERY, context?.previousOrders);
         },
         onSettled: () => {
-            // Invalidate with the same parameters
-            utils.order.getAllOrders.invalidate({
-                limit: 8,
-                sortBy: SortBy.LATEST,
-            });
+            // Refetch to ensure consistency
+            utils.order.getAllOrders.invalidate(DEFAULT_ORDERS_QUERY);
         },
     });
 
