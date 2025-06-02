@@ -18,14 +18,36 @@ export default function OrdersProductsSummary() {
     const locale = useLocale();
     const router = useRouter();
     const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
-    const { mutate, isSuccess, isPending } = trpc.order.deleteOrder.useMutation();
-
-    useEffect(() => {
-        if (!isPending && isSuccess) {
-            utils.order.getAllOrders.invalidate();
+    const { mutate } = trpc.order.deleteOrder.useMutation({
+        onMutate: async (deletedOrderId) => {
+            // Cancel any outgoing refetches so they don't overwrite our optimistic update
+            await utils.order.getAllOrders.cancel();
+            
+            // Snapshot the previous value
+            const previousOrders = utils.order.getAllOrders.getData();
+            
+            // Optimistically update to the new value
+            utils.order.getAllOrders.setData({}, (old) => {
+                if (!old) return old;
+                return {
+                    ...old,
+                    orders: old.orders.filter(order => order._id !== deletedOrderId)
+                };
+            });
+            
+            // Return a context object with the snapshotted value
+            return { previousOrders };
+        },
+        onSuccess: () => {
             router.push("/admin/orders");
-        }
-    }, [isSuccess, isPending])
+        },
+        onSettled: () => {
+            utils.order.getAllOrders.invalidate();
+        },
+        onError: (err, deletedOrderId, context) => {
+            utils.order.getAllOrders.setData({}, context?.previousOrders);
+        },
+    });
 
     // Get form context
     const form = useFormContext<UpdateOrderValues>();
