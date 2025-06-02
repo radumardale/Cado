@@ -4,6 +4,7 @@ import { trpc } from "@/app/_trpc/client";
 import { Link, useRouter } from "@/i18n/navigation";
 import { DeliveryHours, getDeliveryAdditionalRate } from "@/lib/enums/DeliveryHours";
 import { DeliveryRegions, getDeliveryPrice } from "@/lib/enums/DeliveryRegions";
+import SortBy from "@/lib/enums/SortBy";
 import { UpdateOrderValues } from "@/lib/validation/order/updateOrderRequest";
 import { CartProducts } from "@/models/order/types/cartProducts";
 import { Minus, Plus, ShoppingBag } from "lucide-react";
@@ -20,14 +21,20 @@ export default function OrdersProductsSummary() {
     const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
     const { mutate } = trpc.order.deleteOrder.useMutation({
         onMutate: async (deletedOrderId) => {
-            // Cancel any outgoing refetches so they don't overwrite our optimistic update
-            await utils.order.getAllOrders.cancel();
+            // Define the exact same parameters used in server prefetch
+            const queryInput = {
+                limit: 8,
+                sortBy: SortBy.LATEST,
+            };
+    
+            // Cancel any outgoing refetches for this specific query
+            await utils.order.getAllOrders.cancel(queryInput);
             
-            // Snapshot the previous value
-            const previousOrders = utils.order.getAllOrders.getData();
+            // Snapshot the previous value with the correct input
+            const previousOrders = utils.order.getAllOrders.getData(queryInput);
             
-            // Optimistically update to the new value
-            utils.order.getAllOrders.setData({}, (old) => {
+            // Update the cache with the SAME input parameters as server prefetch
+            utils.order.getAllOrders.setData(queryInput, (old) => {
                 if (!old) return old;
                 return {
                     ...old,
@@ -35,17 +42,23 @@ export default function OrdersProductsSummary() {
                 };
             });
             
-            // Return a context object with the snapshotted value
-            return { previousOrders };
+            return { previousOrders, queryInput };
         },
         onSuccess: () => {
             router.push("/admin/orders");
         },
-        onSettled: () => {
-            utils.order.getAllOrders.invalidate();
-        },
         onError: (err, deletedOrderId, context) => {
-            utils.order.getAllOrders.setData({}, context?.previousOrders);
+            // Restore with the same input parameters
+            if (context?.queryInput) {
+                utils.order.getAllOrders.setData(context.queryInput, context.previousOrders);
+            }
+        },
+        onSettled: () => {
+            // Invalidate with the same parameters
+            utils.order.getAllOrders.invalidate({
+                limit: 8,
+                sortBy: SortBy.LATEST,
+            });
         },
     });
 
