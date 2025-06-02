@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react'
+import React, { useEffect } from 'react'
 import ProductImages from './ProductImages'
 import ProductContent from './ProductContent'
 import { trpc } from '@/app/_trpc/client'
@@ -21,6 +21,12 @@ export default function ProductInfo({id}: ProductInfoInterface) {
     const locale = useLocale();
     const searchParams = useSearchParams();
     const categoryParam = searchParams.get("category") as Categories | null;
+    const utils = trpc.useUtils();
+
+    useEffect(() => {
+        const data = utils.products.getProductById.getData();
+        console.log(data);
+    }, [utils])
 
     return (
         <>

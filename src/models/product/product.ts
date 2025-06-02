@@ -17,6 +17,7 @@ const ProductSchema = new mongoose.Schema<ProductInterface>({
     type: String,
     required: true,
     unique: true,
+    index: true,
     default: () => nanoid(8)
   },
   title: {
