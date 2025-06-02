@@ -1,3 +1,5 @@
+/* eslint-disable  @typescript-eslint/no-explicit-any */
+
 'use client'
 
 import { trpc } from "@/app/_trpc/client";
@@ -26,33 +28,55 @@ export default function OrdersProductsSummary() {
     
     const { mutate } = trpc.order.deleteOrder.useMutation({
         onMutate: async (deletedOrderId) => {
-            // Cancel ongoing requests
-            await utils.order.getAllOrders.cancel(DEFAULT_ORDERS_QUERY);
+            // Cancel ALL ongoing requests for getAllOrders
+            await utils.order.getAllOrders.cancel();
             
-            // Get current data
-            const previousOrders = utils.order.getAllOrders.getData(DEFAULT_ORDERS_QUERY);
-            
-            // Optimistically update
-            utils.order.getAllOrders.setData(DEFAULT_ORDERS_QUERY, (old) => {
+            // Update function to remove deleted order
+            const updateFunction = (old: any) => {
                 if (!old) return old;
-                return {
-                    ...old,
-                    orders: old.orders.filter(order => order._id !== deletedOrderId)
-                };
-            });
+                
+                // Handle both paginated and infinite query structures
+                if (old.pages) {
+                    // Infinite query structure
+                    return {
+                        ...old,
+                        pages: old.pages.map((page: any) => ({
+                            ...page,
+                            orders: page.orders?.filter((order: any) => order._id !== deletedOrderId) || []
+                        }))
+                    };
+                } else if (old.orders) {
+                    // Regular query structure
+                    return {
+                        ...old,
+                        orders: old.orders.filter((order: any) => order._id !== deletedOrderId)
+                    };
+                }
+                return old;
+            };
             
-            return { previousOrders };
+            // Store snapshot for rollback and apply optimistic update
+            const specificData = utils.order.getAllOrders.getData(DEFAULT_ORDERS_QUERY);
+            utils.order.getAllOrders.setData(DEFAULT_ORDERS_QUERY, updateFunction);
+            
+            return { snapshot: specificData };
         },
         onSuccess: () => {
+            // Navigate without router.refresh() to preserve optimistic update
             router.push("/admin/orders");
         },
         onError: (err, deletedOrderId, context) => {
-            // Rollback on error
-            utils.order.getAllOrders.setData(DEFAULT_ORDERS_QUERY, context?.previousOrders);
+            console.error('Delete failed, rolling back:', err);
+            
+            // Rollback the specific query
+            if (context?.snapshot) {
+                utils.order.getAllOrders.setData(DEFAULT_ORDERS_QUERY, context.snapshot);
+            }
         },
         onSettled: () => {
-            // Refetch to ensure consistency
-            utils.order.getAllOrders.invalidate(DEFAULT_ORDERS_QUERY);
+            // Invalidate all queries to ensure eventual consistency
+            // This refetches in background without showing stale data
+            utils.order.getAllOrders.invalidate();
         },
     });
 

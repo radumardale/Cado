@@ -114,10 +114,7 @@ export const addOrderProcedure = publicProcedure
         order: { 
           ...order.toObject(), 
           _id: order._id.toString(),
-          additional_info: {
-            ...order.additional_info,
-            billing_checkbox: input.additional_info.billing_checkbox
-          }
+          additional_info: order.additional_info,
         } as unknown as ResOrderInterface,
         locale: "ro",
         paymentMethodName: input.payment_method,
