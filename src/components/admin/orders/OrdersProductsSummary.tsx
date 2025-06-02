@@ -13,6 +13,7 @@ import { useEffect, useState } from "react";
 import { useFormContext, useFormState, useWatch } from "react-hook-form";
 
 export default function OrdersProductsSummary() {
+    const utils = trpc.useUtils();
     const [mounted, setMounted] = useState(false);
     const locale = useLocale();
     const router = useRouter();
@@ -20,7 +21,10 @@ export default function OrdersProductsSummary() {
     const { mutate, isSuccess, isPending } = trpc.order.deleteOrder.useMutation();
 
     useEffect(() => {
-        if (!isPending && isSuccess) router.push("/admin/orders")
+        if (!isPending && isSuccess) {
+            utils.order.getAllOrders.invalidate();
+            router.push("/admin/orders");
+        }
     }, [isSuccess, isPending])
 
     // Get form context
