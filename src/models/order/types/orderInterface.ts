@@ -18,7 +18,8 @@ export interface OrderInterface {
     invoice_id: number,
     createdAt: Date,
     total_cost: number,
-    delivery_details: DeliveryDetailsInterface
+    delivery_details: DeliveryDetailsInterface,
+    paynet_id: number
 }
 
 export interface ResOrderInterface {

@@ -49,7 +49,6 @@ export default function CheckoutForm({items, setDeliveryRegion, setDeliveryHour,
               const form = document.createElement('form');
               form.method = data.paymentForm.method;
               form.action = data.paymentForm.action;
-              form.target = '_blank'; // Open in new tab
         
               Object.entries(data.paymentForm.fields).forEach(([key, value]) => {
                 const input = document.createElement('input');

@@ -13,6 +13,7 @@ import { render } from "@react-email/components";
 import OrderConfirmation from "@/components/emails/OrderConfirmation";
 import { APIClient } from "@/lib/apiCLient";
 import { OrderPaymentMethod } from "@/models/order/types/orderPaymentMethod";
+import { Product } from "@/models/product/product";
 
 const mailConfig = {
     service: "gmail",
@@ -120,6 +121,27 @@ export const addOrderProcedure = publicProcedure
       client.orders.push(order._id.toString());
       await client.save();
 
+      // Update product stock quantities
+      for (const orderProduct of input.products) {
+        await Product.findOneAndUpdate(
+          { _id: orderProduct.product._id },
+          { $inc: { stock: -orderProduct.quantity } }
+        );
+      }
+
+      console.log(input.products.map((product: any, index: number) => ({
+        GroupName: "Produse",
+        GroupId: 1,
+        LineNo: index + 1,
+        Code: product.product.custom_id,
+        Barcode: index + 1001,
+        Name: product.product.title.ro,
+        Description: product.product.title.ro,
+        UnitPrice: Math.round(product.product.price * 100),
+        UnitProduct: 1,
+        Amount: Math.round(product.product.price * product.quantity * 100)
+      })));
+
       if (input.payment_method === OrderPaymentMethod.Paynet) {
         const requestBody = {
           Invoice: order.invoice_id,
@@ -147,23 +169,18 @@ export const addOrderProcedure = publicProcedure
             {
               Name: "CADO Order",
               Description: `Order #${order.custom_id}`,
-              Amount: Math.round(input.total_cost * 100), // Convert to cents
+              Amount: Math.round(input.total_cost * 100),
               Products: input.products.map((product: any, index: number) => ({
-                GroupName: null,
-                QualitiesConcat: null,
+                GroupName: "Produse",
+                GroupId: 1,
                 LineNo: index + 1,
-                GroupId: null,
-                Code: product.code || `product_${index + 1}`,
-                Barcode: product.barcode || index + 1001,
-                Name: product.name,
-                Description: product.description || product.name,
-                UnitPrice: Math.round(product.price * 100), // Convert to cents
-                UnitProduct: null,
-                Quantity: product.quantity,
-                Amount: null,
-                Dimensions: null,
-                Qualities: null,
-                TotalAmount: Math.round(product.price * product.quantity * 100) // Convert to cents
+                Code: product.product.custom_id,
+                Barcode: index + 1001,
+                Name: product.product.title.ro,
+                Description: product.product.title.ro,
+                UnitPrice: Math.round(product.product.price * 100),
+                UnitProduct: 1,
+                Amount: Math.round(product.product.price * product.quantity * 100)
               }))
             }
           ],

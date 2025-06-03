@@ -59,6 +59,9 @@ const OrderSchema = new mongoose.Schema<OrderInterface>({
     delivery_details: {
         type: DeliveryDetailsSchema,
         required: false
+    },
+    paynet_id: {
+      type: Number,
     }
 }, {timestamps: true});
 
