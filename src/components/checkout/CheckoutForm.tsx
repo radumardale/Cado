@@ -40,19 +40,36 @@ interface CheckoutFormProps {
 
 export default function CheckoutForm({items, setDeliveryRegion, setDeliveryHour, totalCost, products}: CheckoutFormProps) {
     const t = useTranslations();
-    const { mutate, data, isPending } = trpc.order.addOrder.useMutation();
     const router = useRouter();
-    
-    useEffect(() => {
-        if (!isPending && data?.success) {
-            if (data?.success) {
+
+    const { mutate } = trpc.order.addOrder.useMutation({
+        onSuccess: (data) => {
+            if (data.success && data.paymentForm) {
+              // Create and auto-submit a form
+              const form = document.createElement('form');
+              form.method = data.paymentForm.method;
+              form.action = data.paymentForm.action;
+              form.target = '_blank'; // Open in new tab
+        
+              Object.entries(data.paymentForm.fields).forEach(([key, value]) => {
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = key;
+                input.value = value as string;
+                form.appendChild(input);
+              });
+        
+              document.body.appendChild(form);
+              form.submit();
+              document.body.removeChild(form);
+            }
+
+            if (data.success && data.order) {
                 toast.success("Comanda a fost plasată cu succes!");
                 router.push({pathname: "/confirmation/[id]", params: {id: data?.order?.custom_id || ""}})
-            } else {
-                toast.error(data?.error);
             }
-        } 
-    }, [data, isPending])
+          }
+    });
 
     const form = useForm<z.infer<typeof addOrderRequestSchema>>({
         resolver: zodResolver(addOrderRequestSchema),

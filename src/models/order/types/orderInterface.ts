@@ -15,6 +15,7 @@ export interface OrderInterface {
     payment_method: OrderPaymentMethod,
     delivery_method: DeliveryMethod,
     custom_id: string,
+    invoice_id: number,
     createdAt: Date,
     total_cost: number,
     delivery_details: DeliveryDetailsInterface

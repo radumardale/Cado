@@ -23,6 +23,10 @@ const OrderSchema = new mongoose.Schema<OrderInterface>({
         type: CartProductsSchema,
         required: true
     }],
+    invoice_id: {
+        type: Number,
+        unique: true
+    },
     client: {
         type: 'ObjectId',
         ref: "Client",
@@ -73,6 +77,14 @@ OrderSchema.pre("findOneAndDelete", async function(next) {
     } catch (error) {
       console.error(error);
     }
+  });
+
+  OrderSchema.pre('save', async function(next) {
+    if (this.isNew) {
+      const lastOrder = await Order.findOne().sort({ invoice_id: -1 });
+      this.invoice_id = (lastOrder?.invoice_id || 100000) + 1;
+    }
+    next();
   });
 
 OrderSchema.path<mongoose.Schema.Types.Subdocument>('additional_info.billing_address').discriminator('NATURAL', NormalAddressSchema);

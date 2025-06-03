@@ -8,6 +8,6 @@ export const config = {
   matcher: [
     '/', // The root path
     '/(ro|en)/:path*', // Locale-prefixed paths
-    '/((?!api|_next|_vercel|.*\\..*).*)',
+    '/((?!api|_next|_vercel|paynet-callback|.*\\..*).*)',
   ]
 };
