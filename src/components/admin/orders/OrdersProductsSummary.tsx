@@ -21,8 +21,8 @@ export default function OrdersProductsSummary() {
 
     const { mutate } = trpc.order.deleteOrder.useMutation({
         onSuccess: () => {
-            utils.order.invalidate();
-            
+            utils.invalidate();
+
             router.push("/admin/orders");
             router.refresh();
         }
