@@ -13,7 +13,7 @@ export enum carousellDirection {
 
 export default function Hero() {
   const trpc = useTRPC();
-  const { data } = useQuery(trpc.home_banner.getAllHomeBanners.queryOptions());
+  const { data } = useQuery(trpc.home_banner.getAllHomeBanners.queryOptions(undefined, {staleTime: Infinity}));
   const [slide, setSlide] = useState(-1);
   const [nextSlideState, setNextSlideState] = useState(0);
   const [slideNumber, setSlideNumber] = useState(0);

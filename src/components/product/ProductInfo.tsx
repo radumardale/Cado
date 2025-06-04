@@ -12,7 +12,6 @@ import { Skeleton } from '../ui/skeleton'
 import 'swiper/css';
 
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { useQueryClient } from "@tanstack/react-query";
 
 interface ProductInfoInterface {
     id: string,
@@ -22,16 +21,10 @@ export default function ProductInfo({id}: ProductInfoInterface) {
     const trpc = useTRPC();
     const {
         data: data
-    } = useSuspenseQuery(trpc.products.getProductById.queryOptions({id}, {staleTime: 10000}));
+    } = useSuspenseQuery(trpc.products.getProductById.queryOptions({id}, {staleTime: 10000, refetchOnMount: false, refetchOnWindowFocus: false}));
     const locale = useLocale();
     const searchParams = useSearchParams();
     const categoryParam = searchParams.get("category") as Categories | null;
-    const queryClient = useQueryClient();
-
-    useEffect(() => {
-        const data = queryClient.getQueryData(trpc.products.getProductById.queryKey({id}));
-        console.log(data);
-    }, [])
 
     return (
         <>
