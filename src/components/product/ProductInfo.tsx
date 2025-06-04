@@ -1,5 +1,4 @@
 'use client';
-import React, { useEffect } from 'react'
 import ProductImages from './ProductImages'
 import ProductContent from './ProductContent'
 import { useTRPC } from '@/app/_trpc/client'
