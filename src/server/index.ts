@@ -1,4 +1,4 @@
-import { router } from './trpc';
+import { createTRPCContext, router } from './trpc';
 import { productRouter } from './procedures/routers/productRouter';
 import { imageRouter } from './procedures/routers/imageRouter';
 import { orderRouter } from './procedures/routers/orderRouter';
@@ -25,6 +25,6 @@ export type AppRouter = typeof appRouter;
 
 export const serverHelper = createServerSideHelpers({
   router: appRouter,
-  ctx: {},
+  ctx: await createTRPCContext(),
   transformer: superjson
 });
