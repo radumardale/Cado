@@ -22,11 +22,11 @@ export default function Footer() {
                     Oferim cele mai bune soluții pentru orice ocazie. Explorează opțiunile noastre exclusive și găsește potrivirea perfectă pentru tine!
                 </p>
                 <div className="flex mt-4 lg:mt-6 gap-4 mx-auto justify-center lg:justify-start mb-12 lg:mb-0">
+                    <Image unoptimized src="/icons/paymentMethod/Paynet.svg" alt="Paynet logo" width={47} height={32} className='w-12 h-8' />
                     <Image unoptimized src="/icons/paymentMethod/Visa.svg" alt="visa logo" width={47} height={32} className='w-12 h-8' />
                     <Image unoptimized src="/icons/paymentMethod/Mastercard.svg" alt="Mastercard logo" width={47} height={32} className='w-12 h-8' />
                     <Image unoptimized src="/icons/paymentMethod/Qiwi.svg" alt="Qiwi logo" width={47} height={32} className='w-12 h-8' />
                     <Image unoptimized src="/icons/paymentMethod/Yandex.svg" alt="Yandex logo" width={47} height={32} className='w-12 h-8' />
-                    <Image unoptimized src="/icons/paymentMethod/Bitcoin.svg" alt="Bitcoin logo" width={47} height={32} className='w-12 h-8' />
                 </div>
             </div>
 

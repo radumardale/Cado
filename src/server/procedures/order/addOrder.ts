@@ -125,22 +125,9 @@ export const addOrderProcedure = publicProcedure
       for (const orderProduct of input.products) {
         await Product.findOneAndUpdate(
           { _id: orderProduct.product._id },
-          { $inc: { stock: -orderProduct.quantity } }
+          { $inc: { "stock_availability.stock": -orderProduct.quantity } }
         );
       }
-
-      console.log(input.products.map((product: any, index: number) => ({
-        GroupName: "Produse",
-        GroupId: 1,
-        LineNo: index + 1,
-        Code: product.product.custom_id,
-        Barcode: index + 1001,
-        Name: product.product.title.ro,
-        Description: product.product.title.ro,
-        UnitPrice: Math.round(product.product.price * 100),
-        UnitProduct: 1,
-        Amount: Math.round(product.product.price * product.quantity * 100)
-      })));
 
       if (input.payment_method === OrderPaymentMethod.Paynet) {
         const requestBody = {
@@ -178,9 +165,9 @@ export const addOrderProcedure = publicProcedure
                 Barcode: index + 1001,
                 Name: product.product.title.ro,
                 Description: product.product.title.ro,
-                UnitPrice: Math.round(product.product.price * 100),
-                UnitProduct: 1,
-                Amount: Math.round(product.product.price * product.quantity * 100)
+                UnitPrice: Math.round(product.product.sale && product.product.sale.active ? product.product.sale.sale_price * 100 : product.product.price * 100),
+                UnitProduct: product.quantity,
+                Amount: Math.round((product.product.sale && product.product.sale.active ? product.product.sale.sale_price * 100 : product.product.price * 100) * product.quantity)
               }))
             }
           ],
