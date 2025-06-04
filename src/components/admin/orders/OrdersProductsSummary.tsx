@@ -20,8 +20,8 @@ export default function OrdersProductsSummary() {
     const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
 
     const { mutate } = trpc.order.deleteOrder.useMutation({
-        onSuccess: () => {
-            utils.invalidate();
+        onSuccess: async () => {
+            await utils.invalidate();
 
             router.push("/admin/orders");
             router.refresh();

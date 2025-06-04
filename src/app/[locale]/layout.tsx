@@ -6,9 +6,9 @@ import {notFound} from 'next/navigation';
 import "./globals.css";
 import { getMessages, setRequestLocale } from "next-intl/server";
 import { NextIntlClientProvider } from "next-intl";
-import TrpcProvider from "../_trpc/TrpcProvider";
 import SmoothScroll from "@/components/providers/SmoothScroll";
 import { Toaster } from "@/components/ui/sonner";
+import TrpcProvider from "../_trpc/TrpcProvider";
 
 export const metadata: Metadata = {
   title: "Create Next App",
