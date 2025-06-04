@@ -4,7 +4,6 @@ import { trpc } from "@/app/_trpc/client";
 import { Link, useRouter } from "@/i18n/navigation";
 import { DeliveryHours, getDeliveryAdditionalRate } from "@/lib/enums/DeliveryHours";
 import { DeliveryRegions, getDeliveryPrice } from "@/lib/enums/DeliveryRegions";
-import SortBy from "@/lib/enums/SortBy";
 import { UpdateOrderValues } from "@/lib/validation/order/updateOrderRequest";
 import { CartProducts } from "@/models/order/types/cartProducts";
 import { Minus, Plus, ShoppingBag } from "lucide-react";
@@ -19,36 +18,13 @@ export default function OrdersProductsSummary() {
     const locale = useLocale();
     const router = useRouter();
     const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
-    const DEFAULT_ORDERS_QUERY = {
-        limit: 8,
-        sortBy: SortBy.LATEST,
-    } as const;
-    
+
     const { mutate } = trpc.order.deleteOrder.useMutation({
-        onMutate: async (deletedOrderId) => {
-            // Cancel ongoing requests
-            await utils.order.getAllOrders.cancel();
-            
-            // Snapshot and update cache
-            const previousOrders = utils.order.getAllOrders.getData(DEFAULT_ORDERS_QUERY);
-            
-            utils.order.getAllOrders.setData(DEFAULT_ORDERS_QUERY, (old) => {
-                if (!old) return old;
-                return {
-                    ...old,
-                    orders: old.orders.filter(order => order._id !== deletedOrderId)
-                };
-            });
-            
-            return { previousOrders };
-        },
         onSuccess: () => {
-            // Force invalidation to bypass HTTP cache
-            utils.order.getAllOrders.invalidate(DEFAULT_ORDERS_QUERY, {
-                refetchType: 'active' // Force refetch from server
-            });
+            utils.order.invalidate();
             
             router.push("/admin/orders");
+            router.refresh();
         }
     });
 
