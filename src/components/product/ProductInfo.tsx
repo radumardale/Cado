@@ -22,14 +22,14 @@ export default function ProductInfo({id}: ProductInfoInterface) {
     const trpc = useTRPC();
     const {
         data: data
-    } = useSuspenseQuery(trpc.products.getProductById.queryOptions({id: id}));
+    } = useSuspenseQuery(trpc.products.getProductById.queryOptions({id}, {staleTime: 10000}));
     const locale = useLocale();
     const searchParams = useSearchParams();
     const categoryParam = searchParams.get("category") as Categories | null;
     const queryClient = useQueryClient();
 
     useEffect(() => {
-        const data = queryClient.getQueryData(trpc.products.getProductById.queryKey());
+        const data = queryClient.getQueryData(trpc.products.getProductById.queryKey({id}));
         console.log(data);
     }, [])
 
