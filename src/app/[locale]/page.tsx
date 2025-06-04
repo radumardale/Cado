@@ -10,8 +10,7 @@ import Recommendations from "@/components/home/recommendations/Recommendations";
 import Reviews from "@/components/home/reviews/Reviews";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import LinksMenu from "@/components/LinksMenu";
-import { serverHelper } from "@/server";
-import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
+import { HydrateClient, prefetch, trpc } from "../_trpc/server";
 
 export async function generateMetadata() {
   const t = await getTranslations('index.meta');
@@ -25,15 +24,13 @@ export async function generateMetadata() {
 export default async function Home({params}: {params: Promise<{locale: string}>;}) {
   const {locale} = await params;
   setRequestLocale(locale);
-  const helpers = serverHelper;
-  await helpers.products.getRecProduct.prefetch();
-  await helpers.blog.getLimitedBlogs.prefetch({limit: 6});
-  await helpers.home_banner.getAllHomeBanners.prefetch();
-  await helpers.homeOcasion.getHomeOcasion.prefetch();
-  const dehydratedState = JSON.parse(JSON.stringify(dehydrate(helpers.queryClient)));
+
+  await prefetch(
+    trpc.home_banner.getAllHomeBanners.queryOptions(),
+  );
 
   return (
-    <HydrationBoundary state={dehydratedState}>
+    <HydrateClient>
         <Header />
         <Hero />
         <CategoriesGrid />
@@ -44,6 +41,6 @@ export default async function Home({params}: {params: Promise<{locale: string}>;
         <Faq />
         <Footer />
         <LinksMenu />
-    </HydrationBoundary>
+    </HydrateClient>
   );
 }

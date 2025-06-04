@@ -1,19 +1,21 @@
-'use client'
-
-import { trpc } from '@/app/_trpc/client';
+'use client';
+import { useTRPC } from '@/app/_trpc/client';
 import { productsLimit } from '@/lib/constants';
 import React, { useEffect, useRef, useState } from 'react'
 import ClientTable from './ClientTable';
 import { useClientSearchStore } from '@/states/admin/ClientsSearchState';
 
+import { useInfiniteQuery } from "@tanstack/react-query";
+
 export default function ClientContent() {
+    const trpc = useTRPC();
     const closeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
     const searchText = useClientSearchStore((store) => store.search);
     const sortBy = useClientSearchStore((store) => store.sortBy);
     const observerRef = useRef<HTMLDivElement>(null);
     const [queryText, setQueryText] = useState('');
 
-    const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = trpc.getAllClients.useInfiniteQuery(
+    const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteQuery(trpc.getAllClients.infiniteQueryOptions(
         {
           limit: productsLimit,
           searchQuery: queryText.length > 2 ? queryText.split(" ").join("+") : undefined,
@@ -22,7 +24,7 @@ export default function ClientContent() {
         { 
           getNextPageParam: (lastPage) => lastPage.nextCursor,
         }
-      );
+      ));
 
     const [queryClients, setQueryClients] = useState(data?.pages.flatMap(page => page.clients) || []);
 
@@ -66,21 +68,21 @@ export default function ClientContent() {
         };
     }, [observerRef, hasNextPage, isFetchingNextPage, fetchNextPage]);
 
-  return (
-    <>
-        <ClientTable queryClients={queryClients}/>
-        <div 
-            ref={observerRef} 
-            className="col-span-full lg:col-span-12 flex justify-center"
-        >
-            {isFetchingNextPage && (
-                <div className="animate-pulse flex justify-center py-4">
-                    <div className="h-4 w-4 bg-blue-1 rounded-full mr-1"></div>
-                    <div className="h-4 w-4 bg-blue-1 rounded-full mr-1 animate-pulse-delay-200"></div>
-                    <div className="h-4 w-4 bg-blue-1 rounded-full animate-pulse-delay-400"></div>
-                </div>
-            )}
-        </div>
-    </>
-  )
+    return (
+      <>
+          <ClientTable queryClients={queryClients}/>
+          <div 
+              ref={observerRef} 
+              className="col-span-full lg:col-span-12 flex justify-center"
+          >
+              {isFetchingNextPage && (
+                  <div className="animate-pulse flex justify-center py-4">
+                      <div className="h-4 w-4 bg-blue-1 rounded-full mr-1"></div>
+                      <div className="h-4 w-4 bg-blue-1 rounded-full mr-1 animate-pulse-delay-200"></div>
+                      <div className="h-4 w-4 bg-blue-1 rounded-full animate-pulse-delay-400"></div>
+                  </div>
+              )}
+          </div>
+      </>
+    )
 }

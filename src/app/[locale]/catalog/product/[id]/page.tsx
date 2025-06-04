@@ -1,10 +1,9 @@
+import { HydrateClient, prefetch, trpc } from '@/app/_trpc/server';
 import Footer from '@/components/footer/Footer';
 import Faq from '@/components/home/faq/Faq';
 import Recommendations from '@/components/home/recommendations/Recommendations';
 import LinksMenu from '@/components/LinksMenu';
 import ProductInfo from '@/components/product/ProductInfo';
-import { serverHelper } from '@/server';
-import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { Suspense } from 'react';
 
@@ -21,20 +20,19 @@ export async function generateMetadata() {
     const { locale, id } = await params;
     setRequestLocale(locale);
 
-    const helpers = serverHelper;
-    await helpers.products.getProductById.prefetch({ id }, {staleTime: 10000});
-
-    const dehydratedState = JSON.parse(JSON.stringify(dehydrate(helpers.queryClient)));
+    await prefetch(
+      trpc.products.getProductById.queryOptions({ id }, { staleTime: 10000 })
+    );
 
     return (
-        <HydrationBoundary state={dehydratedState}>
-            <Suspense fallback={<div>Loading...</div>}>
-                <ProductInfo id={id} />
-            </Suspense>
-            <Recommendations indProductSection={true} />
-            <Faq />
-            <Footer />
-            <LinksMenu />
-        </HydrationBoundary>
+      <HydrateClient>
+        <Suspense fallback={<div>Loading...</div>}>
+          <ProductInfo id={id} />
+        </Suspense>
+        <Recommendations indProductSection={true} />
+        <Faq />
+        <Footer />
+        <LinksMenu />
+      </HydrateClient>
     );
 }

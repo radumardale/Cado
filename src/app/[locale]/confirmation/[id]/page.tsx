@@ -1,21 +1,22 @@
 import ConfirmationContent from '@/components/confirmation/ConfirmationContent';
-import { HydrationBoundary, dehydrate } from '@tanstack/react-query';
-import { serverHelper } from '@/server';
 import Footer from '@/components/footer/Footer';
 import Header from '@/components/header/Header';
+import { getQueryClient, HydrateClient, prefetch, trpc } from '@/app/_trpc/server';
 
 export default async function OrderConfirmationPage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
 
-    const helpers = serverHelper;
-    await helpers.order.getOrderById.prefetch({ id });
-    const dehydratedState = JSON.parse(JSON.stringify(dehydrate(helpers.queryClient)));
+    await prefetch(
+        trpc.order.getOrderById.queryOptions({ id })
+    );
+    const queryClient = getQueryClient();
+    await queryClient.prefetchQuery(trpc.order.getOrderById.queryOptions({ id }));
 
     return (
-        <HydrationBoundary state={dehydratedState}>
+        <HydrateClient>
             <Header />
             <ConfirmationContent id={id} />
             <Footer />
-        </HydrationBoundary>
+        </HydrateClient>
     );
 }

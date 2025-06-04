@@ -1,6 +1,5 @@
-'use client'
-
-import { trpc } from '@/app/_trpc/client';
+'use client';
+import { useTRPC } from '@/app/_trpc/client';
 import { Categories } from '@/lib/enums/Categories';
 import React, { useEffect, useState } from 'react'
 import PcSimilarProducts from './PcSimilarProducts';
@@ -8,16 +7,21 @@ import MobileSimilarProducts from './MobileSimilarProducts';
 import { ProductInterface } from '@/models/product/types/productInterface';
 import ProductCard from '../catalog/productsGrid/ProductCard';
 
+import { useQuery } from "@tanstack/react-query";
+
 interface SimiliarProductsInterface {
     category: Categories,
     productId: string
 }
 
 export default function SimiliarProducts({category, productId}: SimiliarProductsInterface) {
-    const { data, isLoading } = trpc.products.getSimilarProducts.useQuery({category: category, productId});
+    const trpc = useTRPC();
+    const { data, isLoading } = useQuery(
+        trpc.products.getSimilarProducts.queryOptions({category: category, productId})
+    );
     const [isDesktop, setIsDesktop] = useState<boolean | null>(null);
     const [isMounted, setIsMounted] = useState(false);
-  
+
     // Check screen size on mount and window resize
     useEffect(() => {
         const checkScreenSize = () => {

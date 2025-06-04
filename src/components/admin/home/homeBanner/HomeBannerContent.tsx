@@ -1,20 +1,22 @@
-'use client'
-
+'use client';
 import { useEffect, useRef, useState } from 'react'
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 import ImageSlide from '@/components/home/hero/ImageSlide';
-import { trpc } from '@/app/_trpc/client';
+import { useTRPC } from '@/app/_trpc/client';
 import NewBannerSlide from './NewBannerSlide';
 import NewBannerForm from './NewBannerForm';
 import DeleteBannerForm from './DeleteBannerForm';
 
+import { useQuery } from "@tanstack/react-query";
+
 export enum carousellDirection {
     "FORWARD",
     "BACKWARDS"
-}  
+}
 
 export default function HomeBannerContent() {
-    const { data: HomeBannerQuery, refetch } = trpc.home_banner.getAllHomeBanners.useQuery();
+    const trpc = useTRPC();
+    const { data: HomeBannerQuery, refetch } = useQuery(trpc.home_banner.getAllHomeBanners.queryOptions());
 
     const [slide, setSlide] = useState(-1);
     const [nextSlideState, setNextSlideState] = useState(0);
@@ -28,7 +30,7 @@ export default function HomeBannerContent() {
     const totalExistingBanners = HomeBannerQuery?.banners?.length || 0;
     const newBannerSlideIndex = totalExistingBanners; // Last position is for new banner
     const totalSlides = totalExistingBanners + 1; // Including new banner slide
-    
+
     // Current banner tracking
     const currentBanner = slideNumber < totalExistingBanners ? HomeBannerQuery?.banners[slideNumber] : null;
 

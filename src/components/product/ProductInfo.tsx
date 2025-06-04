@@ -1,9 +1,8 @@
-'use client'
-
+'use client';
 import React, { useEffect } from 'react'
 import ProductImages from './ProductImages'
 import ProductContent from './ProductContent'
-import { trpc } from '@/app/_trpc/client'
+import { useTRPC } from '@/app/_trpc/client'
 import Header from '../header/Header'
 import { useLocale } from 'next-intl'
 import { useSearchParams } from 'next/navigation'
@@ -12,21 +11,27 @@ import SimiliarProducts from './SimilarProducts'
 import { Skeleton } from '../ui/skeleton'
 import 'swiper/css';
 
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
+
 interface ProductInfoInterface {
     id: string,
 }
 
 export default function ProductInfo({id}: ProductInfoInterface) {
-    const [data] = trpc.products.getProductById.useSuspenseQuery({id: id});
+    const trpc = useTRPC();
+    const {
+        data: data
+    } = useSuspenseQuery(trpc.products.getProductById.queryOptions({id: id}));
     const locale = useLocale();
     const searchParams = useSearchParams();
     const categoryParam = searchParams.get("category") as Categories | null;
-    const utils = trpc.useUtils();
+    const queryClient = useQueryClient();
 
     useEffect(() => {
-        const data = utils.products.getProductById.getData();
+        const data = queryClient.getQueryData(trpc.products.getProductById.queryKey());
         console.log(data);
-    }, [utils])
+    }, [])
 
     return (
         <>

@@ -1,5 +1,4 @@
-'use client'
-
+'use client';
 import {
     Form,
   } from "@/components/ui/form"
@@ -11,18 +10,22 @@ import { useEffect, useState } from 'react'
 import { StockState } from '@/lib/enums/StockState'
 import AdminProductDetails from '../AdminProductDetails'
 import AdminProductImages from '../AdminProductImages'
-import { trpc } from '@/app/_trpc/client'
+import { useTRPC } from '@/app/_trpc/client'
 import { LoaderCircle } from 'lucide-react'
 import { toast } from 'sonner'
+
+import { useQuery } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 
 interface AdminProductFormProps {
     id: string
 }
 
 export default function AdminUpdateProductForm({id}: AdminProductFormProps) {
-    const { data } = trpc.products.getProductById.useQuery({id: id});
-    const {isSuccess, isPending, mutate, data: MutatedData} = trpc.products.updateProduct.useMutation();
-    const { mutate: UpdateMutate, isSuccess: UpdateIsSuccess, data: UpdateData } = trpc.image.uploadProductImages.useMutation();
+    const trpc = useTRPC();
+    const { data } = useQuery(trpc.products.getProductById.queryOptions({id: id}));
+    const {isSuccess, isPending, mutate, data: MutatedData} = useMutation(trpc.products.updateProduct.mutationOptions());
+    const { mutate: UpdateMutate, isSuccess: UpdateIsSuccess, data: UpdateData } = useMutation(trpc.image.uploadProductImages.mutationOptions());
     const [initialImagesData, setInitialImagesData] = useState<string[]>([]);
     const [imagesData, setImagesData] = useState<string[]>([]);
 
@@ -144,7 +147,7 @@ export default function AdminUpdateProductForm({id}: AdminProductFormProps) {
             setInitialImagesData(UpdateData.images || []);
         }
     }, [UpdateIsSuccess])
-    
+
     useEffect(() => {
         if (data?.product) {
             form.reset({
@@ -183,7 +186,7 @@ export default function AdminUpdateProductForm({id}: AdminProductFormProps) {
         }
 
     }, [data?.product, form]);
-    
+
     function onSubmit(values: z.infer<typeof updateProductRequestSchema>) {
         mutate(values);
     }

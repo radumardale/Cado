@@ -1,11 +1,12 @@
 'use client'
 
-import { trpc } from "@/app/_trpc/client";
+import { useTRPC } from "@/app/_trpc/client";
 import { Link, useRouter } from "@/i18n/navigation";
 import { DeliveryHours, getDeliveryAdditionalRate } from "@/lib/enums/DeliveryHours";
 import { DeliveryRegions, getDeliveryPrice } from "@/lib/enums/DeliveryRegions";
 import { UpdateOrderValues } from "@/lib/validation/order/updateOrderRequest";
 import { CartProducts } from "@/models/order/types/cartProducts";
+import { useMutation } from "@tanstack/react-query";
 import { Minus, Plus, ShoppingBag } from "lucide-react";
 import { useLocale } from "next-intl";
 import Image from "next/image";
@@ -13,20 +14,19 @@ import { useEffect, useState } from "react";
 import { useFormContext, useFormState, useWatch } from "react-hook-form";
 
 export default function OrdersProductsSummary() {
-    const utils = trpc.useUtils();
+    const trpc = useTRPC();
+
     const [mounted, setMounted] = useState(false);
     const locale = useLocale();
     const router = useRouter();
     const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
 
-    const { mutate } = trpc.order.deleteOrder.useMutation({
+    const { mutate } = useMutation(trpc.order.deleteOrder.mutationOptions({
         onSuccess: async () => {
-            await utils.invalidate();
-
             router.push("/admin/orders");
             router.refresh();
         }
-    });
+    }));
 
     // Get form context
     const form = useFormContext<UpdateOrderValues>();

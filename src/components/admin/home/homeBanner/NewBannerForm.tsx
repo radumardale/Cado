@@ -1,6 +1,5 @@
-'use client'
-
-import { trpc } from "@/app/_trpc/client";
+'use client';
+import { useTRPC } from "@/app/_trpc/client";
 import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import {
   Select,
@@ -20,6 +19,8 @@ import { useForm, useFormState } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
+import { useMutation } from "@tanstack/react-query";
+
 interface NewBannerFormProps {
   selectedImage: string | null,
   setSelectedImage: (img: string | null) => void,
@@ -27,14 +28,15 @@ interface NewBannerFormProps {
 }
 
 export default function NewBannerForm({ selectedImage, refetchBanners, setSelectedImage }: NewBannerFormProps) {
+  const trpc = useTRPC();
   const ocastionsT = useTranslations("ocasions");
   const {
     isSuccess,
     mutate,
     data: MutatedData,
-  } = trpc.home_banner.addHomeBanner.useMutation();
+  } = useMutation(trpc.home_banner.addHomeBanner.mutationOptions());
   const { mutate: UpdateMutate, isSuccess: UpdateIsSuccess } =
-    trpc.image.uploadBannerImage.useMutation();
+    useMutation(trpc.image.uploadBannerImage.mutationOptions());
 
   useEffect(() => {
     if (UpdateIsSuccess) {

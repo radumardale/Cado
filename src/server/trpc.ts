@@ -1,13 +1,10 @@
 import { initTRPC } from "@trpc/server";
 import { getServerSession } from "next-auth";
-import { cache } from "react";
-import superjson from 'superjson';
 
 const t = initTRPC.create({
-  transformer: superjson
 });
 
-export const createTRPCContext = cache(async () => {
+export const createTRPCContext = async () => {
   try {
     const session = await getServerSession();
     return { session };
@@ -15,7 +12,7 @@ export const createTRPCContext = cache(async () => {
     console.error("Session error:", error);
     return { session: null };
   }
-});
+};
 
 export const router = t.router;
 export const publicProcedure = t.procedure;

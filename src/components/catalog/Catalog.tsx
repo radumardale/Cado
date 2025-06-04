@@ -1,9 +1,8 @@
-'use client'
-
+'use client';
 import { useEffect, useState, useRef } from "react";
 import CatalogSidebar from "./sidebar/CatalogSidebar";
 import ProductsGrid from "./productsGrid/ProductsGrid";
-import { trpc } from "@/app/_trpc/client";
+import { useTRPC } from "@/app/_trpc/client";
 import { Categories } from "@/lib/enums/Categories";
 import { Ocasions } from "@/lib/enums/Ocasions";
 import { ProductContent } from "@/lib/enums/ProductContent";
@@ -14,10 +13,14 @@ import { productsLimit } from "@/lib/constants";
 import PcCatalogSidebar from "./sidebar/PcCatalogSidebar";
 import { useCatalogStore } from "@/states/CatalogState";
 
+import { useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery } from "@tanstack/react-query";
+
 export default function Catalog() {
+    const trpc = useTRPC();
     // All your existing state and params
     const searchParams = useSearchParams();
-    const {data: MinMaxData} = trpc.products.getMinMaxPrice.useQuery();
+    const {data: MinMaxData} = useQuery(trpc.products.getMinMaxPrice.queryOptions());
 
     const minPrice = useCatalogStore((state) => state.minPrice);
     const maxPrice = useCatalogStore((state) => state.maxPrice);
@@ -34,7 +37,7 @@ export default function Catalog() {
 
     // Create a ref for the loading trigger element
     const observerRef = useRef<HTMLDivElement>(null);
-    
+
     useEffect(() => {
         // Your existing effect for search params
         const newKeywords = searchParams.get("keywords");
@@ -55,7 +58,7 @@ export default function Catalog() {
         setPrice([newMinPrice, newMaxPrice]);
         setSortBy(newSortBy);
     }, [searchParams, MinMaxData, minPrice, maxPrice]);
-    
+
     const queryData = {
         limit: productsLimit,
         title: keywords,
@@ -69,10 +72,10 @@ export default function Catalog() {
         sortBy: sortBy
     };
 
-    const { data, fetchNextPage, hasNextPage, isFetchingNextPage, status } = trpc.products.getProducts.useInfiniteQuery(queryData, {
+    const { data, fetchNextPage, hasNextPage, isFetchingNextPage, status } = useInfiniteQuery(trpc.products.getProducts.infiniteQueryOptions(queryData, {
         getNextPageParam: (lastPage) => lastPage.nextCursor,
-    });
-    
+    }));
+
     const allProducts = data?.pages.flatMap(page => page.products) || [];
     const countProducts = data?.pages.reduce((total, page) => total += page.productsCount, 0) || 0;
 

@@ -1,5 +1,4 @@
-'use client'
-
+'use client';
 import React, { useEffect, useRef, useState } from 'react'
 import BlogCard from './BlogCard'
 import { Swiper, SwiperRef, SwiperSlide } from 'swiper/react';
@@ -7,16 +6,19 @@ import { Autoplay } from 'swiper/modules';
 
 import 'swiper/css';
 import BlogTitle from './BlogTitle';
-import { trpc } from '@/app/_trpc/client';
+import { useTRPC } from '@/app/_trpc/client';
 import { useLocale } from 'next-intl';
 
+import { useQuery } from "@tanstack/react-query";
+
 export default function BlogCarousel() {
-    const {data, isLoading} = trpc.blog.getLimitedBlogs.useQuery({limit: 6});
+    const trpc = useTRPC();
+    const {data, isLoading} = useQuery(trpc.blog.getLimitedBlogs.queryOptions({limit: 6}));
     const swiperRef = useRef<SwiperRef>(null);
     const locale = useLocale();
     const [slidesPerView, setSlidesPerView] = useState(2); // Default to mobile view
     const [isMounted, setIsMounted] = useState(false);
-    
+
     const updateSlidesPerView = () => {
         setSlidesPerView(window.innerWidth >= 1024 ? 4 : 2);
     };
@@ -34,7 +36,7 @@ export default function BlogCarousel() {
             window.removeEventListener('resize', updateSlidesPerView);
         };
     }, []);
- 
+
     const goToNextSlide = () => {
         swiperRef.current?.swiper.slideNext();
     };

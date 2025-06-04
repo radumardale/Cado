@@ -1,11 +1,12 @@
 'use client'
 
-import { trpc } from '@/app/_trpc/client';
 import { productsLimit } from '@/lib/constants';
 import { useProductsSearchStore } from '@/states/admin/ProductsSearchState';
 import React, { useEffect, useRef, useState } from 'react'
 import ProductsGrid from './ProductsGrid';
 import ProductsTable from './ProductsTable';
+import { useTRPC } from '@/app/_trpc/client';
+import { useInfiniteQuery } from '@tanstack/react-query';
 
 export default function ProductsContent() {
     const closeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -15,14 +16,16 @@ export default function ProductsContent() {
     const observerRef = useRef<HTMLDivElement>(null);
     const [queryText, setQueryText] = useState('');
 
-    const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = trpc.products.getAdminProducts.useInfiniteQuery({
+    const trpc = useTRPC();
+
+    const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteQuery(trpc.products.getAdminProducts.infiniteQueryOptions({
         limit: productsLimit,
         title: queryText.length > 2 ? queryText.split(" ").join("+") : null,
         sortBy: sortBy,
     },
     { 
         getNextPageParam: (lastPage) => lastPage.nextCursor,
-    });
+    }));
 
     const [queryProducts, setQueryProducts] = useState(data?.pages.flatMap(page => page.products) || []);
 

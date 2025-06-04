@@ -1,6 +1,4 @@
-'use client'
-
-import { trpc } from '@/app/_trpc/client';
+'use client';
 import SeeMoreButton from '@/components/buttons/SeeMoreButton';
 import React, { useEffect, useState } from 'react'
 import PCRecommendations from './PCRecommendations';
@@ -8,12 +6,16 @@ import MobileRecommendations from './MobileRecommendations';
 import { ProductInterface } from '@/models/product/types/productInterface';
 import ProductCard from '@/components/catalog/productsGrid/ProductCard';
 
+import { useQuery } from "@tanstack/react-query";
+import { useTRPC } from '@/app/_trpc/client';
+
 interface RecommendationsInterface {
     indProductSection?: boolean
 }
 
 export default function Recommendations({indProductSection = false}: RecommendationsInterface) {
-    const { data, isLoading } = trpc.products.getRecProduct.useQuery();
+    const trpc = useTRPC();
+    const { data, isLoading } = useQuery(trpc.products.getRecProduct.queryOptions());
     const [isDesktop, setIsDesktop] = useState(false);
     const [isMounted, setIsMounted] = useState(false);
 

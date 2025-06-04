@@ -6,16 +6,19 @@ import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useEffect, useState } from 'react'
 import { StockState } from '@/lib/enums/StockState'
-import { trpc } from '@/app/_trpc/client'
+import { useTRPC } from '@/app/_trpc/client'
 import { LoaderCircle } from 'lucide-react'
 import { addProductRequestSchema } from "@/lib/validation/product/addProductRequest"
 import AdminProductDetails from "@/components/admin/products/AdminProductDetails"
 import AdminProductImages from "@/components/admin/products/AdminProductImages"
 import { useRouter } from "@/i18n/navigation"
 
+import { useMutation } from "@tanstack/react-query";
+
 export default function AdminAddProductForm() {
-    const {isSuccess, mutate, data} = trpc.products.createProduct.useMutation();
-    const { mutate: UpdateMutate, isSuccess: UpdateIsSuccess, } = trpc.image.uploadProductImages.useMutation();
+    const trpc = useTRPC();
+    const {isSuccess, mutate, data} = useMutation(trpc.products.createProduct.mutationOptions());
+    const { mutate: UpdateMutate, isSuccess: UpdateIsSuccess, } = useMutation(trpc.image.uploadProductImages.mutationOptions());
     const router = useRouter();
     const [imagesData, setImagesData] = useState<string[]>([]);
 
@@ -111,7 +114,7 @@ export default function AdminAddProductForm() {
             }
         }
     });
-    
+
     function onSubmit(values: z.infer<typeof addProductRequestSchema>) {
         mutate(values);
     }

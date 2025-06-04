@@ -1,10 +1,9 @@
 
+import { getQueryClient, HydrateClient, prefetch, trpc } from "@/app/_trpc/server";
 import Catalog from "@/components/catalog/Catalog";
 import Footer from "@/components/footer/Footer";
 import LinksMenu from "@/components/LinksMenu";
 import SortBy from "@/lib/enums/SortBy";
-import { serverHelper } from "@/server";
-import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Suspense } from "react";
 
@@ -21,28 +20,27 @@ export default async function CatalogPage({params}: {params: Promise<{locale: st
   const {locale} = await params;
   setRequestLocale(locale);
 
-  const helpers = serverHelper;
+  const queryClient = getQueryClient();
 
-  const minMax = await helpers.products.getMinMaxPrice.fetch();
+  const minMax = await queryClient.fetchQuery(trpc.products.getMinMaxPrice.queryOptions());
 
-  await helpers.products.getProducts.prefetchInfinite({
-    title: null,
-    category: null,
-    limit: 8,
-    sortBy: SortBy.RECOMMENDED,
-    price: {
-      min: minMax.minPrice || 0,
-      max: minMax.maxPrice || 0
-    },
-    ocasions: [],          
-    productContent: []
-  });
+  await prefetch(
+    trpc.products.getProducts.infiniteQueryOptions({
+      title: null,
+      category: null,
+      limit: 8,
+      sortBy: SortBy.RECOMMENDED,
+      price: {
+        min: minMax.minPrice || 0,
+        max: minMax.maxPrice || 0
+      },
+      ocasions: [],          
+      productContent: []
+    })
+  )
   
-
-  const dehydratedState = JSON.parse(JSON.stringify(dehydrate(helpers.queryClient)));
-
   return (
-    <HydrationBoundary state={dehydratedState}>
+    <HydrateClient>
       <div className="grid grid-cols-full gap-x-6 col-span-full">
           <Suspense>
             <Catalog />
@@ -50,6 +48,6 @@ export default async function CatalogPage({params}: {params: Promise<{locale: st
           <Footer />
           <LinksMenu />
       </div>
-    </HydrationBoundary>
+    </HydrateClient>
   );
 }

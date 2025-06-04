@@ -1,6 +1,5 @@
-'use client'
-
-import { trpc } from "@/app/_trpc/client"
+'use client';
+import { useTRPC } from "@/app/_trpc/client"
 import { Link } from "@/i18n/navigation";
 import { DeliveryRegions, getDeliveryPrice } from "@/lib/enums/DeliveryRegions";
 import { DeliveryMethod } from "@/models/order/types/deliveryMethod";
@@ -8,14 +7,17 @@ import { CircleCheckBig } from "lucide-react"
 import { useLocale, useTranslations } from "next-intl";
 import Image from "next/image";
 
+import { useQuery } from "@tanstack/react-query";
+
 interface ConfirmationContentProps {
     id: string
 }
 
 export default function ConfirmationContent({ id }: ConfirmationContentProps) {
+  const trpc = useTRPC();
   const { 
     data, 
-} = trpc.order.getOrderById.useQuery({ id });
+} = useQuery(trpc.order.getOrderById.queryOptions({ id }));
   const locale = useLocale();
   const paymentMethodsT = useTranslations("payment_methods");
   const deliveryRegionsT = useTranslations("delivery_regions");

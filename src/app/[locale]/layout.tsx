@@ -8,7 +8,7 @@ import { getMessages, setRequestLocale } from "next-intl/server";
 import { NextIntlClientProvider } from "next-intl";
 import SmoothScroll from "@/components/providers/SmoothScroll";
 import { Toaster } from "@/components/ui/sonner";
-import TrpcProvider from "../_trpc/TrpcProvider";
+import { TRPCReactProvider } from "../_trpc/client";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -42,11 +42,11 @@ export default async function RootLayout({
       <body className="scroll-bar-custom">
         <div className="grid grid-cols-8 lg:grid-cols-15 gap-x-2 lg:gap-x-6 px-4 lg:px-16 max-w-3xl mx-auto relative">
           <NextIntlClientProvider messages={messages}>
-            <TrpcProvider>
+            <TRPCReactProvider>
               <SmoothScroll>
                 {children} 
               </SmoothScroll>
-            </TrpcProvider>
+            </TRPCReactProvider>
           </NextIntlClientProvider>
         </div>
         <Toaster 

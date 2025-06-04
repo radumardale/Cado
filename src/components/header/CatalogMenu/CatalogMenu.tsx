@@ -1,32 +1,34 @@
-'use client'
-
+'use client';
 import React, { useEffect, useRef, useState } from 'react'
 import Searchbar from './Searchbar'
 import { Categories } from './Categories'
 import Ocasions from './Ocasions'
 import ViewCategory from './ViewCategory'
 import Image from 'next/image'
-import { trpc } from '@/app/_trpc/client'
+import { useTRPC } from '@/app/_trpc/client'
 import SearchProducts from './SearchProducts'
 import { ReccProductsI } from '@/models/reccProduct/types/ReccProductsI'
+
+import { useQuery } from "@tanstack/react-query";
 
 interface CatalogMenuProps {
   setIsCatalogMenuActive: (v: boolean) => void
 }
 
 export default function CatalogMenu({setIsCatalogMenuActive}: CatalogMenuProps) {
+  const trpc = useTRPC();
   const closeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const recProducts = trpc.products.getRecProduct.useQuery()
+  const recProducts = useQuery(trpc.products.getRecProduct.queryOptions())
   const [searchText, setSearchText] = useState('');
   const [queryText, setQueryText] = useState('');
-  const { data, isLoading } = trpc.search.useQuery(
+  const { data, isLoading } = useQuery(trpc.search.queryOptions(
     { title: queryText },
     { 
       enabled: queryText.length > 1,
       staleTime: 30000, 
       gcTime: 60000, 
     }
-  );
+  ));
 
   useEffect(() => {
     if (closeTimeoutRef?.current) clearTimeout(closeTimeoutRef?.current);

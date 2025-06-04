@@ -1,10 +1,11 @@
 'use client'
 
-import { trpc } from '@/app/_trpc/client';
 import { productsLimit } from '@/lib/constants';
 import React, { useEffect, useRef, useState } from 'react'
 import OrdersTable from './OrdersTable';
 import { useOrdersSearchStore } from '@/states/admin/OrdersSearchState';
+import { useSuspenseInfiniteQuery } from '@tanstack/react-query';
+import { useTRPC } from '@/app/_trpc/client';
 
 export default function OrdersContent() {
     const closeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -14,19 +15,24 @@ export default function OrdersContent() {
     const sortBy = useOrdersSearchStore((store) => store.sortBy);
     const observerRef = useRef<HTMLDivElement>(null);
     const [queryText, setQueryText] = useState('');
+    const trpc = useTRPC();
 
-    const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = trpc.order.getAllOrders.useInfiniteQuery(
+    const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useSuspenseInfiniteQuery(trpc.order.getAllOrders.infiniteQueryOptions(
         {
-          limit: productsLimit,
-          searchQuery: queryText.length > 2 ? queryText.split(" ").join("+") : undefined,
-          startDate: startDate ? startDate.toISOString() : undefined,
-          endDate: endDate ? endDate.toISOString() : undefined,
-          sortBy: sortBy
+            limit: productsLimit,
+            searchQuery: queryText.length > 2 ? queryText.split(" ").join("+") : undefined,
+            startDate: startDate ? startDate.toISOString() : undefined,
+            endDate: endDate ? endDate.toISOString() : undefined,
+            sortBy: sortBy
         },
         { 
-          getNextPageParam: (lastPage) => lastPage.nextCursor,
-        }
-      );
+            getNextPageParam: (lastPage) => lastPage.nextCursor,
+            staleTime: 30 * 1000,
+            gcTime: 5 * 60 * 1000,
+            refetchOnWindowFocus: false,
+            refetchOnMount: false,
+        },
+    ));
 
     const [queryProducts, setQueryProducts] = useState(data?.pages.flatMap(page => page.orders) || []);
 
