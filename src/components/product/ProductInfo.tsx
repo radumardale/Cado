@@ -17,7 +17,7 @@ interface ProductInfoInterface {
 }
 
 export default function ProductInfo({id}: ProductInfoInterface) {
-    const {data} = trpc.products.getProductById.useQuery({id: id});
+    const [data] = trpc.products.getProductById.useSuspenseQuery({id: id});
     const locale = useLocale();
     const searchParams = useSearchParams();
     const categoryParam = searchParams.get("category") as Categories | null;

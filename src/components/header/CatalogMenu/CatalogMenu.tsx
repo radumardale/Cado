@@ -8,6 +8,7 @@ import ViewCategory from './ViewCategory'
 import Image from 'next/image'
 import { trpc } from '@/app/_trpc/client'
 import SearchProducts from './SearchProducts'
+import { ReccProductsI } from '@/models/reccProduct/types/ReccProductsI'
 
 interface CatalogMenuProps {
   setIsCatalogMenuActive: (v: boolean) => void
@@ -56,7 +57,7 @@ export default function CatalogMenu({setIsCatalogMenuActive}: CatalogMenuProps) 
               <ViewCategory />
             </>
             :
-            <SearchProducts isLoading={isLoading} productsCount={data?.count} products={data?.products} recProducts={recProducts.data?.products} searchText={searchText} closeMenu={closeMenu}/>
+            <SearchProducts isLoading={isLoading} productsCount={data?.count} products={data?.products} recProducts={recProducts.data?.products.map((product: ReccProductsI) => product.product)} searchText={searchText} closeMenu={closeMenu}/>
         }
       </div>
       <Image unoptimized src="/ribbon/left-bottom-ribbon.png" className='absolute right-0 bottom-0 w-[13vw] rotate-y-180' width={242} height={225} alt='ribbon' />

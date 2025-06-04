@@ -49,10 +49,7 @@ export default function OrdersProductsSummary() {
             });
             
             router.push("/admin/orders");
-        },
-        onError: (err, deletedOrderId, context) => {
-            utils.order.getAllOrders.setData(DEFAULT_ORDERS_QUERY, context?.previousOrders);
-        },
+        }
     });
 
     // Get form context

@@ -10,7 +10,7 @@ import { useForm } from 'react-hook-form'
 import { BanknoteIcon, BriefcaseBusiness, CalendarIcon, ChevronDown, Clock, CreditCard, MapPin, Truck, User } from 'lucide-react'
 import { Input } from '../ui/input'
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '../ui/select'
-import { Fragment, useEffect } from 'react'
+import { Dispatch, Fragment, SetStateAction, useEffect } from 'react'
 import { Checkbox } from '../ui/checkbox'
 import { ClientEntity } from '@/models/order/types/orderEntity'
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover'
@@ -32,19 +32,27 @@ import { ProductInterface } from '@/models/product/types/productInterface'
 
 interface CheckoutFormProps {
     items: CartInterface[],
+    setValue: Dispatch<SetStateAction<CartInterface[]>>,
     setDeliveryRegion: (v: DeliveryRegions | null) => void,
     setDeliveryHour: (v: DeliveryHours | null) => void,
     totalCost: number,
     products: ProductInterface[]
 }
 
-export default function CheckoutForm({items, setDeliveryRegion, setDeliveryHour, totalCost, products}: CheckoutFormProps) {
+export default function CheckoutForm({items, setValue, setDeliveryRegion, setDeliveryHour, totalCost, products}: CheckoutFormProps) {
     const t = useTranslations();
     const router = useRouter();
 
     const { mutate } = trpc.order.addOrder.useMutation({
         onSuccess: (data) => {
-            if (data.success && data.paymentForm) {
+            if (!data.success) {
+                toast.error("Comanda nu a putut fi efectuata!");
+                return;
+            }
+
+            setValue([]);
+
+            if (data.paymentForm) {
               // Create and auto-submit a form
               const form = document.createElement('form');
               form.method = data.paymentForm.method;
@@ -63,7 +71,7 @@ export default function CheckoutForm({items, setDeliveryRegion, setDeliveryHour,
               document.body.removeChild(form);
             }
 
-            if (data.success && data.order) {
+            if (data.order) {
                 toast.success("Comanda a fost plasată cu succes!");
                 router.push({pathname: "/confirmation/[id]", params: {id: data?.order?.custom_id || ""}})
             }

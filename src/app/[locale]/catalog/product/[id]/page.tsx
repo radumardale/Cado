@@ -6,7 +6,7 @@ import ProductInfo from '@/components/product/ProductInfo';
 import { serverHelper } from '@/server';
 import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
-import { notFound } from 'next/navigation';
+import { Suspense } from 'react';
 
 export async function generateMetadata() {
     const t = await getTranslations('index.meta');
@@ -22,24 +22,19 @@ export async function generateMetadata() {
     setRequestLocale(locale);
 
     const helpers = serverHelper;
-    
-    try {
-        await helpers.products.getProductById.prefetch({ id });
-  
-        const dehydratedState = JSON.parse(JSON.stringify(dehydrate(helpers.queryClient)));
+    await helpers.products.getProductById.prefetch({ id }, {staleTime: 10000});
 
-        return (
-            <HydrationBoundary state={dehydratedState}>
+    const dehydratedState = JSON.parse(JSON.stringify(dehydrate(helpers.queryClient)));
+
+    return (
+        <HydrationBoundary state={dehydratedState}>
+            <Suspense fallback={<div>Loading...</div>}>
                 <ProductInfo id={id} />
-                
-                <Recommendations indProductSection={true} />
-                <Faq />
-                <Footer />
-                <LinksMenu />
-            </HydrationBoundary>
-        );
-    } catch (error) {
-        console.error('Error loading product page:', error);
-        notFound();
-    }
+            </Suspense>
+            <Recommendations indProductSection={true} />
+            <Faq />
+            <Footer />
+            <LinksMenu />
+        </HydrationBoundary>
+    );
 }

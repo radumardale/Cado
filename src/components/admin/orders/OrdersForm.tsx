@@ -34,7 +34,6 @@ export default function OrdersForm() {
     useEffect(() => {
         if (isSuccess) {
             toast.success("Produsul a fost actualizat cu succes!");
-            console.log(MutatedData);
             if (MutatedData) form.reset({
                 id: MutatedData.order?._id,
                 ...MutatedData.order,
@@ -80,8 +79,6 @@ export default function OrdersForm() {
     }, [entityType])
 
     function onSubmit(values: z.infer<typeof updateOrderRequestSchema>) {
-        
-        console.log(values)
         mutate(values);
     }
 
