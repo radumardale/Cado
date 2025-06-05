@@ -1,4 +1,3 @@
-import { HydrateClient, prefetch, trpc } from '@/app/_trpc/server'
 import AdminHeader from '@/components/admin/AdminHeader'
 import AdminSidebar from '@/components/admin/AdminSidebar'
 import AdminBlogForm from '@/components/admin/blog/id/AdminBlogForm'
@@ -12,17 +11,13 @@ export default async function AdminBlogPage({
   }) {
     const { id } = await params;
 
-    await prefetch(
-      trpc.blog.getBlogById.queryOptions({ id }),
-    );
-
     return (
-      <HydrateClient>
+      <>
         <AdminSidebar page={AdminPages.BLOG_PAGE} />
         <div className='col-span-full xl:col-span-12 grid grid-cols-12 gap-x-6'>
           <AdminHeader id={"#" + id} href='/admin/blog' page={AdminPages.BLOG_PAGE} />
           <AdminBlogForm id={id}/>
         </div>
-      </HydrateClient>
+      </>
     )
 }

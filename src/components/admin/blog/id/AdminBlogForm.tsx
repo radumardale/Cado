@@ -49,7 +49,7 @@ export default function AdminBlogForm({ id }: AdminBlogFormProps) {
 
     useEffect(() => {
         if (UpdateIsSuccess) {
-            toast.success("Produsul a fost actualizat cu succes!");
+            toast.success("Articolul a fost actualizat cu succes!");
             setInitialSectionImages(UpdateData.sectionImages);
             setSectionImages(UpdateData.sectionImages);
 
@@ -193,7 +193,7 @@ export default function AdminBlogForm({ id }: AdminBlogFormProps) {
             if (form.getValues("data.imagesChanged") || form.getValues("data.isImageNew")) {
                 uploadImagesInOrder();
             } else {
-                toast.success("Produsul a fost actualizat cu succes!");
+                toast.success("Articolul a fost actualizat cu succes!");
             }
             
              // Reset form with updated product data
@@ -265,7 +265,7 @@ export default function AdminBlogForm({ id }: AdminBlogFormProps) {
                               <FormLabel className="font-semibold font-manrope leading-5">Titlu</FormLabel>
                               <FormMessage className='top-7' />
                               <FormControl className="border rounded-3xl border-gray shadow-none p-0 text-black placeholder:text-black focus-visible:outline-none">
-                                  <Input className=" text-base h-12 w-full px-6 rounded-3xl" placeholder="Titlu produs*" {...field} />
+                                  <Input className=" text-base h-12 w-full px-6 rounded-3xl" placeholder="Titlu articol*" {...field} />
                               </FormControl>
                           </FormItem>
                       )}

@@ -29,10 +29,12 @@ export default function CustomLink({ href, className, value, ocasion }: CustomLi
   return (
     <div className={`overflow-hidden relative ${className}`} onMouseEnter={() => {seIsLinkActive(true)}} onMouseLeave={() => {seIsLinkActive(false)}} >
         <p className='pointer-events-none invisible whitespace-nowrap'>{value}</p>
-        <motion.div className='flex flex-col absolute left-0 top-0' variants={linkVariants} animate={isLinkActive ? "open" : "initial"} transition={{ease: easeInOutCubic, duration: .45}} initial={false}>
-            <Link className='pb-2' href={{pathname: href, query: ocasion ? {ocasions: ocasion} : {}}}>{value}</Link>
-            <Link className='pb-2' href={{pathname: href, query: ocasion ? {ocasions: ocasion} : {}}}>{value}</Link>
-        </motion.div>
+        <Link href={{pathname: href, query: ocasion ? {ocasions: ocasion} : {}}}>
+            <motion.div className='flex flex-col absolute left-0 top-0' variants={linkVariants} animate={isLinkActive ? "open" : "initial"} transition={{ease: easeInOutCubic, duration: .45}} initial={false}>
+                <p className='pb-2' >{value}</p>
+                <p className='pb-2' >{value}</p>
+            </motion.div>
+        </Link>
     </div>
   )
 }
