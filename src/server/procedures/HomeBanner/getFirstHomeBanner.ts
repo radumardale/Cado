@@ -10,13 +10,13 @@ interface addHomeBannerI extends ActionResponse {
     banners: HomeBannerInterface[]
 }
 
-export const getAllHomeBanners = publicProcedure
+export const getFirstHomeBanner = publicProcedure
     .query(async(): Promise<addHomeBannerI> => {
         try {
 
             await connectMongo();
 
-            const homeBanners = await HomeBanner.find().lean();
+            const homeBanners = await HomeBanner.find().limit(1).lean();
 
             return {
                 success: true,

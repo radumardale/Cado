@@ -26,7 +26,7 @@ export default async function Home({params}: {params: Promise<{locale: string}>;
   setRequestLocale(locale);
 
   await prefetch(
-    trpc.home_banner.getAllHomeBanners.queryOptions(undefined, {staleTime: Infinity}),
+    trpc.home_banner.getFirstHomeBanner.queryOptions(undefined, {staleTime: Infinity}),
   );
 
   return (

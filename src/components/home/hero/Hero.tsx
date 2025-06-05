@@ -13,7 +13,9 @@ export enum carousellDirection {
 
 export default function Hero() {
   const trpc = useTRPC();
-  const { data } = useQuery(trpc.home_banner.getAllHomeBanners.queryOptions(undefined, {staleTime: Infinity}));
+  const { data: AllBanners, isSuccess } = useQuery(trpc.home_banner.getAllHomeBanners.queryOptions(undefined, {staleTime: Infinity}));
+  const { data: FistBanner } = useQuery(trpc.home_banner.getFirstHomeBanner.queryOptions(undefined, {staleTime: Infinity}));
+  const [banners, setBanners] = useState(FistBanner?.banners || []);
   const [slide, setSlide] = useState(-1);
   const [nextSlideState, setNextSlideState] = useState(0);
   const [slideNumber, setSlideNumber] = useState(0);
@@ -21,8 +23,13 @@ export default function Hero() {
   const [direction, setDirection] = useState<carousellDirection>(carousellDirection.FORWARD);
   const intervalRef = useRef<NodeJS.Timeout>(null);
 
-  const banners = data?.banners || [];
   const totalBanners = banners.length;
+
+  useEffect(() => {
+    if (isSuccess && AllBanners) {
+      setBanners(AllBanners.banners);
+    }
+  }, [isSuccess])
 
   const nextSlide = () => {
     if (isAnimationPlaying || totalBanners === 0) return;
