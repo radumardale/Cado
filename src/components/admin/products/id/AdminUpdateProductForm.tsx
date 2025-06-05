@@ -14,7 +14,7 @@ import { useTRPC } from '@/app/_trpc/client'
 import { LoaderCircle } from 'lucide-react'
 import { toast } from 'sonner'
 
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useMutation } from "@tanstack/react-query";
 import { revalidateServerPath } from "@/server/actions/revalidateServerPath";
 
@@ -29,6 +29,7 @@ export default function AdminUpdateProductForm({id}: AdminProductFormProps) {
     const { mutate: UpdateMutate, isSuccess: UpdateIsSuccess, data: UpdateData } = useMutation(trpc.image.uploadProductImages.mutationOptions());
     const [initialImagesData, setInitialImagesData] = useState<string[]>([]);
     const [imagesData, setImagesData] = useState<string[]>([]);
+    const queryClient = useQueryClient();
 
     const form = useForm<z.infer<typeof updateProductRequestSchema>>({
         resolver: zodResolver(updateProductRequestSchema),
@@ -147,6 +148,9 @@ export default function AdminUpdateProductForm({id}: AdminProductFormProps) {
             toast.success("Produsul a fost actualizat cu succes!");
             setInitialImagesData(UpdateData.images || []);
             revalidateServerPath(`/ro/catalog/produs/${data?.product?.custom_id}`);
+            
+            const myQueryKey = trpc.products.getProductById.queryKey({id: data?.product?.custom_id});
+            queryClient.invalidateQueries({queryKey: myQueryKey});
         }
     }, [UpdateIsSuccess])
 

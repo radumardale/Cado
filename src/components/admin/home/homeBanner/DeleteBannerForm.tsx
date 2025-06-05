@@ -47,7 +47,7 @@ export default function DeleteBannerForm({ id, ocasion, refetchBanners }: Delete
 
     useEffect(() => {
       if (isSuccess && MutatedData) {
-          revalidateServerPath("/ro");
+          revalidateServerPath("/[locale]", 'page');
           refetchBanners();
       }
     }, [isSuccess, MutatedData]);

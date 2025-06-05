@@ -41,8 +41,8 @@ export default function NewBannerForm({ selectedImage, refetchBanners, setSelect
 
   useEffect(() => {
     if (UpdateIsSuccess) {
-      revalidateServerPath("/ro");
-      
+      revalidateServerPath("/[locale]", 'page');
+
       setSelectedImage(null);
       toast.success("Banerul a fost creat cu succes!")
       refetchBanners();
