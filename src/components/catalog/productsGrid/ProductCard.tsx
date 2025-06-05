@@ -28,7 +28,7 @@ export default function ProductCard({product, category, section="RECOMMENDATIONS
         <div className='relative overflow-hidden before:content-[""] before:absolute before:left-0 before:top-0 before:w-full before:h-full before:bg-pureblack before:opacity-0 group-hover:before:opacity-25 before:rounded-lg before:lg:rounded-2xl before:transition before:duration-300 before:z-10 mb-4 aspect-[339/425]'>
           {
               product.sale && product.sale.active &&
-              <div className='absolute top-2 lg:top-4 right-2 lg:right-4 h-8 lg:h-12 flex items-center justify-center bg-red px-4 lg:px-6 rounded-3xl text-white z-[5]'>
+              <div className='absolute top-2 lg:top-4 right-2 lg:right-4 h-8 lg:h-12 flex items-center justify-center bg-red px-4 lg:px-6 rounded-3xl text-white z-[15]'>
                   <span className='font-semibold text-xs lg:text-base leading-3.5 lg:leading-5'>Reducere</span>
               </div>
           }
