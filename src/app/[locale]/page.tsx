@@ -11,6 +11,7 @@ import Reviews from "@/components/home/reviews/Reviews";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import LinksMenu from "@/components/LinksMenu";
 import { HydrateClient, prefetch, trpc } from "../_trpc/server";
+export const dynamic = 'force-static'
 
 export async function generateMetadata() {
   const t = await getTranslations('index.meta');
