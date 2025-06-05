@@ -5,7 +5,7 @@ import Recommendations from '@/components/home/recommendations/Recommendations';
 import LinksMenu from '@/components/LinksMenu';
 import ProductInfo from '@/components/product/ProductInfo';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
-import { Suspense } from 'react';
+export const dynamic = 'force-static'
 
 export async function generateMetadata() {
     const t = await getTranslations('index.meta');
@@ -26,9 +26,7 @@ export async function generateMetadata() {
 
     return (
       <HydrateClient>
-        <Suspense fallback={<div>Loading...</div>}>
-          <ProductInfo id={id} />
-        </Suspense>
+        <ProductInfo id={id} />
         <Recommendations indProductSection={true} />
         <Faq />
         <Footer />

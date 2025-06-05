@@ -7,6 +7,7 @@ import Faq from "@/components/home/faq/Faq";
 import Recommendations from "@/components/home/recommendations/Recommendations";
 import LinksMenu from "@/components/LinksMenu";
 import { getTranslations, setRequestLocale } from "next-intl/server";
+export const dynamic = 'force-static'
 
 export async function generateMetadata() {
   const t = await getTranslations('index.meta');
