@@ -95,7 +95,7 @@ export default function Header({category, breadcrumbs = false, productInfo}: Hea
                                     <MobileMenuIcon isSidebarOpen={isSidebarOpen} setSidebarOpen={setSidebarOpen}/>
                                     <LangIcon />
                                 </div>
-                                <Link href="/" className='max-w-[14vw]'>
+                                <Link href="/" className='lg:max-w-[14vw]'>
                                     <Image unoptimized src="/logo/logo-white.svg" width={228} height={56} alt='logo' className='h-8 lg:h-14 w-fit'/>
                                 </Link>
                                 <div className='hidden gap-8 items-center absolute left-1/2 -translate-x-1/2 lg:flex'>

@@ -31,13 +31,13 @@ export default function ConfirmationContent({ id }: ConfirmationContentProps) {
   }, [])
 
   return (
-    <div className="col-span-7 col-start-5 mt-16 mb-24">
+    <div className="col-span-full lg:col-span-7 lg:col-start-5 mt-16 mb-24">
         <CircleCheckBig strokeWidth={1.5} className='text-green size-12 mx-auto mb-6' />
         <p className="font-manrope font-semibold uppercase text-center text-[2rem] leading-9 mb-6">Mulțumim MULT! <br/> comanda <span className="underline">#{data?.order?.custom_id}</span> a fost preluată</p>
         <p className="text-center mb-12">Am trimis un e-mail la adresa <span className="font-semibold">{data?.order?.additional_info.user_data.email}</span> cu confirmarea și factura comenzii. <br/><br/> Dacă nu ai primit e-mailul în două minute, te rugăm să verifici și folderul spam.</p>
         <div className="border-t border-lightgray pt-4 mb-12">
           <p className="font-manrope font-semibold mb-4">Sumarul comenzii</p>
-          <div className="grid col-span-full grid-cols-2 gap-6">
+          <div className="grid col-span-full grid-cols-1 lg:grid-cols-2 gap-6">
             {
               data?.order?.products.map((product, index) => (
                 <div key={index} className='w-full flex gap-2 lg:gap-4'>
@@ -83,10 +83,10 @@ export default function ConfirmationContent({ id }: ConfirmationContentProps) {
             </div>
         </div>
         <div className="border-t border-lightgray pt-4 grid grid-cols-2 gap-x-6 gap-y-8">
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-2 overflow-hidden overflow-ellipsis">
             <p className="font-manrope font-semibold mb-2">Detalii de contact</p>
             <p>{data?.order?.additional_info.user_data.firstname} {data?.order?.additional_info.user_data.lastname}</p>
-            <p>Email: {data?.order?.additional_info.user_data.email}</p>
+            <p className="truncate">Email: {data?.order?.additional_info.user_data.email}</p>
             <p>Metodă de plată: {data?.order?.additional_info.user_data.tel_number}</p>
           </div>
           <div className="flex flex-col gap-2">

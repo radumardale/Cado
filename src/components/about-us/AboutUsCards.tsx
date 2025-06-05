@@ -30,7 +30,7 @@ export default function AboutUsCards() {
                     <ArrowRight className='size-5' />
                 </Link>
             </div>
-            <Image unoptimized quality={100} priority src="/hero/hero1.jpg" alt='hero image' width={580} height={600} className='col-span-full w-full lg:col-span-5 h-56 lg:h-full object-cover rounded-2xl lg:rounded-3xl order-1 lg:order-2' />
+            <Image unoptimized quality={100} priority src="/about-us/hero1.jpg" alt='hero image' width={580} height={600} className='col-span-full w-full lg:col-span-5 h-56 lg:h-full object-cover rounded-2xl lg:rounded-3xl order-1 lg:order-2' />
         </div>
         <div className="grid col-span-full grid-cols-13 gap-x-6 bg-blue-4 rounded-2xl lg:rounded-3xl pt-4 pb-6 lg:py-8 px-4 lg:px-0 lg:pl-8">
             <div className='col-span-full lg:col-span-6 h-full relative box-border'>

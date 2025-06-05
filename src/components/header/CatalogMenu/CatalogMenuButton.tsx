@@ -1,3 +1,4 @@
+import { useRouter } from '@/i18n/navigation'
 import { COLORS } from '@/lib/colors/colors'
 import { easeInOutCubic } from '@/lib/utils'
 import { ChevronDown } from 'lucide-react'
@@ -21,8 +22,9 @@ const overlayVariants = {
 }
 
 export default function CatalogMenuButton({isCatalogMenuOpen, setCatalogButtonActive}: CatalogMenuButtonProps) {
+  const router = useRouter();
   return (
-    <div className={`flex items-center gap-2 rounded-3xl h-12 py-3 px-6 border border-black transition duration-500 relative cursor-pointer ${isCatalogMenuOpen ? "text-white" : ""}`} onMouseEnter={() => {setCatalogButtonActive(true)}} onMouseLeave={() => {setCatalogButtonActive(false)}}>
+    <div onClick={() => {router.push("/catalog")}} className={`flex items-center gap-2 rounded-3xl h-12 py-3 px-6 border border-black transition duration-500 relative cursor-pointer ${isCatalogMenuOpen ? "text-white" : ""}`} onMouseEnter={() => {setCatalogButtonActive(true)}} onMouseLeave={() => {setCatalogButtonActive(false)}}>
         <motion.div 
             className="absolute -z-10 bg-black left-0 top-0 w-full h-full rounded-3xl" 
             variants={overlayVariants} 

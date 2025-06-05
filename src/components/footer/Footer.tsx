@@ -60,16 +60,16 @@ export default function Footer() {
                     <NextLink href="https://www.instagram.com/cado.md_ro?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target='_blank' className='border border-white bg-white lg:bg-transparent lg:hover:bg-white min-w-8 min-h-8 flex justify-center items-center rounded-full footer-link'>
                         <Image unoptimized src="/icons/instagram.svg" alt="instagram logo" width={16} height={16} className='size-4' />
                     </NextLink>
-                    <NextLink href="/" target='_blank' className='border border-white bg-white lg:bg-transparent lg:hover:bg-white min-w-8 min-h-8 flex justify-center items-center rounded-full footer-link'>
+                    <NextLink href="https://www.facebook.com/profile.php?id=61565865145718" target='_blank' className='border border-white bg-white lg:bg-transparent lg:hover:bg-white min-w-8 min-h-8 flex justify-center items-center rounded-full footer-link'>
                         <Image unoptimized src="/icons/facebook.svg" alt="facebook logo" width={16} height={16} className='size-4' />
                     </NextLink>
-                    <NextLink href="/" target='_blank' className='border border-white bg-white lg:bg-transparent lg:hover:bg-white min-w-8 min-h-8 flex justify-center items-center rounded-full footer-link'>
+                    <NextLink href="https://www.tiktok.com/@cado.mdro?_t=ZM-8wrrSGYJ87i&_r=1" target='_blank' className='border border-white bg-white lg:bg-transparent lg:hover:bg-white min-w-8 min-h-8 flex justify-center items-center rounded-full footer-link'>
                         <Image unoptimized src="/icons/tiktok.svg" alt="tiktok logo" width={16} height={16} className='size-4' />
                     </NextLink>
                     <NextLink href="https://www.pinterest.com/infocadomd/" target='_blank' className='border border-white bg-white lg:bg-transparent lg:hover:bg-white min-w-8 min-h-8 flex justify-center items-center rounded-full footer-link'>
                         <Image unoptimized src="/icons/pinterest.svg" alt="pinterest logo" width={16} height={16} className='size-4' />
                     </NextLink>
-                    <NextLink href="/" target='_blank' className='border border-white bg-white lg:bg-transparent lg:hover:bg-white min-w-8 min-h-8 flex justify-center items-center rounded-full footer-link'>
+                    <NextLink href="https://www.linkedin.com/company/cadomd-ro/?viewAsMember=true" target='_blank' className='border border-white bg-white lg:bg-transparent lg:hover:bg-white min-w-8 min-h-8 flex justify-center items-center rounded-full footer-link'>
                         <Image unoptimized src="/icons/linkedin.svg" alt="linkedin logo" width={16} height={16} className='size-4' />
                     </NextLink>
                 </div>

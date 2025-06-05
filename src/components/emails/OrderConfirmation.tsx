@@ -546,8 +546,6 @@ import {
                               Adresă juridică și poștală: mun. Chișinău, str. Alecu Russo, nr. 15, of. 59, Moldova
                               <br/>
                               Cod fiscal: 1015600006586
-                              <br/>
-                              Director General: Irina Cecan
                               <br/><br/><br/>
                               © 2025 CADO. Toate drepturile rezervate.
                             </p>

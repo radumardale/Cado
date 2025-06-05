@@ -40,6 +40,15 @@ interface CheckoutFormProps {
     products: ProductInterface[]
 }
 
+const determineAvailableDeliveryHours = (hour: number): DeliveryHours[] => {
+    const thresholds = [5, 9, 13, 19, 24];
+    const sliceIndex = thresholds.findIndex(threshold => hour < threshold);
+    
+    return sliceIndex === -1 
+        ? [] 
+        : DeliveryHoursArr.slice(sliceIndex) as DeliveryHours[];
+}
+
 export default function CheckoutForm({items, setDeliveryRegion, setDeliveryHour, totalCost, products}: CheckoutFormProps) {
     const trpc = useTRPC();
     const t = useTranslations();
@@ -141,6 +150,7 @@ export default function CheckoutForm({items, setDeliveryRegion, setDeliveryHour,
     const entityType = form.watch("additional_info.entity_type");
     const deliveryRegion = form.watch("additional_info.delivery_address.region");
     const deliveryHour = form.watch("delivery_details.hours_intervals");
+    const deliveryDate = form.watch("delivery_details.delivery_date");
     const isBillingAddress = form.watch("additional_info.billing_checkbox");
 
     useEffect(() => {
@@ -615,8 +625,10 @@ export default function CheckoutForm({items, setDeliveryRegion, setDeliveryHour,
                                                   <SelectGroup>
                                                       {
                                                           DeliveryHoursArr.map((hour, index) => {
+                                                                const currDate = new Date();
+                                                                const isHourDisabled = deliveryDate ? new Date(deliveryDate).getDate() - currDate.getDate() <= 1 ? !determineAvailableDeliveryHours(currDate.getHours()).includes(hour as DeliveryHours) : false : false;
                                                               return (
-                                                                  <SelectItem key={index} className="text-base cursor-pointer" value={DeliveryHours[hour as DeliveryHours]}>{t(`delivery_hours.${hour}`)}</SelectItem>
+                                                                  <SelectItem disabled={isHourDisabled} key={index} className="text-base cursor-pointer" value={DeliveryHours[hour as DeliveryHours]}>{t(`delivery_hours.${hour}`)}</SelectItem>
                                                               )
                                                           })
                                                       }

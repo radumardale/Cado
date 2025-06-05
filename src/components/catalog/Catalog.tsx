@@ -15,6 +15,7 @@ import { useCatalogStore } from "@/states/CatalogState";
 
 import { useQuery } from "@tanstack/react-query";
 import { useInfiniteQuery } from "@tanstack/react-query";
+import SeasonCatalog from "./productsGrid/SeasonCatalog";
 
 export default function Catalog() {
     const trpc = useTRPC();
@@ -111,6 +112,7 @@ export default function Catalog() {
     return (
         <> 
             <Header category={category} breadcrumbs />
+            <SeasonCatalog />
             <div className="relative col-span-full grid grid-cols-full gap-x-2 lg:gap-x-6 mb-24">
                 <CatalogSidebar      
                     keywordsState={{

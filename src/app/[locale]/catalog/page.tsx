@@ -1,11 +1,10 @@
 
 import { getQueryClient, HydrateClient, prefetch, trpc } from "@/app/_trpc/server";
 import Catalog from "@/components/catalog/Catalog";
+import LinkMenuWrapper from "@/components/catalog/LinkMenuWrapper";
 import Footer from "@/components/footer/Footer";
-import LinksMenu from "@/components/LinksMenu";
 import SortBy from "@/lib/enums/SortBy";
 import { getTranslations, setRequestLocale } from "next-intl/server";
-import { Suspense } from "react";
 
 export async function generateMetadata() {
   const t = await getTranslations('index.meta');
@@ -38,16 +37,20 @@ export default async function CatalogPage({params}: {params: Promise<{locale: st
       productContent: []
     })
   )
+
+  await prefetch(
+    trpc.seasonCatalog.getSeasonCatalog.queryOptions()
+  )
   
   return (
-    <HydrateClient>
+    <>
       <div className="grid grid-cols-full gap-x-6 col-span-full">
-          <Suspense>
+          <HydrateClient>
             <Catalog />
-          </Suspense>
+          </HydrateClient>
           <Footer />
-          <LinksMenu />
+          <LinkMenuWrapper /> 
       </div>
-    </HydrateClient>
+    </>
   );
 }

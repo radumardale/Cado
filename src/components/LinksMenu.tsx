@@ -42,9 +42,18 @@ export default function LinksMenu() {
         <motion.div 
             variants={linkVariants}
             transition={{ease: easeInOutCubic, duration: .3}}
+            className={`${isMenuOpen ? "" : "pointer-events-none"} absolute left-0 -top-54`}
+            >
+                <Link href="tel:+37369645153" target='_blank' className='size-14 flex items-center justify-center bg-blue-2 rounded-full mb-4 shadow-sm border border-white'>
+                    <Image unoptimized src="/icons/call.svg" alt="telegram logo" height={28} width={28} className='size-7 text-white'/>
+                </Link>
+        </motion.div>
+        <motion.div 
+            variants={linkVariants}
+            transition={{ease: easeInOutCubic, duration: .3}}
             className={`${isMenuOpen ? "" : "pointer-events-none"} absolute left-0 -top-36`}
             >
-                <Link href="#" className='size-14 flex items-center justify-center bg-blue-2 rounded-full mb-4 shadow-sm border border-white'>
+                <Link href="https://t.me/+37369645153" target='_blank' className='size-14 flex items-center justify-center bg-blue-2 rounded-full mb-4 shadow-sm border border-white'>
                     <Image unoptimized src="/icons/telegram.svg" alt="telegram logo" height={28} width={28} className='size-7 text-white'/>
                 </Link>
         </motion.div>
@@ -53,7 +62,7 @@ export default function LinksMenu() {
             transition={{ease: easeInOutCubic, duration: .3}}
             className={`${isMenuOpen ? "" : "pointer-events-none"} absolute left-0 -top-18`}
             >
-                <Link href="#" className='size-14 flex items-center justify-center bg-blue-2 rounded-full mb-4 shadow-sm border border-white'>
+                <Link href="https://api.whatsapp.com/send?phone=37369645153" target='_blank' className='size-14 flex items-center justify-center bg-blue-2 rounded-full mb-4 shadow-sm border border-white'>
                     <Image unoptimized src="/icons/whatsapp.svg" alt="telegram logo" height={28} width={28} className='size-7 text-white'/>
                 </Link>
         </motion.div>

@@ -4,6 +4,7 @@ import { AdminPages } from '@/lib/enums/AdminPages'
 import HomeBannerContent from '@/components/admin/home/homeBanner/HomeBannerContent'
 import AdminHomeOcasion from '@/components/admin/home/homeOcasion/AdminHomeOcasion'
 import RecommendationsContent from '@/components/admin/home/recommendations/RecommendationsContent'
+import AdminSeasonCatalog from '@/components/admin/home/seasonCatalog/AdminSeasonCatalog'
 
 export default async function AdminHome() {
 
@@ -15,6 +16,7 @@ export default async function AdminHome() {
             <HomeBannerContent />
             <AdminHomeOcasion />
             <RecommendationsContent />
+            <AdminSeasonCatalog />
         </div>
     </>
   )

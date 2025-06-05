@@ -4,5 +4,5 @@ import { updateHomeOcasionProcedure } from '../homeOcasion/updateHomeOcasion';
 
 export const homeOcasionRouter = router({
     getHomeOcasion: getHomeOcasionProcedure,
-    updateHomeOcasion: updateHomeOcasionProcedure
+    updateHomeOcasion: updateHomeOcasionProcedure,
 });

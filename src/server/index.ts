@@ -7,6 +7,7 @@ import { getAllClientsProcedure } from './procedures/clients/getAllClients';
 import { homeRouter } from './procedures/routers/homeRouter';
 import { homeOcasionRouter } from './procedures/routers/homeOcasionRouter';
 import { router } from './trpc';
+import { seasonCatalogRouter } from './procedures/routers/seasonCatalogRouter';
 
 export const appRouter = router({
   products: productRouter,
@@ -16,6 +17,7 @@ export const appRouter = router({
   search: searchProductProcedure,
   home_banner: homeRouter,
   homeOcasion: homeOcasionRouter,
+  seasonCatalog: seasonCatalogRouter,
   getAllClients: getAllClientsProcedure
 });
 

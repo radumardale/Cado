@@ -20,10 +20,11 @@ interface CategoriesCardInterface {
 
 export default function CategoriesCard({index, category, side, rowHover, setRowHover, image, ocasion = false, ocastionTitle}: CategoriesCardInterface) {
     const namespace = ocasion ? "ocasions" : "tags";
+    const query = ocasion ? {ocasions: category} : {category: category};
     const t = useTranslations(namespace);
 
   return (
-    <Link href={{pathname: '/catalog', query: {category: category}}} className={`bg-blue-2 h-38 lg:h-80 rounded-2xl relative transition-all duration-400 cursor-pointer overflow-hidden ${side === rowHover ? "lg:w-7/13" : rowHover === CategoriesRowHover.NONE ? "lg:w-6/13" : "lg:w-5/13"}`} onMouseEnter={() => {setRowHover(side)}} onMouseLeave={() => {setRowHover(CategoriesRowHover.NONE)}}>
+    <Link href={{pathname: '/catalog', query: query}} className={`bg-blue-2 h-38 lg:h-80 rounded-2xl relative transition-all duration-400 cursor-pointer overflow-hidden ${side === rowHover ? "lg:w-7/13" : rowHover === CategoriesRowHover.NONE ? "lg:w-6/13" : "lg:w-5/13"}`} onMouseEnter={() => {setRowHover(side)}} onMouseLeave={() => {setRowHover(CategoriesRowHover.NONE)}}>
         {image.length > 0 && 
             <>
                 <Image unoptimized src={image} alt={t(`${category}.title`)} className='absolute left-0 top-0 w-full h-full object-cover' width={702} height={320} />

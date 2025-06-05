@@ -8,5 +8,5 @@ export const homeRouter = router({
     addHomeBanner: addHomeBannerProcedure,
     getAllHomeBanners: getAllHomeBanners,
     getFirstHomeBanner: getFirstHomeBanner,
-    deleteHomebanner: deleteHomeBannerProcedure
+    deleteHomebanner: deleteHomeBannerProcedure,
 });
