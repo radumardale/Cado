@@ -20,6 +20,7 @@ import { toast } from "sonner";
 import { z } from "zod";
 
 import { useMutation } from "@tanstack/react-query";
+import { revalidateServerPath } from "@/server/actions/revalidateServerPath";
 
 interface NewBannerFormProps {
   selectedImage: string | null,
@@ -40,6 +41,8 @@ export default function NewBannerForm({ selectedImage, refetchBanners, setSelect
 
   useEffect(() => {
     if (UpdateIsSuccess) {
+      revalidateServerPath("/ro");
+      
       setSelectedImage(null);
       toast.success("Banerul a fost creat cu succes!")
       refetchBanners();

@@ -37,7 +37,9 @@ export default function AdminProductImages({ product, imagesData, initialImagesD
     const isSaleActive = form.watch("data.sale.active");
 
     useEffect(() => {
-        if (!isPending && isSuccess) router.push("/admin/products")
+        if (!isPending && isSuccess) {
+            router.push("/admin/products")
+        }
     }, [isSuccess, isPending])
 
     useEffect(() => {

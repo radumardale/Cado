@@ -16,6 +16,7 @@ import { toast } from 'sonner'
 
 import { useQuery } from "@tanstack/react-query";
 import { useMutation } from "@tanstack/react-query";
+import { revalidateServerPath } from "@/server/actions/revalidateServerPath";
 
 interface AdminProductFormProps {
     id: string
@@ -145,6 +146,7 @@ export default function AdminUpdateProductForm({id}: AdminProductFormProps) {
         if (UpdateIsSuccess) {
             toast.success("Produsul a fost actualizat cu succes!");
             setInitialImagesData(UpdateData.images || []);
+            revalidateServerPath(`/ro/catalog/produs/${data?.product?.custom_id}`);
         }
     }, [UpdateIsSuccess])
 

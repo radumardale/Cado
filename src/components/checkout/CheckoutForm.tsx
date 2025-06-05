@@ -9,7 +9,7 @@ import { useForm } from 'react-hook-form'
 import { BanknoteIcon, BriefcaseBusiness, CalendarIcon, ChevronDown, Clock, CreditCard, MapPin, Truck, User } from 'lucide-react'
 import { Input } from '../ui/input'
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '../ui/select'
-import { Dispatch, Fragment, SetStateAction, useEffect } from 'react'
+import { Fragment, useEffect } from 'react'
 import { Checkbox } from '../ui/checkbox'
 import { ClientEntity } from '@/models/order/types/orderEntity'
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover'
@@ -30,29 +30,29 @@ import { toast } from 'sonner'
 import { ProductInterface } from '@/models/product/types/productInterface'
 
 import { useMutation } from "@tanstack/react-query";
+import { revalidateServerPath } from '@/server/actions/revalidateServerPath';
 
 interface CheckoutFormProps {
     items: CartInterface[],
-    setValue: Dispatch<SetStateAction<CartInterface[]>>,
     setDeliveryRegion: (v: DeliveryRegions | null) => void,
     setDeliveryHour: (v: DeliveryHours | null) => void,
     totalCost: number,
     products: ProductInterface[]
 }
 
-export default function CheckoutForm({items, setValue, setDeliveryRegion, setDeliveryHour, totalCost, products}: CheckoutFormProps) {
+export default function CheckoutForm({items, setDeliveryRegion, setDeliveryHour, totalCost, products}: CheckoutFormProps) {
     const trpc = useTRPC();
     const t = useTranslations();
     const router = useRouter();
 
     const { mutate } = useMutation(trpc.order.addOrder.mutationOptions({
-        onSuccess: (data) => {
+        onSuccess: async (data) => {
             if (!data.success) {
                 toast.error("Comanda nu a putut fi efectuata!");
                 return;
             }
 
-            setValue([]);
+            revalidateServerPath('/[locale]/catalog/product/[id]', 'page');
 
             if (data.paymentForm) {
               // Create and auto-submit a form
@@ -128,7 +128,7 @@ export default function CheckoutForm({items, setValue, setDeliveryRegion, setDel
                     title: {
                         ro: product.title?.ro || '',
                         ru: product.title?.ru || '',
-                        en: product.title?.en || '' // Ensure 'en' is included
+                        en: product.title?.en || ''
                     }
                 },
                 quantity: cartItem?.quantity || 1

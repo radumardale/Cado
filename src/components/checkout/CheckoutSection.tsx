@@ -23,7 +23,7 @@ export default function CheckoutSection() {
 
   return (
     <div className="relative col-span-full grid grid-cols-8 lg:grid-cols-15 mt-16 gap-x-2 lg:gap-x-6">
-      <CheckoutForm products={!isLoading ? productsData?.products as ProductInterface[] : []} items={items} setValue={setValue} setDeliveryRegion={setDeliveryRegion} setDeliveryHour={setDeliveryHour} totalCost={totalCost}/>
+      <CheckoutForm products={!isLoading ? productsData?.products as ProductInterface[] : []} items={items} setDeliveryRegion={setDeliveryRegion} setDeliveryHour={setDeliveryHour} totalCost={totalCost}/>
       <CheckoutCart products={!isLoading ? productsData?.products as ProductInterface[] : []} items={items} setValue={setValue} deliveryRegion={deliveryRegion} deliveryHour={deliveryHour} setTotalCost={setTotalCost}/>
     </div>
   )

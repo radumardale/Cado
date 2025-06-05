@@ -8,6 +8,9 @@ import { useLocale, useTranslations } from "next-intl";
 import Image from "next/image";
 
 import { useQuery } from "@tanstack/react-query";
+import { useLocalStorage } from "usehooks-ts";
+import { CartInterface } from "@/lib/types/CartInterface";
+import { useEffect } from "react";
 
 interface ConfirmationContentProps {
     id: string
@@ -21,6 +24,12 @@ export default function ConfirmationContent({ id }: ConfirmationContentProps) {
   const locale = useLocale();
   const paymentMethodsT = useTranslations("payment_methods");
   const deliveryRegionsT = useTranslations("delivery_regions");
+  const [,setValue] = useLocalStorage<CartInterface[]>("cart", []);
+
+  useEffect(() => {
+    setValue([]);
+  }, [])
+
   return (
     <div className="col-span-7 col-start-5 mt-16 mb-24">
         <CircleCheckBig strokeWidth={1.5} className='text-green size-12 mx-auto mb-6' />

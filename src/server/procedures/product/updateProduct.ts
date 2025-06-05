@@ -7,7 +7,6 @@ import { updateProductRequestSchema } from '@/lib/validation/product/updateProdu
 import { publicProcedure } from "@/server/trpc";
 import connectMongo from '@/lib/connect-mongo';
 import { DestinationEnum, generateUploadLinks } from '../image/generateUploadLinks';
-import { revalidateServerPath } from '@/server/actions/revalidateServerPath';
 
 // Define the response interface for TypeScript type checking
 export interface updateProductResponseInterface extends ActionResponse {
@@ -62,8 +61,6 @@ export const updateProductProcedure = publicProcedure
           product: null
         };
       }
-
-      revalidateServerPath(`/ro/catalog/produs/${product.custom_id}`);
 
       return {
         success: true,

@@ -15,6 +15,7 @@ import { useTranslations } from "next-intl";
 import React, { useEffect, useState } from "react";
 
 import { useMutation } from "@tanstack/react-query";
+import { revalidateServerPath } from "@/server/actions/revalidateServerPath";
 
 interface DeleteBannerFormProps {
   id: string,
@@ -46,6 +47,7 @@ export default function DeleteBannerForm({ id, ocasion, refetchBanners }: Delete
 
     useEffect(() => {
       if (isSuccess && MutatedData) {
+          revalidateServerPath("/ro");
           refetchBanners();
       }
     }, [isSuccess, MutatedData]);
