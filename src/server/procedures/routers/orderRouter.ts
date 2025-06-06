@@ -4,11 +4,13 @@ import { addOrderProcedure } from "../order/addOrder";
 import { getOrderByIdProcedure } from "../order/getOrderById";
 import { updateOrderProcedure } from "../order/updateOrder";
 import { deleteOrderProcedure } from "../order/deleteOrder";
+import { cancelOrderProcedure } from "../order/cancelOrderPayment";
 
 export const orderRouter = router({
     addOrder: addOrderProcedure,
     getAllOrders: getAllOrdersProcedure,
     getOrderById: getOrderByIdProcedure,
     updateOrder: updateOrderProcedure,
-    deleteOrder: deleteOrderProcedure
+    deleteOrder: deleteOrderProcedure,
+    cancelOrder: cancelOrderProcedure
 });
