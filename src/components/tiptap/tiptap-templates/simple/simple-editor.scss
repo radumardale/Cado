@@ -1,0 +1,76 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+
+body {
+  --tt-toolbar-height: auto;
+  --tt-theme-text: var(--tt-gray-light-900);
+
+  .dark & {
+    --tt-theme-text: var(--tt-gray-dark-900);
+  }
+}
+
+.tiptap.ProseMirror {
+  font-family: "Roboto", sans-serif;
+}
+
+.tiptap.ProseMirror p {
+  margin: 0 !important;
+}
+
+.tiptap.ProseMirror ul {
+  margin: 0 !important;
+}
+
+.tiptap.ProseMirror ol {
+  margin: 0 !important;
+}
+
+.tiptap.ProseMirror ::selection {
+  background: #b3d4fc !important;
+  color: #222 !important;
+}
+
+.tiptap.ProseMirror::-moz-selection {
+  background: #b3d4fc;
+  color: #222;
+}
+
+.content-wrapper {
+  height: calc(100% - var(--tt-toolbar-height));
+  overflow-y: auto;
+  border: 1px solid gray;
+  border-radius: 0.5rem;
+  height: 10rem;
+
+  &::-webkit-scrollbar {
+    display: block;
+    width: 0.5rem;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: var(--tt-scrollbar-color);
+    border-radius: 4px;
+  }
+
+  /* Firefox scrollbar */
+  scrollbar-width: thin;
+  scrollbar-color: var(--tt-scrollbar-color) transparent;
+}
+
+.simple-editor-content {
+  width: 100%;
+}
+
+.simple-editor-content .tiptap.ProseMirror {
+  padding: 1rem 1.5rem;
+}
+
+@media screen and (max-width: 480px) {
+  .simple-editor-content .tiptap.ProseMirror {
+    padding: 1.5rem;
+  }
+}

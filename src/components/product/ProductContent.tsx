@@ -9,6 +9,8 @@ import { useLocalStorage } from 'usehooks-ts';
 import { CartInterface } from '@/lib/types/CartInterface';
 import { StockState, stockStateColors } from '@/lib/enums/StockState';
 
+import styles from './product.module.scss';
+
 interface ProductContentInterface {
     product: ProductInterface
 }
@@ -24,6 +26,8 @@ export default function ProductContent({product}: ProductContentInterface) {
     useEffect(() => {
         lenis?.scrollTo(0, {immediate: true})
     }, [])
+
+    console.log(product.description[locale])
 
     return (
         <div className='col-span-full lg:col-span-6 pb-24 lg:pb-31 lg:mt-16 top-25 h-fit'>
@@ -42,7 +46,12 @@ export default function ProductContent({product}: ProductContentInterface) {
                         <p style={{color: stockStateColors[product.stock_availability.state]}}>{t(product.stock_availability.state)}</p>
                     </div>
                 </div>
-                <p className='text-sm leading-4 lg:leading-5 whitespace-pre-line mb-4 lg:mb-8 lg:text-base'>{product.description[locale]}</p>
+
+                <div 
+                    className={styles.productDescription + " text-sm leading-4 lg:leading-5 mb-4 lg:mb-8 lg:text-base"}
+                    dangerouslySetInnerHTML={{ __html: product.description[locale] }}
+                ></div>
+
                 {
                     product.stock_availability.state !== StockState.NOT_IN_STOCK &&
                     <div className="grid grid-cols-6 gap-x-6 col-span-5 mb-8">

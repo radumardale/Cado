@@ -7,7 +7,6 @@ import {
     FormMessage,
   } from "@/components/ui/form"
 import { Input } from '@/components/ui/input'
-import { Textarea } from '@/components/ui/textarea'
 import { useTranslations } from 'next-intl'
 import ProductTagsSearchbar from './ProductTagsSearchbar'
 import { ActiveFiltersButton } from '@/components/catalog/sidebar/ActiveFiltersButton'
@@ -17,6 +16,7 @@ import { Ocasions } from '@/lib/enums/Ocasions'
 import { useFormContext } from 'react-hook-form'
 import { UpdateFormValues } from '@/lib/validation/product/updateProductRequest'
 import { useEffect } from 'react'
+import { TextEditor } from './TextEditor'
 
 export default function AdminProductDetails() {
     const t = useTranslations();
@@ -152,7 +152,8 @@ export default function AdminProductDetails() {
                         <FormItem className="col-span-full">
                             <FormLabel className="font-semibold font-manrope leading-5">Descriere scurtă</FormLabel>
                             <FormControl>
-                                <Textarea data-lenis-prevent className="scroll-bar-custom placeholder:text-black h-40 items-center px-6 border border-gray rounded-3xl text-base text-black pt-4 col-span-full" placeholder="Descriere scurtă*" {...field}/>
+                                {/* <Textarea data-lenis-prevent className="scroll-bar-custom placeholder:text-black h-40 items-center px-6 border border-gray rounded-3xl text-base text-black pt-4 col-span-full" placeholder="Descriere scurtă*" {...field}/> */}
+                                <TextEditor {...field}/>
                             </FormControl>
                             <FormMessage className='top-7' />
                         </FormItem>
@@ -165,7 +166,7 @@ export default function AdminProductDetails() {
                         <FormItem className="col-span-full">
                             <FormLabel className="font-semibold font-manrope leading-5">Краткое описание</FormLabel>
                             <FormControl>
-                                <Textarea data-lenis-prevent className="scroll-bar-custom placeholder:text-black h-40 items-center px-6 border border-gray rounded-3xl text-base text-black pt-4 col-span-full" placeholder="Краткое описание*" {...field}/>
+                                <TextEditor {...field}/>
                             </FormControl>
                             <FormMessage className='top-7' />
                         </FormItem>
@@ -178,7 +179,7 @@ export default function AdminProductDetails() {
                         <FormItem className="col-span-full">
                             <FormLabel className="font-semibold font-manrope leading-5">Short description</FormLabel>
                             <FormControl>
-                                <Textarea data-lenis-prevent className="scroll-bar-custom placeholder:text-black h-40 items-center px-6 border border-gray rounded-3xl text-base text-black pt-4 col-span-full" placeholder="Short description*" {...field}/>
+                                <TextEditor {...field}/>
                             </FormControl>
                             <FormMessage className='top-7' />
                         </FormItem>
@@ -230,7 +231,7 @@ export default function AdminProductDetails() {
                                 <FormItem className="col-span-full">
                                     <FormLabel className="font-semibold font-manrope leading-5">Cadoul include</FormLabel>
                                     <FormControl>
-                                        <Textarea data-lenis-prevent className="scroll-bar-custom placeholder:text-black h-40 items-center px-6 border border-gray rounded-3xl text-base text-black pt-4 col-span-full" placeholder="Cadoul include*" {...field}/>
+                                        <TextEditor {...field}/>
                                     </FormControl>
                                     <FormMessage className='top-7' />
                                 </FormItem>
@@ -243,7 +244,7 @@ export default function AdminProductDetails() {
                                 <FormItem className="col-span-full">
                                     <FormLabel className="font-semibold font-manrope leading-5">Подарок включает в себя</FormLabel>
                                     <FormControl>
-                                        <Textarea data-lenis-prevent className="scroll-bar-custom placeholder:text-black h-40 items-center px-6 border border-gray rounded-3xl text-base text-black pt-4 col-span-full" placeholder="Подарок включает в себя*" {...field}/>
+                                        <TextEditor {...field}/>
                                     </FormControl>
                                     <FormMessage className='top-7' />
                                 </FormItem>
@@ -256,7 +257,7 @@ export default function AdminProductDetails() {
                                 <FormItem className="col-span-full mb-6">
                                     <FormLabel className="font-semibold font-manrope leading-5">The gift includes</FormLabel>
                                     <FormControl>
-                                        <Textarea data-lenis-prevent className="scroll-bar-custom placeholder:text-black h-40 items-center px-6 border border-gray rounded-3xl text-base text-black pt-4 col-span-full" placeholder="The gift includes*" {...field}/>
+                                        <TextEditor {...field}/>
                                     </FormControl>
                                     <FormMessage className='top-7' />
                                 </FormItem>
@@ -272,7 +273,7 @@ export default function AdminProductDetails() {
                         <FormItem className="col-span-full mt-2 pt-4 border-t border-lightgray">
                             <FormLabel className="font-semibold font-manrope leading-5">Descriere</FormLabel>
                             <FormControl>
-                                <Textarea data-lenis-prevent className="scroll-bar-custom placeholder:text-black h-40 items-center px-6 border border-gray rounded-3xl text-base text-black pt-4 col-span-full" placeholder="Descriere*" {...field}/>
+                                <TextEditor {...field}/>
                             </FormControl>
                             <FormMessage className='top-7' />
                         </FormItem>
@@ -285,7 +286,7 @@ export default function AdminProductDetails() {
                         <FormItem className="col-span-full">
                             <FormLabel className="font-semibold font-manrope leading-5">Описание</FormLabel>
                             <FormControl>
-                                <Textarea data-lenis-prevent className="scroll-bar-custom placeholder:text-black h-40 items-center px-6 border border-gray rounded-3xl text-base text-black pt-4 col-span-full" placeholder="Описание*" {...field}/>
+                                <TextEditor {...field}/>
                             </FormControl>
                             <FormMessage className='top-7' />
                         </FormItem>
@@ -298,7 +299,7 @@ export default function AdminProductDetails() {
                         <FormItem className="col-span-full">
                             <FormLabel className="font-semibold font-manrope leading-5">Description</FormLabel>
                             <FormControl>
-                                <Textarea data-lenis-prevent className="scroll-bar-custom placeholder:text-black h-40 items-center px-6 border border-gray rounded-3xl text-base text-black pt-4 col-span-full" placeholder="Description*" {...field}/>
+                                <TextEditor {...field}/>
                             </FormControl>
                             <FormMessage className='top-7' />
                         </FormItem>
