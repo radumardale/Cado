@@ -46,7 +46,6 @@ export const generateUploadLinks = async ({id, destination} : GenerateUploadLink
         const comm = new PutObjectCommand({
           Bucket: 'studio36',
           Key: fileName,
-        //   Body: buf,
         });
     
         const uploadUrl = await getSignedUrl(
