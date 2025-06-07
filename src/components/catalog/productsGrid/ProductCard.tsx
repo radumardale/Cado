@@ -38,7 +38,7 @@ export default function ProductCard({product, category, section="RECOMMENDATIONS
           <div className='bg-purewhite w-full h-full absolute left-0 top-0 transition duration-300 -z-10 rounded-lg lg:rounded-2xl overflow-hidden'>
             <Image unoptimized src={product.images[1] || product.images[0]} width={1596} height={2396} alt={product.title.ro} className={`${isImageLoaded ? "" : "hidden"} absolute left-0 top-1/2 -translate-y-1/2 max-w-full max-h-full object-contain`}/>  
           </div>
-          <button onClick={(e) => {e.stopPropagation(); addToCart(product, 1, value, setValue, locale)}} className='absolute left-4 -bottom-12 h-12 w-[calc(100%-2rem)] bg-white rounded-3xl font-manrope z-20 opacity-100 transition-all duration-300 group-hover:bottom-4 font-semibold cursor-pointer hover:bg-lightergray'>{product.stock_availability.stock <= 0 ? "Stoc epuizat" : "Adaugă în coș"}</button>
+          <button disabled={product.stock_availability.stock <= 0} onClick={(e) => {e.stopPropagation(); addToCart(product, 1, value, setValue, locale)}} className={`absolute left-4 -bottom-12 h-12 w-[calc(100%-2rem)] bg-white rounded-3xl font-manrope z-20 opacity-100 transition-all duration-300 group-hover:bottom-4 font-semibold cursor-pointer disabled:pointer-events-none hover:bg-lightergray`}>{product.stock_availability.stock <= 0 ? "Stoc epuizat" : "Adaugă în coș"}</button>
         </div>
         <Link href={{pathname: "/catalog/product/[id]", params: {id: product.custom_id}, query: category ? {category: category} : {}}} className='col-span-3 group cursor-pointer flex flex-col flex-1'>
             <p className={`flex-1 font-manrope font-semibold mb-2 ${section === "CATALOG" ? "text-left" : "text-center"} lg:text-left`}>{product.title[locale]}</p>

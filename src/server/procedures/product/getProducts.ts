@@ -6,6 +6,7 @@ import { ActionResponse } from "@/lib/types/ActionResponse";
 import connectMongo from "@/lib/connect-mongo";
 import { getAllProductsRequestSchema } from "@/lib/validation/product/getAllProductsRequest";
 import SortBy from "@/lib/enums/SortBy";
+import { ReccProduct } from "@/models/reccProduct/ReccProduct";
 
 export interface GetProductResponseInterface extends ActionResponse {
   products: any;
@@ -33,15 +34,22 @@ export const getProductsProcedure = publicProcedure
         ? normalizedSearch.split("+").filter((word) => word.length > 1)
         : null;
 
-      // const sortOptions =
-      //   input.sortBy === SortBy.PRICE_ASC || input.sortBy === SortBy.PRICE_DESC
-      //     ? {
-      //         ...getSortOptions(input.sortBy),
-      //       }
-      //     : {
-      //         relevance: -1 as const,
-      //         ...getSortOptions(input.sortBy),
-      //       };
+      const recommendedValue = 
+        input.sortBy === SortBy.RECOMMENDED ? {
+          $cond: [
+        {
+          $in: ["$_id", { 
+            $map: { 
+          input: await ReccProduct.find({}, { product: 1 }).lean(),
+          as: "reccProduct",
+          in: "$$reccProduct.product"
+            }
+          }]
+        },
+        1,
+        0
+          ]
+        } : 0
 
       const relevanceValue = 
         input.sortBy === SortBy.PRICE_ASC || input.sortBy === SortBy.PRICE_DESC
@@ -66,6 +74,12 @@ export const getProductsProcedure = publicProcedure
                               {
                                 $regexMatch: {
                                   input: "$normalized_title.ru",
+                                  regex: word,
+                                },
+                              },
+                              {
+                                $regexMatch: {
+                                  input: "$normalized_title.en",
                                   regex: word,
                                 },
                               },
@@ -221,7 +235,10 @@ export const getProductsProcedure = publicProcedure
           },
         },
         {
-          $set: { relevance: relevanceValue }
+          $set: { 
+            relevance: relevanceValue,
+            recommended: recommendedValue
+          }
         },
         {
           $facet: {
@@ -265,6 +282,8 @@ export const getProductsProcedure = publicProcedure
 
 function getSortOptions(sortBy: SortBy): Record<string, 1 | -1> {
   switch (sortBy) {
+    case SortBy.RECOMMENDED:
+        return { recommended: -1 };
     case SortBy.PRICE_ASC:
       return { price: 1 };
     case SortBy.PRICE_DESC:
