@@ -1,6 +1,6 @@
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 
-import { publicProcedure } from "../../trpc";
+import { protectedProcedure } from "../../trpc";
 import { Product } from '@/models/product/product';
 import { ActionResponse } from "@/lib/types/ActionResponse";
 import connectMongo from "@/lib/connect-mongo";
@@ -12,7 +12,7 @@ export interface GetProductResponseInterface extends ActionResponse {
 }
 
 // trpc server procedure
-export const getAdminProductsProcedure = publicProcedure
+export const getAdminProductsProcedure = protectedProcedure
   .input(getAdminProductsRequestSchema)
   .query(async ({ input }) => { 
     try {

@@ -5,13 +5,13 @@ import { ActionResponse } from "@/lib/types/ActionResponse";
 import { updateHomeOcasionRequestSchema } from "@/lib/validation/home/updateHomeOcasion";
 import { HomeOcasion } from "@/models/homeOcasion/HomeOcasion";
 import { HomeOcasionI } from "@/models/homeOcasion/types/HomeOcasionI";
-import { publicProcedure } from "@/server/trpc";
+import { protectedProcedure } from "@/server/trpc";
 
 interface updateHomeOcasionI extends ActionResponse {
     homeOcasion: HomeOcasionI | null
 }
 
-export const updateHomeOcasionProcedure = publicProcedure
+export const updateHomeOcasionProcedure = protectedProcedure
     .input(updateHomeOcasionRequestSchema)
     .mutation(async ({ input }): Promise<updateHomeOcasionI> => {
         try {

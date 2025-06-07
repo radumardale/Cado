@@ -5,6 +5,7 @@ import { Link } from '@/i18n/navigation';
 import { Pathnames } from '@/i18n/routing';
 import { AdminPages } from '@/lib/enums/AdminPages';
 import { ChevronDown, LogOut } from 'lucide-react';
+import { signOut } from 'next-auth/react';
 import { useLocale, useTranslations } from 'next-intl';
 
 interface AdminHeaderProps {
@@ -40,7 +41,7 @@ export default function AdminHeader({page, href, id}: AdminHeaderProps) {
                     </SelectGroup>
                 </SelectContent>
             </Select>
-            <button className='h-12 px-6 flex items-center gap-2 bg-black rounded-3xl hover:opacity-75 cursor-pointer transition duration-300'>
+            <button className='h-12 px-6 flex items-center gap-2 bg-black rounded-3xl hover:opacity-75 cursor-pointer transition duration-300' onClick={() => {signOut()}}>
                 <LogOut className='text-white size-6' strokeWidth={1.5} />
                 <p className='text-white'>Ieșire</p>
             </button>

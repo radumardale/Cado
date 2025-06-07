@@ -147,9 +147,14 @@ export default function AdminUpdateProductForm({id}: AdminProductFormProps) {
         if (UpdateIsSuccess) {
             toast.success("Produsul a fost actualizat cu succes!");
             setInitialImagesData(UpdateData.images || []);
+
             revalidateServerPath(`/ro/catalog/product/${data?.product?.custom_id}`);
             revalidateServerPath(`/ru/catalog/product/${data?.product?.custom_id}`);
             revalidateServerPath(`/en/catalog/product/${data?.product?.custom_id}`);
+
+            revalidateServerPath("/ro/catalog");
+            revalidateServerPath("/ru/catalog");
+            revalidateServerPath("/en/catalog");
             
             const myQueryKey = trpc.products.getProductById.queryKey({id: data?.product?.custom_id});
             queryClient.invalidateQueries({queryKey: myQueryKey});

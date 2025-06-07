@@ -2,7 +2,7 @@ import { Product } from '@/models/product/product';
 import { ActionResponse } from '@/lib/types/ActionResponse';
 import { addProductRequestSchema } from '@/lib/validation/product/addProductRequest';
 import { ProductInterface } from '@/models/product/types/productInterface';
-import { publicProcedure } from '@/server/trpc';
+import { protectedProcedure } from '@/server/trpc';
 import connectMongo from '@/lib/connect-mongo';
 import { DestinationEnum, generateUploadLinks } from '../image/generateUploadLinks';
 
@@ -11,7 +11,7 @@ export interface addProductResponseInterface extends ActionResponse {
   imagesLinks: string[];
 }
 
-export const addProductProcedure = publicProcedure
+export const addProductProcedure = protectedProcedure
   .input(addProductRequestSchema)
   .mutation(async ({ input }): Promise<addProductResponseInterface> => {
     try {

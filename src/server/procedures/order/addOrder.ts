@@ -1,6 +1,6 @@
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 
-import { publicProcedure } from "@/server/trpc";
+import { protectedProcedure } from "@/server/trpc";
 import { Client } from "@/models/client/client";
 import { Order } from "@/models/order/order";
 import { OrderInterface, ResOrderInterface } from "@/models/order/types/orderInterface";
@@ -49,7 +49,7 @@ export interface addOrderResponse extends ActionResponse {
   order?: OrderInterface
 }
 
-export const addOrderProcedure = publicProcedure
+export const addOrderProcedure = protectedProcedure
   .input(addOrderRequestSchema)
   .mutation(async ({ input }): Promise<addOrderResponse> => {
     try {

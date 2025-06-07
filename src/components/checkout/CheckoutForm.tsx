@@ -62,6 +62,9 @@ export default function CheckoutForm({items, setDeliveryRegion, setDeliveryHour,
             }
 
             revalidateServerPath('/[locale]/catalog/product/[id]', 'page');
+            revalidateServerPath("/ro/catalog");
+            revalidateServerPath("/ru/catalog");
+            revalidateServerPath("/en/catalog");
 
             if (data.paymentForm) {
               // Create and auto-submit a form

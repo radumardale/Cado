@@ -1,6 +1,6 @@
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 
-import { publicProcedure } from "@/server/trpc";
+import { protectedProcedure } from "@/server/trpc";
 import { Client } from '@/models/client/client';
 import { ActionResponse } from '@/lib/types/ActionResponse';
 import connectMongo from "@/lib/connect-mongo";
@@ -21,7 +21,7 @@ export interface getAllOrdersResponseInterface extends ActionResponse {
   totalCount: number
 }
 
-export const getAllClientsProcedure = publicProcedure
+export const getAllClientsProcedure = protectedProcedure
   .input(getAdminOrdersRequestSchema)
   .query(async ({ input }): Promise<getAllOrdersResponseInterface> => {    
     try {

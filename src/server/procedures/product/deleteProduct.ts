@@ -2,10 +2,10 @@ import connectMongo from '@/lib/connect-mongo';
 import { ActionResponse } from '@/lib/types/ActionResponse';
 import { deleteProductRequestSchema } from '@/lib/validation/product/deleteProductRequest';
 import { Product } from '@/models/product/product';
-import { publicProcedure } from '@/server/trpc';
+import { protectedProcedure } from '@/server/trpc';
 import { deleteMultipleFromBucket } from '../image/deleteObjects/deleteMultipleFromBucket';
 
-export const deleteProductProcedure = publicProcedure
+export const deleteProductProcedure = protectedProcedure
   .input(deleteProductRequestSchema)
   .mutation(async ({ input }): Promise<ActionResponse> => {
     try {

@@ -1,12 +1,12 @@
 import connectMongo from '@/lib/connect-mongo';
 import { ActionResponse } from '@/lib/types/ActionResponse';
 import { Blog } from '@/models/blog/blog';
-import { publicProcedure } from '@/server/trpc';
+import { protectedProcedure } from '@/server/trpc';
 import { deleteMultipleFromBucket } from '../image/deleteObjects/deleteMultipleFromBucket';
 import { deleteBlogRequestSchema } from '@/lib/validation/blog/deleteBlogRequest';
 import { SectionImagesInterface } from '@/models/blog/types/SectionImagesInterface';
 
-export const deleteBlogProcedure = publicProcedure
+export const deleteBlogProcedure = protectedProcedure
   .input(deleteBlogRequestSchema)
   .mutation(async ({ input }): Promise<ActionResponse> => {
     try {

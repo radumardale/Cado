@@ -2,7 +2,7 @@
 
 import { ProductInterface } from '@/models/product/types/productInterface';
 import { ActionResponse } from '@/lib/types/ActionResponse';
-import { publicProcedure } from "@/server/trpc";
+import { protectedProcedure } from "@/server/trpc";
 import connectMongo from '@/lib/connect-mongo';
 import { updateReccProductRequestSchema } from '@/lib/validation/reccProducts/updateReccProductRequestSchema';
 import { ReccProduct } from '@/models/reccProduct/ReccProduct';
@@ -13,7 +13,7 @@ export interface updateReccProductResponseInterface extends ActionResponse {
   imagesLinks: string[];
 }
 
-export const updateReccProductProcedure = publicProcedure
+export const updateReccProductProcedure = protectedProcedure
   .input(updateReccProductRequestSchema)
   .mutation(async ({ input }): Promise<ActionResponse> => {
     try {

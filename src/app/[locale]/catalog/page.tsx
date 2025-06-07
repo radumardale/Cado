@@ -5,6 +5,8 @@ import LinkMenuWrapper from "@/components/catalog/LinkMenuWrapper";
 import Footer from "@/components/footer/Footer";
 import SortBy from "@/lib/enums/SortBy";
 import { getTranslations, setRequestLocale } from "next-intl/server";
+export const dynamic = 'force-static'
+export const revalidate = 3600; // Cache for 1 hour
 
 export async function generateMetadata() {
   const t = await getTranslations('index.meta');

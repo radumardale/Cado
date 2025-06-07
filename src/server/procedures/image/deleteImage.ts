@@ -2,12 +2,12 @@
 
 import { ActionResponse } from "@/lib/types/ActionResponse";
 import { deleteImageRequestSchema } from "@/lib/validation/image/deleteImageRequest";
-import { publicProcedure } from "@/server/trpc";
+import { protectedProcedure } from "@/server/trpc";
 import { selectObjectToDelete } from "./deleteObjects/selectObjectToDelete";
 import connectMongo from "@/lib/connect-mongo";
 import { deleteFromBucket } from "./deleteObjects/deleteFromBucket";
 
-export const deleteImageProcedure = publicProcedure
+export const deleteImageProcedure = protectedProcedure
   .input(deleteImageRequestSchema)
   .mutation(async ({ input }): Promise<ActionResponse> => {
     try {

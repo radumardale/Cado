@@ -1,6 +1,6 @@
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 
-import { publicProcedure } from "@/server/trpc";
+import { protectedProcedure } from "@/server/trpc";
 import { ActionResponse } from '@/lib/types/ActionResponse';
 import connectMongo from "@/lib/connect-mongo";
 import { uploadBlogImagesRequestSchema } from "@/lib/validation/image/uploadBlogImagesRequest";
@@ -13,7 +13,7 @@ interface UploadBlogImagesResponse extends ActionResponse {
   mainImage: string;
 }
 
-export const UploadBlogImagesProcedure = publicProcedure
+export const UploadBlogImagesProcedure = protectedProcedure
   .input(uploadBlogImagesRequestSchema)
   .mutation(async ({ input }): Promise<UploadBlogImagesResponse> => {
     try {

@@ -3,7 +3,7 @@
 import { Blog } from '@/models/blog/blog';
 import { ActionResponse } from '@/lib/types/ActionResponse';
 import { updateBlogRequestSchema } from '@/lib/validation/blog/updateBlogRequest';
-import { publicProcedure } from "@/server/trpc";
+import { protectedProcedure } from "@/server/trpc";
 import connectMongo from '@/lib/connect-mongo';
 import { BlogInterface } from '@/models/blog/types/BlogInterface';
 import { DestinationEnum, generateUploadLinks } from '../image/generateUploadLinks';
@@ -14,7 +14,7 @@ export interface updateBlogResponseInterface extends ActionResponse {
   imagesLinks: string[];
 }
 
-export const updateBlogProcedure = publicProcedure
+export const updateBlogProcedure = protectedProcedure
   .input(updateBlogRequestSchema)
   .mutation(async ({ input }): Promise<updateBlogResponseInterface> => {
     try {

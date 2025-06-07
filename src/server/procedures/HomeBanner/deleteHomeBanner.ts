@@ -4,9 +4,9 @@ import connectMongo from "@/lib/connect-mongo";
 import { ActionResponse } from "@/lib/types/ActionResponse";
 import { deleteHomeBannerRequestSchema } from "@/lib/validation/home/updateHomeBannerRequest";
 import { HomeBanner } from "@/models/home_banner/HomeBanner";
-import { publicProcedure } from "@/server/trpc";
+import { protectedProcedure } from "@/server/trpc";
 
-export const deleteHomeBannerProcedure = publicProcedure
+export const deleteHomeBannerProcedure = protectedProcedure
     .input(deleteHomeBannerRequestSchema)
     .mutation(async ({ input }): Promise<ActionResponse> => {
         try {

@@ -4,7 +4,7 @@ import connectMongo from "@/lib/connect-mongo";
 import { ActionResponse } from "@/lib/types/ActionResponse";
 import { addHomeBannerRequestSchema } from "@/lib/validation/home/addHomeBannerRequest";
 import { HomeBanner } from "@/models/home_banner/HomeBanner";
-import { publicProcedure } from "@/server/trpc";
+import { protectedProcedure } from "@/server/trpc";
 import { DestinationEnum, generateUploadLinks } from "../image/generateUploadLinks";
 import { HomeBannerInterface } from "@/models/home_banner/types/HomeBannerInterface";
 
@@ -13,7 +13,7 @@ interface addHomeBannerI extends ActionResponse {
     homeBanner: HomeBannerInterface | null
 }
 
-export const addHomeBannerProcedure = publicProcedure
+export const addHomeBannerProcedure = protectedProcedure
     .input(addHomeBannerRequestSchema)
     .mutation(async ({ input }): Promise<addHomeBannerI> => {
         try {

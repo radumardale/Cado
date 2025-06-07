@@ -2,8 +2,8 @@
 
 import { Blog } from '@/models/blog/blog';
 import { ActionResponse } from '@/lib/types/ActionResponse';
-import { addBlogRequestSchema } from '@/lib/validation/blog/addBlogRequest'; // Changed from updateBlogRequestSchema
-import { publicProcedure } from "@/server/trpc";
+import { addBlogRequestSchema } from '@/lib/validation/blog/addBlogRequest'; 
+import { protectedProcedure } from "@/server/trpc";
 import connectMongo from '@/lib/connect-mongo';
 import { BlogInterface } from '@/models/blog/types/BlogInterface';
 import { DestinationEnum, generateUploadLinks } from '../image/generateUploadLinks';
@@ -14,8 +14,8 @@ export interface createBlogResponseInterface extends ActionResponse { // Changed
   imagesLinks: string[];
 }
 
-export const createBlogProcedure = publicProcedure // Changed from updateBlogProcedure
-  .input(addBlogRequestSchema) // Changed from updateBlogRequestSchema
+export const createBlogProcedure = protectedProcedure
+  .input(addBlogRequestSchema) 
   .mutation(async ({ input }): Promise<createBlogResponseInterface> => { // Changed return type
     try {
       await connectMongo();

@@ -1,18 +1,26 @@
-import { initTRPC } from "@trpc/server";
+import { initTRPC, TRPCError } from "@trpc/server";
 import { getServerSession } from "next-auth";
 
 const t = initTRPC.create({
 });
 
-export const createTRPCContext = async () => {
-  try {
-    const session = await getServerSession();
-    return { session };
-  } catch (error) {
-    console.error("Session error:", error);
-    return { session: null };
+const enforceUserIsAuthed = t.middleware(async ({ next, ctx }) => {
+  const session = await getServerSession();
+  
+  if (!session?.user) {
+    throw new TRPCError({ code: "UNAUTHORIZED" });
   }
-};
+  
+  return next({
+    ctx: {
+      ...ctx,
+      session,
+      user: session.user,
+    },
+  });
+});
+
+export const protectedProcedure = t.procedure.use(enforceUserIsAuthed);
 
 export const router = t.router;
 export const publicProcedure = t.procedure;
