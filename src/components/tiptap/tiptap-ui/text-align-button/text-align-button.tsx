@@ -90,6 +90,7 @@ export function canSetTextAlign(
   if (!editor || !alignAvailable) return false
 
   try {
+    // @ts-expect-error Assuming `setTextAlign` is a valid command
     return editor.can().setTextAlign(align)
   } catch {
     return false
