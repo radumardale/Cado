@@ -8,6 +8,8 @@ import { Metadata } from 'next';
 import { setRequestLocale } from 'next-intl/server';
 export const dynamic = 'force-static'
 export const revalidate = 3600; // Cache for 1 hour
+// @ts-expect-error ggg
+import { htmlToText } from 'html-to-text';
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string, id: string }> }) : Promise<Metadata> {
   
@@ -19,7 +21,9 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   const productData = await queryClient.fetchQuery(queryOptions);
 
   const title = productData.product?.title[locale] || 'Product';
-  const description = productData.product?.description?.[locale] || '';
+  const descriptionResponse = productData.product?.long_description?.[locale] || '';
+  const description = htmlToText(descriptionResponse);
+
   const image = productData.product?.images?.[0] || 'https://your-default-image-url.com/default.jpg';
 
   return {
