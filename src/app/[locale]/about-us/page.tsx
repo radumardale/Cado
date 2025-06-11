@@ -7,7 +7,7 @@ import Collaboration from "@/components/home/collaboration/Collaboration";
 import Faq from "@/components/home/faq/Faq";
 import Reviews from "@/components/home/reviews/Reviews";
 import { getTranslations, setRequestLocale } from "next-intl/server";
-import { use } from "react";
+// import { use } from "react";
 import LinksMenu from "@/components/LinksMenu";
 import { Metadata } from "next";
 
@@ -43,9 +43,8 @@ export async function generateMetadata({ params }: { params: { locale: string } 
   };
 }
 
-export default function AboutUs({params}: {params: Promise<{locale: string}>;}) {
-  const {locale} = use(params);
-  setRequestLocale(locale);
+export default function AboutUs({ params }: { params: { locale: string } }) {
+  setRequestLocale(params.locale);
 
   return (
     <>
