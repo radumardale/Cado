@@ -19,9 +19,9 @@ export async function generateMetadata() : Promise<Metadata> {
   const locale = await getLocale();
 
   const imagePaths = {
-    en: "/images/opengraph/en.jpg",
-    ru: "/images/opengraph/ru.jpg",
-    ro: "/images/opengraph/ro.jpg",
+    en: "/opengraph/en.jpg",
+    ru: "/opengraph/ru.jpg",
+    ro: "/opengraph/ro.jpg",
   }
 
   return {
