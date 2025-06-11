@@ -20,6 +20,7 @@ interface MobileMenuInterface {
 export default function MobileMenu({setSidebarOpen}: MobileMenuInterface) {
     const trpc = useTRPC();
     const t = useTranslations("Tags");
+    const nav_t = useTranslations("NavBar");
     const pathname = usePathname();
     const [searchText, setSearchText] = useState("");
 
@@ -63,16 +64,16 @@ export default function MobileMenu({setSidebarOpen}: MobileMenuInterface) {
                       </div>
                   </Accordion>
                   <Link className='py-4 border-b border-lightgray' href="/" onClick={() => {if (pathname === "/") setSidebarOpen(false)}}>
-                      <span className='pl-2 font-manrope font-semibold leading-5'>Acasă</span>
+                      <span className='pl-2 font-manrope font-semibold leading-5'>{nav_t("home")}</span>
                   </Link>
                   <Link className='py-4 border-b border-lightgray' href="/about-us" onClick={() => {if (pathname === "/about-us") setSidebarOpen(false)}}>
-                      <span className='pl-2 font-manrope font-semibold leading-5'>Despre Noi</span>
+                      <span className='pl-2 font-manrope font-semibold leading-5'>{nav_t("about")}</span>
                   </Link>
                   <Link className='py-4 border-b border-lightgray' href="/blogs" onClick={() => {if (pathname === "/blogs") setSidebarOpen(false)}}>
-                      <span className='pl-2 font-manrope font-semibold leading-5'>Blog</span>
+                      <span className='pl-2 font-manrope font-semibold leading-5'>{nav_t("blogs")}</span>
                   </Link>
                   <Link className='py-4 border-b border-lightgray' href="/contacts" onClick={() => {if (pathname === "/contacts") setSidebarOpen(false)}}>
-                      <span className='pl-2 font-manrope font-semibold leading-5'>Contacte</span>
+                      <span className='pl-2 font-manrope font-semibold leading-5'>{nav_t("contact")}</span>
                   </Link>
               </>
               :

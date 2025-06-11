@@ -531,7 +531,8 @@
       "title_slice_1" : "Ne pare rău!",
       "title_slice_2" : "Plata a fost anulată sau întreruptă",
       "subtitle_slice_1" : "Se pare că ați părăsit pagina de plată sau tranzacția nu a fost încheiată.",
-      "subtitle_slice_2" : "Dacă întâmpinați dificultăți, vă rugăm să încercați din nou sau să ne contactați.",
+      "subtitle_slice_2" : "Dacă întâmpinați dificultăți, vă rugăm să încercați din nou sau",
+      "subtitle_slice_3" : "să ne contactați.",
       "back" : "Întoarce-te în magazin"
     },
     "TermsPage" : {

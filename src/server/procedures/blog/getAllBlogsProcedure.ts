@@ -14,7 +14,7 @@ export const getAllBlogsProcedure = publicProcedure
         try {
         await connectMongo();
         
-        const blogs = await Blog.find().select("image _id tag title date").lean();
+        const blogs = await Blog.find().sort({ date: -1 }).select("image _id tag title date").lean();
 
         if (!blogs) {
             return {

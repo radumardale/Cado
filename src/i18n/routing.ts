@@ -59,10 +59,10 @@ export const routing = defineRouting({
       ro: '/login',
       ru: '/вход'
     },
-    '/payment-error': {
-      en: '/payment-error',
-      ro: '/eroare-plata',
-      ru: '/ошибка-оплаты'
+    '/payment-error/[id]': {
+      en: '/payment-error/[id]',
+      ro: '/eroare-plata/[id]',
+      ru: '/ошибка-оплаты/[id]'
     },
     '/admin/orders': {
       ru: '/админ/заказы',

@@ -529,7 +529,8 @@
       "title_slice_1": "We're sorry!",
       "title_slice_2": "The payment was cancelled or interrupted",
       "subtitle_slice_1": "It seems you left the payment page or the transaction was not completed.",
-      "subtitle_slice_2": "If you encounter difficulties, please try again or contact us.",
+      "subtitle_slice_2": "If you encounter difficulties, please try again or",
+      "subtitle_slice_3": "contact us.",
       "back": "Back to store"
     },
     "TermsPage" : {
