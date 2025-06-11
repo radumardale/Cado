@@ -31,7 +31,7 @@ export default function Template ({ children } : { children : React.ReactNode })
 
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth >= 1280) {
+      if (window.innerWidth >= 768) {
         setDisplayAdmin(true)
       } else {
         setDisplayAdmin(false)
