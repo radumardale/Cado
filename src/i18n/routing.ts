@@ -142,7 +142,6 @@ export type Pathnames =
 | "/catalog"
 | "/checkout"
 | "/login"
-| '/payment-error'
 | "/admin/orders"
 | "/admin/products"
 | "/admin/products/new"
