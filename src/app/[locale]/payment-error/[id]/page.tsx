@@ -12,13 +12,7 @@ export async function generateMetadata() {
   };
 }
 
-export default function Page({ params }: { params: { id: string } }) {
-  const { id } = params;
-
-  console.log(id)
-
-  
-
+export default function Page() {
 
   return (
       <>

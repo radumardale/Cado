@@ -4,24 +4,42 @@ import Faq from '@/components/home/faq/Faq';
 import Recommendations from '@/components/home/recommendations/Recommendations';
 import LinksMenu from '@/components/LinksMenu';
 import ProductInfo from '@/components/product/ProductInfo';
-import { Metadata } from 'next';
 import { setRequestLocale } from 'next-intl/server';
 export const dynamic = 'force-static'
 export const revalidate = 3600; // Cache for 1 hour
 
-export async function generateMetadata({ params } : {params: Promise<{locale: string, id: string}>}): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: Promise<{ locale: string, id: string }> }) {
   
   const { locale, id } = await params;
-  setRequestLocale(locale);
 
   const queryClient = getQueryClient();
 
   const queryOptions = trpc.products.getProductById.queryOptions({ id });
   const productData = await queryClient.fetchQuery(queryOptions);
 
+  const title = productData.product?.title[locale] || 'Product';
+  const description = productData.product?.description?.[locale] || '';
+  const image = productData.product?.images?.[0] || 'https://your-default-image-url.com/default.jpg';
+
   return {
-    title: productData.product?.title[locale] || 'Product',
-    description: productData.product?.description[locale] || 'Product description',
+    title: title,
+    description: description,
+    openGraph: {
+      title : title,
+      description : description ,
+      images: [
+        {
+          url: image,
+          alt: title,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [image],
+    },
   };
 }
   export default async function Product({ params }: { params: Promise<{ locale: string, id: string }> }) {
