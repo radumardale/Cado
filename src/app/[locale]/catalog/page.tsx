@@ -9,11 +9,11 @@ export const dynamic = 'force-static'
 export const revalidate = 3600; // Cache for 1 hour
 
 export async function generateMetadata() {
-  const t = await getTranslations('index.meta');
+  const t = await getTranslations('PageTitles');
  
   return {
-    title: t('title'),
-    description: t('description'),
+    title: t('catalog'),
+    description: '',
   };
 }
 
@@ -46,13 +46,15 @@ export default async function CatalogPage({params}: {params: Promise<{locale: st
   
   return (
     <>
+    <div className="grid grid-cols-8 lg:grid-cols-15 gap-x-2 lg:gap-x-6 px-4 lg:px-16 max-w-3xl mx-auto relative">
       <div className="grid grid-cols-full gap-x-6 col-span-full">
           <HydrateClient>
             <Catalog />
           </HydrateClient>
-          <Footer />
           <LinkMenuWrapper /> 
       </div>
+    </div>
+    <Footer />
     </>
   );
 }

@@ -7,7 +7,7 @@ export const config = {
   // Match only internationalized pathnames
   matcher: [
     '/', // The root path
-    '/(ro|en)/:path*', // Locale-prefixed paths
+    '/(ro|en|ru)/:path*', // Locale-prefixed paths
     '/((?!api|_next|_vercel|paynet-callback|.*\\..*).*)',
   ]
 };

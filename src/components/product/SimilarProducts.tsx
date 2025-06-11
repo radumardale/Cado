@@ -8,6 +8,7 @@ import { ProductInterface } from '@/models/product/types/productInterface';
 import ProductCard from '../catalog/productsGrid/ProductCard';
 
 import { useQuery } from "@tanstack/react-query";
+import { useTranslations } from 'next-intl';
 
 interface SimiliarProductsInterface {
     category: Categories,
@@ -15,6 +16,9 @@ interface SimiliarProductsInterface {
 }
 
 export default function SimiliarProducts({category, productId}: SimiliarProductsInterface) {
+
+    const t = useTranslations("ProductPage")
+
     const trpc = useTRPC();
     const { data, isLoading } = useQuery(
         trpc.products.getSimilarProducts.queryOptions({category: category, productId})
@@ -41,7 +45,7 @@ export default function SimiliarProducts({category, productId}: SimiliarProducts
 
     return (
         <>
-            <h3 className={"text-center lg:text-left lg:border-t lg:border-black text-2xl lg:text-[2rem] leading-7 lg:leading-9 lg:pt-6 mb-8 col-span-full font-manrope uppercase font-semibold"}>Produse similare</h3>
+            <h3 className={"text-center lg:text-left lg:border-t lg:border-black text-2xl lg:text-[2rem] leading-7 lg:leading-9 lg:pt-6 mb-8 col-span-full font-manrope uppercase font-semibold"}>{t("similar_products")}</h3>
             {
                   !isMounted ? 
                   <div className='col-span-8 -mr-4 lg:mr-0 overflow-hidden lg:overflow-auto lg:col-span-full lg:grid lg:grid-cols-15 lg:gap-x-6 mb-24'>

@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/select"
 import { ArrowUpDown } from "lucide-react"
 import SortBy from "@/lib/enums/SortBy"
+import { useTranslations } from "next-intl";
 
 interface ControlsSortSelectInterface {
   setSortBy: (v: SortBy) => void,
@@ -20,6 +21,7 @@ interface ControlsSortSelectInterface {
 }
 
 export function ControlsSortSelect({setSortBy, children}: ControlsSortSelectInterface) {
+  const t = useTranslations("CatalogPage.ProductsSection")
   const router = useRouter();
   const searchParams = useSearchParams();
   
@@ -54,7 +56,7 @@ export function ControlsSortSelect({setSortBy, children}: ControlsSortSelectInte
     >
       <SelectTrigger className="cursor-pointer flex h-12 max-h-none items-center px-6 gap-2 border border-gray rounded-3xl lg:mr-4 text-base text-black font-manrope font-semibold">
         <ArrowUpDown className='size-5' strokeWidth={1.5}/>
-        <SelectValue placeholder="Sortează după" />
+        <SelectValue placeholder={t("sort_by")} />
       </SelectTrigger>
       <SelectContent className="border-gray">
         <SelectGroup>

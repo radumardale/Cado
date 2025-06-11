@@ -6,7 +6,7 @@ import { DeliveryRegions, getDeliveryPrice } from "@/lib/enums/DeliveryRegions";
 import { CartInterface } from "@/lib/types/CartInterface";
 import { ProductInterface } from "@/models/product/types/productInterface";
 import { Minus, Plus, ShoppingBag } from "lucide-react";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import Image from "next/image";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 
@@ -20,6 +20,9 @@ interface CheckoutCartProps {
 }
 
 export default function CheckoutCart({items, setValue, deliveryRegion, deliveryHour, setTotalCost, products}: CheckoutCartProps) {
+
+    const t = useTranslations("CheckoutPage.CheckoutCart");
+
     const [mounted, setMounted] = useState(false);
     const [deliveryPrice, setDeliveryPrice] = useState(deliveryRegion ? getDeliveryPrice(deliveryRegion) : null)
     const [deliveryHourRate, setDeliveryHourRate] = useState(deliveryHour ? getDeliveryAdditionalRate(deliveryHour) : null);
@@ -46,7 +49,7 @@ export default function CheckoutCart({items, setValue, deliveryRegion, deliveryH
 
   return (
     <div className='col-span-full lg:col-start-10 2xl:col-start-10 lg:col-span-5 2xl:col-span-4 lg:sticky left-0 lg:h-screen -mb-7 pb-16 lg:pb-31 top-25 flex flex-col justify-between'>
-        <p className='font-manrope text-2xl font-semibold leading-7 mb-4 lg:mb-6'>Sumarul comenzii</p>
+        <p className='font-manrope text-2xl font-semibold leading-7 mb-4 lg:mb-6'>{t('summary')}</p>
         {
             items.length > 0 && mounted && products.length > 0 ?
                 <div data-lenis-prevent className='flex flex-col pr-2 gap-6 flex-1 lg:overflow-y-auto scroll-bar-custom mb-16 lg:mb-8'>
@@ -103,7 +106,7 @@ export default function CheckoutCart({items, setValue, deliveryRegion, deliveryH
                                                     const newItems = items.filter((_, i) => i !== index);
                                                     setValue(newItems);
                                                 }}
-                                            >Elimină</button>
+                                            >{t('remove')}</button>
                                         </div>
                                     </div>
                                 </div>
@@ -114,7 +117,7 @@ export default function CheckoutCart({items, setValue, deliveryRegion, deliveryH
             :
             <div className='lg:absolute left-0 top-1/2 lg:-translate-y-1/2 w-full px-4 lg:px-16 my-16 lg:my-0'>
                 <ShoppingBag className='size-12 mx-auto mb-2' strokeWidth={1.25}/>
-                <p className='text-sm leading-4 lg:text-base lg:leading-5 text-center'>Coșul dvs. este gol. Vizitați magazinul pentru inspirație și recomandări personalizate.</p>
+                <p className='text-sm leading-4 lg:text-base lg:leading-5 text-center'>{t('empty')}</p>
             </div>
         }
         {
@@ -124,7 +127,7 @@ export default function CheckoutCart({items, setValue, deliveryRegion, deliveryH
                     deliveryPrice !== null &&
                     <>
                         <div className="flex justify-between items-end mb-2">
-                            <p>Subtotal:</p>
+                            <p>{t('subtotal')}:</p>
                             <p>
                                 {mounted && items.reduce((acc, item) => {
                                     const product = products.find(product => product.custom_id === item.productId);
@@ -133,20 +136,20 @@ export default function CheckoutCart({items, setValue, deliveryRegion, deliveryH
                             </p>
                         </div>
                         <div className="flex justify-between items-end mb-2 lg:mb-4">
-                            <p>Livrare:</p>
+                            <p>{t('delivery_cost')}:</p>
                             <p>{deliveryPrice.toLocaleString()} MDL</p>
                         </div>
                         {
                             deliveryHourRate !== null && deliveryPrice * deliveryHourRate !== 0 && 
                             <div className="flex justify-between items-end -mt-2 mb-2 lg:mb-4">
-                                <p>Ora livrării: {deliveryHour}</p>
+                                <p>{t('hour')}: {deliveryHour}</p>
                                 <p>{(deliveryPrice * deliveryHourRate).toLocaleString()} MDL</p>
                             </div>
                         }
                     </>
                 }
                 <div className="flex justify-between items-end mb-4">
-                    <p>Total:</p>
+                    <p>{t('total')}:</p>
                     <p className="font-semibold">
                         {mounted && (items.reduce((acc, item) => {
                             const product = products.find(product => product.custom_id === item.productId);
@@ -157,7 +160,7 @@ export default function CheckoutCart({items, setValue, deliveryRegion, deliveryH
             </>
         }
 
-        <button className='h-12 w-full bg-blue-2 text-white rounded-3xl font-manrope font-semibold cursor-pointer border hover:opacity-75 transition duration-300' form="checkout-form">Continuă plata</button>
+        <button className='h-12 w-full bg-blue-2 text-white rounded-3xl font-manrope font-semibold cursor-pointer border hover:opacity-75 transition duration-300' form="checkout-form">{t('continue')}</button>
     </div>
   )
 }

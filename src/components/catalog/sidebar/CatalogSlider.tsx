@@ -2,6 +2,7 @@ import React, { useEffect, useState, useCallback } from 'react'
 import { DualRangeSlider } from '../../ui/slider'
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useCatalogStore } from '@/states/CatalogState';
+import { useTranslations } from 'next-intl';
 
 interface CatalogSliderProps {
   price: number[],
@@ -9,6 +10,9 @@ interface CatalogSliderProps {
 }
 
 export default function CatalogSlider({setPrice, price}: CatalogSliderProps) {
+
+  const t = useTranslations('CatalogPage.CatalogSidebar');
+
   const minPrice = useCatalogStore((state) => state.minPrice);
   const maxPrice = useCatalogStore((state) => state.maxPrice);
 
@@ -41,8 +45,8 @@ export default function CatalogSlider({setPrice, price}: CatalogSliderProps) {
   return (
     <div className='pb-4'>
       <div className='flex justify-between mb-3'>
-        <p>Min: <span className='font-semibold'>{currPrice[0]}</span></p>
-        <p>Max: <span className='font-semibold'>{currPrice[1]}</span></p>
+        <p>{t("min")}: <span className='font-semibold'>{currPrice[0]}</span></p>
+        <p>{t("max")}: <span className='font-semibold'>{currPrice[1]}</span></p>
       </div>
       <DualRangeSlider
         minStepsBetweenThumbs={2}

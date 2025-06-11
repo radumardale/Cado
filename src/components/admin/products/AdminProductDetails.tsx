@@ -1,3 +1,4 @@
+
 import { Minus, Plus } from 'lucide-react'
 import {
     FormControl,
@@ -60,10 +61,12 @@ export default function AdminProductDetails() {
         }
     };
 
+    const prod_t = useTranslations("Admin.AdminProducts")
+
   return (
     <>
         <div className='xl:col-start-2 col-span-7 xl:col-span-6 flex justify-between items-center mb-6'>
-            <p className='font-manrope text-2xl font-semibold leading-7'>Detalii produs</p>
+            <p className='font-manrope text-2xl font-semibold leading-7'>{prod_t("product_details")}</p>
         </div>
             <div className="xl:col-start-2 col-span-7 xl:col-span-6 grid grid-cols-6 gap-x-6 gap-y-4 pb-8">
                 <FormField
@@ -188,7 +191,7 @@ export default function AdminProductDetails() {
                 <div className='h-[1px] col-span-full bg-lightgray mt-8 mb-2'></div>
 
                 <div className="col-span-full flex items-center gap-4">
-                    <p>Numărul obiectelor în cadou:</p>
+                    <p>{prod_t("number")}:</p>
                     <FormField
                         control={form.control}
                         name="data.nr_of_items"
@@ -306,7 +309,7 @@ export default function AdminProductDetails() {
                     )}
                 />
                 <div className='h-[1px] col-span-full bg-lightgray mt-8 mb-2'></div>
-                <p className='col-span-full font-manrope font-semibold'>Caracteristici</p>
+                <p className='col-span-full font-manrope font-semibold'>{prod_t("features")}</p>
                 <FormField
                     control={form.control}
                     name="data.optional_info.weight"
@@ -416,11 +419,11 @@ export default function AdminProductDetails() {
                     {
                         categories.length > 0 && (
                         <div className='col-span-full flex gap-1 flex-wrap'>
-                            <p>Categorie principală:</p>
+                            <p>{prod_t("main_category")}:</p>
                             {
                                 categories.map((category: Categories, index: number) => {
                                     return (
-                                        <p key={index} className='text-gray'>{t(`tags.${category}.title`)}<span className={`${index === categories.length - 1 ? "hidden" : ""} text-black`}>,</span> </p>
+                                        <p key={index} className='text-gray'>{t(`Tags.${category}.title`)}<span className={`${index === categories.length - 1 ? "hidden" : ""} text-black`}>,</span> </p>
                                     )
                                 })
                             }
@@ -429,7 +432,7 @@ export default function AdminProductDetails() {
                     {
                         productContents.length > 0 && (
                         <div className='col-span-full flex gap-1 flex-wrap'>
-                            <p>Conținut:</p>
+                            <p>{prod_t("content")}:</p>
                             {
                                 productContents.map((productContent: ProductContent, index: number) => {
                                     return (
@@ -443,7 +446,7 @@ export default function AdminProductDetails() {
                     {
                         ocasions.length > 0 && (
                         <div className='col-span-full flex gap-1 flex-wrap'>
-                            <p>Ocazie:</p>
+                            <p>{prod_t("ocasion")}:</p>
                             {
                                 ocasions.map((ocasion: Ocasions, index: number) => {
                                     return (
@@ -463,7 +466,7 @@ export default function AdminProductDetails() {
                                 return (
                                     <ActiveFiltersButton 
                                         key={index} 
-                                        title={t(`tags.${category}.title`)} 
+                                        title={t(`Tags.${category}.title`)} 
                                         onClick={() => {
                                             const updatedCategories = categories.filter((cat: Categories) => cat !== category);
                                             form.setValue("data.categories", updatedCategories, {shouldDirty: true});

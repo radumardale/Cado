@@ -7,7 +7,7 @@ import dynamic from 'next/dynamic';
 const BgMap = dynamic(() => import("./BgMap"), { ssr:false })
 
 export default function Maps() {
-    const t = useTranslations("maps");
+    const t = useTranslations("ContactPage.Maps");
 
   return (
     <>

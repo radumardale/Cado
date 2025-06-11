@@ -7,10 +7,12 @@ import { Button } from '@/components/ui/button'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { cn } from '@/lib/utils'
 import { CalendarIcon } from 'lucide-react'
-import { format } from 'date-fns'
+import { format, Locale } from 'date-fns'
 import { Calendar } from '@/components/ui/calendar'
 import { SelectItem } from '@/components/ui/select';
 import SortBy from '@/lib/enums/SortBy';
+import { useLocale, useTranslations } from 'next-intl';
+import { ro, ru, enUS } from 'date-fns/locale';
 
 
 export default function OrdersFilter() {
@@ -22,15 +24,26 @@ export default function OrdersFilter() {
     const endDate = useOrdersSearchStore((store) => store.endDate);
     const setEndDate = useOrdersSearchStore((store) => store.setEndDate);
 
+    const locale = useLocale()
+    let calLocale : Locale;
+        switch(locale){
+            case 'ro' : calLocale = ro; break;
+            case 'en' : calLocale = enUS; break;
+            case 'ru' : calLocale = ru; break;
+            default : calLocale = enUS; break;
+        }
+
+    const t = useTranslations("Admin.AdminOrders");
+
   return (
     <>
         <Searchbar className='col-span-5 mt-16' searchText={searchText} setSearchText={setSearchText}/>
         <div className='mt-16 col-span-7 flex gap-1 lg:gap-2 justify-end items-center'>
             <ControlsSortSelect setSortBy={setSortBy}>
-              <SelectItem className="text-base cursor-pointer font-semibold font-manrope" value={SortBy.LATEST}>Comenzi noi</SelectItem>
-              <SelectItem className="text-base cursor-pointer font-semibold font-manrope" value={SortBy.OLDEST}>Comenzi vechi</SelectItem>
-              <SelectItem className="text-base cursor-pointer font-semibold font-manrope" value={SortBy.PRICE_ASC}>Preț: Mic la Mare</SelectItem>
-              <SelectItem className="text-base cursor-pointer font-semibold font-manrope" value={SortBy.PRICE_DESC}>Preț: Mare la Mic</SelectItem>
+              <SelectItem className="text-base cursor-pointer font-semibold font-manrope" value={SortBy.LATEST}>{t('new')}</SelectItem>
+              <SelectItem className="text-base cursor-pointer font-semibold font-manrope" value={SortBy.OLDEST}>{t('old')}</SelectItem>
+              <SelectItem className="text-base cursor-pointer font-semibold font-manrope" value={SortBy.PRICE_ASC}>{t('price_asc')}</SelectItem>
+              <SelectItem className="text-base cursor-pointer font-semibold font-manrope" value={SortBy.PRICE_DESC}>{t('price_desc')}</SelectItem>
             </ControlsSortSelect>
             <Popover>
               <PopoverTrigger asChild>
@@ -44,12 +57,13 @@ export default function OrdersFilter() {
                 {startDate ? (
                     format(startDate, "dd/MM/yyyy")
                 ) : (
-                    <span className='mr-auto leading-0'>Data de livrare</span>
+                    <span className='mr-auto leading-0'>{t("delivery_date")}</span>
                 )}
                 </Button>
               </PopoverTrigger>
               <PopoverContent className="w-auto p-0" align="start">
               <Calendar
+                  locale={calLocale}
                   mode="single"
                   selected={startDate}
                   onSelect={(day) => {setStartDate(day)}}
@@ -58,7 +72,7 @@ export default function OrdersFilter() {
               />
               </PopoverContent>
             </Popover>
-            <p className='font-semibold font-manrope'>până la</p>
+            <p className='font-semibold font-manrope'>{t('to')}</p>
             <Popover>
               <PopoverTrigger asChild>
                 <Button
@@ -71,12 +85,13 @@ export default function OrdersFilter() {
                 {endDate ? (
                   format(endDate, "dd/MM/yyyy")
                 ) : (
-                  <span className='mr-auto leading-0'>Data de livrare</span>
+                  <span className='mr-auto leading-0'>{t("delivery_date")}</span>
                 )}
                 </Button>
               </PopoverTrigger>
               <PopoverContent className="w-auto p-0" align="start">
               <Calendar
+                  locale={calLocale}
                   mode="single"
                   selected={endDate}
                   onSelect={(day) => {setEndDate(day)}}

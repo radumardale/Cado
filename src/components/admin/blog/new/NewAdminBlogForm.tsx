@@ -30,7 +30,7 @@ export default function NewAdminBlogForm() {
     const [sectionsImages, setSectionImages] = useState<SectionImagesInterface[]>([]);
 
     const [isMounted, setIsMounted] = useState(false);
-    const blogTagsT = useTranslations("blog_tags");
+    const blogTagsT = useTranslations("HomePage.Blog.BlogTags");
     const router = useRouter();
 
     useEffect(() => {
@@ -208,6 +208,8 @@ export default function NewAdminBlogForm() {
         form.setValue("data.isImageNew", true, {shouldDirty: true});
     };
 
+    const t = useTranslations("Admin.AdminBlog");
+
     return (
       <>
           {
@@ -282,7 +284,7 @@ export default function NewAdminBlogForm() {
           </>
               
               <div className='col-span-3 flex items-center gap-6 -col-start-4'>
-                  <p>Tip noutate:</p>
+                  <p>{t("type")}:</p>
                   <FormField
                       control={form.control}
                       name="data.tag"
@@ -292,7 +294,7 @@ export default function NewAdminBlogForm() {
                                   <Select onValueChange={field.onChange} value={isMounted ? field.value : BlogTags.NEWS}>
                                       <FormControl>
                                           <SelectTrigger className="text-base cursor-pointer flex h-12 max-h-none items-center px-6 gap-2 border border-gray rounded-3xl text-black w-full">
-                                              <SelectValue placeholder="Alege disponibilitate stoc" />
+                                              <SelectValue placeholder={t("choose_stock")} />
                                               <ChevronDown className='size-5' strokeWidth={1.5}/>
                                           </SelectTrigger>
                                       </FormControl>  
@@ -326,7 +328,7 @@ export default function NewAdminBlogForm() {
                                       e.preventDefault();
                                       remove(index);
                                   }}
-                                  >Șterge paragraf</button>
+                                  >{t("delete_paragraph")}</button>
                               <FormField
                                   control={form.control}
                                   name={`data.sections.${index}.subtitle.ro`}
@@ -439,7 +441,7 @@ export default function NewAdminBlogForm() {
                   className='col-span-full h-18 flex gap-2 items-center justify-center bg-[#F0F0F0] rounded-2xl border border-dashed border-gray cursor-pointer hover:opacity-75 transition duration-300 mb-4'
                   >
                   <Plus strokeWidth={1.5} className='size-6'/>
-                  <p>Adaugă paragraf</p>
+                  <p>{t("add_paragraph")}</p>
               </button>
 
               <div className='mt-12 pt-4 border-t border-lightgray col-span-full flex justify-end'>
@@ -455,10 +457,10 @@ export default function NewAdminBlogForm() {
                           }}
                       >
                           <span className='text-gray relative after:content-[""] after:absolute after:left-0 after:bottom-0 after:w-0 after:h-[1px] after:bg-gray hover:after:w-full after:transition-all after:duration-300'>
-                              Anulează
+                              {t("cancel")}
                           </span>
                       </button>
-                      <button type="submit" disabled={!isDirty} className='disabled:opacity-75 disabled:cursor-default cursor-pointer h-12 px-6 flex justify-center items-center bg-blue-2 text-white rounded-3xl hover:opacity-75 transition duration-300'>Salvează</button>
+                      <button type="submit" disabled={!isDirty} className='disabled:opacity-75 disabled:cursor-default cursor-pointer h-12 px-6 flex justify-center items-center bg-blue-2 text-white rounded-3xl hover:opacity-75 transition duration-300'>{t("save")}</button>
                   </div>
               </div>
           </form>

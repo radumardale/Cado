@@ -16,7 +16,7 @@ interface ProductContentInterface {
 }
 
 export default function ProductContent({product}: ProductContentInterface) {
-    const t = useTranslations("stock_state");
+    const t = useTranslations("ProductPage");
     const locale = useLocale();
     const lenis = useLenis();
     const [productQuantity, setProductQuantity] = useState(1);
@@ -26,8 +26,6 @@ export default function ProductContent({product}: ProductContentInterface) {
     useEffect(() => {
         lenis?.scrollTo(0, {immediate: true})
     }, [])
-
-    console.log(product.description[locale])
 
     return (
         <div className='col-span-full lg:col-span-6 pb-24 lg:pb-31 lg:mt-16 top-25 h-fit'>
@@ -43,7 +41,7 @@ export default function ProductContent({product}: ProductContentInterface) {
                     </div>
                     <div className="flex gap-2 items-center ">
                         <div className='size-2 rounded-full' style={{backgroundColor: stockStateColors[product.stock_availability.state]}}></div>
-                        <p style={{color: stockStateColors[product.stock_availability.state]}}>{t(product.stock_availability.state)}</p>
+                        <p style={{color: stockStateColors[product.stock_availability.state]}}>{t(`stock_state.${product.stock_availability.state}`)}</p>
                     </div>
                 </div>
 
@@ -60,7 +58,7 @@ export default function ProductContent({product}: ProductContentInterface) {
                             <span className='text-2xl leading-7'>{productQuantity}</span>
                             <button disabled={productQuantity === product.stock_availability.stock} onClick={() => {setProductQuantity(productQuantity + 1 > maxStock ? productQuantity : productQuantity + 1)}} className='cursor-pointer disabled:pointer-events-none disabled:text-gray'><Plus strokeWidth={1.5} className='w-6' /></button>
                         </div>
-                        <button onClick={() => {addToCart(product, productQuantity, value, setValue, locale)}} className='h-12 col-span-full lg:col-span-4 bg-blue-2 text-white rounded-3xl font-manrope font-semibold cursor-pointer border hover:opacity-75 transition duration-300'>Adaugă în coș</button>
+                        <button onClick={() => {addToCart(product, productQuantity, value, setValue, locale)}} className='h-12 col-span-full lg:col-span-4 bg-blue-2 text-white rounded-3xl font-manrope font-semibold cursor-pointer border hover:opacity-75 transition duration-300'>{t('add_to_cart')}</button>
                     </div>
                 }
             </div>

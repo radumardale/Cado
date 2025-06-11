@@ -1,3 +1,5 @@
+'use client'
+
 import { Link } from '@/i18n/navigation';
 import { BlogTags } from '@/lib/enums/BlogTags';
 import { getTagColor } from '@/lib/utils';
@@ -14,7 +16,7 @@ interface BlogCardInterface {
 }
 
 export default function BlogCard({src, tag ,title, date, id}: BlogCardInterface) {
-    const t = useTranslations("blog_tags");
+    const t = useTranslations("HomePage.Blog.BlogTags");
 
   return (
     <Link href={{pathname: '/blog/[id]', params: {id: id}}} className='cursor-pointer col-span-full lg:col-span-6 group block'>

@@ -9,6 +9,7 @@ import Image from 'next/image';
 import { useEffect, useState } from 'react';
 
 import { useQuery } from "@tanstack/react-query";
+import { useTranslations } from 'next-intl';
 
 interface CartSidebarInterface {
     setSidebarOpen: (v: boolean) => void,
@@ -18,6 +19,9 @@ interface CartSidebarInterface {
 }
 
 export default function CartSidebar({items, locale, setSidebarOpen, setValue}: CartSidebarInterface) {
+
+    const t = useTranslations("Cart")
+
     const trpc = useTRPC();
     const { data, isLoading, isSuccess } = useQuery(
         trpc.products.getProductsByIds.queryOptions({ids: items.map(item => item.productId)})
@@ -70,7 +74,7 @@ export default function CartSidebar({items, locale, setSidebarOpen, setValue}: C
           >
               <div className="flex justify-between items-center mb-6 lg:mb-12">
                   <div className='flex gap-2'>
-                      <p className='text-black font-manrope text-2xl leading-7 font-semibold'>Coș</p>
+                      <p className='text-black font-manrope text-2xl leading-7 font-semibold'>{ t("title") }</p>
                       <div className='rounded-full size-8 bg-black text-white text-sm flex items-center justify-center leading-tight'>
                           {items.length}
                       </div>
@@ -134,7 +138,7 @@ export default function CartSidebar({items, locale, setSidebarOpen, setValue}: C
                                                           const newItems = items.filter((_, i) => i !== index);
                                                           setValue(newItems);
                                                       }}
-                                                  >Elimină</button>
+                                                  >{ t("remove") }</button>
                                               </div>
                                           </div>
                                       </div>
@@ -145,14 +149,14 @@ export default function CartSidebar({items, locale, setSidebarOpen, setValue}: C
                   :
                   <div className='absolute left-0 top-1/2 -translate-y-1/2 w-full px-8 lg:px-16'>
                       <ShoppingBag className='size-12 mx-auto mb-2' strokeWidth={1.25}/>
-                      <p className='text-center text-sm leading-4 lg:leading-5 lg:text-base'>Coșul dvs. este gol. Vizitați magazinul pentru inspirație și recomandări personalizate.</p>
+                      <p className='text-center text-sm leading-4 lg:leading-5 lg:text-base'>{ t("empty") }</p>
                   </div>
               }
               <div className='absolute left-0 w-full bottom-6 lg:bottom-16 px-4 lg:pl-6 lg:pr-14 xl:px-16'>
                   {
                       items.length > 0 && products.length > 0 &&
                       <div className="flex justify-between items-end mb-4">
-                          <p>Subtotal:</p>
+                          <p>{t("subtotal")}:</p>
                           <p className='font-semibold'>{items.reduce((acc, item) => {
                               const product = products.find(product => product.custom_id === item.productId);
                               return acc + (product?.sale.active ? product.sale.sale_price : (product?.price || 0)) * item.quantity;
@@ -162,9 +166,9 @@ export default function CartSidebar({items, locale, setSidebarOpen, setValue}: C
                   {
                       items.length > 0  ?
                       <Link href="/checkout">
-                          <button className='h-12 w-full bg-blue-2 text-white rounded-3xl font-manrope font-semibold cursor-pointer border hover:opacity-75 transition duration-300'>Spre achitare</button>
+                          <button className='h-12 w-full bg-blue-2 text-white rounded-3xl font-manrope font-semibold cursor-pointer border hover:opacity-75 transition duration-300'>{t("to_checkout")}</button>
                       </Link> :
-                      <button onClick={() => {setSidebarOpen(false)}} className='h-12 w-full bg-blue-2 text-white rounded-3xl font-manrope font-semibold cursor-pointer border hover:opacity-75 transition duration-300'>Întoarce-te în magazin</button>
+                      <button onClick={() => {setSidebarOpen(false)}} className='h-12 w-full bg-blue-2 text-white rounded-3xl font-manrope font-semibold cursor-pointer border hover:opacity-75 transition duration-300'>{t("back")}</button>
                   }
               </div>
           </motion.div>

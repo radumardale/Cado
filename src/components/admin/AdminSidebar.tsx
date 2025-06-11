@@ -12,7 +12,7 @@ interface AdminSidebarProps {
 }
 
 export default function AdminSidebar({ page }: AdminSidebarProps) {
-  const t = useTranslations('admin');
+  const t = useTranslations('Admin.Sidebar');
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -27,13 +27,13 @@ export default function AdminSidebar({ page }: AdminSidebarProps) {
         <Link href="/" className='w-fit'>
           <Image unoptimized src="/logo/logo-blue.svg" alt='logo cado' className='h-12 w-auto' width={196} height={48}/>
         </Link>
-        <p className='font-manrope font-semibold leading-5 text-white mt-16 mb-4'>{t(`sidebar.titles.0`)}</p>
+        <p className='font-manrope font-semibold leading-5 text-white mt-16 mb-4'>{t(`titles.0`)}</p>
         {
           AdminPagesArr.map((link, index) => {
             return(
               <Fragment key={index}>
                 {
-                  (index === 3 || index === 6) && <p className='font-manrope font-semibold leading-5 text-white my-4 w-full border-t border-lightgray pt-4'>{t(`sidebar.titles.${index}`)}</p>
+                  (index === 3 || index === 6) && <p className='font-manrope font-semibold leading-5 text-white my-4 w-full border-t border-lightgray pt-4'>{t(`titles.${index}`)}</p>
                 }
                 <Link href={AdminPagesLinks[link as AdminPages]} className={`h-12 flex gap-2 items-center pl-6 w-full rounded-3xl cursor-pointer transition duration-300 ${link === page ? "bg-white text-black" : "text-white"}`}>
                   {

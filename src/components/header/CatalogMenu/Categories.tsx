@@ -3,11 +3,12 @@ import { useTranslations } from 'next-intl'
 import React from 'react'
 
 export function Categories() {
-    const t = useTranslations("tags");
+    const t = useTranslations("Tags");
+    const nav_t = useTranslations("NavBar");
 
   return (
     <div className='col-span-3'>
-        <p className='font-manrope font-semibold mb-4'>Categorii</p>
+        <p className='font-manrope font-semibold mb-4'>{ nav_t("categories") }</p>
         <div className="flex gap-2 mb-2">
             <Link href={{pathname: '/catalog', query: {category: "FOR_HER"}}} className='h-12 px-6 text-white font-manrope font-semibold bg-blue-1 rounded-3xl flex items-center hover:opacity-75 transition duration-300'>{t("FOR_HER.title")}</Link>
             <Link href={{pathname: '/catalog', query: {category: "FOR_HIM"}}} className='h-12 px-6 text-white font-manrope font-semibold bg-blue-2 rounded-3xl flex items-center hover:opacity-75 transition duration-300'>{t("FOR_HIM.title")}</Link>

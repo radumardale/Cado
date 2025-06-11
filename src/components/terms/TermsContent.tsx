@@ -9,7 +9,7 @@ interface TermsSidebarProps {
 }
 
 export default function TermsContent({activeSection, setActiveSection}: TermsSidebarProps) {
-    const t = useTranslations("terms_sections");
+    const t = useTranslations("TermsPage.terms_sections");
 
   return (
     <div className='col-span-8 lg:col-start-5 lg:col-span-7 mt-16 mb-16 lg:mb-24'>

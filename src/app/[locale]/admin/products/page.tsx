@@ -3,7 +3,16 @@ import AdminSidebar from '@/components/admin/AdminSidebar'
 import ProductsContent from '@/components/admin/products/ProductsContent'
 import ProductsFilter from '@/components/admin/products/ProductsFilter'
 import { AdminPages } from '@/lib/enums/AdminPages'
+import { getTranslations } from 'next-intl/server'
 import React from 'react'
+
+export async function generateMetadata() {
+  const t = await getTranslations('PageTitles');
+ 
+  return {
+    title: t('admin_products'),
+  };
+}
 
 export default async function AdminProducts() {
 

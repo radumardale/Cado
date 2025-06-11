@@ -9,7 +9,7 @@ interface CategoriesProps {
 }
 
 export default function CategoriesGrid({category, setCategory}: CategoriesProps) {
-    const t = useTranslations("tags");
+    const t = useTranslations("Tags");
     const router = useRouter();
     const searchParams = useSearchParams();
     

@@ -16,6 +16,7 @@ import { Categories } from '@/lib/enums/Categories';
 import CartIcon from './CartIcon';
 import MobileMenuIcon from './MobileMenuIcon';
 import LangIcon from './LangIcon';
+import { useTranslations } from 'next-intl';
 
 interface HeaderProps {
     category?: Categories | null,
@@ -27,6 +28,9 @@ interface HeaderProps {
 }
 
 export default function Header({category, breadcrumbs = false, productInfo}: HeaderProps) {
+
+    const t = useTranslations("NavBar")
+
     const [isCatalogButtonActive, setCatalogButtonActive] = useState(false);
     const [isCatalogMenuActive, setIsCatalogMenuActive] = useState(false);
     const [isCatalogMenuOpen, setIsCatalogMenuOpen] = useState(false);
@@ -100,10 +104,10 @@ export default function Header({category, breadcrumbs = false, productInfo}: Hea
                                 </Link>
                                 <div className='hidden gap-8 items-center absolute left-1/2 -translate-x-1/2 lg:flex'>
                                     <CatalogMenuButton isCatalogMenuOpen={isCatalogMenuOpen} setCatalogButtonActive={setCatalogButtonActive} />
-                                    <CustomLink className='text-black font-semibold font-manrope h-5' href="/" value='Acasă'/>
-                                    <CustomLink className='text-black font-semibold font-manrope h-5' href="/about-us" value='Despre Noi'/>
-                                    <CustomLink className='text-black font-semibold font-manrope h-5' href="/blogs" value='Blog'/>
-                                    <CustomLink className='text-black font-semibold font-manrope h-5' href="/contacts" value='Contacte'/>
+                                    <CustomLink className='text-black font-semibold font-manrope h-5' href="/" value={t("home")}/>
+                                    <CustomLink className='text-black font-semibold font-manrope h-5' href="/about-us" value={t("about")}/>
+                                    <CustomLink className='text-black font-semibold font-manrope h-5' href="/blogs" value={t("blogs")}/>
+                                    <CustomLink className='text-black font-semibold font-manrope h-5' href="/contacts" value={t("contact")}/>
                                 </div>
                                 <div className="flex gap-4 items-center">
                                     <button className='cursor-pointer h-6' onClick={() => {if (isDesktop) setIsCatalogMenuOpen(true); else setSidebarOpen(true);}}>

@@ -1,3 +1,5 @@
+'use client'
+
 import { easeInOutCubic } from '@/lib/utils';
 import { ChevronDown, X } from 'lucide-react';
 import { motion } from 'motion/react';
@@ -5,8 +7,11 @@ import Image from 'next/image';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
 import { useEffect, useState } from 'react';
 import { CountriesOptions, CountriesOptionsArr, CountriesOptionsInterface } from '@/lib/enums/CountriesOptions';
-import Link from 'next/link';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
+import LangPicker from './LangPicker';
+import { usePathname, useSearchParams } from 'next/navigation';
+import { Link } from '@/i18n/navigation';
+import { Pathnames } from '@/i18n/routing';
 
 interface LangSidebarInterface {
     setSidebarOpen: (v: boolean) => void,
@@ -15,17 +20,26 @@ interface LangSidebarInterface {
 
 export default function LangSidebar({setSidebarOpen}: LangSidebarInterface) {
     const [country, setCountry] = useState<CountriesOptionsInterface | null>(null);
-    const [language, setLanguage] = useState("");
-    const t = useTranslations("lang");
+    const locale = useLocale()
+    const [language, setLanguage] = useState(locale);
+    
+    const t = useTranslations('LangSidebar');
     
     useEffect(() => {
         let country = window.location.hostname.split(".")[1] as CountriesOptionsInterface;
-
+        
         if (!CountriesOptionsArr.includes(country)) country = CountriesOptionsInterface.md;
-
+        
         setCountry(country);
-        setLanguage(CountriesOptions[country ? country : 'md'][0]);
     }, [])
+    
+    const pathname = usePathname()
+    const searchParams = useSearchParams()
+    const cleanedPathname = pathname === '/ru' || pathname === '/en' || pathname === '/ro'
+    ? '/' 
+    : pathname.replace(/^\/[^/]+\//, '/');
+        
+    const usableSearchParams = searchParams.toString() === "" ? "" : `?${searchParams.toString()}` 
 
   return (
     <motion.div 
@@ -43,18 +57,18 @@ export default function LangSidebar({setSidebarOpen}: LangSidebarInterface) {
             initial={{x: '100%'}} 
             animate={{x: 0, transition: {duration: .4, ease: easeInOutCubic}}} 
             exit={{x: '100%', transition: {duration: .4, ease: easeInOutCubic}}} 
-            className='bg-white h-full w-full lg:w-1/3 z-10 pt-3 lg:pt-6 px-4 lg:pl-6 lg:pr-8 relative flex flex-col pb-32 lg:pb-42' 
+            className='bg-white h-full w-full lg:w-1/3 pt-3 lg:pt-6 px-4 lg:pl-6 z-100 lg:pr-8 relative flex flex-col pb-32 lg:pb-42' 
             onMouseDown={(e) => {e.stopPropagation()}}
         >
             <Image unoptimized src="/ribbon/lang-ribbon.png" className='absolute right-0 bottom-0 w-1/2' alt="ribbon" width={270} height={277} />
              <div className="flex justify-between items-center mb-6 lg:mb-12">
-                <p className='text-2xl leading-7 font-manrope font-semibold'>Limba / Țară</p>
+                <p className='text-2xl leading-7 font-manrope font-semibold'>{ t("title") }</p>
                 <button className='cursor-pointer' onClick={() => {setSidebarOpen(false)}}>
                     <X className='size-6 lg:size-8' strokeWidth={1.5} />
                 </button>
             </div>
-            <div className='xl:px-12'>
-                <p className='leading-5 mb-6'>Metodele de livrare și condițiile de vânzare vor fi actualizate atunci când schimbați țara.</p>
+            <div className='xl:px-12 z-100'>
+                <p className='leading-5 mb-6'>{ t("info") }</p>
                 <Select 
                     defaultValue={country ? country : "md"}
                     onValueChange={(e) => {setCountry(e as CountriesOptionsInterface); setLanguage(CountriesOptions[e as CountriesOptionsInterface][0])}}
@@ -63,15 +77,18 @@ export default function LangSidebar({setSidebarOpen}: LangSidebarInterface) {
                         <SelectValue placeholder="Regiunea" />
                         <ChevronDown className='size-5' strokeWidth={1.5}/>
                     </SelectTrigger>
-                    <SelectContent className="border-gray">
-                        <SelectGroup>
+                    <SelectContent className="border-gray z-[9999] top-[3rem] left-0 px-4 rounded-2xl" position='popper'>
+                        <SelectGroup className=''>
                             <SelectItem className="text-base cursor-pointer font-semibold font-manrope" value='md'>Republica Moldova (MDL)</SelectItem>
                             <SelectItem className="text-base cursor-pointer font-semibold font-manrope" value='ro'>România (RON)</SelectItem>
                         </SelectGroup>
                     </SelectContent>
                 </Select>
 
-                <Select 
+                <LangPicker language={language} setLanguage={setLanguage}/>
+                
+
+                {/* <Select 
                     value={language}
                     onValueChange={(value) => {setLanguage(value)}}
                 >
@@ -79,7 +96,7 @@ export default function LangSidebar({setSidebarOpen}: LangSidebarInterface) {
                         <SelectValue placeholder="Limba" />
                         <ChevronDown className='size-5' strokeWidth={1.5}/>
                     </SelectTrigger>
-                    <SelectContent className="border-gray">
+                    <SelectContent className="border-gray z-[9999] top-[3rem] left-0" position='popper'>
                         <SelectGroup>
                             {
                                 CountriesOptions[country ? country : 'md'].map((language, index) => {
@@ -90,10 +107,10 @@ export default function LangSidebar({setSidebarOpen}: LangSidebarInterface) {
                             }
                         </SelectGroup>
                     </SelectContent>
-                </Select>
+                </Select> */}
 
-                <Link href={`/`}>
-                    <button className='h-12 w-full bg-blue-2 text-white rounded-3xl font-manrope font-semibold cursor-pointer border hover:opacity-75 transition duration-300 mt-6'>Actualizează</button>
+                <Link shallow href={`${cleanedPathname}${usableSearchParams}` as Pathnames} scroll={false} locale={language}>
+                    <button className='h-12 w-full bg-blue-2 text-white rounded-3xl font-manrope font-semibold cursor-pointer border hover:opacity-75 transition duration-300 mt-6'>{ t('change') }</button>
                 </Link>
             </div>
         </motion.div>

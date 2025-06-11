@@ -7,6 +7,7 @@ import AdminRecommendationsCard from './AdminRecommendationsCard';
 import AdminRecommnendationsSearch from './AdminRecommendationsSearch';
 
 import { useQuery } from "@tanstack/react-query";
+import { useTranslations } from 'next-intl';
 
 export default function RecommendationsContent() {
     const trpc = useTRPC();
@@ -22,6 +23,8 @@ export default function RecommendationsContent() {
         setAddProductOpen(false);
     }
 
+    const t = useTranslations("Admin.AdminHomePage")
+
     return (
       <>
           {
@@ -32,7 +35,7 @@ export default function RecommendationsContent() {
                   </div>
               </div>
           }
-          <h2 className='col-span-full font-manrope font-semibold text-3xl leading-11 mb-12'>RECOMANDĂRILE NOASTRE</h2>
+          <h2 className='col-span-full font-manrope font-semibold text-3xl leading-11 mb-12'>{t("recommendations")}</h2>
           <div className={`col-span-full grid grid-cols-15 gap-x-6`}>
                   {
                       isLoading || !data?.products ? <LoadingGrid gridLayout={true} length={5} /> :

@@ -1,36 +1,76 @@
 {
-    "pathnames": {
-      "home": "Principală"
+    "PageTitles" : {
+        "home" : "Acasă",
+        "catalog" : "Catalog",
+        "about" : "Despre Noi",
+        "blogs" : "Noutăți",
+        "terms" : "Termeni și condiții",
+        "contact" : "Contacte",
+        "confirmation" : "Confirmare plată",
+        "checkout" : "Finalizare comandă",
+        "login" : "Autentificare",
+        "payment_err" : "Eroare plată",
+
+        "admin_orders" : "Comenzi",
+        "admin_products" : "Produse",
+        "admin_new_product" : "Produs nou",
+        "admin_client_data" : "Date client",
+        "admin_home" : "Acasă",
+        "admin_blog" : "Blog",
+        "admin_new_blog" : "Blog nou",
+        "admin_catalog_season" : "Catalog sezon",
+        "admin_contact_details" : "Detalii contact"
     },
-    "tags": {
-      "FOR_HIM": {
-      "title": "Pentru El",
-      "description": "Găsește cadouri pentru el care aduc stil și confort - de la accesorii practice la obiecte decorative."
-      },
-      "FOR_HER": {
-      "title": "Pentru Ea",
-      "description": "Cadouri pentru ea, ideale în orice ocazii speciale și în momentele de relaxare, distracție și inspirație."
-      },
-      "FOR_KIDS": {
-      "title": "Pentru Copii",
-      "description": "Surprinde-i pe cei mici cu cadouri pentru copii - dulciuri, jucării premium și seturi creative."
-      },
-      "ACCESSORIES": {
-      "title": "Accesorii",
-      "description": "Alege accesorii cadou ideale pentru ocazii variate - seturi funcționale pentru organizare și stil personal."
-      },
-      "FLOWERS_AND_BALLOONS": {
-      "title": "Flori & Baloane",
-      "description": "Adaugă culoare cu buchete de flori și baloane - perfecte pentru birou, aniversări sau surprize festive."
-      },
-      "GIFT_SET": {
-      "title": "Seturi cadou",
-      "description": "Seturi atent alese pentru a impresiona și încânta."
-      },
-      "ALL_PRODUCTS": {
-        "title": "Toate produsele",
-        "description": "Descoperă întreaga noastră gamă de produse."
-      }
+    "BreadCrumPathnames" : {
+        "home" : "Principală",
+        "catalog" : "Catalog",
+        "about" : "Despre Noi",
+        "blogs" : "Noutăți",
+        "terms" : "Termeni și condiții",
+        "contact" : "Contacte",
+        "confirmation" : "Confirmare plată",
+        "checkout" : "Finalizare comandă",
+        "login" : "Autentificare",
+        "payment_err" : "Eroare plată",
+        "admin_orders" : "Comenzi",
+        "admin_products" : "Produse",
+        "admin_new_product" : "Produs nou",
+        "admin_client_data" : "Date client",
+        "admin_home" : "Acasă",
+        "admin_blog" : "Blog",
+        "admin_new_blog" : "Blog nou",
+        "admin_catalog_season" : "Catalog sezon",
+        "admin_contact_details" : "Detalii contact"
+    },
+    "Tags" : {
+        "FOR_HIM": {
+            "title": "Pentru El",
+            "description": "Găsește cadouri pentru el care aduc stil și confort - de la accesorii practice la obiecte decorative."
+        },
+        "FOR_HER": {
+            "title": "Pentru Ea",
+            "description": "Cadouri pentru ea, ideale în orice ocazii speciale și în momentele de relaxare, distracție și inspirație."
+        },
+        "FOR_KIDS": {
+            "title": "Pentru Copii",
+            "description": "Surprinde-i pe cei mici cu cadouri pentru copii - dulciuri, jucării premium și seturi creative."
+        },
+        "ACCESSORIES": {
+            "title": "Accesorii",
+            "description": "Alege accesorii cadou ideale pentru ocazii variate - seturi funcționale pentru organizare și stil personal."
+        },
+        "FLOWERS_AND_BALLOONS": {
+            "title": "Flori & Baloane",
+            "description": "Adaugă culoare cu buchete de flori și baloane - perfecte pentru birou, aniversări sau surprize festive."
+        },
+        "GIFT_SET": {
+            "title": "Seturi cadou",
+            "description": "Seturi atent alese pentru a impresiona și încânta."
+        },
+        "ALL_PRODUCTS": {
+            "title": "Toate produsele",
+            "description": "Descoperă întreaga noastră gamă de produse."
+        }
     },
     "ocasions": {
       "WELCOME_KIT": {
@@ -90,7 +130,7 @@
         "description": "Fii pregătit cu un cadou special pentru următorul eveniment din calendar."
       }
     },
-    "product_content": {
+    "product_content" : {
       "ACCESSORIES_FOR_DRINKS": "Accesorii pentru băuturi",
       "ACCESSORIES_FOR_TEA_COFFEE": "Accesorii pentru ceai/cafea",
       "FOR_OFFICE": "Pentru birou",
@@ -110,181 +150,573 @@
       "PACKAGING_CUSTOM_BAG": "Ambalaj - pungă personalizată",
       "PACKAGING_CUSTOM_DESIGN": "Ambalaj - design individual"
     },
-    "blog_tags": {
-      "RECOMMENDATIONS": "Recomandări",
-      "NEWS": "Noutăți",
-      "EXPERIENCES": "Experiențe"
+    "NavBar" : {
+        "catalog" : "Catalog",
+        "home" : "Acasă",
+        "about" : "Despre Noi",
+        "blogs" : "Blog",
+        "contact" : "Contacte",
+        "cta" : "Vezi seturi cadou",
+        "search" : "Caută",
+        "categories" : "Categorii",
+        "ocasions" : "Ocazii"
     },
-    "terms_sections": {
-      "TERMS_AND_CONDITIONS": {
-      "title": "Termeni & Condiții",
-      "description": "Acești Termeni și Condiții („Termeni”) reglementează utilizarea site-ului nostru web disponibil la https://cado.md („Site-ul”) și plasarea comenzilor de produse prin magazinul nostru online. Prin accesarea sau utilizarea Site-ului, accepți acești Termeni. Dacă nu ești de acord cu toate prevederile, te rugăm să nu utilizezi Site-ul. <title>Condiții generale</title> Ne rezervăm dreptul de a refuza furnizarea serviciilor către orice persoană, din orice motiv, în orice moment. Înțelegi că informațiile tale (cu excepția datelor cardului bancar) pot fi transmise necriptat și pot include: <br></br> (a) transferuri prin diferite rețele;<br></br>(b) modificări necesare pentru adaptarea la cerințele tehnice ale rețelelor sau dispozitivelor.<br></br>Datele cardului sunt întotdeauna criptate în timpul transferului.<br></br><br></br>Este interzisă reproducerea, copierea, revânzarea sau exploatarea oricărei părți din serviciu, a utilizării serviciului sau a accesului la serviciu, fără acordul nostru scris expres. Titlurile utilizate în acești termeni sunt doar pentru ușurință de lectură și nu afectează interpretarea lor. <title>Acuratețea și actualitatea informațiilor</title>Nu garantăm că informațiile disponibile pe site sunt complete, exacte sau actualizate. Conținutul site-ului are un scop informativ general și nu ar trebui utilizat ca unic criteriu în luarea deciziilor. Orice încredere acordată conținutului este pe propriul risc.<br></br><br></br>Informațiile istorice oferite sunt doar pentru referință. Ne rezervăm dreptul de a modifica oricând conținutul site-ului fără notificare. Nu avem obligația de a actualiza permanent informațiile publicate. <title>Utilizarea site-ului</title> Eligibilitate <br></br> <item>Pentru a utiliza site-ul și a efectua comenzi, trebuie să ai cel puțin 18 ani. Prin utilizarea site-ului, declari că îndeplinești această condiție.</item> Crearea unui cont<br></br> <item>Pentru a accesa anumite funcționalități ale site-ului, poate fi necesar să creezi un cont. Ești responsabil pentru confidențialitatea datelor de autentificare și pentru activitățile efectuate din contul tău.</item> Activități interzise <br></br> <item>Este interzisă utilizarea site-ului în scopuri ilegale sau contrare acestor Termeni. Nu ai voie să afectezi funcționarea site-ului sau să îngreunezi accesul altor utilizatori.</item> <br></br> <title>Informații despre produse și disponibilitate</title> Descrieri <item>Ne străduim să oferim descrieri exacte ale produselor. Totuși, nu garantăm că descrierile sau alte informații de pe site sunt fără erori. Dacă un produs nu corespunde descrierii, singura opțiune este returnarea acestuia în stare nefolosită.</item> <br></br> Disponibilitate <item>Toate produsele sunt în limita stocului disponibil. Ne rezervăm dreptul de a limita cantitățile, de a anula comenzi parțial sau total, ori de a modifica condițiile promoțiilor.</item> <title>Prețuri și plată</title> Prețuri <item>Toate prețurile sunt exprimate în MDL sau EUR (pentru comenzile internaționale) și pot fi modificate fără notificare. Taxele de livrare și eventuale comisioane sunt afișate la finalizarea comenzii.</item> <br></br> Metode de plată <item>Acceptăm carduri bancare, transfer bancar sau alte metode listate pe site. Prin furnizarea unui card de plată, confirmi că ai dreptul de a-l utiliza și ne autorizezi să retragem suma totală a comenzii.</item> <title>Livrare</title> Expediere <item>Produsele sunt livrate la adresa furnizată în momentul comenzii. Costul livrării este calculat automat și afișat la checkout.</item> <br></br> Timp de livrare <item>Timpul de livrare este estimativ și poate varia. Nu suntem responsabili pentru întârzieri cauzate de factori externi (ex. curier, vreme).</item> <title>Returnări și schimburi</title> Politica de retur <item>Politica noastră de retur este detaliată pe pagina dedicată și face parte integrantă din acești Termeni. Te rugăm să o consulți pentru informații complete.</item> Schimburi <item>Schimburile se pot face în limita stocului disponibil și conform instrucțiunilor din Politica de retur.</item> <title>Proprietate intelectuală</title> Drepturi de autor <item>Tot conținutul de pe site (texte, grafice, logo-uri, fotografii etc.) aparține CADO și este protejat de lege.</item> Licență <item>Îți oferim o licență limitată, personală și revocabilă de a utiliza site-ul în scopuri necomerciale. Nu ai voie să revinzi conținutul sau să-l reutilizezi în scop comercial fără permisiune scrisă.</item> <title>Limitarea răspunderii</title> În măsura permisă de lege, CADO nu va fi responsabilă pentru daune indirecte, pierderi de date, profit sau reputație, rezultate din: <br></br><br></br> <item>folosirea sau imposibilitatea folosirii site-ului;</item> <item>acces neautorizat la date;</item> <item>viruși sau erori transmise prin site;</item> <item>erori de conținut.</item> <title>Unelte & Linkuri externe</title> Putem oferi acces la instrumente furnizate de terți (ex: plăți online, tracking). Acestea sunt oferite „ca atare”, fără garanții. Utilizarea lor se face pe propria răspundere. <br></br> <br></br> Site-ul poate conține linkuri către alte website-uri. Nu garantăm conținutul lor și nu ne asumăm responsabilitatea pentru achiziții sau interacțiuni cu terți. <title>Contact</title> Dacă ai întrebări legate de acești Termeni, ne poți contacta la: <br></br> info@cado.md <br></br> +37369645153 / +37368501809 / +40774075088"
-      },
-      "CONFIDENTIALITY": {
-      "title": "Politica de Confidenţialitate",
-      "description": "Această Politică de Confidențialitate descrie modul în care CADO („noi”, „al nostru”) colectează, folosește și protejează informațiile tale personale atunci când vizitezi site-ul nostru https://cado.md („Site-ul”) sau utilizezi serviciile noastre. Prin accesarea Site-ului sau trimiterea unei comenzi, ești de acord cu această politică. <title>Colectarea datelor</title> Colectăm informații atunci când: <item>creezi un cont pe site,</item> <item>plasezi o comandă,</item> <item>ne contactezi prin formular/e-mail,</item> <item>te abonezi la newsletter.</item> <br></br><br></br> Tipuri de date colectate: <item>Nume, prenume</item> <item>Adresă de livrare</item> <item>Număr de telefon</item> <item>Adresă de e-mail</item> <item>Informații de facturare și plată (procesate de furnizori terți)</item> <title>Utilizarea datelor</title> Folosim datele tale pentru: <item>procesarea și livrarea comenzilor,</item> <item>comunicare legată de comenzile tale,</item> <item>îmbunătățirea serviciilor și experienței pe site,</item> <item>trimiterea de oferte sau notificări (numai cu acordul tău explicit),</item> <item>prevenirea fraudelor și a abuzurilor.</item> <title>Stocarea și securitatea datelor</title> Stocăm datele pe servere securizate și luăm măsuri tehnice și organizatorice pentru protejarea acestora. Informațiile legate de plată sunt procesate prin platforme terțe (ex. procesatori de plăți) și nu sunt stocate pe serverele noastre. <title>Dezvăluirea către terți</title> Nu vindem și nu închiriem datele tale personale. Putem partaja anumite date doar cu: <item>firme de curierat (pentru livrare),</item> <item>procesatori de plăți,</item> <item>furnizori de servicii IT care susțin funcționarea site-ului,</item> toți fiind obligați să respecte confidențialitatea și securitatea datelor. <title>Contact</title> Dacă ai întrebări legate de acești Termeni, ne poți contacta la: <br></br> info@cado.md <br></br> +37369645153 / +37368501809 / +40774075088"
-      },
-      "PAYMENT_AND_SECURITY": {
-      "title": "Plată & Securitate",
-      "description": "Această secțiune descrie metodele de plată acceptate pe site-ul cado.md și măsurile de securitate implementate pentru a-ți proteja datele financiare și personale în timpul tranzacțiilor. <title>Metode de plată acceptate</title> Acceptăm următoarele metode de plată: <item>Carduri bancare (Visa, Mastercard)</item> <item>Transfer bancar (pentru comenzi corporate sau personalizate)</item> <item>Plăți electronice prin procesatori securizați</item> <br></br> Toate opțiunile disponibile sunt afișate la finalizarea comenzii. <title>Autorizarea plăților</title> Prin furnizarea unui card de plată, confirmi că ai dreptul legal de a-l utiliza și ne autorizezi să debităm suma totală a comenzii, inclusiv taxele aplicabile. <title>Securitatea tranzacțiilor</title> Toate plățile efectuate pe site sunt procesate prin servicii terțe autorizate, care folosesc criptare SSL și protocoale avansate de securitate. CADO nu stochează datele tale de card sau alte informații bancare. <br></br> <br></br> Pentru protecția noastră și a clienților noștri, ne rezervăm dreptul de a verifica anumite comenzi, de a solicita informații suplimentare sau de a anula comenzile suspecte. <title>Probleme la plată</title> Dacă întâmpini probleme în procesul de plată, te rugăm să ne contactezi imediat prin: <br></br> info@cado.md <br></br> +37369645153 / +37368501809 / +40774075088"
-      },
-      "ORDERS": {
-      "title": "Comenzi",
-      "description": "Această secțiune explică pașii de plasare a unei comenzi, confirmarea acesteia, modificări posibile și condiții speciale aplicabile comenzilor plasate pe site-ul cado.md. <title>Cum plasezi o comandă</title> Poți plasa o comandă: <item>direct pe site, adăugând produsele dorite în coș și completând datele de livrare,</item> <item>prin contact direct cu echipa noastră, în cazul comenzilor corporate sau personalizate (telefon, e-mail, mesaj).</item> <title>Confirmarea comenzii</title> După finalizarea comenzii, vei primi un e-mail sau SMS de confirmare care include: <item>detalii despre produse,</item> <item>adresa de livrare,</item> <item>metoda de plată aleasă,</item> <item>termen estimativ de livrare.</item> <br></br> Este responsabilitatea ta să verifici corectitudinea acestor informații. <title>Modificări sau anulări</title> Dacă dorești să modifici sau să anulezi o comandă, te rugăm să ne contactezi în cel mai scurt timp posibil. Nu putem garanta posibilitatea modificării dacă comanda este deja în proces de expediere sau personalizare. <title>Comenzi personalizate</title> Pentru comenzile care includ produse personalizate (ex: cu logo, mesaj personal sau design special), este necesar un acord în scris și, în unele cazuri, o plată în avans. <br></br> Comenzile personalizate nu pot fi returnate, cu excepția cazurilor în care produsul este defect sau livrat incorect. <title>Stare comandă și comunicare</title> Pentru orice întrebări despre starea comenzii tale, ne poți contacta oricând: <br></br> info@cado.md <br></br> +37369645153 / +37368501809 / +40774075088"
-      },
-      "RETURN": {
-      "title": "Returnarea & Schimb",
-      "description": "Această secțiune stabilește condițiile în care poți returna sau schimba un produs cumpărat de la CADO. Politica noastră are scopul de a asigura transparență și încredere în relația cu clienții. <title>Eligibilitatea returnării</title> Poți returna un produs dacă: <item>nu a fost folosit,</item> <item>se află în ambalajul original,</item> <item>este returnat în termen de 14 zile calendaristice de la data livrării.</item> <br></br> <br></br> Pentru a iniția un retur, te rugăm să ne contactezi la info@cado.md sau prin telefon. <title>Excepții</title> Nu pot fi returnate: <item>produse personalizate la cerere (ex: cu nume, logo, mesaje unice),</item> <item>produse desigilate care includ articole alimentare sau cosmetice,</item> <item>produse deteriorate din vina clientului.</item> <title>Rambursări</title> După recepționarea și verificarea produsului returnat: <item>rambursarea va fi procesată în termen de 7–10 zile lucrătoare prin aceeași metodă de plată utilizată inițial (sau prin transfer bancar, dacă se stabilește altfel).</item> <br></br><br></br> Costul inițial de livrare nu este rambursabil, cu excepția cazurilor în care produsul returnat este defect sau greșit livrat. <title>Schimburi</title> Dacă dorești schimbul unui produs (mărime, model, altă variantă), te rugăm să ne contactezi în termen de 14 zile. Schimbul este posibil doar în limita stocului disponibil. <br></br><br></br> Costul transportului pentru schimb revine clientului, cu excepția cazurilor în care produsul inițial a fost livrat eronat sau cu defect. <title>Produse deteriorate</title> Dacă ai primit un produs defect sau deteriorat, trimite-ne o fotografie și descrierea problemei în maximum 48 de ore de la livrare. Vom analiza situația și îți vom oferi o soluție (schimb, rambursare sau voucher)."
-      },
-      "SUPPORT": {
-      "title": "Suport",
-      "description": "Ne dorim ca experiența ta pe cado.md să fie cât mai plăcută. Dacă întâmpini probleme, ai nelămuriri sau pur și simplu vrei să ne transmiți o sugestie, suntem aici pentru tine. <title>Probleme legate de comenzi</title> Ai dificultăți cu o comandă? <br></br> Ne poți contacta oricând, fără ezitare, prin e-mail la info@cado.md sau la unul dintre numerele afișate pe site. Echipa noastră de suport îți va răspunde prompt, cu profesionalism și amabilitate. <title>Întrebări frecvente</title> Dacă nu ai găsit informația de care ai nevoie, ne poți scrie prin formularul de pe pagina Contact sau direct pe e-mail. Vom reveni cât mai curând posibil cu un răspuns clar și util. <title>Feedback și sugestii</title> Ne bucurăm să primim părerile tale despre site-ul și serviciile noastre. Dacă ai identificat o eroare sau vrei să ne propui o îmbunătățire, ne poți scrie folosind formularul de pe pagina Contact."
-      }
+    "Cart" : {
+        "title" : "Coș",
+        "empty" : "Coșul dvs. este gol. Vizitați magazinul pentru inspirație și recomandări personalizate.",
+        "back" : "Întoarce-te în magazin",
+        "remove" : "Elimină",
+        "subtotal" : "Subtotal",
+        "to_checkout" : "Spre achizitare"
     },
-    "delivery_regions": {
-      "CHISINAU": "Chișinău - 80 MDL",
-      "BALTI": "Bălți - 1,350 MDL",
-      "ANENII_NOI": "Anenii Noi - 300 MDL",
-      "BASARABEASCA": "Basarabeasca - 1,170 MDL",
-      "BENDER": "Bender - 680 MDL",
-      "BRICENI": "Briceni - 2,340 MDL",
-      "CAHUL": "Cahul - 1,770 MDL",
-      "CALARASI": "Călărași - 470 MDL",
-      "CANTEMIR": "Cantemir - 1,240 MDL",
-      "CAUSENI": "Căușeni - 700 MDL",
-      "CEADIR_LUNGA": "Ceadîr-Lunga - 1,290 MDL",
-      "CIMISLIA": "Cimișlia - 600 MDL",
-      "COMRAT": "Comrat - 970 MDL",
-      "DROCHIA": "Drochia - 1,870 MDL",
-      "DUBASARI": "Dubăsari - 500 MDL",
-      "EDINET": "Edineț - 2,060 MDL",
-      "FALESTI": "Fălești - 1,340 MDL",
-      "FLORESTI": "Florești - 1,290 MDL",
-      "GLODENI": "Glodeni - 1,750 MDL",
-      "HINCESTI": "Hîncești - 370 MDL",
-      "IALOVENI": "Ialoveni - 150 MDL",
-      "LEOVA": "Leova - 1,220 MDL",
-      "NISPORENI": "Nisporeni - 770 MDL",
-      "OCNITA": "Ocnița - 2,330 MDL",
-      "ORHEI": "Orhei - 435 MDL",
-      "REZINA": "Rezina - 1,130 MDL",
-      "RIBNITA": "Rîbnița - 1,200 MDL",
-      "RISCANI": "Rîșcani - 1,760 MDL",
-      "SOLDANESTI": "Șoldănești - 1,210 MDL",
-      "SOROCA": "Soroca - 1,580 MDL",
-      "STEFAN_VODA": "Ștefan-Vodă - 950 MDL",
-      "STRASENI": "Strășeni - 240 MDL",
-      "TARACLIA": "Taraclia - 1,520 MDL",
-      "TIRASPOL": "Tiraspol - 750 MDL",
-      "UNGHENI": "Ungheni - 1,100 MDL"
+    "LangSidebar" : {
+        "title" : "Limba / Țară",
+        "info" : "Metodele de livrare și condițiile de vânzare vor fi actualizate atunci când schimbați țara.",
+        "change" : "Actualizează"
     },
-    "delivery_hours": {
-      "01:00-05:00": "01:00 - 05:00 - suplimentar +60% pret livrare",
-      "06:00-09:00": "06:00 - 09:00 - suplimentar +40% pret livrare",
-      "10:00-13:00": "10:00 - 13:00",
-      "14:00-19:00": "14:00 - 19:00",
-      "20:00-00:00": "20:00 - 00:00 - suplimentar +40% pret livrare"
+    "Footer" : {
+      "side_text_1" : "Căutați să surprindeți clienții sau să-i încântați pe cei dragi?",
+      "side_text_2" : "Oferim cele mai bune soluții pentru orice ocazie. Explorează opțiunile noastre exclusive și găsește potrivirea perfectă pentru tine!",
+      "nav" : "Navigare",
+      "support" : "Suport",
+      "orders" : "Comenzi",
+      "contacts" : "Contacte",
+      "adresses" : "Adrese",
+      "socials" : "Urmărește-ne",
+      "terms" : "Termeni & Condiții",
+      "address1" : "Moldova, Chișinău, str. Alecu Russo 15, of. 59",
+      "address2" : "România, Brașov, str. Ceferiștilor 65"
     },
-    "index": {
-      "meta": {
-        "title": "Index page",
-        "description": "Index page description"
+    "HomePage" : {
+      "Recommendations" : {
+        "title": "PRODUSE RECOMANDATE",
+        "see_more": "Vezi mai multe",
+        "add_to_cart": "Adaugă în coș",
+        "out_of_stock": "Stoc epuizat",
+        "discount": "Reducere"
       },
-      "title": "Hello world!",
-      "about": "Go to the about page",
-      "faq": {
-        "0": {
+      "Collaboration" : {
+        "title": "CONDIȚIILE DE COOPERARE",
+        "description": "De la selecție la livrare, vă ghidăm pas cu pas pentru a crea cadouri corporate personalizate, potrivite brandului dumneavoastră.",
+        "card1" : {
+          "title": "ALEGEȚI | CADOURILE",
+          "description": "Consultați catalogul și selectați cadourile care vi se potrivesc."
+        },
+        "card2" : {
+          "title": "ADAPTĂM & | PERSONALIZĂM",
+          "description": "Vă sugerăm cum pot fi adaptate la brandul dumneavoastră."
+        },
+        "card3" : {
+          "title": "STABILIM | TERMENELE",
+          "description": "Încheiem un contract în care stabilim termenele de livrare."
+        },
+        "card4" : {
+          "title": "EXECUTĂM | 2-4 Săptămâni",
+          "description": "Lucrăm la proiectul dumneavoastră și vă actualizăm la fiecare etapă."
+        },
+        "card5" : {
+          "title": "AMBALĂM | & LIVRĂM",
+          "description": "Ambalăm cu atenție, respectând regimul de temperatură, și livrăm."
+        }
+      },
+      "Reviews" : {
+        "title": "Experiențele clienților"
+      },
+      "Blog" : {
+        "title": "ULTIMELE NOUTĂȚI",
+        "BlogTags" : {
+          "RECOMMENDATIONS" : "Recomandări",
+          "NEWS" : "Noutăți",
+          "EXPERIENCES" : "Experiențe"
+        }
+      },
+      "FAQ" : {
+        "title": "ÎNTREbări frecvente",
+        "question": "Nu ai găsit răspunsul la întrebarea ta? Poți consulta oricând lista noastră cu informații esențiale aici:",
+        "see_more" : "Vezi mai multe",
+        "questions" : {
+          "0": {
           "title": "Cum pot comanda un cadou și ce opțiuni de personalizare există?",
           "description": "Comandarea este simplă: alegeți produsele, adăugați-le în coș și finalizați comanda urmând pașii indicați. Oferim posibilitatea de a modifica conținutul cadoului după preferințe și creăm seturi personalizate pentru clienți corporate, inclusiv branding. Dacă aveți nevoie de ajutor, ne puteți contacta direct aici."
-        },
-        "1": {
-          "title": "Ce metode de plată acceptați și cum este asigurată securitatea?",
-          "description": "Acceptăm plăți cu card bancar, plăți electronice și transfer bancar. Toate tranzacțiile sunt procesate în siguranță, iar datele dvs. sunt protejate."
-        },
-        "2": {
-          "title": "Cum se face livrarea și cât durează?",
-          "description": "Livrăm în toată Moldova și România. Timpul de livrare este, în general, de 2-5 zile lucrătoare. Costul livrării variază în funcție de locație și se calculează în funcție de adresa oferită. Este posibilă programarea livrării pentru o anumită dată. Veți primi un număr de urmărire după expediere."
-        },
-        "3": {
-          "title": "Ce opțiuni există pentru comenzi corporate sau în cantități mari?",
-          "description": "Oferim soluții personalizate pentru clienți corporate, inclusiv design unic și branding. Comanda minimă variază în funcție de produs, iar pentru comenzi mari oferim reduceri. Contactați-ne pentru o ofertă dedicată la order@cado.md."
-        },
-        "4": {
-          "title": "Pot returna produsele sau vedea cadourile înainte de achiziție?",
-          "description": "Produsele pot fi returnate sau schimbate în termen de 14 zile dacă nu au fost utilizate și sunt în ambalajul original. De asemenea, vă puteți programa o vizită la sediul nostru pentru a vedea cadourile. Dacă aveți nevoie de ajutor, ne puteți contacta direct aici."
+          },
+          "1": {
+            "title": "Ce metode de plată acceptați și cum este asigurată securitatea?",
+            "description": "Acceptăm plăți cu card bancar, plăți electronice și transfer bancar. Toate tranzacțiile sunt procesate în siguranță, iar datele dvs. sunt protejate."
+          },
+          "2": {
+            "title": "Cum se face livrarea și cât durează?",
+            "description": "Livrăm în toată Moldova și România. Timpul de livrare este, în general, de 2-5 zile lucrătoare. Costul livrării variază în funcție de locație și se calculează în funcție de adresa oferită. Este posibilă programarea livrării pentru o anumită dată. Veți primi un număr de urmărire după expediere."
+          },
+          "3": {
+            "title": "Ce opțiuni există pentru comenzi corporate sau în cantități mari?",
+            "description": "Oferim soluții personalizate pentru clienți corporate, inclusiv design unic și branding. Comanda minimă variază în funcție de produs, iar pentru comenzi mari oferim reduceri. Contactați-ne pentru o ofertă dedicată la order@cado.md."
+          },
+          "4": {
+            "title": "Pot returna produsele sau vedea cadourile înainte de achiziție?",
+            "description": "Produsele pot fi returnate sau schimbate în termen de 14 zile dacă nu au fost utilizate și sunt în ambalajul original. De asemenea, vă puteți programa o vizită la sediul nostru pentru a vedea cadourile. Dacă aveți nevoie de ajutor, ne puteți contacta direct aici."
+          }
         }
       }
     },
-    "admin" : {
-      "sidebar": {
+    "AboutPage" : {
+      "Hero" : {
+        "title_slice_1" : "CADO — cadouri care",
+        "title_slice_2" : "nu se redăruiesc",
+        "description" : "Cadourile noastre sunt create cu gândul la impactul emoțional — pentru ca fiecare gest să devină o amintire și fiecare set să transmită grijă autentică.",
+        "see_catalog" : "Vezi catalog",
+        "Cards" : {
+          "card_1_title" : "Misiunea noastră este să aducem emoție prin cadouri",
+          "card_1_description_slice_1" : "Misiunea noastră este să creăm cadouri personalizate care exprimă atenție, atât în mediul corporate, cât și în viața personală. Oferim",
+          "card_1_description_slice_2" : "cadouri corporate pentru parteneri de afaceri",
+          "card_1_description_slice_3" : ", dar și",
+          "card_1_description_slice_4" : "seturi individuale",
+          "card_1_description_slice_5" : "care aduc bucurie și lasă amintiri plăcute destinatarilor. În catalog vei găsi",
+
+          "card_1_text" : "CADO a trecut printr-un rebranding și colaborează astăzi cu parteneri din Moldova și România, oferind servicii la standarde înalte.",
+          "see_catalog" : "Accesează catalogul",
+          
+          
+          "card_2_title" : "CADO nseamnă mai mult decât cadouri — înseamnă și experiențe",
+          "card_2_paragraph_1_slice_1" : "Dincolo de cadourile personalizate, oferim și",
+          "card_2_paragraph_1_slice_2" : "servicii complete de organizare de evenimente",
+          "card_2_paragraph_1_slice_3" : " — de la petreceri corporate la evenimente private.",
+
+          "card_2_paragraph_2_slice_1" : "Prin proiectul nostru",
+          "card_2_paragraph_2_slice_2" : "Event Republic",
+          "card_2_paragraph_2_slice_3" : ", aducem concepte memorabile la viață, cu profesionalism și creativitate.",
+
+          "card_2_paragraph_3_slice_1" : "Accesați",
+          "card_2_paragraph_3_slice_2" : "pentru a descoperi cum putem transforma ocaziile speciale în experiențe de neuitat.",
+          "visit" : "Vizitează pagina"
+        }
+      }
+    },
+    "BlogsPage" : {
+      "title": "LISTA NOUTĂȚILOR",
+      "description": "Bine ai venit pe blogul nostru — locul unde găsești idei utile, noutăți relevante și inspirație din activitatea noastră."
+    },
+    "ContactPage" : {
+      "Maps" : {
+        "0": {
+          "full_city": "Chișinău, Moldova",
+          "city": "Chișinău",
+          "address": "Adresa: Moldova, Chișinău, <br></br> str. Alecu Russo 15, of. 59",
+          "work_hours": "Ore de lucru: Luni-Vineri 9:00 - 16:00",
+          "phone": "Telefon: +373 69 645 153 |  +373 69 645 153",
+          "email_support": "E-mail suport: info@cado.md",
+          "email_orders": "E-mail comenzi: order@cado.md",
+          "additional_info": "Informație suplimentară: <br></br> <br></br> Biroul nostru din Chișinău se află pe strada Alecu Russo, nr. 15, oficiul 59 — la aproximativ 10 minute de mers pe jos de intersecția cu strada Bogdan Voievod. <br></br> <br></br> DIM EXPRES S.R.L. <br></br> Cod fiscal: 1015600006586 Adresă juridică și poștală: mun. Chișinău, str. Alecu Russo, nr. 15, of. 59"
+        },
+        "1": {
+          "full_city": "Brașov, România",
+          "city": "Brașov",
+          "address": "Adresa: România, Brașov, <br></br> str. Ceferiștilor 65",
+          "work_hours": "Ore de lucru: Luni-Vineri 9:00 - 16:00",
+          "phone": "Telefon: +40 774 075 088",
+          "email_support": "E-mail suport: info@cado.md",
+          "email_orders": "E-mail comenzi: order@cado.md",
+          "additional_info": "Informație suplimentară: <br></br> <br></br> Biroul nostru din Brașov se află pe strada Ceferiștilor, nr. 65 — într-o zonă accesibilă, la câteva minute de mers de Gara Brașov. <br></br> <br></br> DIM EXPRES S.R.L. <br></br> Cod fiscal: 1015600006586 Adresă juridică și poștală: România, Brașov, str. Ceferiștilor, nr. 65"
+        }
+      },
+      "ContactForm" : {
+        "title" : "CONTACTEAZĂ-NE",
+        "subject" : "Alegeți subiectul",
+        "order_issue" : "Problemă cu comanda",
+        "gift_assistance" : "Întrebare despre produs",
+        "company_collaboration" : "Oferte de colaborare (persoană juridică)",
+        "other" : "Alt subiect",
+        "name" : "Nume",
+        "email" : "Email",
+        "message" : "Mesaj",
+        "phone" : "Telefon",
+        "preference" : "Modul preferat de contact?",
+        "agreement_slice_1" : "Sunt de acord cu",
+        "agreement_slice_2" : "Termenii și condițiile și cu Politica de confidențialitate",
+        "send" : "Transmite mesajul"
+      }
+    },
+    "CatalogPage" : {
+      "SeasonCatalog" : {
+        "title" : "CATALOG DE SEZON",
+        "cta" : "Accesează catalog"
+      },
+      "CatalogSidebar" : {
+        "category" : "Categorie",
+        "ocasion" : "Ocazie",
+        "price" : "Preț",
+        "content" : "Conținut",
+        "update" : "Actualizează",
+        "min" : "Min",
+        "max" : "Max",
+        "reset" : "Resetează",
+        "active_filters" : "Filtre active"
+      },
+      "ProductsSection" : {
+        "sort_by" : "Sortează după",
+        "sort_options" : {
+          "recommended" : "Recomandate",
+          "new" : "Produse noi",
+          "price_desc" : "Preț: Mare la Mic",
+          "price_asc" : "Preț: Mic la Mare"
+        },
+        "general" : "CATALOG GENERAL",
+        "ListProduct" : {
+          "add_to_cart" : "Adaugă în coș",
+          "see" : "Vezi produsul",
+          "out_of_stock" : "Stoc epuizat",
+          "discount" : "Reducere",
+          "description" : "Descriere",
+          "includes" : "Cadoul include"
+        }
+      }
+    },
+    "ProductPage" : {
+      "stock_state": {
+        "IN_STOCK": "ÎN STOC",
+        "ON_COMMAND": "LA COMANDĂ",
+        "NOT_IN_STOCK": "STOC EPUIZAT"
+      },
+      "add_to_cart" : "Adaugă în coș",
+      "includes" : "Cadoul include",
+      "description" : "Descriere",
+      "features" : "Caracteristici",
+      "material" : "Material",
+      "dimensions" : "Dimensiuni",
+      "category" : "Categorie principală",
+      "weight" : "Greutate",
+      "color" : "Culoare",
+      "ocasion" : "Ocazie",
+      "content" : "Conținut",
+      "number" : "Numărul obiectelor în cadou",
+      "id" : "ID produs",
+      "similar_products" : "Produse similare",
+
+      "Toast" : {
+        "added" : "Adăugat în coș",
+        "see" : "Vezi coș"
+      }
+    },
+    "CheckoutPage" : {
+      "CheckoutForm" : {
+        "method" : "Metoda de expediere",
+        "delivery" : "Livrare la domiciliu",
+        "pickup" : "Ridicare personală",
+        "pickup_place" : "Punct de ridicare",
+        "pickup_info_slice_1" : "Ridicarea comenzii este posibilă pe",
+        "pickup_info_slice_2" : "str. Alecu Russo 15, of. 59, Chișinău,  Luni-Vineri 9:00 - 16:00",
+        "customer_info" : "Informație client",
+        "address_info" : "Adresa trebuie să fie în Republica Moldova.",
+        "email" : "Email",
+        "phone" : "Telefon",
+        "first_name" : "Prenume",
+        "last_name" : "Nume de familie",
+        "city" : "Oraș",
+        "address" : "Adresa* (stradă, număr, etc.)",
+        "number" : "Număr casă/apartament",
+        "billing_address" : "Adresa de facturare",
+        "billing_address_checkbox" : "Folosește aceleași date cu cele de la adresa de livrare.",
+        "individual" : "Persoană fizică",
+        "company" : "Persoană juridică",
+        "company_name" : "Nume companie",
+        "company_id" : "IDNO",
+        "delivery_details" : "Detalii pentru livrare",
+        "delivery_info" : "Livrările între intervalele orelor 1:00-9:00 și 20:00-24:00 sunt tarifate diferit",
+        "date" : "Data de livrare",
+        "time" : "Intervalul orelor de livrare",
+        "print" : "Lăsați aici câteva cuvinte pe care le vom imprima pe felicitare",
+        "comment" : "Comentariu despre comandă",
+        "not_req" : "Completarea casetelor nu este obligatorie",
+        "payment_method" : "Metoda de plată",
+        "online" : "Achitare online",
+        "cash" : "Achitare în numerar",
+        "payment_info" : "Achitarea numerar este posibilă doar la ridicare personală",
+        "agreement_slice_1" : "Am citit și sunt de acord cu condițiile de",
+        "agreement_slice_2" : "livrare/achitare",
+        "agreement_slice_3" : "și condițiile de",
+        "agreement_slice_4" : "returnare/anulare",
+
+        "delivery_regions": {
+          "CHISINAU": "Chișinău - 80 MDL",
+          "BALTI": "Bălți - 1,350 MDL",
+          "ANENII_NOI": "Anenii Noi - 300 MDL",
+          "BASARABEASCA": "Basarabeasca - 1,170 MDL",
+          "BENDER": "Bender - 680 MDL",
+          "BRICENI": "Briceni - 2,340 MDL",
+          "CAHUL": "Cahul - 1,770 MDL",
+          "CALARASI": "Călărași - 470 MDL",
+          "CANTEMIR": "Cantemir - 1,240 MDL",
+          "CAUSENI": "Căușeni - 700 MDL",
+          "CEADIR_LUNGA": "Ceadîr-Lunga - 1,290 MDL",
+          "CIMISLIA": "Cimișlia - 600 MDL",
+          "COMRAT": "Comrat - 970 MDL",
+          "DROCHIA": "Drochia - 1,870 MDL",
+          "DUBASARI": "Dubăsari - 500 MDL",
+          "EDINET": "Edineț - 2,060 MDL",
+          "FALESTI": "Fălești - 1,340 MDL",
+          "FLORESTI": "Florești - 1,290 MDL",
+          "GLODENI": "Glodeni - 1,750 MDL",
+          "HINCESTI": "Hîncești - 370 MDL",
+          "IALOVENI": "Ialoveni - 150 MDL",
+          "LEOVA": "Leova - 1,220 MDL",
+          "NISPORENI": "Nisporeni - 770 MDL",
+          "OCNITA": "Ocnița - 2,330 MDL",
+          "ORHEI": "Orhei - 435 MDL",
+          "REZINA": "Rezina - 1,130 MDL",
+          "RIBNITA": "Rîbnița - 1,200 MDL",
+          "RISCANI": "Rîșcani - 1,760 MDL",
+          "SOLDANESTI": "Șoldănești - 1,210 MDL",
+          "SOROCA": "Soroca - 1,580 MDL",
+          "STEFAN_VODA": "Ștefan-Vodă - 950 MDL",
+          "STRASENI": "Strășeni - 240 MDL",
+          "TARACLIA": "Taraclia - 1,520 MDL",
+          "TIRASPOL": "Tiraspol - 750 MDL",
+          "UNGHENI": "Ungheni - 1,100 MDL"
+        },
+        "delivery_hours": {
+          "01:00-05:00": "01:00 - 05:00 - suplimentar +60% pret livrare",
+          "06:00-09:00": "06:00 - 09:00 - suplimentar +40% pret livrare",
+          "10:00-13:00": "10:00 - 13:00",
+          "14:00-19:00": "14:00 - 19:00",
+          "20:00-00:00": "20:00 - 00:00 - suplimentar +40% pret livrare"
+        }
+      },
+      "CheckoutCart" : {
+        "summary" : "Sumarul comenzii",
+        "remove" : "Elimină",
+        "empty" : "Coșul dvs. este gol. Vizitați magazinul pentru inspirație și recomandări personalizate.",
+        "hour" : "Ora livrării",
+        "total" : "Total",
+        "continue" : "Continuă plata",
+        "subtotal" : "Subtotal",
+        "delivery_cost" : "Livrare"
+      }
+    },
+    "ConfirmationPage" : {
+      "title" : "Mulțumim MULT!",
+      "subtitle_slice_1" : "comanda",
+      "subtitle_slice_2" : "a fost preluată",
+      "paragraph_slice_1" : "Am trimis un e-mail la adresa",
+      "paragraph_slice_2" : "cu confirmarea și factura comenzii.",
+      "paragraph_slice_3" : "Dacă nu ai primit e-mailul în două minute, te rugăm să verifici și folderul spam.",
+      "summary" : "Sumarul comenzii",
+      "quantity" : "Cantitatea",
+      "subtotal" : "Subtotal",
+      "delivery" : "Livrare",
+      "total" : "Total",
+      "contact" : "Detalii de contact",
+      "email" : "Email",
+      "phone" : "Telefon",
+      "payment_method" : "Metoda de plată",
+      "date" : "Data",
+      "date_unavailable" : "Data indisponibilă",
+      "address" : "Adresa de livrare",
+      "moldova" : "Republica Moldova",
+      "billing_address" : "Adresa de facturare",
+      "order_details" : "Detalii comandă"
+    },
+    "LoginPage" : {
+      "username" : "Nume de utilizator",
+      "password" : "Parolă",
+      "login" : "Autentificare"
+    },
+    "PaymentErrorPage" : {
+      "title_slice_1" : "Ne pare rău!",
+      "title_slice_2" : "Plata a fost anulată sau întreruptă",
+      "subtitle_slice_1" : "Se pare că ați părăsit pagina de plată sau tranzacția nu a fost încheiată.",
+      "subtitle_slice_2" : "Dacă întâmpinați dificultăți, vă rugăm să încercați din nou sau să ne contactați.",
+      "back" : "Întoarce-te în magazin"
+    },
+    "TermsPage" : {
+      "terms_sections": {
+        "TERMS_AND_CONDITIONS": {
+        "title": "Termeni & Condiții",
+        "description": "Acești Termeni și Condiții („Termeni”) reglementează utilizarea site-ului nostru web disponibil la https://cado.md („Site-ul”) și plasarea comenzilor de produse prin magazinul nostru online. Prin accesarea sau utilizarea Site-ului, accepți acești Termeni. Dacă nu ești de acord cu toate prevederile, te rugăm să nu utilizezi Site-ul. <title>Condiții generale</title> Ne rezervăm dreptul de a refuza furnizarea serviciilor către orice persoană, din orice motiv, în orice moment. Înțelegi că informațiile tale (cu excepția datelor cardului bancar) pot fi transmise necriptat și pot include: <br></br> (a) transferuri prin diferite rețele;<br></br>(b) modificări necesare pentru adaptarea la cerințele tehnice ale rețelelor sau dispozitivelor.<br></br>Datele cardului sunt întotdeauna criptate în timpul transferului.<br></br><br></br>Este interzisă reproducerea, copierea, revânzarea sau exploatarea oricărei părți din serviciu, a utilizării serviciului sau a accesului la serviciu, fără acordul nostru scris expres. Titlurile utilizate în acești termeni sunt doar pentru ușurință de lectură și nu afectează interpretarea lor. <title>Acuratețea și actualitatea informațiilor</title>Nu garantăm că informațiile disponibile pe site sunt complete, exacte sau actualizate. Conținutul site-ului are un scop informativ general și nu ar trebui utilizat ca unic criteriu în luarea deciziilor. Orice încredere acordată conținutului este pe propriul risc.<br></br><br></br>Informațiile istorice oferite sunt doar pentru referință. Ne rezervăm dreptul de a modifica oricând conținutul site-ului fără notificare. Nu avem obligația de a actualiza permanent informațiile publicate. <title>Utilizarea site-ului</title> Eligibilitate <br></br> <item>Pentru a utiliza site-ul și a efectua comenzi, trebuie să ai cel puțin 18 ani. Prin utilizarea site-ului, declari că îndeplinești această condiție.</item> Crearea unui cont<br></br> <item>Pentru a accesa anumite funcționalități ale site-ului, poate fi necesar să creezi un cont. Ești responsabil pentru confidențialitatea datelor de autentificare și pentru activitățile efectuate din contul tău.</item> Activități interzise <br></br> <item>Este interzisă utilizarea site-ului în scopuri ilegale sau contrare acestor Termeni. Nu ai voie să afectezi funcționarea site-ului sau să îngreunezi accesul altor utilizatori.</item> <br></br> <title>Informații despre produse și disponibilitate</title> Descrieri <item>Ne străduim să oferim descrieri exacte ale produselor. Totuși, nu garantăm că descrierile sau alte informații de pe site sunt fără erori. Dacă un produs nu corespunde descrierii, singura opțiune este returnarea acestuia în stare nefolosită.</item> <br></br> Disponibilitate <item>Toate produsele sunt în limita stocului disponibil. Ne rezervăm dreptul de a limita cantitățile, de a anula comenzi parțial sau total, ori de a modifica condițiile promoțiilor.</item> <title>Prețuri și plată</title> Prețuri <item>Toate prețurile sunt exprimate în MDL sau EUR (pentru comenzile internaționale) și pot fi modificate fără notificare. Taxele de livrare și eventuale comisioane sunt afișate la finalizarea comenzii.</item> <br></br> Metode de plată <item>Acceptăm carduri bancare, transfer bancar sau alte metode listate pe site. Prin furnizarea unui card de plată, confirmi că ai dreptul de a-l utiliza și ne autorizezi să retragem suma totală a comenzii.</item> <title>Livrare</title> Expediere <item>Produsele sunt livrate la adresa furnizată în momentul comenzii. Costul livrării este calculat automat și afișat la checkout.</item> <br></br> Timp de livrare <item>Timpul de livrare este estimativ și poate varia. Nu suntem responsabili pentru întârzieri cauzate de factori externi (ex. curier, vreme).</item> <title>Returnări și schimburi</title> Politica de retur <item>Politica noastră de retur este detaliată pe pagina dedicată și face parte integrantă din acești Termeni. Te rugăm să o consulți pentru informații complete.</item> Schimburi <item>Schimburile se pot face în limita stocului disponibil și conform instrucțiunilor din Politica de retur.</item> <title>Proprietate intelectuală</title> Drepturi de autor <item>Tot conținutul de pe site (texte, grafice, logo-uri, fotografii etc.) aparține CADO și este protejat de lege.</item> Licență <item>Îți oferim o licență limitată, personală și revocabilă de a utiliza site-ul în scopuri necomerciale. Nu ai voie să revinzi conținutul sau să-l reutilizezi în scop comercial fără permisiune scrisă.</item> <title>Limitarea răspunderii</title> În măsura permisă de lege, CADO nu va fi responsabilă pentru daune indirecte, pierderi de date, profit sau reputație, rezultate din: <br></br><br></br> <item>folosirea sau imposibilitatea folosirii site-ului;</item> <item>acces neautorizat la date;</item> <item>viruși sau erori transmise prin site;</item> <item>erori de conținut.</item> <title>Unelte & Linkuri externe</title> Putem oferi acces la instrumente furnizate de terți (ex: plăți online, tracking). Acestea sunt oferite „ca atare”, fără garanții. Utilizarea lor se face pe propria răspundere. <br></br> <br></br> Site-ul poate conține linkuri către alte website-uri. Nu garantăm conținutul lor și nu ne asumăm responsabilitatea pentru achiziții sau interacțiuni cu terți. <title>Contact</title> Dacă ai întrebări legate de acești Termeni, ne poți contacta la: <br></br> info@cado.md <br></br> +37369645153 / +37368501809 / +40774075088"
+        },
+        "CONFIDENTIALITY": {
+        "title": "Politica de Confidenţialitate",
+        "description": "Această Politică de Confidențialitate descrie modul în care CADO („noi”, „al nostru”) colectează, folosește și protejează informațiile tale personale atunci când vizitezi site-ul nostru https://cado.md („Site-ul”) sau utilizezi serviciile noastre. Prin accesarea Site-ului sau trimiterea unei comenzi, ești de acord cu această politică. <title>Colectarea datelor</title> Colectăm informații atunci când: <item>creezi un cont pe site,</item> <item>plasezi o comandă,</item> <item>ne contactezi prin formular/e-mail,</item> <item>te abonezi la newsletter.</item> <br></br><br></br> Tipuri de date colectate: <item>Nume, prenume</item> <item>Adresă de livrare</item> <item>Număr de telefon</item> <item>Adresă de e-mail</item> <item>Informații de facturare și plată (procesate de furnizori terți)</item> <title>Utilizarea datelor</title> Folosim datele tale pentru: <item>procesarea și livrarea comenzilor,</item> <item>comunicare legată de comenzile tale,</item> <item>îmbunătățirea serviciilor și experienței pe site,</item> <item>trimiterea de oferte sau notificări (numai cu acordul tău explicit),</item> <item>prevenirea fraudelor și a abuzurilor.</item> <title>Stocarea și securitatea datelor</title> Stocăm datele pe servere securizate și luăm măsuri tehnice și organizatorice pentru protejarea acestora. Informațiile legate de plată sunt procesate prin platforme terțe (ex. procesatori de plăți) și nu sunt stocate pe serverele noastre. <title>Dezvăluirea către terți</title> Nu vindem și nu închiriem datele tale personale. Putem partaja anumite date doar cu: <item>firme de curierat (pentru livrare),</item> <item>procesatori de plăți,</item> <item>furnizori de servicii IT care susțin funcționarea site-ului,</item> toți fiind obligați să respecte confidențialitatea și securitatea datelor. <title>Contact</title> Dacă ai întrebări legate de acești Termeni, ne poți contacta la: <br></br> info@cado.md <br></br> +37369645153 / +37368501809 / +40774075088"
+        },
+        "PAYMENT_AND_SECURITY": {
+        "title": "Plată & Securitate",
+        "description": "Această secțiune descrie metodele de plată acceptate pe site-ul cado.md și măsurile de securitate implementate pentru a-ți proteja datele financiare și personale în timpul tranzacțiilor. <title>Metode de plată acceptate</title> Acceptăm următoarele metode de plată: <item>Carduri bancare (Visa, Mastercard)</item> <item>Transfer bancar (pentru comenzi corporate sau personalizate)</item> <item>Plăți electronice prin procesatori securizați</item> <br></br> Toate opțiunile disponibile sunt afișate la finalizarea comenzii. <title>Autorizarea plăților</title> Prin furnizarea unui card de plată, confirmi că ai dreptul legal de a-l utiliza și ne autorizezi să debităm suma totală a comenzii, inclusiv taxele aplicabile. <title>Securitatea tranzacțiilor</title> Toate plățile efectuate pe site sunt procesate prin servicii terțe autorizate, care folosesc criptare SSL și protocoale avansate de securitate. CADO nu stochează datele tale de card sau alte informații bancare. <br></br> <br></br> Pentru protecția noastră și a clienților noștri, ne rezervăm dreptul de a verifica anumite comenzi, de a solicita informații suplimentare sau de a anula comenzile suspecte. <title>Probleme la plată</title> Dacă întâmpini probleme în procesul de plată, te rugăm să ne contactezi imediat prin: <br></br> info@cado.md <br></br> +37369645153 / +37368501809 / +40774075088"
+        },
+        "ORDERS": {
+        "title": "Comenzi",
+        "description": "Această secțiune explică pașii de plasare a unei comenzi, confirmarea acesteia, modificări posibile și condiții speciale aplicabile comenzilor plasate pe site-ul cado.md. <title>Cum plasezi o comandă</title> Poți plasa o comandă: <item>direct pe site, adăugând produsele dorite în coș și completând datele de livrare,</item> <item>prin contact direct cu echipa noastră, în cazul comenzilor corporate sau personalizate (telefon, e-mail, mesaj).</item> <title>Confirmarea comenzii</title> După finalizarea comenzii, vei primi un e-mail sau SMS de confirmare care include: <item>detalii despre produse,</item> <item>adresa de livrare,</item> <item>metoda de plată aleasă,</item> <item>termen estimativ de livrare.</item> <br></br> Este responsabilitatea ta să verifici corectitudinea acestor informații. <title>Modificări sau anulări</title> Dacă dorești să modifici sau să anulezi o comandă, te rugăm să ne contactezi în cel mai scurt timp posibil. Nu putem garanta posibilitatea modificării dacă comanda este deja în proces de expediere sau personalizare. <title>Comenzi personalizate</title> Pentru comenzile care includ produse personalizate (ex: cu logo, mesaj personal sau design special), este necesar un acord în scris și, în unele cazuri, o plată în avans. <br></br> Comenzile personalizate nu pot fi returnate, cu excepția cazurilor în care produsul este defect sau livrat incorect. <title>Stare comandă și comunicare</title> Pentru orice întrebări despre starea comenzii tale, ne poți contacta oricând: <br></br> info@cado.md <br></br> +37369645153 / +37368501809 / +40774075088"
+        },
+        "RETURN": {
+        "title": "Returnarea & Schimb",
+        "description": "Această secțiune stabilește condițiile în care poți returna sau schimba un produs cumpărat de la CADO. Politica noastră are scopul de a asigura transparență și încredere în relația cu clienții. <title>Eligibilitatea returnării</title> Poți returna un produs dacă: <item>nu a fost folosit,</item> <item>se află în ambalajul original,</item> <item>este returnat în termen de 14 zile calendaristice de la data livrării.</item> <br></br> <br></br> Pentru a iniția un retur, te rugăm să ne contactezi la info@cado.md sau prin telefon. <title>Excepții</title> Nu pot fi returnate: <item>produse personalizate la cerere (ex: cu nume, logo, mesaje unice),</item> <item>produse desigilate care includ articole alimentare sau cosmetice,</item> <item>produse deteriorate din vina clientului.</item> <title>Rambursări</title> După recepționarea și verificarea produsului returnat: <item>rambursarea va fi procesată în termen de 7–10 zile lucrătoare prin aceeași metodă de plată utilizată inițial (sau prin transfer bancar, dacă se stabilește altfel).</item> <br></br><br></br> Costul inițial de livrare nu este rambursabil, cu excepția cazurilor în care produsul returnat este defect sau greșit livrat. <title>Schimburi</title> Dacă dorești schimbul unui produs (mărime, model, altă variantă), te rugăm să ne contactezi în termen de 14 zile. Schimbul este posibil doar în limita stocului disponibil. <br></br><br></br> Costul transportului pentru schimb revine clientului, cu excepția cazurilor în care produsul inițial a fost livrat eronat sau cu defect. <title>Produse deteriorate</title> Dacă ai primit un produs defect sau deteriorat, trimite-ne o fotografie și descrierea problemei în maximum 48 de ore de la livrare. Vom analiza situația și îți vom oferi o soluție (schimb, rambursare sau voucher)."
+        },
+        "SUPPORT": {
+        "title": "Suport",
+        "description": "Ne dorim ca experiența ta pe cado.md să fie cât mai plăcută. Dacă întâmpini probleme, ai nelămuriri sau pur și simplu vrei să ne transmiți o sugestie, suntem aici pentru tine. <title>Probleme legate de comenzi</title> Ai dificultăți cu o comandă? <br></br> Ne poți contacta oricând, fără ezitare, prin e-mail la info@cado.md sau la unul dintre numerele afișate pe site. Echipa noastră de suport îți va răspunde prompt, cu profesionalism și amabilitate. <title>Întrebări frecvente</title> Dacă nu ai găsit informația de care ai nevoie, ne poți scrie prin formularul de pe pagina Contact sau direct pe e-mail. Vom reveni cât mai curând posibil cu un răspuns clar și util. <title>Feedback și sugestii</title> Ne bucurăm să primim părerile tale despre site-ul și serviciile noastre. Dacă ai identificat o eroare sau vrei să ne propui o îmbunătățire, ne poți scrie folosind formularul de pe pagina Contact."
+        }
+      }
+    },
+    "Admin" : {
+      "unsupported_device" : "Dispozitiv Neacceptat",
+      "unsupported_device_message" : "Accesul la panoul de administrare este disponibil doar pe ecrane de computer.",
+      "logout" : "Ieșire",
+      "Sidebar" : {
         "titles": {
           "0": "Magazin online",
           "3": "Conținut pagini",
           "6": "Contacte"
+        },
+        "admin_pages": {
+          "ORDERS": {
+            "title": "Comenzile",
+            "item": "Comanda"
+          },
+          "PRODUCTS": {
+            "title": "Catalog",
+            "item": "Produs"
+          },
+          "CLIENTS": {
+            "title": "Date clienți",
+            "item": "Client"
+          },
+          "HOME_PAGE": {
+            "title": "Pagina “Acasă”",
+            "item": "Secțiune"
+          },
+          "BLOG_PAGE": {
+            "title": "Pagina “Blog”",
+            "item": "Articol"
+          }
         }
       },
-      "admin_pages": {
-        "ORDERS": {
-          "title": "Comenzile",
-          "item": "Comanda"
-        },
-        "PRODUCTS": {
-          "title": "Catalog",
-          "item": "Produs"
-        },
-        "CLIENTS": {
-          "title": "Date clienți",
-          "item": "Client"
-        },
-        "HOME_PAGE": {
-          "title": "Pagina “Acasă”",
-          "item": "Secțiune"
-        },
-        "BLOG_PAGE": {
-          "title": "Pagina “Blog”",
-          "item": "Articol"
-        }
-      }
-    },
-    "maps": {
-      "0": {
-        "full_city": "Chișinău, Moldova",
-        "city": "Chișinău",
-        "address": "Adresa: Moldova, Chișinău, <br></br> str. Alecu Russo 15, of. 59",
-        "work_hours": "Ore de lucru: Luni-Vineri 9:00 - 16:00",
-        "phone": "Telefon: +373 69 645 153 |  +373 69 645 153",
-        "email_support": "E-mail suport: info@cado.md",
-        "email_orders": "E-mail comenzi: order@cado.md",
-        "additional_info": "Informație suplimentară: <br></br> <br></br> Biroul nostru din Chișinău se află pe strada Alecu Russo, nr. 15, oficiul 59 — la aproximativ 10 minute de mers pe jos de intersecția cu strada Bogdan Voievod. <br></br> <br></br> DIM EXPRES S.R.L. <br></br> Cod fiscal: 1015600006586 Adresă juridică și poștală: mun. Chișinău, str. Alecu Russo, nr. 15, of. 59"
+      "AdminBlog" : {
+        "add_blog" : "Adaugă noutate",
+        "edit_blog" : "Editează noutatea",
+        "delete_question" : "Ești sigur că vrei să ștergi articolul?",
+        "cancel" : "Anulează",
+        "delete" : "Da, șterge",
+        "is_processing" : "Se procesează...",
+        "is_uploading" : "Se încarcă...",
+        "select_image" : "Selectează sau trage o imagine aici",
+        "type" : "Tip noutate",
+        "choose_stock" : "Alege disponibilitate stoc",
+        "delete_paragraph" : "Șterge paragraf",
+        "add_paragraph" : "Adaugă paragraf",
+        "delete_blog" : "Șterge articol",
+        "save" : "Salvează"
       },
-      "1": {
-        "full_city": "Brașov, România",
-        "city": "Brașov",
-        "address": "Adresa: România, Brașov, <br></br> str. Ceferiștilor 65",
-        "work_hours": "Ore de lucru: Luni-Vineri 9:00 - 16:00",
-        "phone": "Telefon: +40 774 075 088",
-        "email_support": "E-mail suport: info@cado.md",
-        "email_orders": "E-mail comenzi: order@cado.md",
-        "additional_info": "Informație suplimentară: <br></br> <br></br> Biroul nostru din Brașov se află pe strada Ceferiștilor, nr. 65 — într-o zonă accesibilă, la câteva minute de mers de Gara Brașov. <br></br> <br></br> DIM EXPRES S.R.L. <br></br> Cod fiscal: 1015600006586 Adresă juridică și poștală: România, Brașov, str. Ceferiștilor, nr. 65"
+      "AdminClientData" : {
+        "search" : "Caută",
+        "email" : "Email",
+        "phone" : "Telefon",
+        "name" : "Prenume, Nume",
+        "orders" : "№ comenzi",
+        "new" : "Clienți noi",
+        "old" : "Clienți vechi",
+        "orders_asc" : "Nr comenzi: Mic la Mare",
+        "orders_desc" : "Nr comenzi: Mare la Mic"
+      },
+      "AdminHomePage" : {
+        "banner_filter" : "Filtru banner",
+        "save_banner": "Salvează banner",
+        "choose_filter" : "Alege filtru",
+        "delete_banner_question" : "Ești sigur că vrei să ștergi banerul?",
+        "cancel" : "Anulează",
+        "delete" : "Da, șterge",
+        "choose_stock" : "Alege disponibilitate stoc",
+        "delete_banner" : "Șterge banner",
+        "is_processing" : "Se procesează...",
+        "is_uploading" : "Se încarcă...",
+        "select_image" : "Selectează sau trage o imagine aici",
+        "save" : "Salvează",
+
+        "soon_ocasion" : "OCAZIE APROPIATĂ",
+        "ocasion_details" : "Detalii ocazie",
+        "ocasion_filter" : "Filtru ocazie",
+
+        "recommendations" : "RECOMANDĂRILE NOASTRE",
+        "discount" : "Reducere",
+        "change_prod" : "Schimbă produsul",
+        "search" : "Caută",
+        "no_match" : "Ups! Nimic nu se potrivește cu ce ai căutat. Încearcă din nou sau vezi toate produsele disponibile.",
+        "modify_prod" : "Modifică produsul",
+
+        "season_catalog" : "Catalog de sezon",
+        "season_catalog_details" : "Detalii catalog de sezon",
+        "season_catalog_link" : "Link spre catalog"
+      },
+      "AdminOrders" : {
+        "new" : "Comenzi noi",
+        "old" : "Comenzi vechi",
+        "price_asc" : "Preț: Mic la Mare",
+        "price_desc" : "Preț: Mare la Mic",
+        "delivery_date" : "Data de livrare",
+        "to" : "până la",
+        "id" : "ID comandă",
+        "email" : "Email",
+        "phone" : "Telefon",
+        "date" : "Data",
+        "payment_method" : "Metoda de achitare",
+        "total" : "Total comandă",
+        "status" : "Status",
+
+        "delete_question" : "Ești sigur că vrei să ștergi comanda?",
+        "cancel" : "Anulează",
+        "delete" : "Da, șterge",
+        "summary" : "Sumarul comenzii",
+        "empty" : "Coșul dvs. este gol. Vizitați magazinul pentru inspirație și recomandări personalizate.",
+        "subtotal" : "Subtotal",
+        "delivery_cost" : "Livrare",
+        "total_summary" : "Total",
+        "hour" : "Ora livrării",
+        "delete_order" : "Șterge comanda",
+        "save" : "Salvează",
+        "remove" : "Elimină",
+
+        "payment_methods": {
+          "PAYNET": "Achitare online",
+          "CASH": "Achitare în numerar"
+        },
+        "order_status": {
+          "NOT_PAID": "UNPAID",
+          "PAID": "PAID",
+          "DELIVERED": "FINISHED"
+        }
+      },
+      "AdminProducts" : {
+        "new" : "Produse noi",
+        "old" : "Produse vechi",
+        "price_asc" : "Preț: Mic la Mare",
+        "price_desc" : "Preț: Mare la Mic",
+
+        "add_product" : "Adaugă produs",
+        "discount" : "Reducere",
+        "edit_product" : "Editează produsul",
+        "id" : "ID produs",
+        "image" : "Imagine",
+        "title" : "Titlu",
+        "price" : "Preț",
+        "old_price" : "Preț vechi",
+        "new_price" : "Preț nou",
+        "stock" : "Status stoc",
+        "stock_nr" : "№ stoc",
+
+        "product_details" : "Detalii produs",
+        "number" : "Numărul obiectelor în cadou",
+        "features" : "Caracteristici",
+        "main_category" : "Categorie principală",
+        "content" : "Conținut",
+        "ocasion" : "Ocazie",
+        "images" : "Imagini pentru produs",
+        "delete_question" : "Ești sigur că vrei să ștergi produsul?",
+        "cancel" : "Anulează",
+        "delete" : "Da, șterge",
+        "delete_product" : "Șterge produs",
+        "is_processing" : "Se procesează...",
+        "is_uploading" : "Se încarcă...",
+        "availability" : "Disponibilitatea în stoc",
+        "in_stock" : "În stoc",
+        "on_command" : "La comandă",
+        "not_in_stock" : "Stoc epuizat",
+        "save" : "Salvează"
       }
-    },
-    "lang": {
-      "ro": "Română",
-      "ru": "Rusă",
-      "en": "Engleză"
-    },
-    "stock_state": {
-      "IN_STOCK": "ÎN STOC",
-      "ON_COMMAND": "LA COMANDĂ",
-      "NOT_IN_STOCK": "STOC EPUIZAT"
-    },
-    "payment_methods": {
-      "PAYNET": "Achitare online",
-      "CASH": "Achitare în numerar"
-    },
-    "order_status": {
-      "NOT_PAID": "UNPAID",
-      "PAID": "PAID",
-      "DELIVERED": "FINISHED"
     }
-  }
+}

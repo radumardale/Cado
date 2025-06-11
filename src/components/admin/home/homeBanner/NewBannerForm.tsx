@@ -13,7 +13,7 @@ import { OcasionsArr } from "@/lib/enums/Ocasions";
 import { addHomeBannerRequestSchema } from "@/lib/validation/home/addHomeBannerRequest";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ChevronDown } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import React, { useEffect } from "react";
 import { useForm, useFormState } from "react-hook-form";
 import { toast } from "sonner";
@@ -22,6 +22,19 @@ import { z } from "zod";
 import { useMutation } from "@tanstack/react-query";
 import { revalidateServerPath } from "@/server/actions/revalidateServerPath";
 
+const toastMessages = {
+  success: {
+    ro: "Banerul a fost creat cu succes!",
+    ru: "Баннер был успешно создан!",
+    en: "Banner was created successfully!"
+  },
+  noImage: {
+    ro: "Introduceți imaginea!",
+    ru: "Добавьте изображение!",
+    en: "Please add an image!"
+  }
+};
+
 interface NewBannerFormProps {
   selectedImage: string | null,
   setSelectedImage: (img: string | null) => void,
@@ -29,6 +42,9 @@ interface NewBannerFormProps {
 }
 
 export default function NewBannerForm({ selectedImage, refetchBanners, setSelectedImage }: NewBannerFormProps) {
+
+  const locale = useLocale() as "ro" | "ru" | "en";
+
   const trpc = useTRPC();
   const ocastionsT = useTranslations("ocasions");
   const {
@@ -44,7 +60,7 @@ export default function NewBannerForm({ selectedImage, refetchBanners, setSelect
       revalidateServerPath("/[locale]", 'page');
 
       setSelectedImage(null);
-      toast.success("Banerul a fost creat cu succes!")
+      toast.success(toastMessages.success[locale])
       refetchBanners();
     }
   }, [UpdateIsSuccess]);
@@ -108,7 +124,7 @@ export default function NewBannerForm({ selectedImage, refetchBanners, setSelect
       if (selectedImage) {
         uploadImagesInOrder();
       } else {
-        toast.error("Introduceti imaginea!");
+        toast.error(toastMessages.noImage[locale]);
       }
 
       // Reset form with updated product data
@@ -132,11 +148,13 @@ export default function NewBannerForm({ selectedImage, refetchBanners, setSelect
     }
   };
 
+  const t = useTranslations("Admin.AdminHomePage")
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="col-span-full flex justify-between items-center mb-42">
         <div className="flex items-center gap-6">
-          <p>Filtru banner:</p>
+          <p>{t("banner_filter")}:</p>
           <FormField
             control={form.control}
             name="ocasion"
@@ -146,7 +164,7 @@ export default function NewBannerForm({ selectedImage, refetchBanners, setSelect
                 <Select onValueChange={field.onChange} value={field.value}>
                   <FormControl>
                     <SelectTrigger className="text-base cursor-pointer flex h-12 max-h-none items-center px-6 gap-2 border border-gray rounded-3xl text-black w-full">
-                      <SelectValue placeholder="Alege filtru" />
+                      <SelectValue placeholder={t("choose_filter")} />
                       <ChevronDown className="size-5" strokeWidth={1.5} />
                     </SelectTrigger>
                   </FormControl>
@@ -168,7 +186,7 @@ export default function NewBannerForm({ selectedImage, refetchBanners, setSelect
             )}
           />
         </div>
-        <button type="submit" disabled={!isDirty} className='disabled:opacity-75 disabled:cursor-default cursor-pointer h-12 px-6 flex justify-center items-center bg-blue-2 text-white rounded-3xl hover:opacity-75 transition duration-300'>Salvează banner</button>
+        <button type="submit" disabled={!isDirty} className='disabled:opacity-75 disabled:cursor-default cursor-pointer h-12 px-6 flex justify-center items-center bg-blue-2 text-white rounded-3xl hover:opacity-75 transition duration-300'>{t("save_banner")}</button>
       </form>
     </Form>
   );

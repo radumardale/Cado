@@ -11,11 +11,11 @@ import { use } from "react";
 import LinksMenu from "@/components/LinksMenu";
 
 export async function generateMetadata() {
-  const t = await getTranslations('index.meta');
+  const t = await getTranslations('PageTitles');
  
   return {
-    title: t('title'),
-    description: t('description'),
+    title: t('about'),
+    description: "",
   };
 }
 
@@ -25,14 +25,16 @@ export default function AboutUs({params}: {params: Promise<{locale: string}>;}) 
 
   return (
     <>
-        <Header />
-        <Hero />
-        <Collaboration />
-        <Reviews />
-        <Blog />
-        <Faq />
-        <Footer />
-        <LinksMenu />
+      <div className="grid grid-cols-8 lg:grid-cols-15 gap-x-2 lg:gap-x-6 px-4 lg:px-16 max-w-3xl mx-auto relative">
+          <Header />
+          <Hero />
+          <Collaboration />
+          <Reviews />
+          <Blog />
+          <Faq />
+      </div>
+      <Footer />
+      <LinksMenu />
     </>
   );
 }

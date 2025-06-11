@@ -1,6 +1,6 @@
 import { useTRPC } from '@/app/_trpc/client'
 import { ProductInterface } from '@/models/product/types/productInterface'
-import { useLocale } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 import Image from 'next/image'
 import React, { useEffect, useRef, useState } from 'react'
 import AdminReccSearchbar from './AdminReccSearchbar'
@@ -70,6 +70,8 @@ export default function AdminRecommnendationsSearch({replaceProduct, handleRefre
         }
     }, [data?.products])
 
+    const t = useTranslations("Admin.AdminHomePage");
+
     return (
       <>
           <AdminReccSearchbar searchText={searchText} setSearchText={setSearchText}/>
@@ -79,7 +81,7 @@ export default function AdminRecommnendationsSearch({replaceProduct, handleRefre
                       localCount == 0 &&
                       <div className='absolute left-1/2 top-1/2 -translate-1/2 w-full lg:w-auto px-13 lg:px-0 flex flex-col items-center'>
                           <Image unoptimized src="/icons/shopping-bag-sad.svg" alt='sad shopping bag' width={48} height={48} className='size-12 translate-y-12' />
-                          <p className='mt-2 text-sm leading-4 lg:leading-5 lg:text-base text-center mb-12 translate-y-12'>Ups! Nimic nu se potrivește cu ce ai căutat. Încearcă din nou sau vezi toate produsele disponibile.</p>
+                          <p className='mt-2 text-sm leading-4 lg:leading-5 lg:text-base text-center mb-12 translate-y-12'>{t("no_match")}</p>
                       </div>
                   }
                   <div className='grid grid-cols-2 lg:flex gap-x-2 gap-y-6 lg:gap-y-0 lg:w-228'>
@@ -90,7 +92,7 @@ export default function AdminRecommnendationsSearch({replaceProduct, handleRefre
                                   {
                                       selectedProduct.sale && selectedProduct.sale.active &&
                                       <div className='absolute top-2 right-2 h-8 flex items-center justify-center bg-red px-4 rounded-3xl text-white z-[5]'>
-                                          <span className='font-semibold text-xs leading-3.5'>Reducere</span>
+                                          <span className='font-semibold text-xs leading-3.5'>{t("discount")}</span>
                                       </div>
                                   }
                                   <div className='w-full aspect-[339/425] bg-purewhite rounded-lg lg:rounded-2xl opacity-100 group-hover:opacity-0 overflow-hidden transition duration-300 z-10 flex items-center relative'>
@@ -156,7 +158,7 @@ export default function AdminRecommnendationsSearch({replaceProduct, handleRefre
               </div>
           </div>
           <div className='col-span-full flex justify-end'>
-              <button disabled={!selectedProduct} onClick={submitProduct} className='disabled:opacity-75 disabled:cursor-default cursor-pointer h-12 px-6 flex justify-center items-center bg-blue-2 text-white rounded-3xl hover:opacity-75 transition duration-300'>Modifică produsul</button>
+              <button disabled={!selectedProduct} onClick={submitProduct} className='disabled:opacity-75 disabled:cursor-default cursor-pointer h-12 px-6 flex justify-center items-center bg-blue-2 text-white rounded-3xl hover:opacity-75 transition duration-300'>{t('modify_prod')}</button>
           </div>
       </>
     )

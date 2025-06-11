@@ -15,6 +15,7 @@ interface LogoCardInterface {
 }
 
 export default function LogoCarousel() {
+
     const [steps, setSteps] = useState<LogoCardInterface[]>(reviewLogos);
     const [isSlideInitialized, setSliderInitialized] = useState(false);
     const [isAnimationPlaying, setAnimationPlaying] = useState(false);

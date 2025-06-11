@@ -20,8 +20,12 @@ import { ChevronDown } from "lucide-react"
 import { Checkbox } from "../ui/checkbox"
 import { Link } from "@/i18n/navigation"
 import { toast } from "@/components/ui/contactToast";
+import { useTranslations } from "next-intl"
 
 export default function ContactForm() {
+
+    const t = useTranslations("ContactPage.ContactForm")
+
     const form = useForm<z.infer<typeof sendMessageRequest>>({
         resolver: zodResolver(sendMessageRequest),
         defaultValues: {
@@ -41,10 +45,10 @@ export default function ContactForm() {
 
     return (
         <>
-            <h3 className='col-span-full lg:text-center mb-8 lg:mb-16 font-manrope text-2xl lg:text-3xl leading-7 lg:leading-11 uppercase font-semibold'>CONTACTEAZĂ-NE</h3>
+            <h3 className='col-span-full lg:text-center mb-8 lg:mb-16 font-manrope text-2xl lg:text-3xl leading-7 lg:leading-11 uppercase font-semibold'>{ t('title') }</h3>
             <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="col-span-full lg:col-start-4 lg:col-span-9 grid grid-cols-8 lg:grid-cols-9">
-                <div className="col-span-full lg:col-span-4 mb-2 lg:mb-0">
+                <div className="col-span-full lg:col-span-4 mb-2 lg:mb-0"> 
                     <FormField
                         control={form.control}
                         name="subject"
@@ -54,16 +58,16 @@ export default function ContactForm() {
                                     <Select onValueChange={field.onChange} >
                                         <FormControl>
                                             <SelectTrigger className="text-base cursor-pointer flex h-12 max-h-none items-center px-6 gap-2 border border-gray rounded-3xl text-black  w-full">
-                                                <SelectValue placeholder="Alege subiectul" />
+                                                <SelectValue placeholder={t('subject')} />
                                                 <ChevronDown className='size-5' strokeWidth={1.5}/>
                                             </SelectTrigger>
                                         </FormControl>  
                                         <SelectContent className="border-gray">
                                             <SelectGroup>
-                                                <SelectItem className="text-base cursor-pointer  " value={"ORDER_ISSUE"}>Problemă cu comanda</SelectItem>
-                                                <SelectItem className="text-base cursor-pointer  " value={"GIFT_ASSITANCE"}>Consultanță (persoană fizică)</SelectItem>
-                                                <SelectItem className="text-base cursor-pointer  " value={"COMPANY_COLLABORATION"}>Oferte de colaborare (persoană juridică)</SelectItem>
-                                                <SelectItem className="text-base cursor-pointer  " value={"OTHER"}>Altele</SelectItem>
+                                                <SelectItem className="text-base cursor-pointer  " value={"ORDER_ISSUE"}>{ t("order_issue") }</SelectItem>
+                                                <SelectItem className="text-base cursor-pointer  " value={"GIFT_ASSITANCE"}>{ t("gift_assistance") }</SelectItem>
+                                                <SelectItem className="text-base cursor-pointer  " value={"COMPANY_COLLABORATION"}>{ t("company_collaboration") }</SelectItem>
+                                                <SelectItem className="text-base cursor-pointer  " value={"OTHER"}>{ t("other") }</SelectItem>
                                             </SelectGroup>
                                         </SelectContent>
                                     </Select>
@@ -80,7 +84,7 @@ export default function ContactForm() {
                             <FormItem className="text-base text-black  w-full">
                                 <FormMessage />
                                 <FormControl className="border  rounded-3xl border-gray shadow-none p-0 text-black placeholder:text-black focus-visible:outline-none">
-                                    <Input className="h-12 w-full px-6 rounded-3xl" placeholder="Nume*" {...field} />
+                                    <Input className="h-12 w-full px-6 rounded-3xl" placeholder={`${t('name')}*`} {...field} />
                                 </FormControl>
                             </FormItem>
                         )}
@@ -95,7 +99,7 @@ export default function ContactForm() {
                             <FormItem className="text-black w-full">
                                 <FormMessage />
                                 <FormControl className="border rounded-3xl border-gray shadow-none p-0 text-black placeholder:text-black focus-visible:outline-none">
-                                    <Input className=" text-base h-12 w-full px-6 rounded-3xl" placeholder="Email*" {...field} />
+                                    <Input className=" text-base h-12 w-full px-6 rounded-3xl" placeholder={`${t('email')}*`} {...field} />
                                 </FormControl>
                             </FormItem>
                         )}
@@ -110,7 +114,7 @@ export default function ContactForm() {
                             <FormItem className="text-black  w-full">
                                 <FormMessage />
                                 <FormControl className="border  rounded-3xl border-gray shadow-none p-0 text-black placeholder:text-black focus-visible:outline-none">
-                                    <Input className="text-base h-12 w-full px-6 rounded-3xl" placeholder="Telefon*" {...field} />
+                                    <Input className="text-base h-12 w-full px-6 rounded-3xl" placeholder={`${t('phone')}*`} {...field} />
                                 </FormControl>
                             </FormItem>
                         )}
@@ -118,7 +122,7 @@ export default function ContactForm() {
                 </div>
 
                 <div className="col-span-full mt-8 lg:mt-4">
-                    <p className=" mb-2 lg:mb-4">Modul preferat de contact?</p>
+                    <p className=" mb-2 lg:mb-4">{t('preference')}</p>
                     <div className="flex gap-8">
                         <FormField
                             control={form.control}
@@ -141,7 +145,7 @@ export default function ContactForm() {
                                                     }}
                                                     id="email" 
                                                     className="border-gray size-4 cursor-pointer"/>
-                                                <label htmlFor="email" className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer">Email</label>
+                                                <label htmlFor="email" className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer">{t('email')}</label>
                                             </div>
                                         </FormControl>
                                         <FormControl>
@@ -159,7 +163,7 @@ export default function ContactForm() {
                                                     }}
                                                     id="TEL" 
                                                     className="border-gray size-4 cursor-pointer"/>
-                                                <label htmlFor="TEL" className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer">Telefon</label>
+                                                <label htmlFor="TEL" className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer">{t('phone')}</label>
                                             </div>
                                         </FormControl>
                                     </div>
@@ -177,7 +181,7 @@ export default function ContactForm() {
                     render={({ field }) => (
                         <FormItem className="col-span-full mt-8 lg:mt-4">
                             <FormControl>
-                                <Textarea className="placeholder:text-black h-40 items-center px-6 border border-gray rounded-3xl text-base text-black   col-span-full" placeholder="Mesaj*" {...field}/>
+                                <Textarea className="placeholder:text-black h-40 items-center px-6 border border-gray rounded-3xl text-base text-black   col-span-full" placeholder={`${t('message')}*`} {...field}/>
                             </FormControl>
                             <FormMessage />
                         </FormItem>
@@ -200,13 +204,13 @@ export default function ContactForm() {
                                             />
                                         </FormControl>
                                         <div className={`${form.formState.errors.termsAccepted ? 'text-destructive animate-shake' : ''}`}>
-                                            Sunt de acord cu <Link href="/terms" className="underline">Termenii și condițiile și cu Politica de confidențialitate</Link>
+                                            {t('agreement_slice_1')} <Link href="/terms" className="underline">{t('agreement_slice_2')}</Link>
                                         </div>
                                 </div>
                         </FormItem>
                     )}
                 />  
-                <Button type="submit" className=" hover:bg-blue-2 text-white  text-base cursor-pointer col-span-full h-12 rounded-3xl bg-blue-2 mt-8 mb-24 font-semibold">Transmite mesajul</Button>
+                <Button type="submit" className=" hover:bg-blue-2 text-white  text-base cursor-pointer col-span-full h-12 rounded-3xl bg-blue-2 mt-8 mb-24 font-semibold">{t('send')}</Button>
             </form>
             </Form>
         </>

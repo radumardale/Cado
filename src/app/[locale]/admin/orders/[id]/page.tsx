@@ -3,7 +3,17 @@ import AdminHeader from '@/components/admin/AdminHeader'
 import AdminSidebar from '@/components/admin/AdminSidebar'
 import AdminOrderForm from '@/components/admin/orders/id/AdminOrderForm'
 import { AdminPages } from '@/lib/enums/AdminPages'
+import { getTranslations } from 'next-intl/server'
 import React from 'react'
+
+export async function generateMetadata() {
+  const t = await getTranslations('PageTitles');
+
+  return {
+    title: t('admin_orders'),
+    description: '',
+  };
+}
 
 export default async function AdminOrderPage({
     params,

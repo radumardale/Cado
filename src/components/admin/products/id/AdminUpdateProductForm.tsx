@@ -17,9 +17,18 @@ import { toast } from 'sonner'
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useMutation } from "@tanstack/react-query";
 import { revalidateServerPath } from "@/server/actions/revalidateServerPath";
+import { useLocale } from "next-intl";
 
 interface AdminProductFormProps {
     id: string
+}
+
+const toastMessages = {
+  success: {
+    ro: "Produsul a fost actualizat cu succes!",
+    ru: "Товар был успешно обновлён!",
+    en: "Product updated successfully!"
+  }
 }
 
 export default function AdminUpdateProductForm({id}: AdminProductFormProps) {
@@ -143,9 +152,11 @@ export default function AdminUpdateProductForm({id}: AdminProductFormProps) {
         }
     }, [isSuccess, MutatedData, form]);
 
+    const locale = useLocale() as "ro" | "ru" | "en";
+
     useEffect(() => {
         if (UpdateIsSuccess) {
-            toast.success("Produsul a fost actualizat cu succes!");
+            toast.success(toastMessages.success[locale]);
             setInitialImagesData(UpdateData.images || []);
 
             revalidateServerPath(`/ro/catalog/product/${data?.product?.custom_id}`);

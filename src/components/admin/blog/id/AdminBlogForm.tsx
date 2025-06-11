@@ -41,7 +41,7 @@ export default function AdminBlogForm({ id }: AdminBlogFormProps) {
     const [initialSectionsImages, setInitialSectionImages] = useState<SectionImagesInterface[]>(data?.blog?.section_images || []);
 
     const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
-    const blogTagsT = useTranslations("blog_tags");
+    const blogTagsT = useTranslations("HomePage.Blog.BlogTags");
 
     useEffect(() => {
         if (!DeleteIsSuccess && DeleteIsPending) router.push("/admin/blog")
@@ -222,6 +222,8 @@ export default function AdminBlogForm({ id }: AdminBlogFormProps) {
         form.setValue("data.isImageNew", true, {shouldDirty: true});
     };
 
+    const t = useTranslations("Admin.AdminBlog");
+
     return (
       <>
           {
@@ -236,10 +238,10 @@ export default function AdminBlogForm({ id }: AdminBlogFormProps) {
               isDeleteDialogOpen && 
               <div className='fixed top-0 left-0 w-full h-full bg-black/75 z-50 flex justify-center items-center' onMouseDown={() => {setIsDeleteDialogOpen(false)}}>
                   <div className='p-8 rounded-3xl bg-white' onMouseDown={(e) => {e.stopPropagation()}}>
-                      <p className='text-lg'>Ești sigur că vrei să ștergi articolul?</p>
+                      <p className='text-lg'>{t("delete_question")}</p>
                       <div className='flex gap-6 ml-36 mt-12'>
                           <button className='cursor-pointer h-12' onClick={(e) => {e.preventDefault(); setIsDeleteDialogOpen(false);}}>
-                              <span className='relative after:content-[""] after:absolute after:left-0 after:bottom-0 after:w-0 after:h-[1px] after:bg-black hover:after:w-full after:transition-all after:duration-300'>Anulează</span>
+                              <span className='relative after:content-[""] after:absolute after:left-0 after:bottom-0 after:w-0 after:h-[1px] after:bg-black hover:after:w-full after:transition-all after:duration-300'>{t('cancel')}</span>
                           </button>
                           <button 
                               onClick={(e) => {
@@ -248,7 +250,7 @@ export default function AdminBlogForm({ id }: AdminBlogFormProps) {
                               }} 
                               className='disabled:opacity-75 disabled:cursor-default cursor-pointer h-12 px-6 flex justify-center items-center bg-red text-white rounded-3xl hover:opacity-75 transition duration-300'
                               >
-                                  Da, șterge
+                                  {t('delete')}
                               </button>
                       </div>
                   </div>
@@ -318,7 +320,7 @@ export default function AdminBlogForm({ id }: AdminBlogFormProps) {
           </>
               
               <div className='col-span-3 flex items-center gap-6 -col-start-4'>
-                  <p>Tip noutate:</p>
+                  <p>{t("type")}:</p>
                   <FormField
                       control={form.control}
                       name="data.tag"
@@ -328,7 +330,7 @@ export default function AdminBlogForm({ id }: AdminBlogFormProps) {
                                   <Select onValueChange={field.onChange} value={field.value}>
                                       <FormControl>
                                           <SelectTrigger className="text-base cursor-pointer flex h-12 max-h-none items-center px-6 gap-2 border border-gray rounded-3xl text-black w-full">
-                                              <SelectValue placeholder="Alege disponibilitate stoc" />
+                                              <SelectValue placeholder={t("choose_stock")} />
                                               <ChevronDown className='size-5' strokeWidth={1.5}/>
                                           </SelectTrigger>
                                       </FormControl>  
@@ -363,7 +365,7 @@ export default function AdminBlogForm({ id }: AdminBlogFormProps) {
                                       e.preventDefault();
                                       remove(index);
                                   }}
-                                  >Șterge paragraf</button>
+                                  >{t("delete_paragraph")}</button>
                               <FormField
                                   control={form.control}
                                   name={`data.sections.${index}.subtitle.ro`}
@@ -477,11 +479,11 @@ export default function AdminBlogForm({ id }: AdminBlogFormProps) {
                   className='col-span-full h-18 flex gap-2 items-center justify-center bg-[#F0F0F0] rounded-2xl border border-dashed border-gray cursor-pointer hover:opacity-75 transition duration-300 mb-4'
                   >
                   <Plus strokeWidth={1.5} className='size-6'/>
-                  <p>Adaugă paragraf</p>
+                  <p>{t('add_paragraph')}</p>
               </button>
 
               <div className='mt-12 pt-4 border-t border-lightgray col-span-full flex justify-between'>
-                  <button onClick={(e) => {e.preventDefault(); setIsDeleteDialogOpen(true)}} className='disabled:opacity-75 disabled:cursor-default cursor-pointer h-12 px-6 flex justify-center items-center bg-red text-white rounded-3xl hover:opacity-75 transition duration-300'>Șterge articol</button>
+                  <button onClick={(e) => {e.preventDefault(); setIsDeleteDialogOpen(true)}} className='disabled:opacity-75 disabled:cursor-default cursor-pointer h-12 px-6 flex justify-center items-center bg-red text-white rounded-3xl hover:opacity-75 transition duration-300'>{t("delete_blog")}</button>
 
                   <div className='flex gap-6'>
                       <button 
@@ -508,10 +510,10 @@ export default function AdminBlogForm({ id }: AdminBlogFormProps) {
                           }}
                       >
                           <span className='text-gray relative after:content-[""] after:absolute after:left-0 after:bottom-0 after:w-0 after:h-[1px] after:bg-gray hover:after:w-full after:transition-all after:duration-300'>
-                              Anulează
+                              {t('cancel')}
                           </span>
                       </button>
-                      <button type="submit" onClick={() => {console.log("submit")}} disabled={!isDirty} className='disabled:opacity-75 disabled:cursor-default cursor-pointer h-12 px-6 flex justify-center items-center bg-blue-2 text-white rounded-3xl hover:opacity-75 transition duration-300'>Salvează</button>
+                      <button type="submit" onClick={() => {console.log("submit")}} disabled={!isDirty} className='disabled:opacity-75 disabled:cursor-default cursor-pointer h-12 px-6 flex justify-center items-center bg-blue-2 text-white rounded-3xl hover:opacity-75 transition duration-300'>{t("save")}</button>
                   </div>
               </div>
           </form>

@@ -17,16 +17,16 @@ interface BreadcrumsInterface {
 }
 
 export default function Breadcrums({category, productInfo}: BreadcrumsInterface) {
-    const pathnamesTranslations = useTranslations("pathnames");
     const paths = usePathname();
-    const pathNames = paths.split('/').filter( path => !LangOptionsArr.includes(path) && path.length > 0 );
-    const t = useTranslations("tags");
+    const pathNames = paths.split('/').filter( path => !LangOptionsArr.includes(path) && path.length > 0 ).map(segment => decodeURIComponent(segment));
+    const t = useTranslations("Tags");
+    const path_t = useTranslations("BreadCrumPathnames");
 
     return (
         <div className='mt-4 hidden lg:flex'>
             {
                 <div className='flex gap-2'>
-                    <Link href={'/'} className='text-gray font-semibold font-manrope uppercase whitespace-nowrap'>{pathnamesTranslations("home")}</Link>
+                    <Link href={'/'} className='text-gray font-semibold font-manrope uppercase whitespace-nowrap'>{path_t("home")}</Link>
                     <span className='text-gray font-semibold font-manrope'>/</span>
                     {
                         pathNames.map( (link, index) => {

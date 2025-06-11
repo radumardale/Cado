@@ -10,11 +10,11 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 export const dynamic = 'force-static'
 
 export async function generateMetadata() {
-  const t = await getTranslations('index.meta');
+  const t = await getTranslations('PageTitles');
  
   return {
-    title: t('title'),
-    description: t('description'),
+    title: t('blogs'),
+    description: '',
   };
 }
 
@@ -28,12 +28,14 @@ export default async function AboutUs({params}: {params: Promise<{locale: string
 
   return (
     <HydrateClient>
+      <div className="grid grid-cols-8 lg:grid-cols-15 gap-x-2 lg:gap-x-6 px-4 lg:px-16 max-w-3xl mx-auto relative">
         <Header />
         <Hero />
         <Recommendations />
         <Faq />
-        <Footer />
-        <LinksMenu />
+      </div>
+      <Footer />
+      <LinksMenu />
     </HydrateClient>
   );
 }

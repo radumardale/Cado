@@ -24,22 +24,24 @@ export default function ProductTagsSearchbar({ handleAddCategory, handleAddOcasi
         setOcasions(findOcasionsByText(searchText));
     }, [searchText]);
 
+    const prod_t = useTranslations("Admin.AdminProducts")
+
   return (
     <>
         <Searchbar className='col-span-6' searchText={searchText} setSearchText={setSearchText} />
-        <p className={`${categories.length > 0 ? "" : "hidden"} col-span-full font-manrope font-semibold`}>Categorie principală:</p>
+        <p className={`${categories.length > 0 ? "" : "hidden"} col-span-full font-manrope font-semibold`}>{prod_t("main_category")}:</p>
         <div className={`${categories.length > 0 ? "flex" : "hidden"} col-span-6 gap-2 flex-wrap`}>
             {
                 categories.map((category, index) => {
                     return(
                         <button key={index} className="bg-blue-2 h-12 px-6 text-white font-manrope font-semibold rounded-3xl flex items-center gap-1 max-w-full cursor-pointer hover:opacity-75 transition duration-300" onClick={(e) => {e.preventDefault(); handleAddCategory(category)}}>
-                            <p className="whitespace-nowrap overflow-hidden text-ellipsis">{t(`tags.${category}.title`)}</p>
+                            <p className="whitespace-nowrap overflow-hidden text-ellipsis">{t(`Tags.${category}.title`)}</p>
                         </button>
                     )
                 })
             }
         </div>
-        <p className={`${productContents.length > 0 ? "" : "hidden"} col-span-full font-manrope font-semibold`}>Conținut:</p>
+        <p className={`${productContents.length > 0 ? "" : "hidden"} col-span-full font-manrope font-semibold`}>{prod_t("content")}:</p>
         <div className={`${productContents.length > 0 ? "flex" : "hidden"} col-span-6 gap-2 flex-wrap`}>
             {
                 productContents.map((productContent, index) => {
@@ -51,7 +53,7 @@ export default function ProductTagsSearchbar({ handleAddCategory, handleAddOcasi
                 })
             }
         </div>
-        <p className={`${ocasions.length > 0 ? "" : "hidden"} col-span-full font-manrope font-semibold`}>Ocazie:</p>
+        <p className={`${ocasions.length > 0 ? "" : "hidden"} col-span-full font-manrope font-semibold`}>{prod_t('ocasion')}:</p>
         <div className={`${ocasions.length > 0 ? "flex" : "hidden"} col-span-6 gap-2 flex-wrap`}>
             {
                 ocasions.map((ocasion, index) => {

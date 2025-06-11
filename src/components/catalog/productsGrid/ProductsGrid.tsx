@@ -6,6 +6,7 @@ import ListProductCard from './ListProductCard'
 import LoadingGrid from './LoadingGrid'
 import SortBy from '@/lib/enums/SortBy'
 import { Categories } from '@/lib/enums/Categories'
+import { useTranslations } from 'next-intl'
 
 interface ProductsGridProps {
     products: ProductInterface[],
@@ -20,6 +21,8 @@ interface ProductsGridProps {
 
 export default function ProductsGrid({products, loading, setSortBy, category, setSidebarOpen, isSidebarOpen, searchText, countProducts}: ProductsGridProps) {
     const [gridLayout, setGridLayout] = useState(true);
+
+    const t = useTranslations('CatalogPage.ProductsSection');
 
   return (
     <div className='col-span-full lg:col-start-4 lg:col-span-12 grid grid-cols-8 lg:grid-cols-12 mt-16 lg:mt-12 gap-x-2 lg:gap-y-6 lg:gap-6 h-fit'>
@@ -39,7 +42,7 @@ export default function ProductsGrid({products, loading, setSortBy, category, se
                                         {
                                             gridLayout && <div key={'line' + index} className='col-span-full h-[1px] w-full bg-black'></div>
                                         }
-                                        <p className='col-span-full font-manrope text-2xl leading-7 uppercase font-semibold'>CATALOG GENERAL</p>
+                                        <p className='col-span-full font-manrope text-2xl leading-7 uppercase font-semibold'>{t("general")}</p>
                                     </>
                                 }
                                 {

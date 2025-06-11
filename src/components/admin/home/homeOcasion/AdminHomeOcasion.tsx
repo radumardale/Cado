@@ -7,7 +7,7 @@ import { Ocasions, OcasionsArr } from '@/lib/enums/Ocasions';
 import { updateHomeOcasionRequestSchema } from '@/lib/validation/home/updateHomeOcasion';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ChevronDown } from 'lucide-react';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import React, { useEffect } from 'react'
 import { useForm, useFormState } from 'react-hook-form';
 import { toast } from 'sonner';
@@ -16,7 +16,18 @@ import { z } from 'zod';
 import { useQuery } from "@tanstack/react-query";
 import { useMutation } from "@tanstack/react-query";
 
+const toastMessages = {
+  success: {
+    ro: "Ocazie adăugată cu succes!",
+    ru: "Событие успешно добавлено!",
+    en: "Occasion added successfully!"
+  }
+};
+
 export default function AdminHomeOcasion() {
+
+    const locale = useLocale() as "ro" | "ru" | "en";
+
     const trpc = useTRPC();
     const { data } = useQuery(trpc.homeOcasion.getHomeOcasion.queryOptions());
     const { mutate, isSuccess, data: MutatedData } = useMutation(trpc.homeOcasion.updateHomeOcasion.mutationOptions());
@@ -37,7 +48,7 @@ export default function AdminHomeOcasion() {
 
     useEffect(() => {
         if (isSuccess) {
-            toast.success("Ocazie adăugată cu succes!")
+            toast.success(toastMessages.success[locale])
             form.reset({
                 id: MutatedData.homeOcasion?._id,
                 ocasion: MutatedData.homeOcasion?.ocasion,
@@ -52,11 +63,12 @@ export default function AdminHomeOcasion() {
         mutate(values);
     };
 
+    const t = useTranslations("Admin.AdminHomePage");
 
     return (
       <>
-          <h2 className='col-span-5 font-manrope font-semibold text-3xl leading-11 mb-10'>OCAZIE APROPIATĂ</h2>
-          <h3 className='col-start-1 col-span-4 font-manrope font-semibold leading-7'>Detalii ocazie</h3>
+          <h2 className='col-span-5 font-manrope font-semibold text-3xl leading-11 mb-10'>{t("soon_ocasion")}</h2>
+          <h3 className='col-start-1 col-span-4 font-manrope font-semibold leading-7'>{t("ocasion_details")}</h3>
           <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)} className="col-span-full mt-6 grid grid-cols-12 gap-x-6 h-fit mb-16 items-end">
                   {/* Title */}
@@ -101,7 +113,7 @@ export default function AdminHomeOcasion() {
                       />
 
                   <div className='col-span-3 flex items-center gap-6 -col-start-4 h-fit'>
-                      <p>Tip noutate:</p>
+                      <p>{t("ocasion_filter")}:</p>
                       <FormField
                           control={form.control}
                           name="ocasion"
@@ -140,10 +152,10 @@ export default function AdminHomeOcasion() {
                               }}
                           >
                               <span className='text-gray relative after:content-[""] after:absolute after:left-0 after:bottom-0 after:w-0 after:h-[1px] after:bg-gray hover:after:w-full after:transition-all after:duration-300'>
-                                  Anulează
+                                  {t("cancel")}
                               </span>
                           </button>
-                          <button type="submit" disabled={!isDirty} className='disabled:opacity-75 disabled:cursor-default cursor-pointer h-12 px-6 flex justify-center items-center bg-blue-2 text-white rounded-3xl hover:opacity-75 transition duration-300'>Salvează</button>
+                          <button type="submit" disabled={!isDirty} className='disabled:opacity-75 disabled:cursor-default cursor-pointer h-12 px-6 flex justify-center items-center bg-blue-2 text-white rounded-3xl hover:opacity-75 transition duration-300'>{t("save")}</button>
                       </div>
                   </div>
               </form>

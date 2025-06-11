@@ -8,7 +8,7 @@ import { UpdateOrderValues } from "@/lib/validation/order/updateOrderRequest";
 import { CartProducts } from "@/models/order/types/cartProducts";
 import { useMutation } from "@tanstack/react-query";
 import { Minus, Plus, ShoppingBag } from "lucide-react";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { useFormContext, useFormState, useWatch } from "react-hook-form";
@@ -86,24 +86,26 @@ export default function OrdersProductsSummary() {
         setMounted(true);
     }, []);
 
+    const t = useTranslations("Admin.AdminOrders")
+
   return (
     <>
         {
             isDeleteDialogOpen && 
             <div className='fixed top-0 left-0 w-full h-full bg-black/75 z-50 flex justify-center items-center' onMouseDown={() => {setIsDeleteDialogOpen(false)}}>
                 <div className='p-8 rounded-3xl bg-white' onMouseDown={(e) => {e.stopPropagation()}}>
-                    <p className='text-lg'>Ești sigur că vrei să ștergi comanda?</p>
+                    <p className='text-lg'>{t("delete_question")}</p>
                     <div className='flex gap-6 ml-36 mt-12'>
                         <button className='cursor-pointer h-12' onClick={(e) => {e.preventDefault(); setIsDeleteDialogOpen(false);}}>
-                            <span className='relative after:content-[""] after:absolute after:left-0 after:bottom-0 after:w-0 after:h-[1px] after:bg-black hover:after:w-full after:transition-all after:duration-300'>Anulează</span>
+                            <span className='relative after:content-[""] after:absolute after:left-0 after:bottom-0 after:w-0 after:h-[1px] after:bg-black hover:after:w-full after:transition-all after:duration-300'>{t("cancel")}</span>
                         </button>
-                        <button onClick={(e) => {e.preventDefault(); mutate({id: form.getValues("id")})}} className='disabled:opacity-75 disabled:cursor-default cursor-pointer h-12 px-6 flex justify-center items-center bg-red text-white rounded-3xl hover:opacity-75 transition duration-300'>Da, șterge</button>
+                        <button onClick={(e) => {e.preventDefault(); mutate({id: form.getValues("id")})}} className='disabled:opacity-75 disabled:cursor-default cursor-pointer h-12 px-6 flex justify-center items-center bg-red text-white rounded-3xl hover:opacity-75 transition duration-300'>{t("delete")}</button>
                     </div>
                 </div>
             </div>
         }
         <div className='col-span-full lg:col-start-9 lg:col-span-4 left-0 flex-1 overflow-auto pb-16 flex flex-col justify-between mt-16 relative'>
-            <p className='font-manrope text-2xl font-semibold leading-7 mb-4 lg:mb-6'>Sumarul comenzii</p>
+            <p className='font-manrope text-2xl font-semibold leading-7 mb-4 lg:mb-6'>{t('summary')}</p>
             {
                 items.length > 0 && mounted ?
                     <div data-lenis-prevent className='flex flex-col pr-2 gap-6 flex-1 lg:overflow-y-auto scroll-bar-custom mb-16 lg:mb-8'>
@@ -196,7 +198,7 @@ export default function OrdersProductsSummary() {
                                                             quantity: item.quantity
                                                         })));
                                                     }}
-                                                >Elimină</button>
+                                                >{t("remove")}</button>
                                             </div>
                                         </div>
                                     </div>
@@ -208,7 +210,7 @@ export default function OrdersProductsSummary() {
                 <div className='lg:absolute left-0 top-1/2 lg:-translate-y-1/2 w-full px-4 lg:px-16 my-16 lg:my-0'>
                     <ShoppingBag className='size-12 mx-auto mb-2' strokeWidth={1.25}/>
                     <p className='text-sm leading-4 lg:text-base lg:leading-5 text-center'>
-                        Coșul dvs. este gol. Vizitați magazinul pentru inspirație și recomandări personalizate.
+                        {t("empty")}
                     </p>
                 </div>
             }
@@ -219,39 +221,39 @@ export default function OrdersProductsSummary() {
                         deliveryPrice !== null &&
                         <>
                             <div className="flex justify-between items-end mb-2">
-                                <p>Subtotal:</p>
+                                <p>{t("subtotal")}:</p>
                                 <p>
                                     {mounted && items.reduce((acc, item) => 
                                         acc + (item.product.sale?.active ? item.product.sale.sale_price : item.product.price) * (item.quantity || 1), 0).toLocaleString()} MDL
                                 </p>
                             </div>
                             <div className="flex justify-between items-end mb-2 lg:mb-4">
-                                <p>Livrare:</p>
+                                <p>{t("delivery_cost")}:</p>
                                 <p>{deliveryPrice.toLocaleString()} MDL</p>
                             </div>
                             {
                                 deliveryHourRate !== null && deliveryPrice * deliveryHourRate !== 0 && 
                                 <div className="flex justify-between items-end -mt-2 mb-2 lg:mb-4">
-                                    <p>Ora livrării: {deliveryHour}</p>
+                                    <p>{t("hour")}: {deliveryHour}</p>
                                     <p>{(deliveryPrice * deliveryHourRate).toLocaleString()} MDL</p>
                                 </div>
                             }
                         </>
                     }
                     <div className="flex justify-between items-end mb-4">
-                        <p>Total:</p>
+                        <p>{t('total')}:</p>
                         <p className='font-semibold'>{totalCost.toLocaleString()} MDL</p>
                     </div>
                 </>
             }
 
             <div className='flex justify-between gap-6 items-end mt-6 col-span-full'>
-                <button onClick={(e) => {e.preventDefault(); setIsDeleteDialogOpen(true)}} className='disabled:opacity-75 disabled:cursor-default cursor-pointer h-12 px-6 flex justify-center items-center bg-red text-white rounded-3xl hover:opacity-75 transition duration-300'>Șterge comanda</button>
+                <button onClick={(e) => {e.preventDefault(); setIsDeleteDialogOpen(true)}} className='disabled:opacity-75 disabled:cursor-default cursor-pointer h-12 px-6 flex justify-center items-center bg-red text-white rounded-3xl hover:opacity-75 transition duration-300'>{t("delete_order")}</button>
                 <div className="flex gap-6">
                     <button className='cursor-pointer h-12' onClick={(e) => {e.preventDefault(); form.reset();}}>
-                        <span className='text-gray relative after:content-[""] after:absolute after:left-0 after:bottom-0 after:w-0 after:h-[1px] after:bg-gray hover:after:w-full after:transition-all after:duration-300'>Anulează</span>
+                        <span className='text-gray relative after:content-[""] after:absolute after:left-0 after:bottom-0 after:w-0 after:h-[1px] after:bg-gray hover:after:w-full after:transition-all after:duration-300'>{t("cancel")}</span>
                     </button>
-                    <button form="order-update-form" disabled={!isDirty} className='disabled:opacity-75 disabled:cursor-default cursor-pointer h-12 px-6 flex justify-center items-center bg-blue-2 text-white rounded-3xl hover:opacity-75 transition duration-300'>Salvează</button>
+                    <button form="order-update-form" disabled={!isDirty} className='disabled:opacity-75 disabled:cursor-default cursor-pointer h-12 px-6 flex justify-center items-center bg-blue-2 text-white rounded-3xl hover:opacity-75 transition duration-300'>{t("save")}</button>
                 </div>
             </div>
         </div> 

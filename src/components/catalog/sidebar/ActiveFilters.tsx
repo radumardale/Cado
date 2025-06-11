@@ -38,14 +38,14 @@ export default function ActiveFilters({categories, updateCategories, ocasions, u
         }} 
         className='border-b border-lightgray overflow-hidden'>
 
-        <p className='font-semibold font-manrope mb-4 mt-4'>Filtre active</p>
+        <p className='font-semibold font-manrope mb-4 mt-4'>{t("CatalogPage.CatalogSidebar.active_filters")}</p>
             <div className='flex gap-2 max-w-full flex-wrap mb-4'>
                 {
                     keywords !== null && <ActiveFiltersButton key="keyword" title={'"' + keywords.split("+").join(" ") + '"'} onClick={() => {resetKeywords(searchParams, router)}} />
                 }
                 {
                     categories.map((value, index) => {
-                        return (<ActiveFiltersButton key={index} title={t("tags." + value + '.title')} onClick={() => {updateCategories(value, searchParams, router)}} />)
+                        return (<ActiveFiltersButton key={index} title={t("Tags." + value + '.title')} onClick={() => {updateCategories(value, searchParams, router)}} />)
                     })
                 }
                 {
@@ -60,7 +60,7 @@ export default function ActiveFilters({categories, updateCategories, ocasions, u
                 }
                 {(price[0] !== minPrice || price[1] !== maxPrice) && <ActiveFiltersButton title={`${price[0]} - ${price[1]} (MDL)`} onClick={() => {resetPrice(searchParams, router)}}/>}
                 <button className='text-gray cursor-pointer p-2' onClick={() => {resetAllFilters(router)}}>
-                    <span className='relative after:contetn-[""] after:absolute after:left-0 after:bottom-0 after:w-0 after:h-[1px] after:bg-gray hover:after:w-full after:transition-all after:duration-300'>Resetează</span>
+                    <span className='relative after:contetn-[""] after:absolute after:left-0 after:bottom-0 after:w-0 after:h-[1px] after:bg-gray hover:after:w-full after:transition-all after:duration-300'>{t("CatalogPage.CatalogSidebar.reset")}</span>
                 </button>
             </div>
     </motion.div>

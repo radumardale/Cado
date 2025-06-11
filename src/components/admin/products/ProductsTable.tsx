@@ -12,22 +12,24 @@ interface ProductsTableProps {
 }
 
 export default function ProductsTable({queryProducts}: ProductsTableProps) {
-    const t = useTranslations("stock_state");
+    const t = useTranslations("ProductPage.stock_state");
     const locale = useLocale();
+
+    const products_t = useTranslations("Admin.AdminProducts");
 
   return (
     <>
         <div className='col-span-12 grid grid-cols-12 mt-6 pb-2 border-b border-lightgray gap-x-6'>
-            <p className='font-manrope font-semibold leading-5 pl-6 w-[calc(100%+1.5rem)] col-span-1'>ID produs</p>
-            <p className='font-manrope font-semibold leading-5 col-span-2 translate-x-1/2 w-[calc(50%-.75rem)]'>Imagine</p>
-            <p className='font-manrope col-span-4 font-semibold -translate-x-1/8 w-[112.5%] leading-5'>Titlu</p>
-            <p className='col-start-8 col-span-2 font-manrope font-semibold leading-5'>Preț</p>
-            <p className='col-span-2 font-manrope font-semibold leading-5'>Status stoc</p>
-            <p className='font-manrope font-semibold leading-5'>№ stoc</p>
+            <p className='font-manrope font-semibold leading-5 pl-6 w-[calc(100%+1.5rem)] col-span-1'>{products_t("id")}</p>
+            <p className='font-manrope font-semibold leading-5 col-span-2 translate-x-1/2 w-[calc(50%-.75rem)]'>{products_t("image")}</p>
+            <p className='font-manrope col-span-4 font-semibold -translate-x-1/8 w-[112.5%] leading-5'>{products_t("title")}</p>
+            <p className='col-start-8 col-span-2 font-manrope font-semibold leading-5'>{products_t("price")}</p>
+            <p className='col-span-2 font-manrope font-semibold leading-5'>{products_t("stock")}</p>
+            <p className='font-manrope font-semibold leading-5'>{products_t("stock_nr")}</p>
         </div>
         <Link href="/admin/products/new" className='col-span-full h-18 flex gap-2 items-center justify-center bg-[#F0F0F0] rounded-3xl mt-8 border border-dashed border-gray cursor-pointer hover:opacity-75 transition duration-300 mb-4'>
             <Plus strokeWidth={1.5} className='size-6'/>
-            <p>Adaugă produs</p>
+            <p>{products_t("add_product")}</p>
         </Link>
         {
             queryProducts.map((product: ProductInterface, index) => {

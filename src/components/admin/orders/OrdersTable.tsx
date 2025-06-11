@@ -10,19 +10,20 @@ interface OrdersTableProps {
 }
 
 export default function OrdersTable({queryOrders}: OrdersTableProps) {
-    const t = useTranslations("payment_methods");
-    const statusTexts = useTranslations("order_status");
+    const t = useTranslations("Admin.AdminOrders.payment_methods");
+    const orders_t = useTranslations("Admin.AdminOrders");
+    const statusTexts = useTranslations("Admin.AdminOrders.order_status");
     
   return (
     <>
         <div className='col-span-12 grid grid-cols-12 mt-6 pb-2 border-b border-lightgray gap-x-6 pr-6 mb-8'>
-            <p className='font-manrope font-semibold leading-5 pl-6 w-[calc(100%+1.5rem)] col-span-1 overflow-ellipsis overflow-hidden whitespace-nowrap'>ID comandă</p>
-            <p className='font-manrope font-semibold leading-5 col-span-2 translate-x-1/2 w-[calc(50%-.75rem)]'>Data</p>
-            <p className='font-manrope col-span-3 font-semibold -translate-x-1/8 leading-5'>Email</p>
-            <p className='col-start-7 col-span-1 w-3/2 font-manrope font-semibold leading-5'>Telefon</p>
-            <p className='col-span-2 font-manrope font-semibold leading-5 w-3/4 translate-x-2/4 overflow-ellipsis overflow-hidden whitespace-nowrap'>Metoda de achitare</p>
-            <p className='col-span-2 font-manrope font-semibold leading-5 translate-x-1/4 w-3/4 overflow-ellipsis overflow-hidden whitespace-nowrap'>Total comandă</p>
-            <p className='font-manrope font-semibold leading-5'>Status</p>
+            <p className='font-manrope font-semibold leading-5 pl-6 w-[calc(100%+1.5rem)] col-span-1 overflow-ellipsis overflow-hidden whitespace-nowrap'>{orders_t('id')}</p>
+            <p className='font-manrope font-semibold leading-5 col-span-2 translate-x-1/2 w-[calc(50%-.75rem)]'>{orders_t('date')}</p>
+            <p className='font-manrope col-span-3 font-semibold -translate-x-1/8 leading-5'>{orders_t('email')}</p>
+            <p className='col-start-7 col-span-1 w-3/2 font-manrope font-semibold leading-5'>{orders_t('phone')}</p>
+            <p className='col-span-2 font-manrope font-semibold leading-5 w-3/4 translate-x-2/4 overflow-ellipsis overflow-hidden whitespace-nowrap'>{orders_t('payment_method')}</p>
+            <p className='col-span-2 font-manrope font-semibold leading-5 translate-x-1/4 w-3/4 overflow-ellipsis overflow-hidden whitespace-nowrap'>{orders_t('total')}</p>
+            <p className='font-manrope font-semibold leading-5'>{orders_t('status')}</p>
         </div>
         {
             queryOrders.map((order: ResOrderInterface, index) => {

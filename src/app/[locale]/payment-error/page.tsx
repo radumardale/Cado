@@ -1,21 +1,24 @@
-import type { Metadata } from 'next'
 import Footer from '@/components/footer/Footer';
 import Header from '@/components/header/Header';
 import { PageContent } from './PageContent';
+import { getTranslations } from 'next-intl/server';
 
-export const metadata: Metadata = {
-    title: '',
-    robots: {
-        index: false,
-        follow: false,
-    }
+export async function generateMetadata() {
+  const t = await getTranslations('PageTitles');
+ 
+  return {
+    title: t('payment_err'),
+    description: "",
+  };
 }
 
 export default function Page() {
     return (
         <>
-            <Header />
-            <PageContent />
+            <div className="grid grid-cols-8 lg:grid-cols-15 gap-x-2 lg:gap-x-6 px-4 lg:px-16 max-w-3xl mx-auto relative">
+                <Header />
+                <PageContent />
+            </div>
             <Footer />
         </>
     );

@@ -2,16 +2,43 @@ import { useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { toast } from 'sonner';
 import { Upload } from 'lucide-react';
+import { useLocale, useTranslations } from "next-intl";
 
 interface HomeBannerImageUploadProps {
   onImageAdded: (imageBase64: string) => void;
   isLoading?: boolean;
 }
 
-export default function HomeBannerImageUpload({
+const toastMessages = {
+  fileTooLarge: {
+    ro: "Imaginea trebuie să fie mai mică de 500MB",
+    ru: "Изображение должно быть меньше 500MБ",
+    en: "The image must be smaller than 500MB"
+  },
+  notImage: {
+    ro: "Vă rugăm să încărcați doar fișiere imagine",
+    ru: "Пожалуйста, загружайте только файлы изображений",
+    en: "Please upload image files only"
+  },
+  success: {
+    ro: "Imaginea a fost adăugată cu succes",
+    ru: "Изображение успешно добавлено",
+    en: "Image added successfully"
+  },
+  error: {
+    ro: "A apărut o eroare la procesarea imaginii",
+    ru: "Произошла ошибка при обработке изображения",
+    en: "An error occurred while processing the image"
+  }
+};
+
+export default function HomeBannerImageUpload({ 
   onImageAdded,
   isLoading = false
 }: HomeBannerImageUploadProps) {
+
+  const locale = useLocale() as "ro" | "ru" | "en";
+
   const [isProcessing, setIsProcessing] = useState(false);
   
   const convertToBase64 = (file: File): Promise<string> => {
@@ -28,13 +55,13 @@ export default function HomeBannerImageUpload({
       setIsProcessing(true);
       
       if (file.size > 500 * 1024 * 1024) {
-        toast.error("Imaginea trebuie să fie mai mică de 500MB");
+        toast.error(toastMessages.fileTooLarge[locale] || toastMessages.fileTooLarge.en);
         return;
       }
       
       // Validate file type
       if (!file.type.startsWith('image/')) {
-        toast.error("Vă rugăm să încărcați doar fișiere imagine");
+        toast.error(toastMessages.notImage[locale] || toastMessages.notImage.en);
         return;
       }
       
@@ -42,11 +69,11 @@ export default function HomeBannerImageUpload({
       
       // Pass the base64 string to the parent component
       onImageAdded(base64String);
-      toast.success("Imaginea a fost adăugată cu succes");
+      toast.success(toastMessages.success[locale] || toastMessages.success.en);
       
     } catch (error) {
       console.error('Processing failed:', error);
-      toast.error("A apărut o eroare la procesarea imaginii");
+      toast.error(toastMessages.error[locale] || toastMessages.error.en);
     } finally {
       setIsProcessing(false);
     }
@@ -65,6 +92,8 @@ export default function HomeBannerImageUpload({
       }
     }
   });
+
+  const t = useTranslations("Admin.AdminHomePage")
   
   return (
     <div 
@@ -76,17 +105,17 @@ export default function HomeBannerImageUpload({
       {isProcessing ? (
         <div className="flex flex-col items-center">
           <div className="w-8 h-8 border-2 border-t-black border-r-black border-b-transparent border-l-transparent rounded-full animate-spin"></div>
-          <p className="mt-2 text-sm text-gray-600">Se procesează...</p>
+          <p className="mt-2 text-sm text-gray-600">{t("is_processing")}</p>
         </div>
       ) : isLoading ? (
         <div className="flex flex-col items-center">
           <div className="w-8 h-8 border-2 border-t-black border-r-black border-b-transparent border-l-transparent rounded-full animate-spin"></div>
-          <p className="mt-2 text-sm text-gray-600">Se încarcă...</p>
+          <p className="mt-2 text-sm text-gray-600">{t("is_uploading")}</p>
         </div>
       ) : (
         <>
             <Upload strokeWidth={1.5} className="group-hover:opacity-75"/>
-            <p className="group-hover:opacity-75">Selectează sau trage o imagine aici</p>
+            <p className="group-hover:opacity-75">{t('select_image')}</p>
         </>
       )}
     </div>

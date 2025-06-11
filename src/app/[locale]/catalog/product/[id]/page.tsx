@@ -1,22 +1,27 @@
-import { HydrateClient, prefetch, trpc } from '@/app/_trpc/server';
+import { getQueryClient, HydrateClient, prefetch, trpc } from '@/app/_trpc/server';
 import Footer from '@/components/footer/Footer';
 import Faq from '@/components/home/faq/Faq';
 import Recommendations from '@/components/home/recommendations/Recommendations';
 import LinksMenu from '@/components/LinksMenu';
 import ProductInfo from '@/components/product/ProductInfo';
-import { getTranslations, setRequestLocale } from 'next-intl/server';
+import { setRequestLocale } from 'next-intl/server';
 export const dynamic = 'force-static'
 export const revalidate = 3600; // Cache for 1 hour
 
-export async function generateMetadata() {
-    const t = await getTranslations('index.meta');
-   
-    return {
-      title: t('title'),
-      description: t('description'),
-    };
-  }
+export async function generateMetadata({ params } : {params: Promise<{locale: string, id: string}>}) {
+  
+  const { locale, id } = await params;
+  setRequestLocale(locale);
 
+  const queryClient = getQueryClient();
+
+  const queryOptions = trpc.products.getProductById.queryOptions({ id });
+  const productData = await queryClient.fetchQuery(queryOptions);
+
+  return {
+    title: productData.product?.title[locale] || 'Product',
+  };
+}
   export default async function Product({ params }: { params: Promise<{ locale: string, id: string }> }) {
     const { locale, id } = await params;
     setRequestLocale(locale);
@@ -27,9 +32,11 @@ export async function generateMetadata() {
 
     return (
       <HydrateClient>
-        <ProductInfo id={id} />
-        <Recommendations indProductSection={true} />
-        <Faq />
+        <div className="grid grid-cols-8 lg:grid-cols-15 gap-x-2 lg:gap-x-6 px-4 lg:px-16 max-w-3xl mx-auto relative">
+          <ProductInfo id={id} />
+          <Recommendations indProductSection={true} />
+          <Faq />
+        </div>
         <Footer />
         <LinksMenu />
       </HydrateClient>

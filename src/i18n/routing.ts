@@ -2,104 +2,132 @@ import {defineRouting} from 'next-intl/routing';
  
 export const routing = defineRouting({
   // A list of all locales that are supported
-  locales: ['ro', 'ru'],
- 
+  locales: ['ro', 'ru', 'en'],
+
   // Used when no locale matches
   defaultLocale: 'ro',
 
   pathnames: {
     '/': '/',
     '/catalog': {
-      ru: '/catalog',
-      ro: '/catalog'
+      en: '/catalog',
+      ro: '/catalog',
+      ru: '/каталог'
     },
     '/about-us': {
-      ru: '/about-us',
+      en: '/about-us',
       ro: '/despre-noi',
+      ru: '/о-компании'
     },
     '/blogs': {
-      ru: "/blog",
-      ro: '/noutati'
+      en: '/blogs',
+      ro: '/noutati',
+      ru: '/новости'
     },
     '/blog/[id]': {
-      ru: "/blog/[id]",
-      ro: "/noutate/[id]"
+      en: '/blog/[id]',
+      ro: '/articol/[id]',
+      ru: '/статья/[id]'
     },
     '/terms': {
-      ru: "/terms",
-      ro: "/termeni-si-conditii"
+      en: '/terms',
+      ro: '/termeni-si-conditii',
+      ru: '/условия'
     },
     '/contacts': {
-      ru: "/contacts",
-      ro: "/contacte"
+      en: '/contacts',
+      ro: '/contacte',
+      ru: '/контакты'
     },
     '/confirmation/[id]': {
-      ru: "/confirmation/[id]",
-      ro: "/confirmation/[id]"
+      en: '/confirmation/[id]',
+      ro: '/confirmation/[id]',
+      ru: '/подтверждение/[id]'
     },
-  '/catalog/product/[id]': {
-      ru: '/catalog/product/[id]',
+    '/catalog/product/[id]': {
+      en: '/catalog/product/[id]',
       ro: '/catalog/produs/[id]',
+      ru: '/каталог/товар/[id]'
     },
-    "/checkout": {
-      ru: "/checkout",
-      ro: "/achitare"
+    '/checkout': {
+      en: '/checkout',
+      ro: '/achitare',
+      ru: '/оплата'
     },
     '/login': {
-      ru: '/login',
-      ro: '/login'
+      en: '/login',
+      ro: '/login',
+      ru: '/вход'
+    },
+    '/payment-error': {
+      en: '/payment-error',
+      ro: '/eroare-plata',
+      ru: '/ошибка-оплаты'
     },
     '/admin/orders': {
-      ru: '/admin/orders',
-      ro: '/admin/orders'
+      ru: '/админ/заказы',
+      ro: '/admin/comenzi',
+      en: '/admin/orders'
     },
     '/admin/orders/[id]': {
-      ru: '/admin/orders/[id]',
-      ro: '/admin/orders/[id]'
+      ru: '/админ/заказы/[id]',
+      ro: '/admin/comenzi/[id]',
+      en: '/admin/orders/[id]'
     },
     '/admin/orders/new': {
-      ru: '/admin/orders/new',
-      ro: '/admin/orders/new'
+      ru: '/админ/заказы/новый',
+      ro: '/admin/comenzi/nou',
+      en: '/admin/orders/new'
     },
     '/admin/products': {
-      ru: '/admin/products',
-      ro: '/admin/products'
+      ru: '/админ/товары',
+      ro: '/admin/produse',
+      en: '/admin/products'
     },
     '/admin/products/[id]': {
-      ru: '/admin/products/[id]',
-      ro: '/admin/products/[id]'
+      ru: '/админ/товары/[id]',
+      ro: '/admin/produse/[id]',
+      en: '/admin/products/[id]'
     },
     '/admin/products/new': {
-      ru: '/admin/products/new',
-      ro: '/admin/products/new'
+      ru: '/админ/товары/новый',
+      ro: '/admin/produse/nou',
+      en: '/admin/products/new'
     },
     '/admin/client-data': {
-      ru: '/admin/client-data',
-      ro: '/admin/client-data'
+      ru: '/админ/данные-клиентов',
+      ro: '/admin/date-clienti',
+      en: '/admin/client-data'
     },
     '/admin/home': {
-      ru: '/admin/home',
-      ro: '/admin/home'
+      ru: '/админ/главная',
+      ro: '/admin/acasa',
+      en: '/admin/home'
     },
     '/admin/blog': {
-      ru: '/admin/blog',
-      ro: '/admin/blog'
+      ru: '/админ/блог',
+      ro: '/admin/blog',
+      en: '/admin/blog'
     },
     '/admin/blog/[id]': {
-      ru: '/admin/blog/[id]',
-      ro: '/admin/blog/[id]'
+      ru: '/админ/блог/[id]',
+      ro: '/admin/blog/[id]',
+      en: '/admin/blog/[id]'
     },
     '/admin/blog/new': {
-      ru: '/admin/blog/new',
-      ro: '/admin/blog/new'
+      ru: '/админ/блог/новый',
+      ro: '/admin/blog/nou',
+      en: '/admin/blog/new'
     },
     '/admin/catalog-sezon': {
-      ru: '/admin/catalog-sezon',
-      ro: '/admin/catalog-sezon'
+      ru: '/админ/каталог-сезон',
+      ro: '/admin/catalog-sezon',
+      en: '/admin/catalog-sezon'
     },
     '/admin/contact-details': {
-      ru: '/admin/contact-details',
-      ro: '/admin/contact-details'
+      ru: '/админ/контакты',
+      ro: '/admin/contacte',
+      en: '/admin/contact-details'
     },
   }
 });
@@ -114,6 +142,7 @@ export type Pathnames =
 | "/catalog"
 | "/checkout"
 | "/login"
+| '/payment-error'
 | "/admin/orders"
 | "/admin/products"
 | "/admin/products/new"

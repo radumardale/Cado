@@ -11,6 +11,7 @@ import { useCallback } from 'react'
 import { checkboxUpdateUrlParams, resetUrlParams, updateCategoriesParams } from '@/lib/utils'
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime'
 import { useCatalogStore } from '@/states/CatalogState'
+import { useTranslations } from 'next-intl'
 
 interface CatalogSidebarProps {
   keywordsState: {
@@ -36,6 +37,9 @@ interface CatalogSidebarProps {
 }
 
 export default function PcCatalogSidebar({priceState, categoriesState, ocasionsState, productContentState, keywordsState}: CatalogSidebarProps) {
+
+  const t = useTranslations('CatalogPage.CatalogSidebar');
+
   const updateOcasions = useCallback((value: Ocasions) => {
     ocasionsState.setOcasions(
       ocasionsState.ocasions.includes(value) 
@@ -116,13 +120,13 @@ export default function PcCatalogSidebar({priceState, categoriesState, ocasionsS
             />
           }
         </AnimatePresence>
-        <Accordion title="Categorie">
+        <Accordion title={t("category")}>
           <CategoriesGrid 
             category={categoriesState.category} 
             setCategory={(value: Categories | null) => categoriesState.setCategory(value === categoriesState.category ? null : value)} 
           />
         </Accordion>
-        <Accordion title="Ocazie">
+        <Accordion title={t("ocasion")}>
           <CheckboxList 
             activeValues={ocasionsState.ocasions}
             values={OcasionsArr} 
@@ -134,10 +138,10 @@ export default function PcCatalogSidebar({priceState, categoriesState, ocasionsS
             }} 
           />
         </Accordion>
-        <Accordion title="Preț (MDL)">
+        <Accordion title={`${t('price')} (MDL)`}>
           <CatalogSlider price={priceState.price} setPrice={priceState.setPrice} />
         </Accordion>
-        <Accordion title="Conținut" last>
+        <Accordion title={t("content")} last>
           <CheckboxList 
             activeValues={productContentState.productContent}
             values={ProductContentArr} 

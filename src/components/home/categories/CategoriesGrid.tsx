@@ -4,17 +4,15 @@ import CategoriesRow from './CategoriesRow';
 import CustomRow from './CustomRow';
 import { Ocasions } from '@/lib/enums/Ocasions';
 import { useTRPC } from '@/app/_trpc/client';
-import { useLocale } from 'next-intl';
 
 import { useQuery } from "@tanstack/react-query";
 
 export default function CategoriesGrid() {
     const trpc = useTRPC();
-    const locale = useLocale();
     const { data } = useQuery(trpc.homeOcasion.getHomeOcasion.queryOptions());
     return (
       <div className='col-start-1 lg:col-start-2 col-end-9 lg:col-end-15 grid grid-cols-8 lg:grid-cols-11 gap-x-2 lg:gap-x-6 gap-y-4 mb-24 lg:mb-42'>
-          <CustomRow ocasionTitle={data?.homeOcasion?.title[locale] || ""} index={1} index_2={3} category={Categories.FOR_HER} ocasion={data?.homeOcasion?.ocasion || Ocasions.MARCH_8} images={["", `/categories/${CategoriesArr[0]}.jpg`]}/>
+          <CustomRow index={1} index_2={3} category={Categories.FOR_HER} ocasion={data?.homeOcasion?.ocasion || Ocasions.MARCH_8} images={["", `/categories/${CategoriesArr[0]}.jpg`]}/>
           {
               CategoriesArr.map((category, index) => {
                   if (index >= 5 || index % 2 == 0 || index == 0) return;

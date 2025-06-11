@@ -7,19 +7,23 @@ import Image from 'next/image'
 import React from 'react'
 import CustomLink from '../CustomLink'
 import { default as NextLink } from 'next/link'
+import { useTranslations } from 'next-intl'
 
 export default function Footer() {
     const lenis = useLenis();
 
+    const t = useTranslations('Footer');
+    const nav_t = useTranslations('NavBar');
+
   return (
-    <div className='bg-blue-2 -ml-4 lg:-ml-16 w-[calc(100%+2rem)] lg:w-[calc(100%+8rem)] overflow-hidden lg:overflow-auto col-span-full grid grid-cols-8 lg:grid-cols-15 pt-16 lg:pt-24 relative'>
-        <div className='bg-blue-2 absolute left-1/2 -translate-x-1/2 top-0 h-full w-[calc(100vw-1rem)] -z-10'></div>
+    <div className='bg-blue-2 w-full overflow-hidden col-span-full grid grid-cols-8 lg:grid-cols-15 pt-16 lg:pt-24 relative'>
+        {/* <div className='bg-blue-2 absolute left-1/2 -translate-x-1/2 top-0 h-full w-[calc(100vw-1rem)] -z-10'></div> */}
         <div className='col-span-full grid grid-cols-8 lg:grid-cols-15 px-4 lg:px-16'>
             <div className='col-span-full lg:col-start-2 lg:col-span-4 order-1'>
                 <Image unoptimized src="/logo/logo-blue.svg" alt='logo' width={228} height={56} className='h-14 mb-6 hidden lg:block' />
                 <p className='text-white text-center lg:text-left text-sm leading-4 lg:leading-5 lg:text-base'>
-                    Căutați să surprindeți clienții sau să-i încântați pe cei dragi? <br className='hidden lg:block'/><br className='hidden lg:block'/>
-                    Oferim cele mai bune soluții pentru orice ocazie. Explorează opțiunile noastre exclusive și găsește potrivirea perfectă pentru tine!
+                    {t("side_text_1")} <br className='hidden lg:block'/><br className='hidden lg:block'/>
+                    {t("side_text_2")}
                 </p>
                 <div className="flex mt-4 lg:mt-6 gap-4 mx-auto justify-center lg:justify-start mb-12 lg:mb-0">
                     <Image unoptimized src="/icons/paymentMethod/Paynet.svg" alt="Paynet logo" width={47} height={32} className='w-12 h-8' />
@@ -31,31 +35,31 @@ export default function Footer() {
             </div>
 
             <div className='col-span-3 lg:col-start-7 lg:col-span-2 order-2'>
-                <p className='text-white font-manrope text-base lg:text-2xl leading-5 lg:leading-7 font-semibold mb-4 lg:mb-6'>Navigare</p>
-                <CustomLink href="/" className="text-white block text-sm lg:text-base mb-2 lg:mb-4" value="Acasă"/>
-                <CustomLink href="/catalog" className="text-white block text-sm lg:text-base mb-2 lg:mb-4" value="Catalog"/>
-                <CustomLink href="/about-us" className="text-white block text-sm lg:text-base mb-2 lg:mb-4" value="Despre Noi"/>
-                <CustomLink href="/blogs" className="text-white block text-sm lg:text-base mb-2 lg:mb-4" value="Blog"/>
-                <CustomLink href="/contacts" className="text-white block text-sm lg:text-base mb-2 lg:mb-4" value="Contacte"/>
+                <p className='text-white font-manrope text-base lg:text-2xl leading-5 lg:leading-7 font-semibold mb-4 lg:mb-6'>{ t("nav") }</p>
+                <CustomLink href="/" className="text-white block text-sm lg:text-base mb-2 lg:mb-4" value={nav_t("home")}/>
+                <CustomLink href="/catalog" className="text-white block text-sm lg:text-base mb-2 lg:mb-4" value={nav_t("catalog")}/>
+                <CustomLink href="/about-us" className="text-white block text-sm lg:text-base mb-2 lg:mb-4" value={nav_t("about")}/>
+                <CustomLink href="/blogs" className="text-white block text-sm lg:text-base mb-2 lg:mb-4" value={nav_t("blogs")}/>
+                <CustomLink href="/contacts" className="text-white block text-sm lg:text-base mb-2 lg:mb-4" value={nav_t("contact")}/>
             </div>
 
             <div className='col-start-5 col-span-4 lg:col-span-2 lg:col-start-auto order-3'>
-                <p className='text-white font-manrope text-base lg:text-2xl leading-5 lg:leading-7 font-semibold mb-4 lg:mb-6'>Contacte</p>
+                <p className='text-white font-manrope text-base lg:text-2xl leading-5 lg:leading-7 font-semibold mb-4 lg:mb-6'>{ t('contacts') }</p>
                 <a href="tel:+37369645153" className="text-white block text-sm lg:text-base mb-2 lg:mb-4">+373 69 645 153</a>
                 <a href="tel:+37369645153" className="text-white block text-sm lg:text-base mb-2 lg:mb-4">+373 68 501 809</a>
                 <a href="tel:+40774075088" className="text-white block text-sm lg:text-base mb-2 lg:mb-4">+40 774 075 088</a>
-                <p className="text-white block text-sm lg:text-base mb-2 lg:mb-4">Suport: info@cado.md</p>
-                <p className="text-white block text-sm lg:text-base">Comenzi: order@cado.md</p>
+                <p className="text-white block text-sm lg:text-base mb-2 lg:mb-4">{t('support')}: info@cado.md</p>
+                <p className="text-white block text-sm lg:text-base">{t('orders')}: order@cado.md</p>
             </div>
 
             <div className='col-start-5 col-span-4 lg:col-span-2 lg:col-start-auto lg:pr-4 mt-8 lg:mt-0 order-5 lg:order-4'>
-                <p className='text-white font-manrope text-base lg:text-2xl leading-5 lg:leading-7 font-semibold mb-4 lg:mb-6'>Adrese</p>
-                <p className="text-white block text-sm lg:text-base mb-2 lg:mb-4">Moldova, Chișinău, str. Alecu Russo 15, of. 59</p>
-                <p className="text-white block text-sm lg:text-base">România, Brașov, str. Ceferiștilor 65</p>
+                <p className='text-white font-manrope text-base lg:text-2xl leading-5 lg:leading-7 font-semibold mb-4 lg:mb-6'>{ t('adresses') }</p>
+                <p className="text-white block text-sm lg:text-base mb-2 lg:mb-4">{ t("address1") }</p>
+                <p className="text-white block text-sm lg:text-base">{ t("address2") }</p>
             </div>
 
             <div className='col-span-3 order-4 lg:order-5 mt-8 lg:mt-0'>
-                <p className='text-white font-manrope text-base lg:text-2xl leading-5 lg:leading-7 font-semibold mb-4 lg:mb-6'>Urmărește-ne</p>
+                <p className='text-white font-manrope text-base lg:text-2xl leading-5 lg:leading-7 font-semibold mb-4 lg:mb-6'>{ t('socials') }</p>
                 <div className="flex gap-2 lg:gap-4 flex-wrap">
                     <NextLink href="https://www.instagram.com/cado.md_ro?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target='_blank' className='border border-white bg-white lg:bg-transparent lg:hover:bg-white min-w-8 min-h-8 flex justify-center items-center rounded-full footer-link'>
                         <Image unoptimized src="/icons/instagram.svg" alt="instagram logo" width={16} height={16} className='size-4' />
@@ -85,7 +89,7 @@ export default function Footer() {
         <div className="col-span-full lg:col-start-2 lg:col-span-13 pt-4 lg:pt-0 gap-2 lg:gap-0 pb-6 lg:pb-0 flex lg:justify-between flex-col lg:flex-row items-center lg:h-12 border-t border-lightgray lg:px-15">
             <div className='flex'>
                 <p className='text-white lg:mr-6 text-sm leading-4 lg:leading-5 lg:text-base'>© 2025 &quot;DIM EXPRES&quot; S.R.L</p>
-                <Link href="/terms" className='text-white hidden lg:block'>Termeni & Condiții</Link>
+                <Link href="/terms" className='text-white hidden lg:block'>{ t("terms") }</Link>
             </div>
             <div className="flex items-center gap-2 group">
               <span className="text-white text-sm leading-4 lg:leading-5 lg:text-base">by Studio Modvis</span>

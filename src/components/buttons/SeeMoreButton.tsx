@@ -18,7 +18,7 @@ export default function SeeMoreButton({className, href="/catalog", text="Vezi ma
     <div className='flex justify-center col-span-full'>
         <Link href={href} className={`col-span-full w-fit ${className}`}>
             <button 
-                className='cursor-pointer bg-blue-2 rounded-3xl h-12 text-white font-manrope font-semibold flex items-center gap-2 relative lg:w-12 lg:hover:w-[11.4rem] transition-all duration-400 group overflow-hidden'
+                className='cursor-pointer bg-blue-2 rounded-3xl h-12 text-white font-manrope font-semibold flex items-center gap-2 relative lg:max-w-12 lg:hover:max-w-[13rem] transition-all duration-400 group overflow-hidden'
                 onMouseEnter={() => {setButtonActive(true)}} 
                 onMouseLeave={() => {setButtonActive(false)}}
             >

@@ -13,6 +13,7 @@ import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.share
 import { motion } from 'motion/react'
 import { Plus } from 'lucide-react'
 import { useCatalogStore } from '@/states/CatalogState'
+import { useTranslations } from 'next-intl'
 
 interface CatalogSidebarProps {
   keywordsState: {
@@ -40,6 +41,8 @@ interface CatalogSidebarProps {
 }
 
 export default function CatalogSidebar({priceState, categoriesState, ocasionsState, productContentState, setSidebarOpen, isSidebarOpen, keywordsState}: CatalogSidebarProps) {
+  const t = useTranslations('CatalogPage.CatalogSidebar');
+  
   const minPrice = useCatalogStore((state) => state.minPrice);
   const maxPrice = useCatalogStore((state) => state.maxPrice);
 
@@ -127,13 +130,13 @@ export default function CatalogSidebar({priceState, categoriesState, ocasionsSta
             />
           }
         </AnimatePresence>
-        <Accordion title="Categorie">
+        <Accordion title={t('category')} last>
           <CategoriesGrid 
             category={categoriesState.category} 
             setCategory={(value: Categories | null) => categoriesState.setCategory(value === categoriesState.category ? null : value)} 
           />
         </Accordion>
-        <Accordion title="Ocazie">
+        <Accordion title={t('ocasion')}>
           <CheckboxList 
             activeValues={ocasionsState.ocasions}
             values={OcasionsArr} 
@@ -145,10 +148,10 @@ export default function CatalogSidebar({priceState, categoriesState, ocasionsSta
             }} 
           />
         </Accordion>
-        <Accordion title="Preț (MDL)">
+        <Accordion title={`${t('price')} (MDL)`}>
           <CatalogSlider price={priceState.price} setPrice={priceState.setPrice} />
         </Accordion>
-        <Accordion title="Conținut" last>
+        <Accordion title={t('content')} last>
           <CheckboxList 
             activeValues={productContentState.productContent}
             values={ProductContentArr} 
@@ -161,7 +164,7 @@ export default function CatalogSidebar({priceState, categoriesState, ocasionsSta
         </Accordion>
       </LayoutGroup>
 
-      <button onClick={() => {setSidebarOpen(false)}} className='h-12 w-full bg-blue-2 text-white rounded-3xl font-manrope font-semibold cursor-pointer border mt-10 mb-16'>Actualizează</button>
+      <button onClick={() => {setSidebarOpen(false)}} className='h-12 w-full bg-blue-2 text-white rounded-3xl font-manrope font-semibold cursor-pointer border mt-10 mb-16'>{t("update")}</button>
     </motion.div>
   )
 }

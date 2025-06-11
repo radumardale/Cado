@@ -5,6 +5,16 @@ import HomeBannerContent from '@/components/admin/home/homeBanner/HomeBannerCont
 import AdminHomeOcasion from '@/components/admin/home/homeOcasion/AdminHomeOcasion'
 import RecommendationsContent from '@/components/admin/home/recommendations/RecommendationsContent'
 import AdminSeasonCatalog from '@/components/admin/home/seasonCatalog/AdminSeasonCatalog'
+import { getTranslations } from 'next-intl/server'
+
+export async function generateMetadata() {
+  const t = await getTranslations('PageTitles');
+ 
+  return {
+    title: t('admin_home'),
+    description: "",
+  };
+}
 
 export default async function AdminHome() {
 

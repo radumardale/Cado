@@ -17,6 +17,9 @@ interface ConfirmationContentProps {
 }
 
 export default function ConfirmationContent({ id }: ConfirmationContentProps) {
+
+  const t = useTranslations("ConfirmationPage")
+
   const trpc = useTRPC();
   const { 
     data, 
@@ -33,10 +36,10 @@ export default function ConfirmationContent({ id }: ConfirmationContentProps) {
   return (
     <div className="col-span-full lg:col-span-7 lg:col-start-5 mt-16 mb-24">
         <CircleCheckBig strokeWidth={1.5} className='text-green size-12 mx-auto mb-6' />
-        <p className="font-manrope font-semibold uppercase text-center text-[2rem] leading-9 mb-6">Mulțumim MULT! <br/> comanda <span className="underline">#{data?.order?.custom_id}</span> a fost preluată</p>
-        <p className="text-center mb-12">Am trimis un e-mail la adresa <span className="font-semibold">{data?.order?.additional_info.user_data.email}</span> cu confirmarea și factura comenzii. <br/><br/> Dacă nu ai primit e-mailul în două minute, te rugăm să verifici și folderul spam.</p>
+        <p className="font-manrope font-semibold uppercase text-center text-[2rem] leading-9 mb-6">{t("title")} <br/> {t('subtitle_slice_1')} <span className="underline">#{data?.order?.custom_id}</span> {t("subtitle_slice_2")}</p>
+        <p className="text-center mb-12">{t("paragraph_slice_1")} <span className="font-semibold">{data?.order?.additional_info.user_data.email}</span> {t("paragraph_slice_2")} <br/><br/> {t("paragraph_slice_3")}</p>
         <div className="border-t border-lightgray pt-4 mb-12">
-          <p className="font-manrope font-semibold mb-4">Sumarul comenzii</p>
+          <p className="font-manrope font-semibold mb-4">{t("summary")}</p>
           <div className="grid col-span-full grid-cols-1 lg:grid-cols-2 gap-6">
             {
               data?.order?.products.map((product, index) => (
@@ -55,7 +58,7 @@ export default function ConfirmationContent({ id }: ConfirmationContentProps) {
                                 <div className={`font-manrope font-semibold border border-gray rounded-3xl w-fit py-2 px-4`}>{product.product.sale && product.product.sale.active ? product.product.sale.sale_price.toLocaleString() : product.product.price.toLocaleString()} MDL</div>
                             </div>
                         </div>
-                        <p className="text-gray">Cantitatea: {product.quantity}</p>
+                        <p className="text-gray">{t("quantity")}: {product.quantity}</p>
                     </div>
                 </div>
               ))
@@ -66,50 +69,50 @@ export default function ConfirmationContent({ id }: ConfirmationContentProps) {
           {
             data?.order?.delivery_method === DeliveryMethod.HOME_DELIVERY &&
             <div className="flex justify-between">
-              <p>Subtotal:</p>
+              <p>{t('subtotal')}:</p>
               <p>{data?.order?.products.reduce((acc, item) => acc + ((item.product.sale?.active ? item.product.sale.sale_price : item.product.price) || 0) * item.quantity, 0).toLocaleString()} MDL</p>
             </div>
           }
           {
             data?.order?.delivery_method === DeliveryMethod.HOME_DELIVERY && data?.order?.additional_info.delivery_address?.region &&
             <div className="flex justify-between">
-              <p>Livrare:</p>
+              <p>{t('delivery')}:</p>
               <p>{getDeliveryPrice(data?.order?.additional_info.delivery_address.region as DeliveryRegions)} MDL</p>
             </div>
           }
              <div className="flex justify-between">
-              <p>Total:</p>
+              <p>{t('total')}:</p>
               <p className="font-semibold">{data?.order?.total_cost.toLocaleString()} MDL</p>
             </div>
         </div>
         <div className="border-t border-lightgray pt-4 grid grid-cols-2 gap-x-6 gap-y-8">
           <div className="flex flex-col gap-2 overflow-hidden overflow-ellipsis">
-            <p className="font-manrope font-semibold mb-2">Detalii de contact</p>
+            <p className="font-manrope font-semibold mb-2">{t('contact')}</p>
             <p>{data?.order?.additional_info.user_data.firstname} {data?.order?.additional_info.user_data.lastname}</p>
-            <p className="truncate">Email: {data?.order?.additional_info.user_data.email}</p>
-            <p>Metodă de plată: {data?.order?.additional_info.user_data.tel_number}</p>
+            <p className="truncate">{t('email')}: {data?.order?.additional_info.user_data.email}</p>
+            <p>{t('phone')}: {data?.order?.additional_info.user_data.tel_number}</p>
           </div>
           <div className="flex flex-col gap-2">
-            <p className="font-manrope font-semibold mb-2">Datalii comandă</p>
-            <p>Data: {data?.order?.createdAt ? new Date(data.order.createdAt).toLocaleDateString('ro-RO', { day: '2-digit', month: '2-digit', year: 'numeric' }) : 'Data indisponibilă'}</p>
-            <p>Metodă de plată: {paymentMethodsT(data?.order?.payment_method)}</p>
+            <p className="font-manrope font-semibold mb-2">{t("order_details")}</p>
+            <p>{t("date")}: {data?.order?.createdAt ? new Date(data.order.createdAt).toLocaleDateString('ro-RO', { day: '2-digit', month: '2-digit', year: 'numeric' }) : t("date_unavailable")}</p>
+            <p>{t('payment_method')}: {paymentMethodsT(data?.order?.payment_method)}</p>
           </div>
           {
             data?.order?.delivery_method === DeliveryMethod.HOME_DELIVERY && data?.order?.additional_info.delivery_address &&
             <div className="flex flex-col gap-2">
-              <p className="font-manrope font-semibold mb-2">Adresa de livrare</p>
+              <p className="font-manrope font-semibold mb-2">{t('address')}</p>
               <p>{data?.order?.additional_info.user_data.firstname} {data?.order?.additional_info.user_data.lastname}</p>
               <p>{data?.order?.additional_info.delivery_address.home_address} {data?.order?.additional_info.delivery_address.home_nr}</p>
               <p>{deliveryRegionsT(data?.order?.additional_info.delivery_address.region).split(" - ")[0]}, {data?.order?.additional_info.delivery_address.city}</p>
-              <p>Republica Moldova</p>
+              <p>{t('moldova')}</p>
             </div>
           }
           <div className="flex flex-col gap-2">
-            <p className="font-manrope font-semibold mb-2">Adresa de facturare</p>
+            <p className="font-manrope font-semibold mb-2">{t('billing_address')}</p>
             <p>{data?.order?.additional_info.user_data.firstname} {data?.order?.additional_info.user_data.lastname}</p>
             <p>{data?.order?.additional_info.billing_address.home_address} {data?.order?.additional_info.billing_address.home_nr}</p>
             <p>{deliveryRegionsT(data?.order?.additional_info.billing_address.region).split(" - ")[0]}, {data?.order?.additional_info.billing_address.city}</p>
-            <p>Republica Moldova</p>
+            <p>{t('moldova')}</p>
           </div>
         </div>
     </div>

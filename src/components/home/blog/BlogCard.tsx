@@ -12,7 +12,7 @@ interface BlogCardInterface {
 }
 
 export default function BlogCard({src, tag ,title, id}: BlogCardInterface) {
-    const t = useTranslations("blog_tags");
+    const t = useTranslations("HomePage.Blog.BlogTags");
   return (
     <Link href={{pathname: "/blog/[id]", params: {id: id}}} className='cursor-pointer group'>
         <div className='mb-2 lg:mb-4 overflow-hidden rounded-lg lg:rounded-2xl relative before:content-[""] before:absolute before:left-0 before:top-0 before:w-full before:h-full before:bg-pureblack before:opacity-0 group-hover:before:opacity-25 before:rounded-2xl before:transition before:duration-300 before:z-10'>

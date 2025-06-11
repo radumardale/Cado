@@ -12,12 +12,12 @@ import { ClientEntity } from '@/models/order/types/orderEntity'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
-import { format } from 'date-fns'
+import { format, Locale } from 'date-fns'
 import { Calendar } from '@/components/ui/calendar'
 import { Textarea } from '@/components/ui/textarea'
 import { OrderPaymentMethod } from '@/models/order/types/orderPaymentMethod'
 import { DeliveryRegions, DeliveryRegionsArr } from '@/lib/enums/DeliveryRegions'
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 import { DeliveryHours, DeliveryHoursArr } from '@/lib/enums/DeliveryHours'
 import { useFormContext } from 'react-hook-form'
 import { updateOrderRequestSchema, UpdateOrderValues } from '@/lib/validation/order/updateOrderRequest'
@@ -26,6 +26,15 @@ import { useTRPC } from '@/app/_trpc/client'
 import { toast } from 'sonner'
 
 import { useMutation } from "@tanstack/react-query";
+import { enUS, ro, ru } from 'date-fns/locale';
+
+const toastMessages = {
+  success: {
+    ro: "Comanda a fost actualizată cu succes!",
+    ru: "Заказ был успешно обновлён!",
+    en: "Order updated successfully!"
+  }
+};
 
 export default function OrdersForm() {
     const trpc = useTRPC();
@@ -35,7 +44,7 @@ export default function OrdersForm() {
 
     useEffect(() => {
         if (isSuccess) {
-            toast.success("Produsul a fost actualizat cu succes!");
+            toast.success(toastMessages.success[locale]);
             if (MutatedData) form.reset({
                 id: MutatedData.order?._id,
                 ...MutatedData.order,
@@ -84,6 +93,17 @@ export default function OrdersForm() {
         mutate(values);
     }
 
+    const locale = useLocale() as 'ro' | 'en' | 'ru';
+    let calLocale : Locale;
+        switch(locale){
+            case 'ro' : calLocale = ro; break;
+            case 'en' : calLocale = enUS; break;
+            case 'ru' : calLocale = ru; break;
+            default : calLocale = enUS; break;
+        }
+
+    const checkout_t = useTranslations("CheckoutPage.CheckoutForm");
+
     return (
       <>
            {
@@ -96,7 +116,7 @@ export default function OrdersForm() {
           }
           <div className='col-span-7 xl:col-span-6 col-start-1 xl:col-start-2 grid grid-cols-6 gap-x-2 lg:gap-x-6 flex-1 pb-16'>
                   <form id="order-update-form" onSubmit={form.handleSubmit(onSubmit)} className='col-span-full grid grid-cols-6 gap-x-6'>
-                      <p className='text-2xl font-semibold leading-7 mb-4 lg:mb-6 col-span-full font-manrope'>Metoda de expediere</p>
+                      <p className='text-2xl font-semibold leading-7 mb-4 lg:mb-6 col-span-full font-manrope'>{checkout_t("method")}</p>
 
                       {/* Delivery method */}
                       <FormField 
@@ -121,7 +141,7 @@ export default function OrdersForm() {
                                                       className="bg-black text-white transition duration-300 py-3 w-full flex gap-2 font-semibold justify-center items-center rounded-3xl border border-black cursor-pointer"
                                                   >
                                                       <Truck strokeWidth={1.25} className='size-6' />
-                                                      <p className='font-semibold'>Livrare domiciliu</p>
+                                                      <p className='font-semibold'>{checkout_t("delivery")}</p>
                                                   </label>
                                               </FormItem>
                                           ) : (
@@ -134,7 +154,7 @@ export default function OrdersForm() {
                                                       className="bg-black text-white transition duration-300 py-3 w-full flex gap-2 justify-center items-center font-semibold rounded-3xl border border-black cursor-pointer"
                                                   >
                                                       <MapPin strokeWidth={1.25} className='size-6' />
-                                                      <p className='font-semibold'>Ridicare personală</p>
+                                                      <p className='font-semibold'>{checkout_t("pickup")}</p>
                                                   </label>
                                               </FormItem>
                                           )}
@@ -147,13 +167,13 @@ export default function OrdersForm() {
                       {
                           deliveryMethod === DeliveryMethod.PICKUP && 
                           <>
-                              <p className=' text-2xl font-semibold leading-7 mb-2 lg:mb-6 col-span-full mt-8 lg:mt-12'>Punct de ridicare</p>
-                              <p className='col-span-full'>Ridicarea comenzii este posibilă pe <span className='font-semibold'>str. Alecu Russo 15, of. 59, Chișinău,  Luni-Vineri 9:00 - 16:00 </span> </p>
+                              <p className=' text-2xl font-semibold leading-7 mb-2 lg:mb-6 col-span-full mt-8 lg:mt-12'>{checkout_t("pickup_place")}</p>
+                              <p className='col-span-full'>{checkout_t("pickup_info_slice_1")} <span className='font-semibold'>{checkout_t("pickup_info_slice_2")} </span> </p>
                           </>
                       }
 
-                      <p className=' text-2xl font-semibold leading-7 mb-2 col-span-full mt-8 lg:mt-12 font-manrope'>Informație client</p>
-                      <p className='col-span-full mb-4 lg:mb-6'>Adresa trebuie să fie în Republica Moldova.</p>
+                      <p className=' text-2xl font-semibold leading-7 mb-2 col-span-full mt-8 lg:mt-12 font-manrope'>{checkout_t("customer_info")}</p>
+                      <p className='col-span-full mb-4 lg:mb-6'>{checkout_t("address_info")}</p>
 
                       {/* Client information */}
                       <FormField
@@ -163,7 +183,7 @@ export default function OrdersForm() {
                               <FormItem className="col-span-full lg:col-span-3 lg:mt-4">
                                   <FormMessage />
                                   <FormControl className="border  rounded-3xl border-gray shadow-none p-0 text-black placeholder:text-black focus-visible:outline-none">
-                                      <Input className="h-12 w-full px-6 rounded-3xl text-base text-black" placeholder="Email*" {...field} />
+                                      <Input className="h-12 w-full px-6 rounded-3xl text-base text-black" placeholder={`${checkout_t("email")}*`} {...field} />
                                   </FormControl>
                               </FormItem>
                           )}
@@ -175,7 +195,7 @@ export default function OrdersForm() {
                               <FormItem className="col-span-full lg:col-span-3 mt-2 lg:mt-4">
                                   <FormMessage />
                                   <FormControl className="border  rounded-3xl border-gray shadow-none p-0 text-black placeholder:text-black focus-visible:outline-none">
-                                      <Input className="h-12 w-full px-6 rounded-3xl text-base text-black" placeholder="Telefon*" {...field} />
+                                      <Input className="h-12 w-full px-6 rounded-3xl text-base text-black" placeholder={`${checkout_t("phone")}*`} {...field} />
                                   </FormControl>
                               </FormItem>
                           )}
@@ -187,7 +207,7 @@ export default function OrdersForm() {
                               <FormItem className="col-span-full lg:col-span-3 mt-2 lg:mt-4">
                                   <FormMessage />
                                   <FormControl className="border  rounded-3xl border-gray shadow-none p-0 text-black placeholder:text-black focus-visible:outline-none">
-                                      <Input className="h-12 w-full px-6 rounded-3xl text-base text-black" placeholder="Prenume*" {...field} />
+                                      <Input className="h-12 w-full px-6 rounded-3xl text-base text-black" placeholder={`${checkout_t("first_name")}*`} {...field} />
                                   </FormControl>
                               </FormItem>
                           )}
@@ -199,7 +219,7 @@ export default function OrdersForm() {
                               <FormItem className="col-span-full lg:col-span-3 mt-2 lg:mt-4">
                                   <FormMessage />
                                   <FormControl className="border  rounded-3xl border-gray shadow-none p-0 text-black placeholder:text-black focus-visible:outline-none">
-                                      <Input className="h-12 w-full px-6 rounded-3xl text-base text-black" placeholder="Nume de familie*" {...field} />
+                                      <Input className="h-12 w-full px-6 rounded-3xl text-base text-black" placeholder={`${checkout_t("last_name")}*`} {...field} />
                                   </FormControl>
                               </FormItem>
                           )}
@@ -215,7 +235,7 @@ export default function OrdersForm() {
                                       <FormItem className="col-span-full lg:col-span-3 mt-2 lg:mt-4">
                                           <FormMessage />
                                           <FormControl className="border  rounded-3xl border-gray shadow-none p-0 text-black placeholder:text-black focus-visible:outline-none">
-                                              <Input className="h-12 w-full px-6 rounded-3xl text-base text-black" placeholder="Adresa* (stradă, număr, etc.)" {...field} />
+                                              <Input className="h-12 w-full px-6 rounded-3xl text-base text-black" placeholder={checkout_t("address")} {...field} />
                                           </FormControl>
                                       </FormItem>
                                   )}
@@ -227,7 +247,7 @@ export default function OrdersForm() {
                                       <FormItem className="col-span-full lg:col-span-3 mt-2 lg:mt-4">
                                           <FormMessage />
                                           <FormControl className="border  rounded-3xl border-gray shadow-none p-0 text-black placeholder:text-black focus-visible:outline-none">
-                                              <Input className="h-12 w-full px-6 rounded-3xl text-base text-black" placeholder="Număr casă/apartament" {...field} />
+                                              <Input className="h-12 w-full px-6 rounded-3xl text-base text-black" placeholder={checkout_t("number")} {...field} />
                                           </FormControl>
                                       </FormItem>
                                   )}
@@ -241,7 +261,7 @@ export default function OrdersForm() {
                                           <Select onValueChange={field.onChange} defaultValue={"CHISINAU"}>
                                               <FormControl>
                                                   <SelectTrigger className="cursor-pointer flex h-12 max-h-none items-center px-6 gap-2 border border-gray rounded-3xl text-base text-black w-full max-w-full *:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:text-left">
-                                                      <SelectValue placeholder="Alege subiectul"/>
+                                                      <SelectValue placeholder={checkout_t("city")}/>
                                                       <ChevronDown className='min-w-5 size-5' strokeWidth={1.5}/>
                                                   </SelectTrigger>
                                               </FormControl>  
@@ -250,7 +270,7 @@ export default function OrdersForm() {
                                                   {
                                                       DeliveryRegionsArr.map((region, index) => {
                                                           return (
-                                                              <SelectItem key={index} className="text-base cursor-pointer" value={DeliveryRegions[region as DeliveryRegions]}>{t(`delivery_regions.${region}`)}</SelectItem>
+                                                              <SelectItem key={index} className="text-base cursor-pointer" value={DeliveryRegions[region as DeliveryRegions]}>{t(`CheckoutPage.CheckoutForm.delivery_regions.${region}`)}</SelectItem>
                                                           )
                                                       })
                                                   }
@@ -267,7 +287,7 @@ export default function OrdersForm() {
                                       <FormItem className="col-span-full lg:col-span-3 mt-2 lg:mt-4">
                                           <FormMessage />
                                           <FormControl className="border  rounded-3xl border-gray shadow-none p-0 text-black placeholder:text-black focus-visible:outline-none">
-                                              <Input className="h-12 w-full px-6 rounded-3xl text-base text-black" placeholder="Oraș*" {...field} />
+                                              <Input className="h-12 w-full px-6 rounded-3xl text-base text-black" placeholder={`${checkout_t("city")}*`} {...field} />
                                           </FormControl>
                                       </FormItem>
                                   )}
@@ -275,7 +295,7 @@ export default function OrdersForm() {
                           </>
                       }
 
-                      <p className=' text-2xl font-semibold leading-7 mb-4 lg:mb-6 col-span-full mt-8 lg:mt-12 font-manrope'>Adresa de facturare</p>
+                      <p className=' text-2xl font-semibold leading-7 mb-4 lg:mb-6 col-span-full mt-8 lg:mt-12 font-manrope'>{checkout_t("billing_address")}</p>
                       {
                           deliveryMethod === DeliveryMethod.HOME_DELIVERY && 
                           <div className="flex mb-6 col-span-full gap-2">
@@ -284,7 +304,7 @@ export default function OrdersForm() {
                                   checked={isBillingAddress} 
                                   onCheckedChange={(checked) => form.setValue("additional_info.billing_checkbox", checked === true)} 
                               />
-                              <label htmlFor='billing_address_check'>Folosește aceleași date cu cele de la adresa de livrare.</label>
+                              <label htmlFor='billing_address_check'>{checkout_t("billing_address_checkbox")}</label>
                           </div>
                       }
 
@@ -313,7 +333,7 @@ export default function OrdersForm() {
                                           className={`${field.value === ClientEntity.Natural ? "bg-black text-white" : "bg-white"} transition duration-300 py-3 w-full flex gap-2 font-semibold justify-center items-center rounded-3xl border border-black cursor-pointer`}
                                           >
                                           <User strokeWidth={1.25} className='size-6' />
-                                          <p className='font-semibold'>Persoană fizică</p>
+                                          <p className='font-semibold'>{checkout_t("individual")}</p>
                                           </label>
                                       </FormItem>
 
@@ -326,7 +346,7 @@ export default function OrdersForm() {
                                           className={`${field.value === ClientEntity.Legal ? "bg-black text-white" : "bg-white"} transition duration-300 py-3 flex gap-2 justify-center items-center font-semibold rounded-3xl border border-black cursor-pointer`}
                                           >
                                           <BriefcaseBusiness strokeWidth={1.25} className='size-6' />
-                                          <p className='font-semibold'>Persoană juridică</p>
+                                          <p className='font-semibold'>{checkout_t("company")}</p>
                                           </label>
                                       </FormItem>
                                       </RadioGroup>
@@ -345,7 +365,7 @@ export default function OrdersForm() {
                                               <FormItem className="col-span-full lg:col-span-3 mt-2 lg:mt-4">
                                                   <FormMessage />
                                                   <FormControl className="border  rounded-3xl border-gray shadow-none p-0 text-black placeholder:text-black focus-visible:outline-none">
-                                                      <Input className="h-12 w-full px-6 rounded-3xl text-base text-black" placeholder="Prenume*" {...field} />
+                                                      <Input className="h-12 w-full px-6 rounded-3xl text-base text-black" placeholder={`${checkout_t("first_name")}*`} {...field} />
                                                   </FormControl>
                                               </FormItem>
                                           )}
@@ -357,7 +377,7 @@ export default function OrdersForm() {
                                               <FormItem className="col-span-full lg:col-span-3 mt-2 lg:mt-4">
                                                   <FormMessage />
                                                   <FormControl className="border  rounded-3xl border-gray shadow-none p-0 text-black placeholder:text-black focus-visible:outline-none">
-                                                      <Input className="h-12 w-full px-6 rounded-3xl text-base text-black" placeholder="Nume de familie*" {...field} />
+                                                      <Input className="h-12 w-full px-6 rounded-3xl text-base text-black" placeholder={`${checkout_t("last_name")}*`} {...field} />
                                                   </FormControl>
                                               </FormItem>
                                           )}
@@ -372,7 +392,7 @@ export default function OrdersForm() {
                                               <FormItem className="col-span-full lg:col-span-3 mt-2 lg:mt-4">
                                                   <FormMessage />
                                                   <FormControl className="border  rounded-3xl border-gray shadow-none p-0 text-black placeholder:text-black focus-visible:outline-none">
-                                                      <Input className="h-12 w-full px-6 rounded-3xl text-base text-black" placeholder="Nume companie*" {...field} />
+                                                      <Input className="h-12 w-full px-6 rounded-3xl text-base text-black" placeholder={`${checkout_t("company_name")}*`} {...field} />
                                                   </FormControl>
                                               </FormItem>
                                           )}
@@ -384,7 +404,7 @@ export default function OrdersForm() {
                                               <FormItem className="col-span-full lg:col-span-3 mt-2 lg:mt-4">
                                                   <FormMessage />
                                                   <FormControl className="border  rounded-3xl border-gray shadow-none p-0 text-black placeholder:text-black focus-visible:outline-none">
-                                                      <Input className="h-12 w-full px-6 rounded-3xl text-base text-black" placeholder="IDNO*" {...field} />
+                                                      <Input className="h-12 w-full px-6 rounded-3xl text-base text-black" placeholder={`${checkout_t("company_id")}*`} {...field} />
                                                   </FormControl>
                                               </FormItem>
                                           )}
@@ -399,7 +419,7 @@ export default function OrdersForm() {
                                       <FormItem className="col-span-full lg:col-span-3 mt-2 lg:mt-4">
                                           <FormMessage />
                                           <FormControl className="border  rounded-3xl border-gray shadow-none p-0 text-black placeholder:text-black focus-visible:outline-none">
-                                              <Input className="h-12 w-full px-6 rounded-3xl text-base text-black" placeholder="Adresa* (stradă, număr, etc.)" {...field} />
+                                              <Input className="h-12 w-full px-6 rounded-3xl text-base text-black" placeholder={checkout_t("address")} {...field} />
                                           </FormControl>
                                       </FormItem>
                                   )}
@@ -411,7 +431,7 @@ export default function OrdersForm() {
                                       <FormItem className="col-span-full lg:col-span-3 mt-2 lg:mt-4">
                                           <FormMessage />
                                           <FormControl className="border  rounded-3xl border-gray shadow-none p-0 text-black placeholder:text-black focus-visible:outline-none">
-                                              <Input className="h-12 w-full px-6 rounded-3xl text-base text-black" placeholder="Număr casă/apartament" {...field} />
+                                              <Input className="h-12 w-full px-6 rounded-3xl text-base text-black" placeholder={checkout_t("number")} {...field} />
                                           </FormControl>
                                       </FormItem>
                                   )}
@@ -426,7 +446,7 @@ export default function OrdersForm() {
                                               <Select onValueChange={field.onChange} defaultValue={"CHISINAU"} >
                                                   <FormControl>
                                                       <SelectTrigger className="cursor-pointer flex h-12 max-h-none items-center px-6 gap-2 border border-gray rounded-3xl text-base text-black w-full">
-                                                          <SelectValue placeholder="Alege subiectul"/>
+                                                          <SelectValue placeholder={checkout_t("city")}/>
                                                           <ChevronDown className='size-5' strokeWidth={1.5}/>
                                                       </SelectTrigger>
                                                   </FormControl>  
@@ -435,7 +455,7 @@ export default function OrdersForm() {
                                                           {
                                                               DeliveryRegionsArr.map((region, index) => {
                                                                   return (
-                                                                      <SelectItem key={index} className="text-base cursor-pointer" value={DeliveryRegions[region as DeliveryRegions]}>{t(`delivery_regions.${region}`).split(" - ")[0]}</SelectItem>
+                                                                      <SelectItem key={index} className="text-base cursor-pointer" value={DeliveryRegions[region as DeliveryRegions]}>{t(`CheckoutPage.CheckoutForm.delivery_regions.${region}`).split(" - ")[0]}</SelectItem>
                                                                   )
                                                               })
                                                           }
@@ -452,7 +472,7 @@ export default function OrdersForm() {
                                           <FormItem className="col-span-full lg:col-span-3 mt-2 lg:mt-4">
                                               <FormMessage />
                                               <FormControl className="border  rounded-3xl border-gray shadow-none p-0 text-black placeholder:text-black focus-visible:outline-none">
-                                                  <Input className="h-12 w-full px-6 rounded-3xl text-base text-black" placeholder="Oraș*" {...field} />
+                                                  <Input className="h-12 w-full px-6 rounded-3xl text-base text-black" placeholder={`${checkout_t("city")}*`} {...field} />
                                               </FormControl>
                                           </FormItem>
                                       )}
@@ -460,11 +480,11 @@ export default function OrdersForm() {
                               </>
                       }
 
-                      <p className=' text-2xl font-semibold leading-7 mb-2 col-span-full mt-8 lg:mt-12 font-manrope'>Detalii pentru livrare</p>
+                      <p className=' text-2xl font-semibold leading-7 mb-2 col-span-full mt-8 lg:mt-12 font-manrope'>{checkout_t("delivery_details")}</p>
                       {
                           deliveryMethod === DeliveryMethod.HOME_DELIVERY && 
                           <>
-                              <p className='col-span-full mb-4 lg:mb-6'>Livrările între intervalele orelor 1:00-9:00 și 20:00-24:00 sunt tarifate diferit</p>
+                              <p className='col-span-full mb-4 lg:mb-6'>{checkout_t("delivery_info")}</p>
                               <FormField
                                   control={form.control}
                                   name="delivery_details.delivery_date"
@@ -484,13 +504,14 @@ export default function OrdersForm() {
                                                   {field.value ? (
                                                       format(field.value, "PPP")
                                                   ) : (
-                                                      <span className='mr-auto leading-0'>Data de livrare</span>
+                                                      <span className='mr-auto leading-0'>{checkout_t("date")}</span>
                                                   )}
                                                   </Button>
                                               </FormControl>
                                               </PopoverTrigger>
                                               <PopoverContent className="w-auto p-0" align="start">
                                               <Calendar
+                                                  locale = {calLocale}
                                                   mode="single"
                                                   selected={field.value ? new Date(field.value) : new Date()}
                                                   onSelect={(date) => field.onChange(date ? date.toISOString() : '')}
@@ -518,7 +539,7 @@ export default function OrdersForm() {
                                                           <div>
                                                               <Clock strokeWidth={1.25} className='size-5'/>
                                                           </div>
-                                                          <SelectValue placeholder="Intervalul orelor de livrare"/>
+                                                          <SelectValue placeholder={checkout_t("time")}/>
                                                           <ChevronDown className='size-5' strokeWidth={1.5}/>
                                                       </SelectTrigger>
                                                   </FormControl>  
@@ -527,7 +548,7 @@ export default function OrdersForm() {
                                                           {
                                                               DeliveryHoursArr.map((hour, index) => {
                                                                   return (
-                                                                      <SelectItem key={index} className="text-base cursor-pointer" value={DeliveryHours[hour as DeliveryHours]}>{t(`delivery_hours.${hour}`)}</SelectItem>
+                                                                      <SelectItem key={index} className="text-base cursor-pointer" value={DeliveryHours[hour as DeliveryHours]}>{t(`CheckoutPage.CheckoutForm.delivery_hours.${hour}`)}</SelectItem>
                                                                   )
                                                               })
                                                           }
@@ -547,7 +568,7 @@ export default function OrdersForm() {
                           render={({ field }) => (
                               <FormItem className="col-span-full lg:col-span-3 mt-2 lg:mt-4">
                                   <FormControl>
-                                      <Textarea className="placeholder:text-black h-40 items-center px-6 border border-gray rounded-3xl text-base text-black col-span-full" placeholder="Lăsați aici câteva cuvinte pe care le vom imprima pe felicitare" {...field}/>
+                                      <Textarea className="placeholder:text-black h-40 items-center px-6 border border-gray rounded-3xl text-base text-black col-span-full" placeholder={checkout_t("print")} {...field}/>
                                   </FormControl>
                                   <FormMessage />
                               </FormItem>
@@ -560,16 +581,16 @@ export default function OrdersForm() {
                           render={({ field }) => (
                               <FormItem className="col-span-full lg:col-span-3 mt-2 lg:mt-4">
                                   <FormControl>
-                                      <Textarea className="placeholder:text-black h-40 items-center px-6 border border-gray rounded-3xl text-base text-black col-span-full" placeholder="Comentariu despre comandă" {...field}/>
+                                      <Textarea className="placeholder:text-black h-40 items-center px-6 border border-gray rounded-3xl text-base text-black col-span-full" placeholder={checkout_t("comment")} {...field}/>
                                   </FormControl>
                                   <FormMessage />
                               </FormItem>
                           )}
                       />      
 
-                      <p className='font-semibold col-span-full mt-2 lg:mt-4'>*Completarea casetelor nu este obligatorie</p>
+                      <p className='font-semibold col-span-full mt-2 lg:mt-4'>*{checkout_t("not_req")}</p>
 
-                      <p className=' text-2xl font-semibold leading-7 mb-4 lg:mb-6 col-span-full mt-8 lg:mt-12'>Metoda de plată</p>
+                      <p className=' text-2xl font-semibold leading-7 mb-4 lg:mb-6 col-span-full mt-8 lg:mt-12'>{checkout_t("payment_method")}</p>
 
                       {/* Payment Method Radio Group */}
                           <FormField 
@@ -593,7 +614,7 @@ export default function OrdersForm() {
                                                       className="bg-black text-white transition duration-300 py-3 w-full flex gap-2 font-semibold justify-center items-center rounded-3xl border border-black cursor-pointer"
                                                   >
                                                       <CreditCard strokeWidth={1.25} className='size-6' />
-                                                      <p className='font-semibold'>Achitare online</p>
+                                                      <p className='font-semibold'>{checkout_t("online")}</p>
                                                   </label>
                                               </FormItem>
                                           ) : (
@@ -608,7 +629,7 @@ export default function OrdersForm() {
                                                       className="bg-black text-white transition duration-300 py-3 flex gap-2 justify-center items-center font-semibold rounded-3xl border border-black cursor-pointer"
                                                   >
                                                       <BanknoteIcon strokeWidth={1.25} className='size-6' />
-                                                      <p className='font-semibold'>Achitare în numerar</p>
+                                                      <p className='font-semibold'>{checkout_t("cash")}</p>
                                                   </label>
                                               </FormItem>
                                           )}

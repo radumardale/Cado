@@ -1,0 +1,720 @@
+{
+  "PageTitles": {
+    "home": "Home",
+    "catalog": "Catalog",
+    "about": "About Us",
+    "blogs": "News",
+    "terms": "Terms and Conditions",
+    "contact": "Contact",
+    "confirmation": "Payment Confirmation",
+    "checkout": "Checkout",
+    "login": "Login",
+    "payment_err": "Payment Error",
+    "admin_orders": "Orders",
+    "admin_products": "Products",
+    "admin_new_product": "New Product",
+    "admin_client_data": "Client Data",
+    "admin_home": "Home",
+    "admin_blog": "Blog",
+    "admin_new_blog": "New Blog",
+    "admin_catalog_season": "Season Catalog",
+    "admin_contact_details": "Contact Details"
+  },
+  "BreadCrumPathnames": {
+    "home": "Home",
+    "catalog": "Catalog",
+    "about": "About Us",
+    "blogs": "News",
+    "terms": "Terms and Conditions",
+    "contact": "Contact",
+    "confirmation": "Payment Confirmation",
+    "checkout": "Checkout",
+    "login": "Login",
+    "payment_err": "Payment Error",
+    "admin_orders": "Orders",
+    "admin_products": "Products",
+    "admin_new_product": "New Product",
+    "admin_client_data": "Client Data",
+    "admin_home": "Home",
+    "admin_blog": "Blog",
+    "admin_new_blog": "New Blog",
+    "admin_catalog_season": "Season Catalog",
+    "admin_contact_details": "Contact Details"
+  },
+  "Tags": {
+    "FOR_HIM": {
+      "title": "For Him",
+      "description": "Find gifts for him that bring style and comfort - from practical accessories to decorative items."
+    },
+    "FOR_HER": {
+      "title": "For Her",
+      "description": "Gifts for her, perfect for any special occasion and moments of relaxation, fun, and inspiration."
+    },
+    "FOR_KIDS": {
+      "title": "For Kids",
+      "description": "Surprise the little ones with gifts for kids - sweets, premium toys, and creative sets."
+    },
+    "ACCESSORIES": {
+      "title": "Accessories",
+      "description": "Choose ideal gift accessories for various occasions - functional sets for organization and personal style."
+    },
+    "FLOWERS_AND_BALLOONS": {
+      "title": "Flowers & Balloons",
+      "description": "Add color with flower bouquets and balloons - perfect for the office, anniversaries, or festive surprises."
+    },
+    "GIFT_SET": {
+      "title": "Gift Sets",
+      "description": "Carefully selected sets to impress and delight."
+    },
+    "ALL_PRODUCTS": {
+      "title": "All Products",
+      "description": "Discover our entire range of products."
+    }
+  },
+  "ocasions": {
+    "WELCOME_KIT": {
+      "title": "Welcome Kit",
+      "description": "Be ready with a special gift for the next event on your calendar."
+    },
+    "FOR_TEAM": {
+      "title": "For Team",
+      "description": "Be ready with a special gift for the next event on your calendar."
+    },
+    "SCHOOL_HOLIDAYS": {
+      "title": "School Holidays",
+      "description": "Be ready with a special gift for the next event on your calendar."
+    },
+    "VALENTINES_DAY": {
+      "title": "Valentine's Day",
+      "description": "Be ready with a special gift for the next event on your calendar."
+    },
+    "MARCH_8": {
+      "title": "March 8",
+      "description": "Be ready with a special gift for the next event on your calendar."
+    },
+    "CHRISTMAS_NEW_YEAR": {
+      "title": "Christmas and New Year",
+      "description": "Be ready with a special gift for the next event on your calendar."
+    },
+    "EASTER": {
+      "title": "Easter",
+      "description": "Be ready with a special gift for the next event on your calendar."
+    },
+    "VIP_GIFTS": {
+      "title": "VIP Gifts",
+      "description": "Be ready with a special gift for the next event on your calendar."
+    },
+    "FOR_HOME_AND_OFFICE": {
+      "title": "For Home and Office",
+      "description": "Be ready with a special gift for the next event on your calendar."
+    },
+    "FOR_TRAVEL": {
+      "title": "For Travel",
+      "description": "Be ready with a special gift for the next event on your calendar."
+    },
+    "MINI_GIFTS": {
+      "title": "Mini Gifts",
+      "description": "Be ready with a special gift for the next event on your calendar."
+    },
+    "GASTRONOMIC": {
+      "title": "Gastronomic",
+      "description": "Be ready with a special gift for the next event on your calendar."
+    },
+    "PROMOTIONAL": {
+      "title": "Promotional",
+      "description": "Be ready with a special gift for the next event on your calendar."
+    },
+    "UNIVERSAL": {
+      "title": "Universal",
+      "description": "Be ready with a special gift for the next event on your calendar."
+    }
+  },
+  "product_content": {
+    "ACCESSORIES_FOR_DRINKS": "Accessories for drinks",
+    "ACCESSORIES_FOR_TEA_COFFEE": "Accessories for tea/coffee",
+    "FOR_OFFICE": "For office",
+    "FOR_HOME": "For home",
+    "GAMES": "Games",
+    "TOYS": "Toys",
+    "STATIONERY_ITEMS": "Stationery items",
+    "COFFEE_TEA": "Coffee/tea",
+    "MUG_THERMOS_BOTTLE_FOR_WATER": "Mug/thermo mug/water bottle",
+    "HONEY_JAM_CARAMEL_PEANUT_BUTTER": "Honey/jam/caramel/peanut butter",
+    "NUTS_DRY_FRUITS_SPICES": "Nuts/dried fruits/spices",
+    "CHOCOLATE_BISCUITS_CANDY": "Chocolate/biscuits/candy",
+    "FIRECRACKER": "Firecracker",
+    "PACKAGING_CRAFT_BOX": "Packaging - craft box",
+    "PACKAGING_CARDBOARD_BOX_DESIGN": "Packaging - laminated cardboard box/design",
+    "PACKAGING_WOODEN": "Packaging - wooden",
+    "PACKAGING_CUSTOM_BAG": "Packaging - custom bag",
+    "PACKAGING_CUSTOM_DESIGN": "Packaging - custom design"
+  },
+  "NavBar": {
+    "catalog": "Catalog",
+    "home": "Home",
+    "about": "About Us",
+    "blogs": "Blog",
+    "contact": "Contact",
+    "cta": "See gift sets",
+    "search": "Search",
+    "categories": "Categories",
+    "ocasions": "Occasions"
+  },
+  "Cart": {
+    "title": "Cart",
+    "empty": "Your cart is empty. Visit the shop for inspiration and personalized recommendations.",
+    "back": "Back to shop",
+    "remove": "Remove",
+    "subtotal": "Subtotal",
+    "to_checkout": "Proceed to checkout"
+  },
+  "LangSidebar": {
+    "title": "Language / Country",
+    "info": "Delivery methods and sales conditions will be updated when you change the country.",
+    "change": "Update"
+  },
+  "Footer": {
+    "side_text_1": "Looking to surprise clients or delight loved ones?",
+    "side_text_2": "We offer the best solutions for any occasion. Explore our exclusive options and find the perfect match for you!",
+    "nav": "Navigation",
+    "support": "Support",
+    "orders": "Orders",
+    "contacts": "Contacts",
+    "adresses": "Addresses",
+    "socials": "Follow us",
+    "terms": "Terms & Conditions",
+    "address1": "Moldova, Chișinău, 15 Alecu Russo St., office 59",
+    "address2": "Romania, Brașov, 65 Ceferiștilor St."
+  },
+  "HomePage": {
+    "Recommendations": {
+      "title": "RECOMMENDED PRODUCTS",
+      "see_more": "See more",
+      "add_to_cart": "Add to cart",
+      "out_of_stock": "Out of stock",
+      "discount": "Discount"
+    },
+    "Collaboration": {
+      "title": "COOPERATION CONDITIONS",
+      "description": "From selection to delivery, we guide you step by step to create personalized corporate gifts tailored to your brand.",
+      "card1": {
+        "title": "CHOOSE | THE GIFTS",
+        "description": "Browse the catalog and select the gifts that suit you."
+      },
+      "card2": {
+        "title": "WE ADAPT & | PERSONALIZE",
+        "description": "We suggest how they can be adapted to your brand."
+      },
+      "card3": {
+        "title": "WE SET | DEADLINES",
+        "description": "We sign a contract in which we set the delivery deadlines."
+      },
+      "card4": {
+        "title": "WE EXECUTE | 2-4 Weeks",
+        "description": "We work on your project and update you at every stage."
+      },
+      "card5": {
+        "title": "WE PACK | & DELIVER",
+        "description": "We pack carefully, respecting the temperature regime, and deliver."
+      }
+    },
+    "Reviews": {
+      "title": "Customer Experiences"
+    },
+    "Blog": {
+      "title": "LATEST NEWS",
+      "BlogTags": {
+        "RECOMMENDATIONS": "Recommendations",
+        "NEWS": "News",
+        "EXPERIENCES": "Experiences"
+      }
+    },
+    "FAQ": {
+      "title": "FREQUENT QUESTIONS",
+      "question": "Didn't find the answer to your question? You can always check our list of essential information here:",
+      "see_more": "See more",
+      "questions": {
+        "0": {
+          "title": "How can I order a gift and what customization options are available?",
+          "description": "Ordering is simple: choose the products, add them to the cart, and complete the order by following the indicated steps. We offer the possibility to modify the gift content as you wish and create personalized sets for corporate clients, including branding. If you need help, you can contact us directly here."
+        },
+        "1": {
+          "title": "What payment methods do you accept and how is security ensured?",
+          "description": "We accept card payments, electronic payments, and bank transfers. All transactions are processed securely, and your data is protected."
+        },
+        "2": {
+          "title": "How is delivery made and how long does it take?",
+          "description": "We deliver throughout Moldova and Romania. Delivery time is generally 2-5 working days. The delivery cost varies depending on the location and is calculated based on the provided address. It is possible to schedule delivery for a specific date. You will receive a tracking number after shipping."
+        },
+        "3": {
+          "title": "What options are there for corporate or bulk orders?",
+          "description": "We offer personalized solutions for corporate clients, including unique design and branding. The minimum order varies depending on the product, and for large orders we offer discounts. Contact us for a dedicated offer at order@cado.md."
+        },
+        "4": {
+          "title": "Can I return products or see the gifts before purchase?",
+          "description": "Products can be returned or exchanged within 14 days if they have not been used and are in the original packaging. You can also schedule a visit to our office to see the gifts. If you need help, you can contact us directly here."
+        }
+      }
+    }
+  },
+  "AboutPage": {
+    "Hero": {
+      "title_slice_1": "CADO — gifts that",
+      "title_slice_2": "are never regifted",
+      "description": "Our gifts are created with emotional impact in mind—so that every gesture becomes a memory and every set conveys genuine care.",
+      "see_catalog": "See catalog",
+      "Cards": {
+        "card_1_title": "Our mission is to bring emotion through gifts",
+        "card_1_description_slice_1": "Our mission is to create personalized gifts that express care, both in the corporate environment and in personal life. We offer",
+        "card_1_description_slice_2": "corporate gifts for business partners",
+        "card_1_description_slice_3": ", as well as",
+        "card_1_description_slice_4": "individual sets",
+        "card_1_description_slice_5": "that bring joy and leave pleasant memories for recipients. In the catalog you will find",
+
+        "card_1_text": "CADO has undergone rebranding and now collaborates with partners from Moldova and Romania, offering services at high standards.",
+        "see_catalog": "Access the catalog",
+
+        "card_2_title": "CADO means more than gifts—it means experiences",
+        "card_2_paragraph_1_slice_1": "Beyond personalized gifts, we also offer",
+        "card_2_paragraph_1_slice_2": "full event organization services",
+        "card_2_paragraph_1_slice_3": "—from corporate parties to private events.",
+
+        "card_2_paragraph_2_slice_1": "Through our project",
+        "card_2_paragraph_2_slice_2": "Event Republic",
+        "card_2_paragraph_2_slice_3": ", we bring memorable concepts to life with professionalism and creativity.",
+
+        "card_2_paragraph_3_slice_1": "Visit",
+        "card_2_paragraph_3_slice_2": "to discover how we can turn special occasions into unforgettable experiences.",
+        "visit": "Visit page"
+      }
+    }
+  },
+  "BlogsPage": {
+    "title": "NEWS LIST",
+    "description": "Welcome to our blog — the place where you’ll find useful ideas, relevant news, and inspiration from our activity."
+  },
+  "ContactPage": {
+    "Maps": {
+      "0": {
+        "full_city": "Chișinău, Moldova",
+        "city": "Chișinău",
+        "address": "Address: Moldova, Chișinău, <br></br> 15 Alecu Russo St., office 59",
+        "work_hours": "Working hours: Monday–Friday 9:00 AM - 4:00 PM",
+        "phone": "Phone: +373 69 645 153 | +373 69 645 153",
+        "email_support": "Support email: info@cado.md",
+        "email_orders": "Order email: order@cado.md",
+        "additional_info": "Additional information: <br></br> <br></br> Our office in Chișinău is located on Alecu Russo Street, no. 15, office 59 — about a 10-minute walk from the intersection with Bogdan Voievod Street. <br></br> <br></br> DIM EXPRES S.R.L. <br></br> Tax code: 1015600006586 Legal and postal address: Chișinău, Alecu Russo St., no. 15, office 59"
+      },
+      "1": {
+        "full_city": "Brașov, Romania",
+        "city": "Brașov",
+        "address": "Address: Romania, Brașov, <br></br> 65 Ceferiștilor St.",
+        "work_hours": "Working hours: Monday–Friday 9:00 AM - 4:00 PM",
+        "phone": "Phone: +40 774 075 088",
+        "email_support": "Support email: info@cado.md",
+        "email_orders": "Order email: order@cado.md",
+        "additional_info": "Additional information: <br></br> <br></br> Our office in Brașov is located on Ceferiștilor Street, no. 65 — in an accessible area, a few minutes' walk from Brașov Train Station. <br></br> <br></br> DIM EXPRES S.R.L. <br></br> Tax code: 1015600006586 Legal and postal address: Romania, Brașov, Ceferiștilor St., no. 65"
+      }
+    },
+    "ContactForm": {
+      "title": "CONTACT US",
+      "subject": "Choose subject",
+      "order_issue": "Order issue",
+      "gift_assistance": "Product inquiry",
+      "company_collaboration": "Collaboration offers (legal entity)",
+      "other": "Other subject",
+      "name": "Name",
+      "email": "Email",
+      "message": "Message",
+      "phone": "Phone",
+      "preference": "Preferred contact method?",
+      "agreement_slice_1": "I agree with the",
+      "agreement_slice_2": "Terms and Conditions and Privacy Policy",
+      "send": "Send message"
+    }
+  },
+  "CatalogPage": {
+    "SeasonCatalog": {
+      "title": "SEASONAL CATALOG",
+      "cta": "View catalog"
+    },
+    "CatalogSidebar": {
+      "category": "Category",
+      "ocasion": "Occasion",
+      "price": "Price",
+      "content": "Content",
+      "update": "Update",
+      "min": "Min",
+      "max": "Max",
+      "reset": "Reset",
+      "active_filters": "Active filters"
+    },
+    "ProductsSection": {
+      "sort_by": "Sort by",
+      "sort_options": {
+        "recommended": "Recommended",
+        "new": "New products",
+        "price_desc": "Price: High to Low",
+        "price_asc": "Price: Low to High"
+      },
+      "general": "GENERAL CATALOG",
+      "ListProduct": {
+        "add_to_cart": "Add to cart",
+        "see": "View product",
+        "out_of_stock": "Out of stock",
+        "discount": "Discount",
+        "description": "Description",
+        "includes": "Gift includes"
+      }
+    }
+  },
+  "ProductPage": {
+    "stock_state": {
+      "IN_STOCK": "IN STOCK",
+      "ON_COMMAND": "ON ORDER",
+      "NOT_IN_STOCK": "OUT OF STOCK"
+    },
+    "add_to_cart": "Add to cart",
+    "includes": "Gift includes",
+    "description": "Description",
+    "features": "Features",
+    "material": "Material",
+    "dimensions": "Dimensions",
+    "category": "Main category",
+    "weight": "Weight",
+    "color": "Color",
+    "ocasion": "Occasion",
+    "content": "Content",
+    "number": "Number of items in the gift",
+    "id": "Product ID",
+    "similar_products": "Similar products",
+
+    "Toast": {
+      "added": "Added to cart",
+      "see": "See cart"
+    }
+  },
+  "CheckoutPage" : {
+      "CheckoutForm" : {
+        "method" : "Metoda de expediere",
+        "delivery" : "Livrare la domiciliu",
+        "pickup" : "Ridicare personală",
+        "pickup_place" : "Punct de ridicare",
+        "pickup_info_slice_1" : "Ridicarea comenzii este posibilă pe",
+        "pickup_info_slice_2" : "str. Alecu Russo 15, of. 59, Chișinău,  Luni-Vineri 9:00 - 16:00",
+        "customer_info" : "Informație client",
+        "address_info" : "Adresa trebuie să fie în Republica Moldova.",
+        "email" : "Email",
+        "phone" : "Telefon",
+        "first_name" : "Prenume",
+        "last_name" : "Nume de familie",
+        "city" : "Oraș",
+        "address" : "Adresa* (stradă, număr, etc.)",
+        "number" : "Număr casă/apartament",
+        "billing_address" : "Adresa de facturare",
+        "billing_address_checkbox" : "Folosește aceleași date cu cele de la adresa de livrare.",
+        "individual" : "Persoană fizică",
+        "company" : "Persoană juridică",
+        "company_name" : "Nume companie",
+        "company_id" : "IDNO",
+        "delivery_details" : "Detalii pentru livrare",
+        "delivery_info" : "Livrările între intervalele orelor 1:00-9:00 și 20:00-24:00 sunt tarifate diferit",
+        "date" : "Data de livrare",
+        "time" : "Intervalul orelor de livrare",
+        "print" : "Lăsați aici câteva cuvinte pe care le vom imprima pe felicitare",
+        "comment" : "Comentariu despre comandă",
+        "not_req" : "Completarea casetelor nu este obligatorie",
+        "payment_method" : "Metoda de plată",
+        "online" : "Achitare online",
+        "cash" : "Achitare în numerar",
+        "payment_info" : "Achitarea numerar este posibilă doar la ridicare personală",
+        "agreement_slice_1" : "Am citit și sunt de acord cu condițiile de",
+        "agreement_slice_2" : "livrare/achitare",
+        "agreement_slice_3" : "și condițiile de",
+        "agreement_slice_4" : "returnare/anulare",
+
+        "delivery_regions": {
+          "CHISINAU": "Chișinău - 80 MDL",
+          "BALTI": "Bălți - 1,350 MDL",
+          "ANENII_NOI": "Anenii Noi - 300 MDL",
+          "BASARABEASCA": "Basarabeasca - 1,170 MDL",
+          "BENDER": "Bender - 680 MDL",
+          "BRICENI": "Briceni - 2,340 MDL",
+          "CAHUL": "Cahul - 1,770 MDL",
+          "CALARASI": "Călărași - 470 MDL",
+          "CANTEMIR": "Cantemir - 1,240 MDL",
+          "CAUSENI": "Căușeni - 700 MDL",
+          "CEADIR_LUNGA": "Ceadîr-Lunga - 1,290 MDL",
+          "CIMISLIA": "Cimișlia - 600 MDL",
+          "COMRAT": "Comrat - 970 MDL",
+          "DROCHIA": "Drochia - 1,870 MDL",
+          "DUBASARI": "Dubăsari - 500 MDL",
+          "EDINET": "Edineț - 2,060 MDL",
+          "FALESTI": "Fălești - 1,340 MDL",
+          "FLORESTI": "Florești - 1,290 MDL",
+          "GLODENI": "Glodeni - 1,750 MDL",
+          "HINCESTI": "Hîncești - 370 MDL",
+          "IALOVENI": "Ialoveni - 150 MDL",
+          "LEOVA": "Leova - 1,220 MDL",
+          "NISPORENI": "Nisporeni - 770 MDL",
+          "OCNITA": "Ocnița - 2,330 MDL",
+          "ORHEI": "Orhei - 435 MDL",
+          "REZINA": "Rezina - 1,130 MDL",
+          "RIBNITA": "Rîbnița - 1,200 MDL",
+          "RISCANI": "Rîșcani - 1,760 MDL",
+          "SOLDANESTI": "Șoldănești - 1,210 MDL",
+          "SOROCA": "Soroca - 1,580 MDL",
+          "STEFAN_VODA": "Ștefan-Vodă - 950 MDL",
+          "STRASENI": "Strășeni - 240 MDL",
+          "TARACLIA": "Taraclia - 1,520 MDL",
+          "TIRASPOL": "Tiraspol - 750 MDL",
+          "UNGHENI": "Ungheni - 1,100 MDL"
+        },
+        "delivery_hours": {
+          "01:00-05:00": "01:00 - 05:00 - suplimentar +60% pret livrare",
+          "06:00-09:00": "06:00 - 09:00 - suplimentar +40% pret livrare",
+          "10:00-13:00": "10:00 - 13:00",
+          "14:00-19:00": "14:00 - 19:00",
+          "20:00-00:00": "20:00 - 00:00 - suplimentar +40% pret livrare"
+        }
+      },
+      "CheckoutCart" : {
+        "summary" : "Sumarul comenzii",
+        "remove" : "Elimină",
+        "empty" : "Coșul dvs. este gol. Vizitați magazinul pentru inspirație și recomandări personalizate.",
+        "hour" : "Ora livrării",
+        "total" : "Total",
+        "continue" : "Continuă plata",
+        "subtotal": "Subtotal",
+        "delivery_cost": "Delivery"
+      }
+    },
+    "ConfirmationPage": {
+      "title": "Thank you VERY MUCH!",
+      "subtitle_slice_1": "order",
+      "subtitle_slice_2": "has been received",
+      "paragraph_slice_1": "We have sent an email to",
+      "paragraph_slice_2": "with the order confirmation and invoice.",
+      "paragraph_slice_3": "If you have not received the email within two minutes, please also check your spam folder.",
+      "summary": "Order summary",
+      "quantity": "Quantity",
+      "subtotal": "Subtotal",
+      "delivery": "Delivery",
+      "total": "Total",
+      "contact": "Contact details",
+      "email": "Email",
+      "phone": "Phone",
+      "payment_method": "Payment method",
+      "date": "Date",
+      "date_unavailable": "Date unavailable",
+      "address": "Delivery address",
+      "moldova": "Republic of Moldova",
+      "billing_address": "Billing address",
+      "order_details": "Order details"
+    },
+    "LoginPage": {
+      "username": "Username",
+      "password": "Password",
+      "login": "Login"
+    },
+    "PaymentErrorPage": {
+      "title_slice_1": "We're sorry!",
+      "title_slice_2": "The payment was cancelled or interrupted",
+      "subtitle_slice_1": "It seems you left the payment page or the transaction was not completed.",
+      "subtitle_slice_2": "If you encounter difficulties, please try again or contact us.",
+      "back": "Back to store"
+    },
+    "TermsPage" : {
+      "terms_sections": {
+        "TERMS_AND_CONDITIONS": {
+        "title": "Termeni & Condiții",
+        "description": "Acești Termeni și Condiții („Termeni”) reglementează utilizarea site-ului nostru web disponibil la https://cado.md („Site-ul”) și plasarea comenzilor de produse prin magazinul nostru online. Prin accesarea sau utilizarea Site-ului, accepți acești Termeni. Dacă nu ești de acord cu toate prevederile, te rugăm să nu utilizezi Site-ul. <title>Condiții generale</title> Ne rezervăm dreptul de a refuza furnizarea serviciilor către orice persoană, din orice motiv, în orice moment. Înțelegi că informațiile tale (cu excepția datelor cardului bancar) pot fi transmise necriptat și pot include: <br></br> (a) transferuri prin diferite rețele;<br></br>(b) modificări necesare pentru adaptarea la cerințele tehnice ale rețelelor sau dispozitivelor.<br></br>Datele cardului sunt întotdeauna criptate în timpul transferului.<br></br><br></br>Este interzisă reproducerea, copierea, revânzarea sau exploatarea oricărei părți din serviciu, a utilizării serviciului sau a accesului la serviciu, fără acordul nostru scris expres. Titlurile utilizate în acești termeni sunt doar pentru ușurință de lectură și nu afectează interpretarea lor. <title>Acuratețea și actualitatea informațiilor</title>Nu garantăm că informațiile disponibile pe site sunt complete, exacte sau actualizate. Conținutul site-ului are un scop informativ general și nu ar trebui utilizat ca unic criteriu în luarea deciziilor. Orice încredere acordată conținutului este pe propriul risc.<br></br><br></br>Informațiile istorice oferite sunt doar pentru referință. Ne rezervăm dreptul de a modifica oricând conținutul site-ului fără notificare. Nu avem obligația de a actualiza permanent informațiile publicate. <title>Utilizarea site-ului</title> Eligibilitate <br></br> <item>Pentru a utiliza site-ul și a efectua comenzi, trebuie să ai cel puțin 18 ani. Prin utilizarea site-ului, declari că îndeplinești această condiție.</item> Crearea unui cont<br></br> <item>Pentru a accesa anumite funcționalități ale site-ului, poate fi necesar să creezi un cont. Ești responsabil pentru confidențialitatea datelor de autentificare și pentru activitățile efectuate din contul tău.</item> Activități interzise <br></br> <item>Este interzisă utilizarea site-ului în scopuri ilegale sau contrare acestor Termeni. Nu ai voie să afectezi funcționarea site-ului sau să îngreunezi accesul altor utilizatori.</item> <br></br> <title>Informații despre produse și disponibilitate</title> Descrieri <item>Ne străduim să oferim descrieri exacte ale produselor. Totuși, nu garantăm că descrierile sau alte informații de pe site sunt fără erori. Dacă un produs nu corespunde descrierii, singura opțiune este returnarea acestuia în stare nefolosită.</item> <br></br> Disponibilitate <item>Toate produsele sunt în limita stocului disponibil. Ne rezervăm dreptul de a limita cantitățile, de a anula comenzi parțial sau total, ori de a modifica condițiile promoțiilor.</item> <title>Prețuri și plată</title> Prețuri <item>Toate prețurile sunt exprimate în MDL sau EUR (pentru comenzile internaționale) și pot fi modificate fără notificare. Taxele de livrare și eventuale comisioane sunt afișate la finalizarea comenzii.</item> <br></br> Metode de plată <item>Acceptăm carduri bancare, transfer bancar sau alte metode listate pe site. Prin furnizarea unui card de plată, confirmi că ai dreptul de a-l utiliza și ne autorizezi să retragem suma totală a comenzii.</item> <title>Livrare</title> Expediere <item>Produsele sunt livrate la adresa furnizată în momentul comenzii. Costul livrării este calculat automat și afișat la checkout.</item> <br></br> Timp de livrare <item>Timpul de livrare este estimativ și poate varia. Nu suntem responsabili pentru întârzieri cauzate de factori externi (ex. curier, vreme).</item> <title>Returnări și schimburi</title> Politica de retur <item>Politica noastră de retur este detaliată pe pagina dedicată și face parte integrantă din acești Termeni. Te rugăm să o consulți pentru informații complete.</item> Schimburi <item>Schimburile se pot face în limita stocului disponibil și conform instrucțiunilor din Politica de retur.</item> <title>Proprietate intelectuală</title> Drepturi de autor <item>Tot conținutul de pe site (texte, grafice, logo-uri, fotografii etc.) aparține CADO și este protejat de lege.</item> Licență <item>Îți oferim o licență limitată, personală și revocabilă de a utiliza site-ul în scopuri necomerciale. Nu ai voie să revinzi conținutul sau să-l reutilizezi în scop comercial fără permisiune scrisă.</item> <title>Limitarea răspunderii</title> În măsura permisă de lege, CADO nu va fi responsabilă pentru daune indirecte, pierderi de date, profit sau reputație, rezultate din: <br></br><br></br> <item>folosirea sau imposibilitatea folosirii site-ului;</item> <item>acces neautorizat la date;</item> <item>viruși sau erori transmise prin site;</item> <item>erori de conținut.</item> <title>Unelte & Linkuri externe</title> Putem oferi acces la instrumente furnizate de terți (ex: plăți online, tracking). Acestea sunt oferite „ca atare”, fără garanții. Utilizarea lor se face pe propria răspundere. <br></br> <br></br> Site-ul poate conține linkuri către alte website-uri. Nu garantăm conținutul lor și nu ne asumăm responsabilitatea pentru achiziții sau interacțiuni cu terți. <title>Contact</title> Dacă ai întrebări legate de acești Termeni, ne poți contacta la: <br></br> info@cado.md <br></br> +37369645153 / +37368501809 / +40774075088"
+        },
+        "CONFIDENTIALITY": {
+        "title": "Politica de Confidenţialitate",
+        "description": "Această Politică de Confidențialitate descrie modul în care CADO („noi”, „al nostru”) colectează, folosește și protejează informațiile tale personale atunci când vizitezi site-ul nostru https://cado.md („Site-ul”) sau utilizezi serviciile noastre. Prin accesarea Site-ului sau trimiterea unei comenzi, ești de acord cu această politică. <title>Colectarea datelor</title> Colectăm informații atunci când: <item>creezi un cont pe site,</item> <item>plasezi o comandă,</item> <item>ne contactezi prin formular/e-mail,</item> <item>te abonezi la newsletter.</item> <br></br><br></br> Tipuri de date colectate: <item>Nume, prenume</item> <item>Adresă de livrare</item> <item>Număr de telefon</item> <item>Adresă de e-mail</item> <item>Informații de facturare și plată (procesate de furnizori terți)</item> <title>Utilizarea datelor</title> Folosim datele tale pentru: <item>procesarea și livrarea comenzilor,</item> <item>comunicare legată de comenzile tale,</item> <item>îmbunătățirea serviciilor și experienței pe site,</item> <item>trimiterea de oferte sau notificări (numai cu acordul tău explicit),</item> <item>prevenirea fraudelor și a abuzurilor.</item> <title>Stocarea și securitatea datelor</title> Stocăm datele pe servere securizate și luăm măsuri tehnice și organizatorice pentru protejarea acestora. Informațiile legate de plată sunt procesate prin platforme terțe (ex. procesatori de plăți) și nu sunt stocate pe serverele noastre. <title>Dezvăluirea către terți</title> Nu vindem și nu închiriem datele tale personale. Putem partaja anumite date doar cu: <item>firme de curierat (pentru livrare),</item> <item>procesatori de plăți,</item> <item>furnizori de servicii IT care susțin funcționarea site-ului,</item> toți fiind obligați să respecte confidențialitatea și securitatea datelor. <title>Contact</title> Dacă ai întrebări legate de acești Termeni, ne poți contacta la: <br></br> info@cado.md <br></br> +37369645153 / +37368501809 / +40774075088"
+        },
+        "PAYMENT_AND_SECURITY": {
+        "title": "Plată & Securitate",
+        "description": "Această secțiune descrie metodele de plată acceptate pe site-ul cado.md și măsurile de securitate implementate pentru a-ți proteja datele financiare și personale în timpul tranzacțiilor. <title>Metode de plată acceptate</title> Acceptăm următoarele metode de plată: <item>Carduri bancare (Visa, Mastercard)</item> <item>Transfer bancar (pentru comenzi corporate sau personalizate)</item> <item>Plăți electronice prin procesatori securizați</item> <br></br> Toate opțiunile disponibile sunt afișate la finalizarea comenzii. <title>Autorizarea plăților</title> Prin furnizarea unui card de plată, confirmi că ai dreptul legal de a-l utiliza și ne autorizezi să debităm suma totală a comenzii, inclusiv taxele aplicabile. <title>Securitatea tranzacțiilor</title> Toate plățile efectuate pe site sunt procesate prin servicii terțe autorizate, care folosesc criptare SSL și protocoale avansate de securitate. CADO nu stochează datele tale de card sau alte informații bancare. <br></br> <br></br> Pentru protecția noastră și a clienților noștri, ne rezervăm dreptul de a verifica anumite comenzi, de a solicita informații suplimentare sau de a anula comenzile suspecte. <title>Probleme la plată</title> Dacă întâmpini probleme în procesul de plată, te rugăm să ne contactezi imediat prin: <br></br> info@cado.md <br></br> +37369645153 / +37368501809 / +40774075088"
+        },
+        "ORDERS": {
+        "title": "Comenzi",
+        "description": "Această secțiune explică pașii de plasare a unei comenzi, confirmarea acesteia, modificări posibile și condiții speciale aplicabile comenzilor plasate pe site-ul cado.md. <title>Cum plasezi o comandă</title> Poți plasa o comandă: <item>direct pe site, adăugând produsele dorite în coș și completând datele de livrare,</item> <item>prin contact direct cu echipa noastră, în cazul comenzilor corporate sau personalizate (telefon, e-mail, mesaj).</item> <title>Confirmarea comenzii</title> După finalizarea comenzii, vei primi un e-mail sau SMS de confirmare care include: <item>detalii despre produse,</item> <item>adresa de livrare,</item> <item>metoda de plată aleasă,</item> <item>termen estimativ de livrare.</item> <br></br> Este responsabilitatea ta să verifici corectitudinea acestor informații. <title>Modificări sau anulări</title> Dacă dorești să modifici sau să anulezi o comandă, te rugăm să ne contactezi în cel mai scurt timp posibil. Nu putem garanta posibilitatea modificării dacă comanda este deja în proces de expediere sau personalizare. <title>Comenzi personalizate</title> Pentru comenzile care includ produse personalizate (ex: cu logo, mesaj personal sau design special), este necesar un acord în scris și, în unele cazuri, o plată în avans. <br></br> Comenzile personalizate nu pot fi returnate, cu excepția cazurilor în care produsul este defect sau livrat incorect. <title>Stare comandă și comunicare</title> Pentru orice întrebări despre starea comenzii tale, ne poți contacta oricând: <br></br> info@cado.md <br></br> +37369645153 / +37368501809 / +40774075088"
+        },
+        "RETURN": {
+        "title": "Returnarea & Schimb",
+        "description": "Această secțiune stabilește condițiile în care poți returna sau schimba un produs cumpărat de la CADO. Politica noastră are scopul de a asigura transparență și încredere în relația cu clienții. <title>Eligibilitatea returnării</title> Poți returna un produs dacă: <item>nu a fost folosit,</item> <item>se află în ambalajul original,</item> <item>este returnat în termen de 14 zile calendaristice de la data livrării.</item> <br></br> <br></br> Pentru a iniția un retur, te rugăm să ne contactezi la info@cado.md sau prin telefon. <title>Excepții</title> Nu pot fi returnate: <item>produse personalizate la cerere (ex: cu nume, logo, mesaje unice),</item> <item>produse desigilate care includ articole alimentare sau cosmetice,</item> <item>produse deteriorate din vina clientului.</item> <title>Rambursări</title> După recepționarea și verificarea produsului returnat: <item>rambursarea va fi procesată în termen de 7–10 zile lucrătoare prin aceeași metodă de plată utilizată inițial (sau prin transfer bancar, dacă se stabilește altfel).</item> <br></br><br></br> Costul inițial de livrare nu este rambursabil, cu excepția cazurilor în care produsul returnat este defect sau greșit livrat. <title>Schimburi</title> Dacă dorești schimbul unui produs (mărime, model, altă variantă), te rugăm să ne contactezi în termen de 14 zile. Schimbul este posibil doar în limita stocului disponibil. <br></br><br></br> Costul transportului pentru schimb revine clientului, cu excepția cazurilor în care produsul inițial a fost livrat eronat sau cu defect. <title>Produse deteriorate</title> Dacă ai primit un produs defect sau deteriorat, trimite-ne o fotografie și descrierea problemei în maximum 48 de ore de la livrare. Vom analiza situația și îți vom oferi o soluție (schimb, rambursare sau voucher)."
+        },
+        "SUPPORT": {
+        "title": "Suport",
+        "description": "Ne dorim ca experiența ta pe cado.md să fie cât mai plăcută. Dacă întâmpini probleme, ai nelămuriri sau pur și simplu vrei să ne transmiți o sugestie, suntem aici pentru tine. <title>Probleme legate de comenzi</title> Ai dificultăți cu o comandă? <br></br> Ne poți contacta oricând, fără ezitare, prin e-mail la info@cado.md sau la unul dintre numerele afișate pe site. Echipa noastră de suport îți va răspunde prompt, cu profesionalism și amabilitate. <title>Întrebări frecvente</title> Dacă nu ai găsit informația de care ai nevoie, ne poți scrie prin formularul de pe pagina Contact sau direct pe e-mail. Vom reveni cât mai curând posibil cu un răspuns clar și util. <title>Feedback și sugestii</title> Ne bucurăm să primim părerile tale despre site-ul și serviciile noastre. Dacă ai identificat o eroare sau vrei să ne propui o îmbunătățire, ne poți scrie folosind formularul de pe pagina Contact."
+        }
+      }
+    },
+    "Admin": {
+      "unsupported_device": "Unsupported Device",
+      "unsupported_device_message": "Admin panel access is only available on computer screens.",
+      "logout": "Logout",
+      "Sidebar": {
+        "titles": {
+          "0": "Online Store",
+          "3": "Page Content",
+          "6": "Contacts"
+        },
+        "admin_pages": {
+          "ORDERS": {
+            "title": "Orders",
+            "item": "Order"
+          },
+          "PRODUCTS": {
+            "title": "Catalog",
+            "item": "Product"
+          },
+          "CLIENTS": {
+            "title": "Client Data",
+            "item": "Client"
+          },
+          "HOME_PAGE": {
+            "title": "“Home” Page",
+            "item": "Section"
+          },
+          "BLOG_PAGE": {
+            "title": "“Blog” Page",
+            "item": "Article"
+          }
+        }
+      },
+      "AdminBlog": {
+        "add_blog": "Add news",
+        "edit_blog": "Edit news",
+        "delete_question": "Are you sure you want to delete the article?",
+        "cancel": "Cancel",
+        "delete": "Yes, delete",
+        "is_processing": "Processing...",
+        "is_uploading": "Uploading...",
+        "select_image": "Select or drag an image here",
+        "type": "News type",
+        "choose_stock": "Choose stock availability",
+        "delete_paragraph": "Delete paragraph",
+        "add_paragraph": "Add paragraph",
+        "delete_blog": "Delete article",
+        "save": "Save"
+      },
+      "AdminClientData": {
+        "search": "Search",
+        "email": "Email",
+        "phone": "Phone",
+        "name": "First name, Last name",
+        "orders": "№ orders",
+        "new": "New clients",
+        "old": "Old clients",
+        "orders_asc": "Orders: Low to High",
+        "orders_desc": "Orders: High to Low"
+      },
+      "AdminHomePage": {
+        "banner_filter": "Banner filter",
+        "save_banner": "Save banner",
+        "choose_filter": "Choose filter",
+        "delete_banner_question": "Are you sure you want to delete the banner?",
+        "cancel": "Cancel",
+        "delete": "Yes, delete",
+        "choose_stock": "Choose stock availability",
+        "delete_banner": "Delete banner",
+        "is_processing": "Processing...",
+        "is_uploading": "Uploading...",
+        "select_image": "Select or drag an image here",
+        "save": "Save",
+
+        "soon_ocasion": "UPCOMING OCCASION",
+        "ocasion_details": "Occasion details",
+        "ocasion_filter": "Occasion filter",
+
+        "recommendations": "OUR RECOMMENDATIONS",
+        "discount": "Discount",
+        "change_prod": "Change product",
+        "search": "Search",
+        "no_match": "Oops! Nothing matches your search. Try again or see all available products.",
+        "modify_prod": "Edit product",
+
+        "season_catalog": "Season catalog",
+        "season_catalog_details": "Season catalog details",
+        "season_catalog_link": "Link to catalog"
+      },
+      "AdminOrders": {
+        "new": "New orders",
+        "old": "Old orders",
+        "price_asc": "Price: Low to High",
+        "price_desc": "Price: High to Low",
+        "delivery_date": "Delivery date",
+        "to": "to",
+        "id": "Order ID",
+        "email": "Email",
+        "phone": "Phone",
+        "date": "Date",
+        "payment_method": "Payment method",
+        "total": "Order total",
+        "status": "Status",
+
+        "delete_question": "Are you sure you want to delete the order?",
+        "cancel": "Cancel",
+        "delete": "Yes, delete",
+        "summary": "Order summary",
+        "empty": "Your cart is empty. Visit the store for inspiration and personalized recommendations.",
+        "subtotal": "Subtotal",
+        "delivery_cost": "Delivery",
+        "total_summary": "Total",
+        "hour": "Delivery time",
+        "delete_order": "Delete order",
+        "save": "Save",
+        "remove": "Remove",
+
+        "payment_methods": {
+          "PAYNET": "Online payment",
+          "CASH": "Cash payment"
+        },
+        "order_status": {
+          "NOT_PAID": "UNPAID",
+          "PAID": "PAID",
+          "DELIVERED": "FINISHED"
+        }
+      },
+      "AdminProducts": {
+      "new": "New products",
+      "old": "Old products",
+      "price_asc": "Price: Low to High",
+      "price_desc": "Price: High to Low",
+
+      "add_product": "Add product",
+      "discount": "Discount",
+      "edit_product": "Edit product",
+      "id": "Product ID",
+      "image": "Image",
+      "title": "Title",
+      "price": "Price",
+      "old_price": "Old price",
+      "new_price": "New price",
+      "stock": "Stock status",
+      "stock_nr": "Stock №",
+
+      "product_details": "Product details",
+      "number": "Number of items in the gift",
+      "features": "Features",
+      "main_category": "Main category",
+      "content": "Content",
+      "ocasion": "Occasion",
+      "images": "Product images",
+      "delete_question": "Are you sure you want to delete the product?",
+      "cancel": "Cancel",
+      "delete": "Yes, delete",
+      "delete_product": "Delete product",
+      "is_processing": "Processing...",
+      "is_uploading": "Uploading...",
+      "availability": "Stock availability",
+      "in_stock": "In stock",
+      "on_command": "On order",
+      "not_in_stock": "Out of stock",
+      "save": "Save"
+    }
+  }
+}
