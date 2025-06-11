@@ -19,7 +19,7 @@ interface MobileMenuInterface {
 
 export default function MobileMenu({setSidebarOpen}: MobileMenuInterface) {
     const trpc = useTRPC();
-    const t = useTranslations("tags");
+    const t = useTranslations("Tags");
     const pathname = usePathname();
     const [searchText, setSearchText] = useState("");
 
