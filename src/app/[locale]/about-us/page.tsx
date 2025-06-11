@@ -6,26 +6,35 @@ import Blog from "@/components/blog/Blog";
 import Collaboration from "@/components/home/collaboration/Collaboration";
 import Faq from "@/components/home/faq/Faq";
 import Reviews from "@/components/home/reviews/Reviews";
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 import LinksMenu from "@/components/LinksMenu";
 import { Metadata } from "next";
 
 export async function generateMetadata() : Promise<Metadata> {
   const t = await getTranslations('PageTitles');
   const desc_t = await getTranslations('PageDescriptions');
+
+  const locale = await getLocale();
+      
+      const imagePaths = {
+        en: "/opengraph/en.jpg",
+        ru: "/opengraph/ru.jpg",
+        ro: "/opengraph/ro.jpg",
+      }
+    
+      const imageUrl = imagePaths[locale as keyof typeof imagePaths] || imagePaths.ro;
  
   return {
     title: t('about'),
     description: desc_t('about'),
     openGraph: {
       type: "website",
-      url: "https://metatags.io/",
       title: t('about'),
       description:
         desc_t('about'),
       images: [
         {
-          url: "https://metatags.io/images/meta-tags.png",
+          url: imageUrl,
           alt: "CADO Gift Sets Preview",
         },
       ],
@@ -35,7 +44,7 @@ export async function generateMetadata() : Promise<Metadata> {
       title: t('about'),
       description:
         desc_t('about'),
-      images: ["https://metatags.io/images/meta-tags.png"],
+      images: [imageUrl],
       site: "https://metatags.io/",
     },
   };

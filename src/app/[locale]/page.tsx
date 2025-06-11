@@ -8,19 +8,25 @@ import Faq from "@/components/home/faq/Faq";
 import Hero from "@/components/home/hero/Hero";
 import Recommendations from "@/components/home/recommendations/Recommendations";
 import Reviews from "@/components/home/reviews/Reviews";
-import { getTranslations, setRequestLocale } from "next-intl/server";
+import { getLocale, getTranslations, setRequestLocale } from "next-intl/server";
 import LinksMenu from "@/components/LinksMenu";
 import { HydrateClient, prefetch, trpc } from "../_trpc/server";
 import { Metadata } from "next";
 export const dynamic = 'force-static'
 
-export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) : Promise<Metadata> {
-
-  const { locale } = await params;
-  setRequestLocale(locale);
-
+export async function generateMetadata() : Promise<Metadata> {
   const t = await getTranslations('PageTitles');
   const desc_t = await getTranslations('PageDescriptions');
+
+  const locale = await getLocale();
+  
+  const imagePaths = {
+    en: "/opengraph/en.jpg",
+    ru: "/opengraph/ru.jpg",
+    ro: "/opengraph/ro.jpg",
+  }
+
+  const imageUrl = imagePaths[locale as keyof typeof imagePaths] || imagePaths.ro;
  
   return {
     title: t('home'),
@@ -28,12 +34,21 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
     openGraph: {
       type: "website",
       title: t('home'),
-      description: desc_t('home')
+      description:
+        desc_t('home'),
+      images: [
+        {
+          url: imageUrl,
+          alt: "CADO Gift Sets Preview",
+        },
+      ],
     },
     twitter: {
       card: "summary_large_image",
       title: t('home'),
-      description: desc_t('home'),
+      description:
+        desc_t('home'),
+      images: [imageUrl],
     },
   };
 }

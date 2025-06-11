@@ -5,26 +5,35 @@ import LinkMenuWrapper from "@/components/catalog/LinkMenuWrapper";
 import Footer from "@/components/footer/Footer";
 import SortBy from "@/lib/enums/SortBy";
 import { Metadata } from "next";
-import { getTranslations, setRequestLocale } from "next-intl/server";
+import { getLocale, getTranslations, setRequestLocale } from "next-intl/server";
 export const dynamic = 'force-static'
 export const revalidate = 3600; // Cache for 1 hour
 
 export async function generateMetadata() : Promise<Metadata> {
   const t = await getTranslations('PageTitles');
   const desc_t = await getTranslations('PageDescriptions');
+
+  const locale = await getLocale();
+    
+    const imagePaths = {
+      en: "/opengraph/en.jpg",
+      ru: "/opengraph/ru.jpg",
+      ro: "/opengraph/ro.jpg",
+    }
+  
+    const imageUrl = imagePaths[locale as keyof typeof imagePaths] || imagePaths.ro;
  
   return {
     title: t('catalog'),
     description: desc_t('catalog'),
     openGraph: {
       type: "website",
-      url: "https://metatags.io/",
       title: t('catalog'),
       description:
         desc_t('catalog'),
       images: [
         {
-          url: "https://metatags.io/images/meta-tags.png",
+          url: imageUrl,
           alt: "CADO Gift Sets Preview",
         },
       ],
@@ -34,8 +43,7 @@ export async function generateMetadata() : Promise<Metadata> {
       title: t('catalog'),
       description:
         desc_t('catalog'),
-      images: ["https://metatags.io/images/meta-tags.png"],
-      site: "https://metatags.io/",
+      images: [imageUrl],
     },
   };
 }
