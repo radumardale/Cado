@@ -14,7 +14,11 @@ import { HydrateClient, prefetch, trpc } from "../_trpc/server";
 import { Metadata } from "next";
 export const dynamic = 'force-static'
 
-export async function generateMetadata() : Promise<Metadata> {
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) : Promise<Metadata> {
+
+  const { locale } = await params;
+  setRequestLocale(locale);
+
   const t = await getTranslations('PageTitles');
   const desc_t = await getTranslations('PageDescriptions');
  
