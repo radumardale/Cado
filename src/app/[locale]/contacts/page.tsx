@@ -4,11 +4,10 @@ import Footer from '@/components/footer/Footer'
 import Header from '@/components/header/Header'
 import LinksMenu from '@/components/LinksMenu'
 import { Metadata } from 'next'
-import { getTranslations, setRequestLocale } from 'next-intl/server'
+import { getTranslations } from 'next-intl/server'
 import React from 'react'
 
-export async function generateMetadata({ params }: { params: { locale: string } }) : Promise<Metadata> {
-  setRequestLocale(params.locale);
+export async function generateMetadata() : Promise<Metadata> {
   const t = await getTranslations('PageTitles');
   const desc_t = await getTranslations('PageDescriptions');
  

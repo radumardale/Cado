@@ -9,8 +9,7 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 export const dynamic = 'force-static'
 export const revalidate = 3600; // Cache for 1 hour
 
-export async function generateMetadata({ params }: { params: { locale: string } }) : Promise<Metadata> {
-  setRequestLocale(params.locale);
+export async function generateMetadata() : Promise<Metadata> {
   const t = await getTranslations('PageTitles');
   const desc_t = await getTranslations('PageDescriptions');
  

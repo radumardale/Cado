@@ -7,11 +7,10 @@ import Faq from "@/components/home/faq/Faq";
 import Recommendations from "@/components/home/recommendations/Recommendations";
 import LinksMenu from "@/components/LinksMenu";
 import { Metadata } from "next";
-import { getTranslations, setRequestLocale } from "next-intl/server";
+import { getTranslations } from "next-intl/server";
 export const dynamic = 'force-static'
 
-export async function generateMetadata({ params }: { params: { locale: string } }) : Promise<Metadata> {
-  setRequestLocale(params.locale);
+export async function generateMetadata() : Promise<Metadata> {
   const t = await getTranslations('PageTitles');
   const desc_t = await getTranslations('PageDescriptions');
  
@@ -42,9 +41,7 @@ export async function generateMetadata({ params }: { params: { locale: string } 
   };
 }
 
-export default async function AboutUs({params}: {params: Promise<{locale: string}>;}) {
-  const {locale} = await params;
-  setRequestLocale(locale);
+export default async function AboutUs() {
 
   await prefetch(
     trpc.blog.getAllBlogs.queryOptions(),

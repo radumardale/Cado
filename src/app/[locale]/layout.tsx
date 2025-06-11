@@ -1,4 +1,5 @@
 /* eslint-disable  @typescript-eslint/no-explicit-any */
+
 import {routing} from '@/i18n/routing';
 import {notFound} from 'next/navigation';
 import "./globals.css";
