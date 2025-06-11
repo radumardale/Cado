@@ -23,24 +23,13 @@ export async function generateMetadata() : Promise<Metadata> {
     description: desc_t('home'),
     openGraph: {
       type: "website",
-      url: "https://metatags.io/",
       title: t('home'),
-      description:
-        desc_t('home'),
-      images: [
-        {
-          url: "https://metatags.io/images/meta-tags.png",
-          alt: "CADO Gift Sets Preview",
-        },
-      ],
+      description: desc_t('home')
     },
     twitter: {
       card: "summary_large_image",
       title: t('home'),
-      description:
-        desc_t('home'),
-      images: ["https://metatags.io/images/meta-tags.png"],
-      site: "https://metatags.io/",
+      description: desc_t('home'),
     },
   };
 }

@@ -3,14 +3,42 @@
 import {routing} from '@/i18n/routing';
 import {notFound} from 'next/navigation';
 import "./globals.css";
-import { getMessages, setRequestLocale } from "next-intl/server";
+import { getLocale, getMessages, setRequestLocale } from "next-intl/server";
 import { NextIntlClientProvider } from "next-intl";
 import SmoothScroll from "@/components/providers/SmoothScroll";
 import { Toaster } from "@/components/ui/sonner";
 import { TRPCReactProvider } from "../_trpc/client";
+import { Metadata } from 'next';
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({locale}));
+}
+
+export async function generateMetadata() : Promise<Metadata> {
+
+  const locale = await getLocale();
+
+  const imagePaths = {
+    en: "/images/opengraph/en.jpg",
+    ru: "/images/opengraph/ru.jpg",
+    ro: "/images/opengraph/ro.jpg",
+  }
+
+  return {
+    openGraph: {
+      type: "website",
+      images: [
+        {
+          url: imagePaths[locale as keyof typeof imagePaths] || imagePaths.en,
+          alt: "CADO Gift Sets Preview",
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      images: [imagePaths[locale as keyof typeof imagePaths] || imagePaths.en],
+    },
+  }
 }
 
 export default async function RootLayout({
