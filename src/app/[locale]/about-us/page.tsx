@@ -9,13 +9,37 @@ import Reviews from "@/components/home/reviews/Reviews";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { use } from "react";
 import LinksMenu from "@/components/LinksMenu";
+import { Metadata } from "next";
 
-export async function generateMetadata() {
+export async function generateMetadata({ params }: { params: { locale: string } }) : Promise<Metadata> {
+  setRequestLocale(params.locale);
   const t = await getTranslations('PageTitles');
+  const desc_t = await getTranslations('PageDescriptions');
  
   return {
     title: t('about'),
-    description: "",
+    description: desc_t('about'),
+    openGraph: {
+      type: "website",
+      url: "https://metatags.io/",
+      title: t('about'),
+      description:
+        desc_t('about'),
+      images: [
+        {
+          url: "https://metatags.io/images/meta-tags.png",
+          alt: "CADO Gift Sets Preview",
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: t('about'),
+      description:
+        desc_t('about'),
+      images: ["https://metatags.io/images/meta-tags.png"],
+      site: "https://metatags.io/",
+    },
   };
 }
 

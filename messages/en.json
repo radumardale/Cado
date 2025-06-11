@@ -1,11 +1,11 @@
 {
   "PageTitles": {
-    "home": "Home",
-    "catalog": "Catalog",
-    "about": "About Us",
-    "blogs": "News",
-    "terms": "Terms and Conditions",
-    "contact": "Contact",
+    "home": "CADO – Gift Sets & Personalized Products | Delivery in Moldova",
+    "catalog": "CADO Catalog – Gifts & Products for Every Occasion",
+    "about": "About CADO – Corporate & Personal Gifts for Every Occasion",
+    "blogs": "Gift Ideas & Gifting Guides – CADO Blog",
+    "terms": "CADO Terms & Conditions – Gifts and Delivery in Moldova",
+    "contact": "Contact CADO – Gift Orders & Corporate Collaborations in Moldova",
     "confirmation": "Payment Confirmation",
     "checkout": "Checkout",
     "login": "Login",
@@ -19,6 +19,14 @@
     "admin_new_blog": "New Blog",
     "admin_catalog_season": "Season Catalog",
     "admin_contact_details": "Contact Details"
+  },
+  "PageDescriptions" : {
+    "home" : "Order gift sets or individual products online for any personal or corporate occasion. Fast delivery in Chișinău and across Moldova.",
+    "catalog" : "Browse CADO's full catalog – gift sets and individual products for teams, family, or special events. Fast delivery across Moldova.",
+    "about" : "CADO creates carefully selected gift sets and individual products for teams, clients, or loved ones. Give smart, elegant, and memorable gifts.",
+    "blogs" : "Find practical tips and gift ideas for special occasions, holidays, or corporate events. Get inspired with the CADO blog.",
+    "contact" : "Get in touch for custom orders or corporate gifting. We deliver gifts and products in Chișinău and throughout Moldova – fast and reliably.",
+    "terms" : "Learn all terms for orders, delivery, and returns. CADO offers a transparent and secure experience for every customer."
   },
   "BreadCrumPathnames": {
     "home": "Home",

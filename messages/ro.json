@@ -1,11 +1,11 @@
 {
     "PageTitles" : {
-        "home" : "Acasă",
-        "catalog" : "Catalog",
-        "about" : "Despre Noi",
-        "blogs" : "Noutăți",
-        "terms" : "Termeni și condiții",
-        "contact" : "Contacte",
+        "home" : "CADO – Seturi Cadou & Produse Personalizate | Livrare în Moldova",
+        "catalog" : "Catalog CADO – Cadouri și Produse pentru Toate Ocaziile",
+        "about" : "Despre CADO – Cadouri Corporate și Personale pentru Fiecare Ocazie",
+        "blogs" : "Idei de Cadouri & Ghiduri pentru Gifting – Blog CADO",
+        "terms" : "Termeni și Condiții CADO – Cadouri și Livrare Moldova",
+        "contact" : "Contacte CADO – Comenzi și Colaborări Cadouri Moldova",
         "confirmation" : "Confirmare plată",
         "checkout" : "Finalizare comandă",
         "login" : "Autentificare",
@@ -20,6 +20,14 @@
         "admin_new_blog" : "Blog nou",
         "admin_catalog_season" : "Catalog sezon",
         "admin_contact_details" : "Detalii contact"
+    },
+    "PageDescriptions" : {
+      "home" : "Comandă online seturi de cadouri sau produse individuale pentru orice ocazie personală sau corporate. Livrare rapidă în Chișinău și toată Moldova.",
+      "catalog" : "Explorează catalogul complet CADO – seturi cadou și produse individuale pentru echipă, familie sau evenimente speciale. Livrare rapidă în Moldova.",
+      "about" : "CADO este brandul care creează seturi de cadouri și selecții de produse atent alese, potrivite pentru echipe, clienți sau cei dragi. Dăruiește smart, elegant și memorabil.",
+      "blogs" : "Găsește sfaturi practice și idei de cadouri pentru ocazii speciale, sărbători sau evenimente corporate. Alege inspirat din blogul CADO.",
+      "contact" : "Contactează-ne pentru comenzi personalizate sau colaborări corporate. Livrăm cadouri și produse în Chișinău și toată Moldova, rapid și sigur.",
+      "terms" : "Află toate condițiile pentru comenzi, livrări și retururi. CADO oferă o experiență transparentă și sigură pentru fiecare client."
     },
     "BreadCrumPathnames" : {
         "home" : "Principală",

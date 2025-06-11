@@ -3,15 +3,39 @@ import Maps from '@/components/contacts/Maps'
 import Footer from '@/components/footer/Footer'
 import Header from '@/components/header/Header'
 import LinksMenu from '@/components/LinksMenu'
-import { getTranslations } from 'next-intl/server'
+import { Metadata } from 'next'
+import { getTranslations, setRequestLocale } from 'next-intl/server'
 import React from 'react'
 
-export async function generateMetadata() {
+export async function generateMetadata({ params }: { params: { locale: string } }) : Promise<Metadata> {
+  setRequestLocale(params.locale);
   const t = await getTranslations('PageTitles');
+  const desc_t = await getTranslations('PageDescriptions');
  
   return {
     title: t('contact'),
-    description: '',
+    description: desc_t('contact'),
+    openGraph: {
+      type: "website",
+      url: "https://metatags.io/",
+      title: t('contact'),
+      description:
+        desc_t('contact'),
+      images: [
+        {
+          url: "https://metatags.io/images/meta-tags.png",
+          alt: "CADO Gift Sets Preview",
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: t('contact'),
+      description:
+        desc_t('contact'),
+      images: ["https://metatags.io/images/meta-tags.png"],
+      site: "https://metatags.io/",
+    },
   };
 }
 

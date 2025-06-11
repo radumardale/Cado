@@ -11,13 +11,38 @@ import Reviews from "@/components/home/reviews/Reviews";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import LinksMenu from "@/components/LinksMenu";
 import { HydrateClient, prefetch, trpc } from "../_trpc/server";
+import { Metadata } from "next";
 export const dynamic = 'force-static'
 
-export async function generateMetadata() {
+export async function generateMetadata({ params }: { params: { locale: string } }) : Promise<Metadata> {
+  setRequestLocale(params.locale);
   const t = await getTranslations('PageTitles');
+  const desc_t = await getTranslations('PageDescriptions');
  
   return {
-    title: `${t('home')} | Cado`,
+    title: t('home'),
+    description: desc_t('home'),
+    openGraph: {
+      type: "website",
+      url: "https://metatags.io/",
+      title: t('home'),
+      description:
+        desc_t('home'),
+      images: [
+        {
+          url: "https://metatags.io/images/meta-tags.png",
+          alt: "CADO Gift Sets Preview",
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: t('home'),
+      description:
+        desc_t('home'),
+      images: ["https://metatags.io/images/meta-tags.png"],
+      site: "https://metatags.io/",
+    },
   };
 }
 

@@ -1,6 +1,4 @@
 /* eslint-disable  @typescript-eslint/no-explicit-any */
-
-import type { Metadata } from "next";
 import {routing} from '@/i18n/routing';
 import {notFound} from 'next/navigation';
 import "./globals.css";
@@ -9,14 +7,6 @@ import { NextIntlClientProvider } from "next-intl";
 import SmoothScroll from "@/components/providers/SmoothScroll";
 import { Toaster } from "@/components/ui/sonner";
 import { TRPCReactProvider } from "../_trpc/client";
-
-export const metadata: Metadata = {
-  title: {
-    default: "Cado",
-    template: "%s | Cado",
-  },
-  description: "",
-};
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({locale}));
