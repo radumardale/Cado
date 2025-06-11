@@ -4,11 +4,12 @@ import Faq from '@/components/home/faq/Faq';
 import Recommendations from '@/components/home/recommendations/Recommendations';
 import LinksMenu from '@/components/LinksMenu';
 import ProductInfo from '@/components/product/ProductInfo';
+import { Metadata } from 'next';
 import { setRequestLocale } from 'next-intl/server';
 export const dynamic = 'force-static'
 export const revalidate = 3600; // Cache for 1 hour
 
-export async function generateMetadata({ params }: { params: Promise<{ locale: string, id: string }> }) {
+export async function generateMetadata({ params }: { params: Promise<{ locale: string, id: string }> }) : Promise<Metadata> {
   
   const { locale, id } = await params;
 
@@ -30,7 +31,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
       images: [
         {
           url: image,
-          alt: title,
+          alt: title
         },
       ],
     },

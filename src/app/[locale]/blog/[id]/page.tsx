@@ -17,8 +17,29 @@ export async function generateMetadata({ params } : {params: Promise<{locale: st
   const queryOptions = trpc.blog.getBlogById.queryOptions({ id });
   const blogData = await queryClient.fetchQuery(queryOptions);
 
+  const title = blogData.blog?.title[locale] || "Blog Post";
+  const description = blogData.blog?.sections[0].content[locale] || "";
+  const image = blogData.blog?.image || "https://your-default-image-url.com/default.jpg";
+
   return {
-    title: blogData.blog?.title[locale] || 'Blog',
+    title: title,
+    description: description,
+    openGraph: {
+      title : title,
+      description : description ,
+      images: [
+        {
+          url: image,
+          alt: title
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [image],
+    },
   };
 }
 
