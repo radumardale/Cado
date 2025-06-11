@@ -191,7 +191,7 @@ export const addOrderProcedure = protectedProcedure
             fields: {
               operation: data.PaymentId,
               LinkUrlSucces: `${process.env.BASE_URL}/confirmation/${order.custom_id}`,
-              LinkUrlCancel: `${process.env.BASE_URL}/confirmation/${order.custom_id}`,
+              LinkUrlCancel: `${process.env.BASE_URL}/payment-error/${order.custom_id}`,
               ExpiryDate: data.ExpiryDate,
               Signature: data.Signature,
               Lang: 'ro'
