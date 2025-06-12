@@ -84,6 +84,7 @@ export const updateOrderProcedure = protectedProcedure
           delivery_method: input.delivery_method,
           total_cost: input.total_cost || 0,
           delivery_details: deliveryDetails,
+          state: input.state
         },
         { new: true }
       );
