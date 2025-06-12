@@ -20,12 +20,12 @@ export enum CategoriesRowHover {
     NONE
 }
 
-export default function CustomRow({index, index_2, category, ocasion, images}: CategoriesRowInterface) {
+export default function CustomRow({index, index_2, category, ocasion, images, title}: CategoriesRowInterface) {
     const [rowHover , setRowHover] = useState(CategoriesRowHover.NONE)
 
   return (
     <div className='col-span-full flex flex-col lg:flex-row lg:justify-between gap-2 lg:gap-0'>
-        <CategoriesCard ocasion category={ocasion} index={index} rowHover={rowHover} setRowHover={setRowHover} side={CategoriesRowHover.LEFT} image={images[0]}/>
+        <CategoriesCard title={title} ocasion category={ocasion} index={index} rowHover={rowHover} setRowHover={setRowHover} side={CategoriesRowHover.LEFT} image={images[0]}/>
         <div className='1/13 mx-1'></div>
         <CategoriesCard category={category} index={index_2} rowHover={rowHover} setRowHover={setRowHover} side={CategoriesRowHover.RIGHT} image={images[1]}/>
     </div>
