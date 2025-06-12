@@ -6,7 +6,7 @@ import ImagesCarousel from "./ImagesCarousel";
 import { useLenis } from "lenis/react";
 import { AnimatePresence } from "motion/react";
 import { Swiper, SwiperRef, SwiperSlide } from "swiper/react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ArrowLeft, ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 import { motion, PanInfo, useMotionValue, useTransform } from "motion/react";
 
 interface ProductImagesInterface {
@@ -141,6 +141,41 @@ const handleDragEnd = (
       window.document.body.classList.remove("carousel");
     }
   }, [isCarouselOpen]);
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      // Only handle arrow keys if there are multiple images
+      if (product.images.length <= 1) return;
+      
+      switch (event.key) {
+        case 'ArrowLeft':
+          event.preventDefault();
+          if (product.images.length === 2) {
+            setImageIndex(imageIndex === 0 ? 1 : 0);
+          } else {
+            setImageIndex(prevImage);
+          }
+          break;
+          
+        case 'ArrowRight':
+          event.preventDefault();
+          if (product.images.length === 2) {
+            setImageIndex(imageIndex === 0 ? 1 : 0);
+          } else {
+            setImageIndex(nextImage);
+          }
+          break;
+      }
+    };
+
+    // Add event listener
+    window.addEventListener('keydown', handleKeyDown);
+
+    // Cleanup
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [imageIndex, prevImage, nextImage, product.images.length]);
  
   return (
     <>
@@ -154,11 +189,54 @@ const handleDragEnd = (
           />
         )}
       </AnimatePresence>
-      <div className="col-span-full lg:col-start-2 lg:col-span-5 grid grid-cols-5 lg:grid-cols-5 mt-2 lg:mt-16 gap-x-6 mb-4 lg:mb-31 relative h-fit cursor-pointer -ml-4 w-[calc(100%+2rem)] lg:mx-0 lg:w-full px-4 lg:px-0 overflow-hidden lg:overflow-visible">
+      <div className="relative col-span-full lg:col-start-2 lg:col-span-5 grid grid-cols-5 lg:grid-cols-5 mt-2 lg:mt-16 gap-x-6 mb-4 lg:mb-31 h-fit cursor-pointer -ml-4 w-[calc(100%+2rem)] lg:mx-0 lg:w-full px-4 lg:px-0 overflow-hidden lg:overflow-visible">
+
+
         <div className="absolute top-2 lg:top-4 left-6 lg:left-4 bg-black/75 text-white px-6 py-2 rounded-3xl font-manrope font-semibold z-20">
           {imageIndex + 1} / {product.images.length}
         </div>
-        <div className="w-full h-full col-span-full overflow-hidden rounded-lg lg:rounded-2xl">
+        <div className="w-full h-full col-span-full overflow-hidden rounded-lg lg:rounded-2xl relative">
+
+          {product.images.length > 1 && (
+              <>
+                <ArrowRight 
+                  className='absolute top-1/2 -translate-y-1/2 right-4 z-20 text-blue-4 cursor-pointer'
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    // Add your navigation logic here
+                    if (product.images.length === 2) {
+                      setImageIndex(imageIndex === 0 ? 1 : 0);
+                    } else {
+                      setImageIndex(nextImage);
+                    }
+                  }}
+                  onPointerDown={(e) => {
+                    e.stopPropagation();
+                  }}
+                  onMouseDown={(e) => {
+                    e.stopPropagation();
+                  }}
+                />
+                <ArrowLeft 
+                  className='absolute top-1/2 -translate-y-1/2 left-2 lg:left-6 z-20 text-blue-4 cursor-pointer' 
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    if (product.images.length === 2) {
+                      setImageIndex(imageIndex === 0 ? 1 : 0);
+                    } else {
+                      setImageIndex(prevImage);
+                    }
+                  }}
+                  onPointerDown={(e) => {
+                    e.stopPropagation();
+                  }}
+                  onMouseDown={(e) => {
+                    e.stopPropagation();
+                  }}
+                />
+              </>
+            )}
+
           <motion.div
             className="bg-purewhite rounded-lg lg:rounded-2xl flex-1 relative top-0 lg:relative mb-4 w-full max-w-full cursor-grab box-border aspect-[4/5] col-span-full"
             onMouseDown={(e) => {
@@ -181,6 +259,7 @@ const handleDragEnd = (
             }}
             style={{ x }}
           >
+
             {product.images.map((image, index) => (
   <motion.div
     key={index}
@@ -205,6 +284,7 @@ const handleDragEnd = (
         )
     }}
   >
+
     <Image
       onDragStart={(e) => e.preventDefault()}
       quality={100}
@@ -212,7 +292,7 @@ const handleDragEnd = (
       alt={`${product.title[locale]} - Image ${index + 1}`}
       width={1476}
       height={1838}
-      className={`max-h-full w-auto mx-auto max-w-full object-contain ${
+      className={`max-h-full w-auto mx-auto max-w-full object-contain select-none ${
         imageIndex === index ? "z-10" : "z-0"
       }`}
     />
