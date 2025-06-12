@@ -15,6 +15,7 @@ import { updateOrderRequestSchema } from "@/lib/validation/order/updateOrderRequ
 import OrdersProductsSummary from "../OrdersProductsSummary";
 
 import { useQuery } from "@tanstack/react-query";
+import { OrderState } from "@/models/order/types/orderState";
 
 interface AdminOrderFormProps {
     id: string
@@ -66,6 +67,7 @@ export default function AdminOrderForm({id}: AdminOrderFormProps) {
               },
               billing_checkbox: true,
           },
+          state: OrderState.NotPaid,
           payment_method: OrderPaymentMethod.Paynet,
           total_cost: 0,
       }

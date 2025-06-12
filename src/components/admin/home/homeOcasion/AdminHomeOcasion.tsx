@@ -36,15 +36,27 @@ export default function AdminHomeOcasion() {
     const form = useForm<z.infer<typeof updateHomeOcasionRequestSchema>>({
         resolver: zodResolver(updateHomeOcasionRequestSchema),
         defaultValues: {
-            id: data?.homeOcasion?._id,
+            id: "",
             ocasionTitle: {
-                ro: data?.homeOcasion?.title.ro || '',
-                ru: data?.homeOcasion?.title.ru || '',
-                en: data?.homeOcasion?.title.en || '',
+                ro: '',
+                ru: '',
+                en: '',
             },
-            ocasion: data?.homeOcasion?.ocasion || Ocasions.CHRISTMAS_NEW_YEAR
+            ocasion: Ocasions.CHRISTMAS_NEW_YEAR
         } 
     });
+
+    useEffect(() => {
+        form.reset({
+            id: data?.homeOcasion?._id || "",
+            ocasionTitle: {
+                ro: data?.homeOcasion?.title.ro,
+                ru: data?.homeOcasion?.title.ru,
+                en: data?.homeOcasion?.title.en,
+            },
+            ocasion: data?.homeOcasion?.ocasion || Ocasions.CHRISTMAS_NEW_YEAR
+        })
+    }, [data])
 
     useEffect(() => {
         if (isSuccess) {

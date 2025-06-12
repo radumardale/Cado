@@ -7,6 +7,7 @@ import { ClientEntity } from '@/models/order/types/orderEntity';
 import { productInfoSchema } from '../product/types/productInfo';
 import { stockAvailabilitySchema } from '../product/types/stockAvailability';
 import { productSaleSchema } from '../product/types/productSale';
+import { OrderState } from '@/models/order/types/orderState';
 
 
 export const updateOrderRequestSchema = z.object({
@@ -30,6 +31,7 @@ export const updateOrderRequestSchema = z.object({
     delivery_method: z.nativeEnum(DeliveryMethod),
     delivery_details: DeliveryDetails,
     total_cost: z.number(),
+    state: z.nativeEnum(OrderState)
 })
 .refine((data) => {
     if (data.delivery_method === DeliveryMethod.HOME_DELIVERY) {
