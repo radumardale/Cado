@@ -16,6 +16,7 @@ import { useCatalogStore } from "@/states/CatalogState";
 import { useQuery } from "@tanstack/react-query";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import SeasonCatalog from "./productsGrid/SeasonCatalog";
+import { ProductInterface } from "@/models/product/types/productInterface";
 
 export default function Catalog() {
     const trpc = useTRPC();

@@ -9,13 +9,13 @@ import { OrderState } from "@/models/order/types/orderState";
 import { Product } from "@/models/product/product";
 
 export const cancelOrderProcedure = publicProcedure
-    .input(z.object({ id: z.string().length(24, "ID must be exactly 24 characters long") }))
+    .input(z.object({ id: z.string() }))
     .mutation(async ({ input }): Promise<ActionResponse> => {
         try {
             await connectMongo();
 
             // Check if order is already cancelled
-            const order = await Order.findById(input.id);
+            const order = await Order.findOne({custom_id: input.id});
             if (!order) {
                 return {
                     success: false,
@@ -28,6 +28,8 @@ export const cancelOrderProcedure = publicProcedure
                     success: true
                 };
             }
+
+            console.log(order.state);
 
             order.state = OrderState.TransactionFailed;
             await order.save();

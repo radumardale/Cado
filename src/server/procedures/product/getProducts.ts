@@ -7,6 +7,7 @@ import connectMongo from "@/lib/connect-mongo";
 import { getAllProductsRequestSchema } from "@/lib/validation/product/getAllProductsRequest";
 import SortBy from "@/lib/enums/SortBy";
 import { ReccProduct } from "@/models/reccProduct/ReccProduct";
+import { ProductInterface } from "@/models/product/types/productInterface";
 
 export interface GetProductResponseInterface extends ActionResponse {
   products: any;
@@ -39,10 +40,10 @@ export const getProductsProcedure = publicProcedure
           $cond: [
         {
           $in: ["$_id", { 
-            $map: { 
-          input: await ReccProduct.find({}, { product: 1 }).lean(),
-          as: "reccProduct",
-          in: "$$reccProduct.product"
+              $map: { 
+              input: await ReccProduct.find({}, { product: 1 }).lean(),
+              as: "reccProduct",
+              in: "$$reccProduct.product"
             }
           }]
         },
@@ -283,7 +284,7 @@ export const getProductsProcedure = publicProcedure
 function getSortOptions(sortBy: SortBy): Record<string, 1 | -1> {
   switch (sortBy) {
     case SortBy.RECOMMENDED:
-        return { recommended: -1 };
+        return { recommended: -1, _id: 1 };
     case SortBy.PRICE_ASC:
       return { price: 1 };
     case SortBy.PRICE_DESC:
@@ -293,6 +294,6 @@ function getSortOptions(sortBy: SortBy): Record<string, 1 | -1> {
     case SortBy.OLDEST:
       return { createdAt: 1 };
     default:
-      return { _id: 1 }; // Default sort
+      return { _id: 1 };
   }
 }

@@ -17,7 +17,7 @@ export const uploadBannerImageProcedure = protectedProcedure
     try {
         await connectMongo();
 
-        const newImageUrl = `https://d3le09nbvee0zx.cloudfront.net/${input.newMainImageKey}`;
+        const newImageUrl = `https://d3rus23k068yq9.cloudfront.net/${input.newMainImageKey}`;
 
         const homeBanner = await HomeBanner.findById(input.id);
         

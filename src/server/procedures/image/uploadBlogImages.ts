@@ -21,7 +21,7 @@ export const UploadBlogImagesProcedure = protectedProcedure
 
       const newSectionImages = input.filenames.map(filename => ({
         index: filename.index,
-        image: `https://d3le09nbvee0zx.cloudfront.net/${filename.image}`
+        image: `https://d3rus23k068yq9.cloudfront.net/${filename.image}`
       }))
 
     const blog = await Blog.findById(input.id);
@@ -43,7 +43,7 @@ export const UploadBlogImagesProcedure = protectedProcedure
     }
 
     if (input.newMainImageKey) {
-        blog.image = `https://d3le09nbvee0zx.cloudfront.net/${input.newMainImageKey}`;
+        blog.image = `https://d3rus23k068yq9.cloudfront.net/${input.newMainImageKey}`;
     }
 
     blog.section_images = newSectionImages;

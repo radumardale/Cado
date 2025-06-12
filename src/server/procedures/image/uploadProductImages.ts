@@ -17,7 +17,7 @@ export const UploadProductImagesProcedure = protectedProcedure
     try {
     await connectMongo();
 
-    const newImageUrls = input.filenames.map(filename => filename !== "" ? `https://d3le09nbvee0zx.cloudfront.net/${filename}` : "")
+    const newImageUrls = input.filenames.map(filename => filename !== "" ? `https://d3rus23k068yq9.cloudfront.net/${filename}` : "")
 
     const product = await Product.findById(input.id);
     

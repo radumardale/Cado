@@ -22,7 +22,7 @@ export const deleteMultipleFromBucket = async (images: string[]) => {
     // Extract key from CloudFront URL
     const newImages = images.map((image) => {
         return {
-            Key: image.replace('https://d3le09nbvee0zx.cloudfront.net/', '')
+            Key: image.replace('https://d3rus23k068yq9.cloudfront.net/', '')
         }
     });
 

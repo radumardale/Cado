@@ -20,7 +20,7 @@ export const deleteFromBucket = async (image: string) => {
     });
 
     // Extract key from CloudFront URL
-    const key = image.replace('https://d3le09nbvee0zx.cloudfront.net/', '');
+    const key = image.replace('https://d3rus23k068yq9.cloudfront.net/', '');
     
     // Delete from S3
     await s3.send(new DeleteObjectCommand({
