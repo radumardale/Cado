@@ -7,7 +7,6 @@ import connectMongo from "@/lib/connect-mongo";
 import { getAllProductsRequestSchema } from "@/lib/validation/product/getAllProductsRequest";
 import SortBy from "@/lib/enums/SortBy";
 import { ReccProduct } from "@/models/reccProduct/ReccProduct";
-import { ProductInterface } from "@/models/product/types/productInterface";
 
 export interface GetProductResponseInterface extends ActionResponse {
   products: any;
