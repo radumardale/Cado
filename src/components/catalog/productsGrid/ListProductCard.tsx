@@ -66,7 +66,7 @@ export default function ListProductCard({product}: ProductCardInterface) {
                 }
             </div>
             <div className='lg:hidden my-4'>
-                <Accordion last={product.nr_of_items <= 1} open={activeIndex === 0} setActiveIndex={() => {setActiveIndex(activeIndex === 0 ? -1 : 0)}} title='Descriere' >
+                <Accordion last={product.nr_of_items <= 1} open={activeIndex === 0} setActiveIndex={() => {setActiveIndex(activeIndex === 0 ? -1 : 0)}} title={t("description")} >
                   <div 
                     className={styles.productDescription + ' whitespace-pre-line'}
                     dangerouslySetInnerHTML={{ __html: product.description[locale] }}
@@ -74,7 +74,7 @@ export default function ListProductCard({product}: ProductCardInterface) {
                 </Accordion>
                 {
                   product.nr_of_items > 1 &&
-                  <Accordion last open={activeIndex === 1} setActiveIndex={() => {setActiveIndex(activeIndex === 1 ? -1 : 1)}}  title='Cadoul include' >
+                  <Accordion last open={activeIndex === 1} setActiveIndex={() => {setActiveIndex(activeIndex === 1 ? -1 : 1)}}  title={t('includes')} >
                     <div 
                       className={styles.productDescription + ' whitespace-pre-line'}
                       dangerouslySetInnerHTML={{ __html: product.description[locale] }}

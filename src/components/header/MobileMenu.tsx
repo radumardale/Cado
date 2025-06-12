@@ -54,7 +54,7 @@ export default function MobileMenu({setSidebarOpen}: MobileMenuInterface) {
           { 
               searchText.length < 2 ?
               <>
-                  <Accordion title='Catalog' isMenuAccordion>
+                  <Accordion title={nav_t("catalog")} isMenuAccordion>
                       <div className='flex flex-col gap-4 pb-2 pl-4'>
                           <Link onClick={() => {if (pathname === "/catalog") setSidebarOpen(false)}} href={{pathname: '/catalog'}} className='font-manrope font-semibold'>{t("ALL_PRODUCTS.title")}</Link>
                           <Link onClick={() => {if (pathname === "/catalog") setSidebarOpen(false)}} href={{pathname: '/catalog', query: {category: "FOR_HER"}}} className='font-manrope font-semibold'>{t("FOR_HER.title")}</Link>

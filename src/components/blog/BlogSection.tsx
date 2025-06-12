@@ -40,10 +40,10 @@ export default function BlogSection({id}: BlogSectionInteface) {
             <Image 
                 src={data.blog.image} 
                 alt={data.blog.title[locale]} 
-                width={824} 
-                height={544} 
+                width={8240} 
+                height={5440} 
                 className='w-full aspect-[824/544] object-cover lg:mb-4 rounded-lg lg:rounded-2xl' 
-                sizes="(max-width: 1024px) 100vw, 824px" 
+                
             />
             <>
                 {
