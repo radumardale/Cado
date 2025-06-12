@@ -44,7 +44,7 @@ export const generateUploadLinks = async ({id, destination} : GenerateUploadLink
         const fileName = `${destination}/${id}/${hash}.png`;
   
         const comm = new PutObjectCommand({
-          Bucket: 'studio36',
+          Bucket: 'cadomd',
           Key: fileName,
         });
     
