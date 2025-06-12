@@ -157,7 +157,7 @@ export default function AdminOrderForm({id}: AdminOrderFormProps) {
 
   return (
     <Form {...form}>
-      <div data-lenis-prevent className='col-span-7 grid grid-cols-7 scroll-bar-custom overflow-y-auto flex-1 -mr-6 pr-6 mt-16'>
+      <div data-lenis-prevent className='col-span-7 grid grid-cols-7 scroll-bar-custom overflow-y-auto flex-1 -mr-6 pr-6 mt-4'>
         <OrdersForm orderId={id}/>
       </div>
       <OrdersProductsSummary />

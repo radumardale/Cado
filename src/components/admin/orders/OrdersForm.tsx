@@ -27,6 +27,7 @@ import { toast } from 'sonner'
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { enUS, ro, ru } from 'date-fns/locale';
+import { orderStateColors } from '@/models/order/types/orderState';
 
 const toastMessages = {
   success: {
@@ -139,20 +140,23 @@ export default function OrdersForm({orderId}: {orderId: string}) {
                                         value={field.value || "NOT_PAID"}
                                     >
                                         <FormControl>
-                                            <SelectTrigger className="cursor-pointer flex h-12 max-h-none items-center px-6 gap-2 border border-gray rounded-3xl text-base text-black w-full">
+                                            <SelectTrigger className="cursor-pointer flex h-12 max-h-none items-center px-6 gap-2 border border-gray rounded-3xl text-base text-black w-full" style={{color: orderStateColors[field.value as keyof typeof orderStateColors]}}>
                                                 <SelectValue placeholder={t("Admin.AdminOrders.select_status")} />
-                                                <ChevronDown className='size-5' strokeWidth={1.5}/>
+                                                <ChevronDown className='size-5' strokeWidth={1.5} color='black'/>
                                             </SelectTrigger>
                                         </FormControl>  
                                         <SelectContent className="border-gray">
                                             <SelectGroup>
-                                                <SelectItem className="text-base cursor-pointer" value="NOT_PAID">
+                                                <SelectItem className="text-base cursor-pointer" style={{color: orderStateColors["TRANSACTION_FAILED"]}}  value="TRANSACTION_FAILED">
+                                                    {t("Admin.AdminOrders.order_status.TRANSACTION_FAILED")}
+                                                </SelectItem>
+                                                <SelectItem className="text-base cursor-pointer" style={{color: orderStateColors["NOT_PAID"]}}  value="NOT_PAID">
                                                     {t("Admin.AdminOrders.order_status.NOT_PAID")}
                                                 </SelectItem>
-                                                <SelectItem className="text-base cursor-pointer" value="PAID">
+                                                <SelectItem className="text-base cursor-pointer" style={{color: orderStateColors["PAID"]}}  value="PAID">
                                                     {t("Admin.AdminOrders.order_status.PAID")}
                                                 </SelectItem>
-                                                <SelectItem className="text-base cursor-pointer" value="DELIVERED">
+                                                <SelectItem className="text-base cursor-pointer" style={{color: orderStateColors["DELIVERED"]}}  value="DELIVERED">
                                                     {t("Admin.AdminOrders.order_status.DELIVERED")}
                                                 </SelectItem>
                                             </SelectGroup>
