@@ -682,10 +682,13 @@
           "PAYNET": "Онлайн-оплата",
           "CASH": "Оплата наличными"
         },
+        "order_status_title": "Статус Заказа",
+        "select_status": "Выберите статус",
         "order_status": {
           "NOT_PAID": "НЕ ОПЛАЧЕНО",
           "PAID": "ОПЛАЧЕНО",
-          "DELIVERED": "ЗАВЕРШЕНО"
+          "DELIVERED": "ЗАВЕРШЕНО",
+          "TRANSACTION_FAILED": "НЕ УДАЛОСЬ"
         }
       },
       "AdminProducts": {

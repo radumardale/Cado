@@ -144,6 +144,7 @@ export default function AdminOrderForm({id}: AdminOrderFormProps) {
           billing_address: formattedBillingAddress,
           billing_checkbox: isSameAddress,
         },
+        state: data?.order.state || OrderState.NotPaid,
         payment_method: data?.order.payment_method || OrderPaymentMethod.Paynet,
         total_cost: data?.order.total_cost
       };
@@ -157,7 +158,7 @@ export default function AdminOrderForm({id}: AdminOrderFormProps) {
   return (
     <Form {...form}>
       <div data-lenis-prevent className='col-span-7 grid grid-cols-7 scroll-bar-custom overflow-y-auto flex-1 -mr-6 pr-6 mt-16'>
-        <OrdersForm />
+        <OrdersForm orderId={id}/>
       </div>
       <OrdersProductsSummary />
     </Form>

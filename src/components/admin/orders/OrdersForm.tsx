@@ -25,7 +25,7 @@ import { z } from 'zod'
 import { useTRPC } from '@/app/_trpc/client'
 import { toast } from 'sonner'
 
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { enUS, ro, ru } from 'date-fns/locale';
 
 const toastMessages = {
@@ -36,8 +36,9 @@ const toastMessages = {
   }
 };
 
-export default function OrdersForm() {
+export default function OrdersForm({orderId}: {orderId: string}) {
     const trpc = useTRPC();
+    const queryClient = useQueryClient(); 
     const t = useTranslations();
     const { isSuccess, isPending, mutate, data: MutatedData} = useMutation(trpc.order.updateOrder.mutationOptions());
     const form = useFormContext<UpdateOrderValues>()
@@ -45,9 +46,11 @@ export default function OrdersForm() {
     useEffect(() => {
         if (isSuccess) {
             toast.success(toastMessages.success[locale]);
+
             if (MutatedData) form.reset({
                 id: MutatedData.order?._id,
                 ...MutatedData.order,
+                state: MutatedData.order?.state,
                 delivery_details: {
                     ...MutatedData.order?.delivery_details,
                     delivery_date: MutatedData.order?.delivery_details?.delivery_date
@@ -55,6 +58,12 @@ export default function OrdersForm() {
                         : undefined,
                 },
             });
+
+            const ordersListQueryKey = trpc.order.getAllOrders.queryKey();
+            queryClient.invalidateQueries({queryKey: ordersListQueryKey});
+        
+            const orderQueryKey = trpc.order.getOrderById.queryKey({id: orderId});
+            queryClient.invalidateQueries({queryKey: orderQueryKey});
         }
     }, [isSuccess])
 
@@ -116,6 +125,43 @@ export default function OrdersForm() {
           }
           <div className='col-span-7 xl:col-span-6 col-start-1 xl:col-start-2 grid grid-cols-6 gap-x-2 lg:gap-x-6 flex-1 pb-16'>
                   <form id="order-update-form" onSubmit={form.handleSubmit(onSubmit)} className='col-span-full grid grid-cols-6 gap-x-6'>
+
+                        <p className=' text-2xl font-semibold leading-7 mb-4 lg:mb-6 col-span-full mt-8 lg:mt-12 font-manrope'>{t("Admin.AdminOrders.order_status_title")}</p>
+
+                        <FormField
+                            control={form.control}
+                            name="state"
+                            render={({ field }) => (
+                                <FormItem className="col-span-full lg:col-span-3 mb-8"> 
+                                    <FormMessage />
+                                    <Select 
+                                        onValueChange={field.onChange} 
+                                        value={field.value || "NOT_PAID"}
+                                    >
+                                        <FormControl>
+                                            <SelectTrigger className="cursor-pointer flex h-12 max-h-none items-center px-6 gap-2 border border-gray rounded-3xl text-base text-black w-full">
+                                                <SelectValue placeholder={t("Admin.AdminOrders.select_status")} />
+                                                <ChevronDown className='size-5' strokeWidth={1.5}/>
+                                            </SelectTrigger>
+                                        </FormControl>  
+                                        <SelectContent className="border-gray">
+                                            <SelectGroup>
+                                                <SelectItem className="text-base cursor-pointer" value="NOT_PAID">
+                                                    {t("Admin.AdminOrders.order_status.NOT_PAID")}
+                                                </SelectItem>
+                                                <SelectItem className="text-base cursor-pointer" value="PAID">
+                                                    {t("Admin.AdminOrders.order_status.PAID")}
+                                                </SelectItem>
+                                                <SelectItem className="text-base cursor-pointer" value="DELIVERED">
+                                                    {t("Admin.AdminOrders.order_status.DELIVERED")}
+                                                </SelectItem>
+                                            </SelectGroup>
+                                        </SelectContent>
+                                    </Select>
+                                </FormItem>
+                            )}
+                            />
+
                       <p className='text-2xl font-semibold leading-7 mb-4 lg:mb-6 col-span-full font-manrope'>{checkout_t("method")}</p>
 
                       {/* Delivery method */}

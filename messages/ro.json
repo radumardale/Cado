@@ -684,10 +684,14 @@
           "PAYNET": "Achitare online",
           "CASH": "Achitare în numerar"
         },
+
+        "order_status_title": "Status Comandă",
+        "select_status": "Selectează statusul",
         "order_status": {
-          "NOT_PAID": "UNPAID",
-          "PAID": "PAID",
-          "DELIVERED": "FINISHED"
+          "NOT_PAID": "NEPLATIT",
+          "PAID": "PLATIT",
+          "DELIVERED": "FINALIZAT",
+          "TRANSACTION_FAILED": "EȘUAT"
         }
       },
       "AdminProducts" : {

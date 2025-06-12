@@ -682,10 +682,13 @@
           "PAYNET": "Online payment",
           "CASH": "Cash payment"
         },
+        "order_status_title": "Order Status",
+        "select_status": "Select status",
         "order_status": {
           "NOT_PAID": "UNPAID",
           "PAID": "PAID",
-          "DELIVERED": "FINISHED"
+          "DELIVERED": "FINISHED",
+          "TRANSACTION_FAILED": "FAILED"
         }
       },
       "AdminProducts": {
