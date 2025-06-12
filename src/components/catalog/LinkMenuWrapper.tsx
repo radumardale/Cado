@@ -10,6 +10,11 @@ export default function LinkMenuWrapper() {
     const lenis = useLenis();
 
     useEffect(() => {
+        window.scrollTo({ 
+            top: 0,
+            left: 0,
+    });
+
         const handleScroll = () => {
             setIsScrolled(window.scrollY > 200)
         }

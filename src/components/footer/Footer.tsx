@@ -87,9 +87,9 @@ export default function Footer() {
         </div>
         <Image unoptimized src="/footer/ribbon-screen.png" alt="footer ribbon" width={1920} height={326} className='col-span-full -ml-22 lg:ml-0 w-[calc(100%+11rem)] lg:w-full max-w-none lg:max-w-full'/>
         <div className="col-span-full lg:col-start-2 lg:col-span-13 pt-4 lg:pt-0 gap-2 lg:gap-0 pb-6 lg:pb-0 flex lg:justify-between flex-col lg:flex-row items-center lg:h-12 border-t border-lightgray lg:px-15">
-            <div className='flex'>
+            <div className='flex lg:flex:row flex-col max-lg:gap-[0.5rem]'>
                 <p className='text-white lg:mr-6 text-sm leading-4 lg:leading-5 lg:text-base'>© 2025 &quot;DIM EXPRES&quot; S.R.L</p>
-                <Link href="/terms" className='text-white hidden lg:block'>{ t("terms") }</Link>
+                <Link href="/terms" className='text-white lg:block max-lg:text-center'>{ t("terms") }</Link>
             </div>
             <div className="flex items-center gap-2 group">
               <span className="text-white text-sm leading-4 lg:leading-5 lg:text-base">by Studio Modvis</span>

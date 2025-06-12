@@ -166,7 +166,13 @@
     "cta": "See gift sets",
     "search": "Search",
     "categories": "Categories",
-    "ocasions": "Occasions"
+    "ocasions": "Occasions",
+
+    "see_all": "See all results",
+    "no_match": "Oops! Nothing matches what you searched for. Try again or see all available products.",
+    "see_catalog": "See entire catalog",
+    "discount": "Discount",
+    "add_to_cart": "Add to cart"
   },
   "Cart": {
     "title": "Cart",
@@ -426,6 +432,7 @@
         "company_name" : "Nume companie",
         "company_id" : "IDNO",
         "delivery_details" : "Detalii pentru livrare",
+        "more_delivery_info": "The order must be placed at least 24 hours before delivery.",
         "delivery_info" : "Livrările între intervalele orelor 1:00-9:00 și 20:00-24:00 sunt tarifate diferit",
         "date" : "Data de livrare",
         "time" : "Intervalul orelor de livrare",

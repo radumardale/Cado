@@ -578,7 +578,7 @@ export default function CheckoutForm({items, setDeliveryRegion, setDeliveryHour,
                   {
                       deliveryMethod === DeliveryMethod.HOME_DELIVERY && 
                       <>
-                          <p className='col-span-full mb-4 lg:mb-6'>{t("delivery_info")}</p>
+                          <p className='col-span-full mb-4 lg:mb-6'>{t("more_delivery_info")} <br /> {t("delivery_info")}</p>
                           <FormField
                               control={form.control}
                               name="delivery_details.delivery_date"

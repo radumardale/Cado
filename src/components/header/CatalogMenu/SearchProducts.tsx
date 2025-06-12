@@ -2,7 +2,7 @@ import { Link, useRouter } from '@/i18n/navigation'
 import { CartInterface } from '@/lib/types/CartInterface'
 import { addToCart } from '@/lib/utils'
 import { ProductInterface } from '@/models/product/types/productInterface'
-import { useLocale } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 import Image from 'next/image'
 import React, { useEffect, useState } from 'react'
 import { useLocalStorage } from 'usehooks-ts'
@@ -32,12 +32,14 @@ export default function SearchProducts({products, productsCount, searchText, clo
         if (productsCount !== undefined && productsCount !== null) setLocalCount(productsCount);
     }, [productsCount])
 
+    const t = useTranslations("NavBar")
+
   return (
-    <div className='col-span-full h-full lg:h-97.5 lg:mx-auto'>
+    <div className='col-span-full h-full lg:h-97.5 lg:mx-auto mb-[1rem]'>
         {
             localCount > 0 &&
             <button className='font-manrope font-semibold border border-black rounded-3xl w-fit px-6 h-12 flex items-center gap-2 mx-auto cursor-pointer mb-4' onClick={() => {router.push({pathname: "/catalog", query: (productsCount !== undefined && productsCount !== null && productsCount > 0) ? {keywords: searchText.split(/\s+/).filter(word => word.length > 1).join("+")} : undefined}); closeMenu()}}>
-                <span className='font-semibold leading-5 font-manrope'>Vezi toate rezultatele</span>
+                <span className='font-semibold leading-5 font-manrope'>{t("see_all")}</span>
                 <span className='text-gray font-semibold font-manrope leading-5'>({localCount})</span>
             </button>
         }
@@ -46,9 +48,9 @@ export default function SearchProducts({products, productsCount, searchText, clo
                 localCount == 0 &&
                 <div className='absolute left-1/2 top-1/2 -translate-1/2 w-full lg:w-auto px-13 lg:px-0 flex flex-col items-center'>
                     <Image unoptimized src="/icons/shopping-bag-sad.svg" alt='sad shopping bag' width={48} height={48} className='size-12' />
-                    <p className='mt-2 text-sm leading-4 lg:leading-5 lg:text-base text-center mb-12'>Ups! Nimic nu se potrivește cu ce ai căutat. Încearcă din nou sau vezi toate produsele disponibile.</p>
+                    <p className='mt-2 text-sm leading-4 lg:leading-5 lg:text-base text-center mb-12'>{t("no_match")}</p>
                     <Link href={'/catalog'} className='font-manrope font-semibold bg-blue-2 rounded-3xl w-fit px-6 py-3.5 flex gap-2 mx-auto cursor-pointer hover:opacity-75 transition duration-300' onClick={() => {router.push({pathname: "/catalog", query: (productsCount !== undefined && productsCount !== null && productsCount > 0) ? {keywords: searchText.split(/\s+/).filter(word => word.length > 1).join("+")} : undefined}); closeMenu()}}>
-                        <span className='font-semibold leading-5 font-manrope text-white'>Vezi întreg catalog</span>
+                        <span className='font-semibold leading-5 font-manrope text-white'>{t("see_catalog")}</span>
                     </Link>
                 </div>
             }
@@ -62,7 +64,7 @@ export default function SearchProducts({products, productsCount, searchText, clo
                                     {
                                         product.sale && product.sale.active &&
                                         <div className='absolute top-2 right-2 h-8 flex items-center justify-center bg-red px-4 rounded-3xl text-white z-[5]'>
-                                            <span className='font-semibold text-xs leading-3.5'>Reducere</span>
+                                            <span className='font-semibold text-xs leading-3.5'>{t('discount')}</span>
                                         </div>
                                     }
                                     <div className='w-full aspect-[339/425] bg-purewhite rounded-lg lg:rounded-2xl opacity-100 group-hover:opacity-0 overflow-hidden transition duration-300 z-10 flex items-center'>
@@ -71,7 +73,7 @@ export default function SearchProducts({products, productsCount, searchText, clo
                                     <div className='absolute left-0 top-0 h-full w-full rounded-lg lg:rounded-2xl transition duration-300 -z-10 bg-purewhite flex items-center'>
                                         <Image unoptimized src={product.images[1] || product.images[0]} width={798} height={1198} alt={product.title.ro} className={`${isImageLoaded ? "" : "hidden"} w-full max-h-full object-contain`}/>  
                                     </div>
-                                    <button onClick={(e) => {e.stopPropagation(); addToCart(product, 1, value, setValue, locale)}} className='absolute left-2 -bottom-10 h-10 w-[calc(100%-1rem)] bg-white rounded-3xl font-manrope z-20 opacity-100 transition-all duration-300 group-hover:bottom-2 font-semibold cursor-pointer hover:bg-lightgray text-sm'>Adaugă în coș</button>
+                                    <button onClick={(e) => {e.stopPropagation(); addToCart(product, 1, value, setValue, locale)}} className='absolute left-2 -bottom-10 h-10 w-[calc(100%-1rem)] bg-white rounded-3xl font-manrope z-20 opacity-100 transition-all duration-300 group-hover:bottom-2 font-semibold cursor-pointer hover:bg-lightgray text-sm'>{t('add_to_cart')}</button>
                                 </div>
                                 <Link href={{pathname: "/catalog/product/[id]", params: {id: product.custom_id}}} className='group cursor-pointer flex flex-col flex-1 justify-between'>
                                     <p className={`font-manrope font-semibold mb-2 text-left text-sm leading-4`}>{product.title[locale]}</p>

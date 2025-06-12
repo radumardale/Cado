@@ -167,7 +167,13 @@
         "cta" : "Vezi seturi cadou",
         "search" : "Caută",
         "categories" : "Categorii",
-        "ocasions" : "Ocazii"
+        "ocasions" : "Ocazii",
+
+        "see_all" : "Vezi toate rezultatele",
+        "no_match" : "Ups! Nimic nu se potrivește cu ce ai căutat. Încearcă din nou sau vezi toate produsele disponibile.",
+        "see_catalog" : "Vezi întreg catalogul",
+        "discount" : "Reducere",
+        "add_to_cart" : "Adaugă în coș"
     },
     "Cart" : {
         "title" : "Coș",
@@ -428,6 +434,7 @@
         "company_name" : "Nume companie",
         "company_id" : "IDNO",
         "delivery_details" : "Detalii pentru livrare",
+        "more_delivery_info" : "Comanda trebuie plasată cu cel puțin 24 de ore înainte de livrare.",
         "delivery_info" : "Livrările între intervalele orelor 1:00-9:00 și 20:00-24:00 sunt tarifate diferit",
         "date" : "Data de livrare",
         "time" : "Intervalul orelor de livrare",
