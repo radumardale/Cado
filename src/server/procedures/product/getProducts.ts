@@ -283,7 +283,7 @@ export const getProductsProcedure = publicProcedure
 function getSortOptions(sortBy: SortBy): Record<string, 1 | -1> {
   switch (sortBy) {
     case SortBy.RECOMMENDED:
-        return { recommended: -1, _id: 1 };
+        return { recommended: -1, createdAt: -1 };
     case SortBy.PRICE_ASC:
       return { price: 1 };
     case SortBy.PRICE_DESC:
@@ -293,6 +293,6 @@ function getSortOptions(sortBy: SortBy): Record<string, 1 | -1> {
     case SortBy.OLDEST:
       return { createdAt: 1 };
     default:
-      return { _id: 1 };
+      return { createdAt: -1 };
   }
 }

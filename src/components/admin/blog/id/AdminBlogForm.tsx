@@ -79,6 +79,32 @@ export default function AdminBlogForm({ id }: AdminBlogFormProps) {
     });
 
     useEffect(() => {
+        if (data?.blog) {
+            form.reset({
+                id: data.blog._id,
+                data: {
+                    title: {
+                        ro: data.blog.title.ro || '',
+                        ru: data.blog.title.ru || '',
+                        en: data.blog.title.en || '',
+                    },
+                    isImageNew: false,
+                    tag: data.blog.tag || BlogTags.NEWS,
+                    sections: data.blog.sections || [],
+                    sectionsImagesCount: 0,
+                    imagesChanged: false,
+                }
+            });
+
+            // Also reset your state variables
+            setSelectedImage(data.blog.image || null);
+            setInitialSelectedImage(data.blog.image || null);
+            setSectionImages(data.blog.section_images || []);
+            setInitialSectionImages(data.blog.section_images || []);
+        }
+    }, [data?.blog, form]);
+
+    useEffect(() => {
       if (form.getValues("data.sectionsImagesCount") !== sectionsImages.filter(obj => !obj.image.startsWith("https")).length) {
           form.setValue('data.sectionsImagesCount', sectionsImages.filter(obj => !obj.image.startsWith("https")).length, {shouldDirty: true});
       }
@@ -386,7 +412,7 @@ export default function AdminBlogForm({ id }: AdminBlogFormProps) {
                                       <FormItem className="mb-4">
                                           <FormLabel className="font-semibold font-manrope leading-5">Paragraf</FormLabel>
                                           <FormControl>
-                                              <Textarea data-lenis-prevent className="scroll-bar-custom placeholder:text-black h-40 items-center px-6 border border-gray rounded-3xl text-base text-black pt-4 col-span-full" placeholder="Paragraf*" {...field}/>
+                                              <Textarea data-lenis-prevent className="scroll-bar-custom placeholder:text-black h-40 items-center px-6 border border-gray rounded-[0.5rem] text-base text-black pt-4 col-span-full" placeholder="Paragraf*" {...field}/>
                                           </FormControl>
                                           <FormMessage className='top-7' />
                                       </FormItem>
@@ -412,7 +438,7 @@ export default function AdminBlogForm({ id }: AdminBlogFormProps) {
                                       <FormItem className="mb-4">
                                           <FormLabel className="font-semibold font-manrope leading-5">Параграф</FormLabel>
                                           <FormControl>
-                                              <Textarea data-lenis-prevent className="scroll-bar-custom placeholder:text-black h-40 items-center px-6 border border-gray rounded-3xl text-base text-black pt-4 col-span-full" placeholder="Параграф*" {...field}/>
+                                              <Textarea data-lenis-prevent className="scroll-bar-custom placeholder:text-black h-40 items-center px-6 border border-gray rounded-[0.5rem] text-base text-black pt-4 col-span-full" placeholder="Параграф*" {...field}/>
                                           </FormControl>
                                           <FormMessage className='top-7' />
                                       </FormItem>
@@ -438,7 +464,7 @@ export default function AdminBlogForm({ id }: AdminBlogFormProps) {
                                       <FormItem className="mb-4">
                                           <FormLabel className="font-semibold font-manrope leading-5">Paragraph</FormLabel>
                                           <FormControl>
-                                              <Textarea data-lenis-prevent className="scroll-bar-custom placeholder:text-black h-40 items-center px-6 border border-gray rounded-3xl text-base text-black pt-4 col-span-full" placeholder="Paragraph*" {...field}/>
+                                              <Textarea data-lenis-prevent className="scroll-bar-custom placeholder:text-black h-40 items-center px-6 border border-gray rounded-[0.5rem] text-base text-black pt-4 col-span-full" placeholder="Paragraph*" {...field}/>
                                           </FormControl>
                                           <FormMessage className='top-7' />
                                       </FormItem>
