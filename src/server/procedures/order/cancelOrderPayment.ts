@@ -29,8 +29,6 @@ export const cancelOrderProcedure = publicProcedure
                 };
             }
 
-            console.log(order.state);
-
             order.state = OrderState.TransactionFailed;
             await order.save();
 

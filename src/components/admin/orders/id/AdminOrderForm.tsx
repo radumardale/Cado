@@ -86,8 +86,6 @@ export default function AdminOrderForm({id}: AdminOrderFormProps) {
         (data?.order.additional_info?.delivery_address?.home_address === 
          data?.order.additional_info?.billing_address?.home_address);
 
-         console.log(isSameAddress)
-
          const billingAddress = data.order.additional_info?.billing_address;
   
       // Determine address type by examining the object itself, not just relying on entity_type

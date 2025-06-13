@@ -218,7 +218,7 @@ const handleDragEnd = (
                   }}
                 />
                 <ArrowLeft 
-                  className='absolute top-1/2 -translate-y-1/2 left-2 lg:left-6 z-20 text-blue-4 cursor-pointer' 
+                  className='absolute top-1/2 -translate-y-1/2 left-4 z-20 text-blue-4 cursor-pointer' 
                   onClick={(e) => {
                     e.stopPropagation();
                     if (product.images.length === 2) {

@@ -2,7 +2,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import BlogCard from './BlogCard'
 import { Swiper, SwiperRef, SwiperSlide } from 'swiper/react';
-import { Autoplay } from 'swiper/modules';
 
 import 'swiper/css';
 import BlogTitle from './BlogTitle';
@@ -10,11 +9,16 @@ import { useTRPC } from '@/app/_trpc/client';
 import { useLocale } from 'next-intl';
 
 import { useQuery } from "@tanstack/react-query";
+import { Autoplay } from 'swiper/modules';
+
+import { Swiper as SwiperType } from 'swiper/types';
 
 export default function BlogCarousel() {
     const trpc = useTRPC();
     const {data, isLoading} = useQuery(trpc.blog.getLimitedBlogs.queryOptions({limit: 6}));
     const swiperRef = useRef<SwiperRef>(null);
+    const [swiperInstance, setSwiperInstance] = useState<SwiperType | null>(null);
+
     const locale = useLocale();
     const [slidesPerView, setSlidesPerView] = useState(2); // Default to mobile view
     const [isMounted, setIsMounted] = useState(false);
@@ -38,12 +42,26 @@ export default function BlogCarousel() {
     }, []);
 
     const goToNextSlide = () => {
-        swiperRef.current?.swiper.slideNext();
+        // if (swiperRef.current?.swiper) {
+        //     swiperRef.current.swiper.slideNext();
+        // }
+        if (swiperInstance) {
+            swiperInstance.slideNext();
+        }
     };
 
     const goToPreviousSlide = () => {
-        swiperRef.current?.swiper.slidePrev();
+        // if (swiperRef.current?.swiper) {
+        //     swiperRef.current.swiper.slidePrev();
+        // }
+        if (swiperInstance) {
+            swiperInstance.slidePrev();
+        }
     };
+
+    if (isLoading || !data?.blogs || data?.blogs.length === 0) {
+        return <div>Loading...</div>;
+    }
 
     return (
         <>
@@ -69,9 +87,11 @@ export default function BlogCarousel() {
                             modules={[Autoplay]}
                             autoplay={{
                                 delay: 5000,
+                                disableOnInteraction: false,
                             }}
                             ref={swiperRef}
                             slidesPerView={slidesPerView}
+                            slidesPerGroup={1}
                             loop={true}
                             className="h-auto"
                             speed={400}
@@ -86,6 +106,7 @@ export default function BlogCarousel() {
                                     {data.blogs.map((blog, index) => (
                                         <SwiperSlide key={index} className='pr-2 lg:pr-6 mb-1'>
                                             <BlogCard 
+                                                setSwiperInstance={index === 0 ? setSwiperInstance : undefined}
                                                 id={blog._id} 
                                                 src={blog.image} 
                                                 tag={blog.tag} 

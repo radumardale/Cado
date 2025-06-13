@@ -1,17 +1,33 @@
+"use client"
+
 import { Link } from '@/i18n/navigation';
 import { BlogTags } from '@/lib/enums/BlogTags';
 import { useTranslations } from 'next-intl';
 import Image from 'next/image'
-import React from 'react'
+import React, { useEffect } from 'react'
+import { useSwiper } from 'swiper/react';
+import { Swiper } from 'swiper/types';
 
 interface BlogCardInterface {
     src: string;
     tag: BlogTags;
     title: string;
     id: string;
+    setSwiperInstance?: (swiper: Swiper) => void;
 }
 
-export default function BlogCard({src, tag ,title, id}: BlogCardInterface) {
+export default function BlogCard({src, tag ,title, id, setSwiperInstance}: BlogCardInterface) {
+
+    const swiper = useSwiper()
+
+    useEffect(() => {
+        if(setSwiperInstance){
+            setSwiperInstance(swiper);
+        }
+    }, [swiper, setSwiperInstance])
+
+    
+
     const t = useTranslations("HomePage.Blog.BlogTags");
   return (
     <Link href={{pathname: "/blog/[id]", params: {id: id}}} className='cursor-pointer group'>
