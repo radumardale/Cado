@@ -17,7 +17,7 @@ import { useMutation } from "@tanstack/react-query";
 
 export default function AdminAddProductForm() {
     const trpc = useTRPC();
-    const {isSuccess, mutate, data} = useMutation(trpc.products.createProduct.mutationOptions());
+    const {isSuccess, mutate, data, isPending} = useMutation(trpc.products.createProduct.mutationOptions());
     const { mutate: UpdateMutate, isSuccess: UpdateIsSuccess, } = useMutation(trpc.image.uploadProductImages.mutationOptions());
     const router = useRouter();
     const [imagesData, setImagesData] = useState<string[]>([]);
@@ -116,6 +116,8 @@ export default function AdminAddProductForm() {
     });
 
     function onSubmit(values: z.infer<typeof addProductRequestSchema>) {
+        if (isPending) return;
+        if(!UpdateIsSuccess) return
         mutate(values);
     }
 
