@@ -28,7 +28,7 @@ export const deleteMultipleFromBucket = async (images: string[]) => {
 
     // Delete from S3
     await s3.send(new DeleteObjectsCommand({
-      Bucket: 'studio36',
+      Bucket: 'cadomd',
       Delete: {
         Objects: newImages
       }

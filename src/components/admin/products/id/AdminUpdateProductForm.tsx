@@ -123,7 +123,6 @@ export default function AdminUpdateProductForm({id}: AdminProductFormProps) {
                     }
                 }
                 
-                // Update product with image keys if all uploads succeeded
                 if (newImageKeys.length > 0) {
                     // If we have the product ID, update the images
                     if (MutatedData.product?._id) {

@@ -24,7 +24,7 @@ export const deleteFromBucket = async (image: string) => {
     
     // Delete from S3
     await s3.send(new DeleteObjectCommand({
-      Bucket: 'studio36',
+      Bucket: 'cadomd',
       Key: key
     }));
 }

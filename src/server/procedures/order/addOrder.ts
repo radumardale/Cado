@@ -133,6 +133,7 @@ export const addOrderProcedure = protectedProcedure
         const requestBody = {
           Invoice: order.invoice_id,
           MerchantCode: process.env.API_MERCHANT_CODE,
+          SaleAreaCode: process.env.API_SALES_AREA_CODE,
           LinkUrlSuccess: `${process.env.BASE_URL}/confirmation/${order.custom_id}`,
           LinkUrlCancel: `${process.env.BASE_URL}/confirmation/${order.custom_id}`,
           Signature: null,
@@ -182,6 +183,8 @@ export const addOrderProcedure = protectedProcedure
           }
         );
         const data = await response.json();
+
+        console.log(data);
   
         return {
           success: true,

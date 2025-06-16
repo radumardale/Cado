@@ -70,7 +70,6 @@ export default function CheckoutForm({items, setDeliveryRegion, setDeliveryHour,
             revalidateServerPath("/en/catalog");
 
             if (data.paymentForm) {
-              // Create and auto-submit a form
               const form = document.createElement('form');
               form.method = data.paymentForm.method;
               form.action = data.paymentForm.action;

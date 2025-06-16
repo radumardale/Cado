@@ -5,6 +5,7 @@ import { ActionResponse } from "@/lib/types/ActionResponse";
 import { deleteHomeBannerRequestSchema } from "@/lib/validation/home/updateHomeBannerRequest";
 import { HomeBanner } from "@/models/home_banner/HomeBanner";
 import { protectedProcedure } from "@/server/trpc";
+import { deleteFromBucket } from "../image/deleteObjects/deleteFromBucket";
 
 export const deleteHomeBannerProcedure = protectedProcedure
     .input(deleteHomeBannerRequestSchema)
@@ -13,7 +14,12 @@ export const deleteHomeBannerProcedure = protectedProcedure
 
             await connectMongo();
 
+            
             const homeBanner = await HomeBanner.findByIdAndDelete(input.id);
+
+            if (homeBanner && homeBanner.image) {
+                await deleteFromBucket(homeBanner.image);
+            }
 
             if (!homeBanner) {
                 return {
