@@ -70,22 +70,23 @@ export default function CheckoutForm({items, setDeliveryRegion, setDeliveryHour,
             revalidateServerPath("/en/catalog");
 
             if (data.paymentForm) {
+                console.log(data.paymentForm)
               // Create and auto-submit a form
-              const form = document.createElement('form');
-              form.method = data.paymentForm.method;
-              form.action = data.paymentForm.action;
+            //   const form = document.createElement('form');
+            //   form.method = data.paymentForm.method;
+            //   form.action = data.paymentForm.action;
         
-              Object.entries(data.paymentForm.fields).forEach(([key, value]) => {
-                const input = document.createElement('input');
-                input.type = 'hidden';
-                input.name = key;
-                input.value = value as string;
-                form.appendChild(input);
-              });
+            //   Object.entries(data.paymentForm.fields).forEach(([key, value]) => {
+            //     const input = document.createElement('input');
+            //     input.type = 'hidden';
+            //     input.name = key;
+            //     input.value = value as string;
+            //     form.appendChild(input);
+            //   });
         
-              document.body.appendChild(form);
-              form.submit();
-              document.body.removeChild(form);
+            //   document.body.appendChild(form);
+            //   form.submit();
+            //   document.body.removeChild(form);
             }
 
             if (data.order) {

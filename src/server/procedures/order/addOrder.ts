@@ -182,6 +182,8 @@ export const addOrderProcedure = protectedProcedure
           }
         );
         const data = await response.json();
+
+        console.log(data);
   
         return {
           success: true,

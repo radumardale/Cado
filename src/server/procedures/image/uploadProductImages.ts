@@ -28,7 +28,7 @@ export const UploadProductImagesProcedure = protectedProcedure
         error: 'Product not found'
       };
     }
-    
+
     for (const image of product.images) {
       if (!newImageUrls.includes(image)) {
         await deleteFromBucket(image);
