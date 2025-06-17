@@ -1,6 +1,7 @@
 export enum ProductContent {
     ACCESSORIES_FOR_DRINKS = "ACCESSORIES_FOR_DRINKS",
     ACCESSORIES_FOR_TEA_COFFEE = "ACCESSORIES_FOR_TEA_COFFEE",
+    GOURMET_ACCESSORIES = "GOURMET_ACCESSORIES",
     FOR_OFFICE = "FOR_OFFICE",
     FOR_HOME = "FOR_HOME",
     GAMES = "GAMES",
@@ -16,7 +17,6 @@ export enum ProductContent {
     PACKAGING_WOODEN = "PACKAGING_WOODEN",
     PACKAGING_CUSTOM_BAG = "PACKAGING_CUSTOM_BAG",
     PACKAGING_CUSTOM_DESIGN = "PACKAGING_CUSTOM_DESIGN",
-    GOURMET_ACCESSORIES = "GOURMET_ACCESSORIES",
   };
   
   export const ProductContentArr = Object.values(ProductContent).filter(value => typeof value === 'string') as string[];
