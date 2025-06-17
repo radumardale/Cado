@@ -7,7 +7,7 @@ import ProductInfo from '@/components/product/ProductInfo';
 import { Metadata } from 'next';
 import { setRequestLocale } from 'next-intl/server';
 export const dynamic = 'force-static'
-export const revalidate = 3600; // Cache for 1 hour
+export const revalidate = 3600;
 // @ts-expect-error ggg
 import { htmlToText } from 'html-to-text';
 
