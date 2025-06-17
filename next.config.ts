@@ -9,12 +9,7 @@ const nextConfig: NextConfig = {
         hostname: 'd3rus23k068yq9.cloudfront.net',
       }
     ],
-  },
-  i18n: {
-    locales: ['en', 'ro', 'ru'],
-    defaultLocale: 'ro',
-    localeDetection: false,
-  },
+  }
 };
 
 const withNextIntl = createNextIntlPlugin();
