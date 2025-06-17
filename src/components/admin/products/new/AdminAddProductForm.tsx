@@ -123,7 +123,7 @@ export default function AdminAddProductForm() {
     return (
         <>
             {
-                UpdateIsSuccess &&
+                (isPending || UpdateIsPending || isSuccess) &&
                 <div className='fixed top-0 left-0 w-full h-full bg-pureblack/25 z-10 items-center justify-center'>
                     <div className="flex items-center justify-center h-full w-full">
                         <LoaderCircle className='animate-spin text-white size-20' />

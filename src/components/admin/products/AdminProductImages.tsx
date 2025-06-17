@@ -20,10 +20,10 @@ interface AdminProductImagesProps {
     product: ProductInterface | null | undefined,
     imagesData: string[],
     initialImagesData: string[],
-    setImagesData: (v: string[]) => void
+    setImagesData: (v: string[]) => void,
 }
 
-export default function AdminProductImages({ product, imagesData, initialImagesData, setImagesData }: AdminProductImagesProps) {
+export default function AdminProductImages({ product, imagesData, initialImagesData, setImagesData}: AdminProductImagesProps) {
     const trpc = useTRPC();
     const { mutate, isSuccess, isPending } = useMutation(trpc.products.deleteProduct.mutationOptions());
     const locale = useLocale();
