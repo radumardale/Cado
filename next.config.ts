@@ -10,6 +10,11 @@ const nextConfig: NextConfig = {
       }
     ],
   },
+  i18n: {
+    locales: ['en', 'ro', 'ru'],
+    defaultLocale: 'ro',
+    localeDetection: false,
+  },
 };
 
 const withNextIntl = createNextIntlPlugin();
