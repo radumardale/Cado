@@ -404,6 +404,7 @@
     "number": "Number of items in the gift",
     "id": "Product ID",
     "similar_products": "Similar products",
+    "includes_info" : "The contents and design of the gift can be customized according to your preferences. For adjustments or inquiries, please contact our manager at",
 
     "Toast": {
       "added": "Added to cart",
