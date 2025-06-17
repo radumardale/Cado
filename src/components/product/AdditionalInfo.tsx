@@ -22,14 +22,14 @@ export default function AdditionalInfo({product, locale}: AdditionalInfoInterfac
             product.nr_of_items > 1 && 
             <Accordion productAccordion open={activeIndex == 0} setActiveIndex={() => {setActiveIndex(activeIndex === 0 ? -1 : 0)}} title={prod_t('includes')}>
                 <div 
-                    className={styles.productDescription + "text-sm lg:text-base leading-4 lg:leading-5"}
+                    className={styles.productDescription + " text-sm lg:text-base leading-4 lg:leading-5"}
                     dangerouslySetInnerHTML={{ __html: product.set_description[locale] }}
                 ></div>
             </Accordion>
         }
         <Accordion productAccordion open={activeIndex == 1} setActiveIndex={() => {setActiveIndex(activeIndex === 1 ? -1 : 1)}} title={prod_t('description')}>
                 <div 
-                    className={styles.productDescription + "text-sm lg:text-base leading-4 lg:leading-5"}
+                    className={styles.productDescription + " text-sm lg:text-base leading-4 lg:leading-5"}
                     dangerouslySetInnerHTML={{ __html: product.long_description[locale] }}
                 ></div>
         </Accordion>
