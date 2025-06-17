@@ -7,10 +7,6 @@ export const routing = defineRouting({
   // Used when no locale matches
   defaultLocale: 'ro',
 
-  localePrefix: 'as-needed',
-
-  localeDetection: false, 
-
   pathnames: {
     '/': '/',
     '/catalog': {
