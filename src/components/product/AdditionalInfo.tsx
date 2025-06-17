@@ -26,7 +26,7 @@ export default function AdditionalInfo({product, locale}: AdditionalInfoInterfac
                     dangerouslySetInnerHTML={{ __html: product.set_description[locale] }}
                 ></div>
 
-                <p className='mb-6 font-bold text-sm lg:text-base leading-4 lg:leading-5'>*{prod_t('includes_info')} <a href="mailto:order@cado.md" className='underline'>order@cado.md</a></p>
+                <p className='mb-6 mt-4 font-bold text-sm lg:text-base leading-4 lg:leading-5'>*{prod_t('includes_info')} <a href="mailto:order@cado.md" className='underline'>order@cado.md</a></p>
             </Accordion>
         }
         <Accordion productAccordion open={activeIndex == 1} setActiveIndex={() => {setActiveIndex(activeIndex === 1 ? -1 : 1)}} title={prod_t('description')}>
