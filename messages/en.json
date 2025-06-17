@@ -135,6 +135,10 @@
     "UNIVERSAL": {
       "title": "Universal",
       "description": "Be ready with a special gift for the next event on your calendar."
+    },
+    "DISCOUNTS" : {
+      "title":  "Discounts",
+      "description": "Be ready with a special gift for the next event on your calendar."
     }
   },
   "product_content": {
@@ -371,7 +375,8 @@
         "recommended": "Recommended",
         "new": "New products",
         "price_desc": "Price: High to Low",
-        "price_asc": "Price: Low to High"
+        "price_asc": "Price: Low to High",
+        "discounts" : "Discounts"
       },
       "general": "GENERAL CATALOG",
       "ListProduct": {

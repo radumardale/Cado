@@ -146,6 +146,7 @@ export default function AdminHomeOcasion() {
                                                           <SelectItem key={ocasion} className="text-base cursor-pointer" value={ocasion}>{ocastionsT(`${ocasion}.title`)}</SelectItem>
                                                       ))
                                                   }
+                                                  <SelectItem className="text-base cursor-pointer" value={"DISCOUNTS"}>{ocastionsT(`DISCOUNTS.title`)}</SelectItem>
                                               </SelectGroup>
                                           </SelectContent>
                                       </Select>

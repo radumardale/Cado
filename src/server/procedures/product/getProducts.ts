@@ -282,6 +282,8 @@ export const getProductsProcedure = publicProcedure
 
 function getSortOptions(sortBy: SortBy): Record<string, 1 | -1> {
   switch (sortBy) {
+    case SortBy.DISCOUNT:
+      return { sale: -1, createdAt: -1 };
     case SortBy.RECOMMENDED:
         return { recommended: -1, createdAt: -1 };
     case SortBy.PRICE_ASC:

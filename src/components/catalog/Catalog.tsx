@@ -79,7 +79,7 @@ export default function Catalog() {
 
     const allProducts = data?.pages.flatMap(page => page.products) || [];
     const countProducts = data?.pages.reduce((total, page) => total += page.productsCount, 0) || 0;
-
+    
     // Set up intersection observer for infinite scrolling
     useEffect(() => {
         const observer = new IntersectionObserver(

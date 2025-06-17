@@ -136,6 +136,10 @@
       "UNIVERSAL": {
         "title": "Universale",
         "description": "Fii pregătit cu un cadou special pentru următorul eveniment din calendar."
+      },
+      "DISCOUNTS" : {
+        "title": "Reduceri",
+        "description": "Fii pregătit cu un cadou special pentru următorul eveniment din calendar."
       }
     },
     "product_content" : {
@@ -373,7 +377,8 @@
           "recommended" : "Recomandate",
           "new" : "Produse noi",
           "price_desc" : "Preț: Mare la Mic",
-          "price_asc" : "Preț: Mic la Mare"
+          "price_asc" : "Preț: Mic la Mare",
+          "discounts" : "Reduceri"
         },
         "general" : "CATALOG GENERAL",
         "ListProduct" : {

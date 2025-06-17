@@ -29,6 +29,7 @@ export default function Controls({gridLayout, setGridLayout, setSortBy, setSideb
                 <SelectItem className="text-base cursor-pointer font-semibold font-manrope" value={SortBy.LATEST}>{t("new")}</SelectItem>
                 <SelectItem className="text-base cursor-pointer font-semibold font-manrope" value={SortBy.PRICE_ASC}>{t("price_asc")}</SelectItem>
                 <SelectItem className="text-base cursor-pointer font-semibold font-manrope" value={SortBy.PRICE_DESC}>{t("price_desc")}</SelectItem>
+                <SelectItem className="text-base cursor-pointer font-semibold font-manrope" value={SortBy.DISCOUNT}>{t("discounts")}</SelectItem>
             </ControlsSortSelect>
             <button onClick={() => {setGridLayout(true)}} className={`size-12 rounded-full border border-black flex justify-center items-center transition duration-300 hover:bg-black cursor-pointer ${gridLayout ? "bg-black text-white" : ""} hover:text-white`}>
                 <LayoutGrid className='size-5' strokeWidth={1.75}/>

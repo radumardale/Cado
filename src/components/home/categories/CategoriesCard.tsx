@@ -17,12 +17,20 @@ interface CategoriesCardInterface {
     setRowHover: (v: CategoriesRowHover) => void,
     image: string;
     title?: string;
+    sortByDiscount?: boolean;
 }
 
-export default function CategoriesCard({index, category, side, rowHover, setRowHover, image, ocasion = false, title}: CategoriesCardInterface) {
+export default function CategoriesCard({index, category, side, rowHover, setRowHover, image, ocasion = false, title, sortByDiscount}: CategoriesCardInterface) {
     const namespace = ocasion ? "ocasions" : "Tags";
-    const query = ocasion ? {ocasions: category} : {category: category};
     const t = useTranslations(namespace);
+    
+    const query = sortByDiscount 
+        ? {sort_by: 'DISCOUNT'}
+        : ocasion 
+            ? {ocasions: category}
+            : {category: category};
+
+    
 
   return (
     <Link href={{pathname: '/catalog', query: query}} className={`bg-blue-2 h-38 lg:h-80 rounded-2xl relative transition-all duration-400 cursor-pointer overflow-hidden ${side === rowHover ? "lg:w-7/13" : rowHover === CategoriesRowHover.NONE ? "lg:w-6/13" : "lg:w-5/13"}`} onMouseEnter={() => {setRowHover(side)}} onMouseLeave={() => {setRowHover(CategoriesRowHover.NONE)}}>
