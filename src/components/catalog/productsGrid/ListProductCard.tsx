@@ -49,9 +49,9 @@ export default function ListProductCard({product}: ProductCardInterface) {
             </div>
             
             <div className='hidden lg:block'>
-                <p className='font-manrope font-semibold mb-4 mt-8'>{t('description')}</p>
+                {/* <p className='font-manrope font-semibold mb-4 mt-8'>{t('description')}</p> */}
                 <div 
-                      className={styles.productDescription + ' text-black mb-6'}
+                      className={styles.productDescription + ' text-black mb-6 mt-8'}
                       dangerouslySetInnerHTML={{ __html: product.description[locale] }}
                 ></div>
                 {

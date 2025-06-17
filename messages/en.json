@@ -155,7 +155,8 @@
     "PACKAGING_CARDBOARD_BOX_DESIGN": "Packaging - laminated cardboard box/design",
     "PACKAGING_WOODEN": "Packaging - wooden",
     "PACKAGING_CUSTOM_BAG": "Packaging - custom bag",
-    "PACKAGING_CUSTOM_DESIGN": "Packaging - custom design"
+    "PACKAGING_CUSTOM_DESIGN": "Packaging - custom design",
+    "GOURMET_ACCESSORIES" : "Gourmet Accessories"
   },
   "NavBar": {
     "catalog": "Catalog",
@@ -206,6 +207,7 @@
       "see_more": "See more",
       "add_to_cart": "Add to cart",
       "out_of_stock": "Out of stock",
+      "on_command": "On command",
       "discount": "Discount"
     },
     "Collaboration": {

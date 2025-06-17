@@ -11,12 +11,12 @@ export enum ProductContent {
     HONEY_JAM_CARAMEL_PEANUT_BUTTER = "HONEY_JAM_CARAMEL_PEANUT_BUTTER",
     NUTS_DRY_FRUITS_SPICES = "NUTS_DRY_FRUITS_SPICES",
     CHOCOLATE_BISCUITS_CANDY = "CHOCOLATE_BISCUITS_CANDY",
-    FIRECRACKER = "FIRECRACKER",
     PACKAGING_CRAFT_BOX = "PACKAGING_CRAFT_BOX",
     PACKAGING_CARDBOARD_BOX_DESIGN = "PACKAGING_CARDBOARD_BOX_DESIGN",
     PACKAGING_WOODEN = "PACKAGING_WOODEN",
     PACKAGING_CUSTOM_BAG = "PACKAGING_CUSTOM_BAG",
     PACKAGING_CUSTOM_DESIGN = "PACKAGING_CUSTOM_DESIGN",
+    GOURMET_ACCESSORIES = "GOURMET_ACCESSORIES",
   };
   
   export const ProductContentArr = Object.values(ProductContent).filter(value => typeof value === 'string') as string[];
@@ -124,13 +124,6 @@ const productContentTranslations: Record<ProductContent, ProductContentTranslati
       en: normalizeText("Chocolate/biscuits/candy")
     }
   },
-  [ProductContent.FIRECRACKER]: {
-    title: {
-      ro: normalizeText("Petardă"),
-      ru: normalizeText("Петарда"),
-      en: normalizeText("Firecracker")
-    }
-  },
   [ProductContent.PACKAGING_CRAFT_BOX]: {
     title: {
       ro: normalizeText("Ambalaj - cutie craft"),
@@ -165,7 +158,14 @@ const productContentTranslations: Record<ProductContent, ProductContentTranslati
       ru: normalizeText("Упаковка - индивидуальный дизайн"),
       en: normalizeText("Packaging - custom design")
     }
-  }
+  },
+  [ProductContent.GOURMET_ACCESSORIES]: {
+    title: {
+      ro: normalizeText("Accesorii gastronomice"),
+      ru: normalizeText("Гастрономические аксессуары"),
+      en: normalizeText("Gourmet Accessories")
+    }
+  },
 };
 
 export function findProductContentByText(input: string): ProductContent[] {

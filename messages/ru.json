@@ -155,7 +155,8 @@
     "PACKAGING_CARDBOARD_BOX_DESIGN": "Упаковка — ламинированная картонная коробка/дизайн",
     "PACKAGING_WOODEN": "Упаковка — деревянная",
     "PACKAGING_CUSTOM_BAG": "Упаковка — индивидуальный пакет",
-    "PACKAGING_CUSTOM_DESIGN": "Упаковка — индивидуальный дизайн"
+    "PACKAGING_CUSTOM_DESIGN": "Упаковка — индивидуальный дизайн",
+    "GOURMET_ACCESSORIES" : "Гастрономические аксессуары"
   },
   "NavBar" : {
     "catalog" : "Каталог",
@@ -206,6 +207,7 @@
     "see_more": "Смотреть больше",
     "add_to_cart": "Добавить в корзину",
     "out_of_stock": "Нет в наличии",
+    "on_command":  "Под заказ",
     "discount": "Скидка"
     },
     "Collaboration" : {

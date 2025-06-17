@@ -10,7 +10,7 @@ export enum Ocasions {
     FOR_HOME_AND_OFFICE = "FOR_HOME_AND_OFFICE",
     FOR_TRAVEL = "FOR_TRAVEL",
     MINI_GIFTS = "MINI_GIFTS",
-    GASTRONOMIC = "GASTRONOMIC",
+    // GASTRONOMIC = "GASTRONOMIC",
     PROMOTIONAL = "PROMOTIONAL",
     UNIVERSAL = "UNIVERSAL",
 };
@@ -106,13 +106,13 @@ const ocasionTranslations: Record<Ocasions, OcasionTranslation> = {
       en: "Mini Gifts & Compliments"
     }
   },
-  [Ocasions.GASTRONOMIC]: {
-    title: {
-      ro: "Gastronomice",
-      ru: "Гастрономические",
-      en: "Gastronomic"
-    }
-  },
+  // [Ocasions.GASTRONOMIC]: {
+  //   title: {
+  //     ro: "Gastronomice",
+  //     ru: "Гастрономические",
+  //     en: "Gastronomic"
+  //   }
+  // },
   [Ocasions.PROMOTIONAL]: {
     title: {
       ro: "Promoționale",

@@ -156,7 +156,8 @@
       "PACKAGING_CARDBOARD_BOX_DESIGN": "Ambalaj - cutie din carton caserat/design",
       "PACKAGING_WOODEN": "Ambalaj - din lemn",
       "PACKAGING_CUSTOM_BAG": "Ambalaj - pungă personalizată",
-      "PACKAGING_CUSTOM_DESIGN": "Ambalaj - design individual"
+      "PACKAGING_CUSTOM_DESIGN": "Ambalaj - design individual",
+      "GOURMET_ACCESSORIES" : "Accesorii gastronomice"
     },
     "NavBar" : {
         "catalog" : "Catalog",
@@ -207,7 +208,8 @@
         "see_more": "Vezi mai multe",
         "add_to_cart": "Adaugă în coș",
         "out_of_stock": "Stoc epuizat",
-        "discount": "Reducere"
+        "discount": "Reducere",
+        "on_command": "La comandă"
       },
       "Collaboration" : {
         "title": "CONDIȚIILE DE COOPERARE",
