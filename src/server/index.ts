@@ -8,6 +8,7 @@ import { homeRouter } from './procedures/routers/homeRouter';
 import { homeOcasionRouter } from './procedures/routers/homeOcasionRouter';
 import { router } from './trpc';
 import { seasonCatalogRouter } from './procedures/routers/seasonCatalogRouter';
+import { sendContactEmailProcedure } from './procedures/contact/sendContactEmail';
 
 export const appRouter = router({
   products: productRouter,
@@ -18,7 +19,8 @@ export const appRouter = router({
   home_banner: homeRouter,
   homeOcasion: homeOcasionRouter,
   seasonCatalog: seasonCatalogRouter,
-  getAllClients: getAllClientsProcedure
+  getAllClients: getAllClientsProcedure,
+  contact: sendContactEmailProcedure
 });
 
 export type AppRouter = typeof appRouter;
