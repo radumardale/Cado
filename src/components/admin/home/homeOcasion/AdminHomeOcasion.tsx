@@ -135,7 +135,7 @@ export default function AdminHomeOcasion() {
                                       <Select onValueChange={field.onChange} value={field.value}>
                                           <FormControl>
                                               <SelectTrigger className="text-base cursor-pointer flex h-12 max-h-none items-center px-6 gap-2 border border-gray rounded-3xl text-black w-full">
-                                                  <SelectValue placeholder="Alege disponibilitate stoc" />
+                                                  <SelectValue placeholder={t('choose_stock')} />
                                                   <ChevronDown className='size-5' strokeWidth={1.5}/>
                                               </SelectTrigger>
                                           </FormControl>  

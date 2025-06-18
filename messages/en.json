@@ -350,7 +350,9 @@
       "preference": "Preferred contact method?",
       "agreement_slice_1": "I agree with the",
       "agreement_slice_2": "Terms and Conditions and Privacy Policy",
-      "send": "Send message"
+      "send": "Send message",
+      "success" : "Message sent successfully",
+      "success_info" : "Our team has received your request and will get back to you as soon as possible."
     }
   },
   "CatalogPage": {

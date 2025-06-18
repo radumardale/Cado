@@ -137,7 +137,7 @@ export default function AdminProductImages({ product, imagesData, initialImagesD
                                       <Select onValueChange={field.onChange} value={isMounted ? field.value : StockState.IN_STOCK}>
                                           <FormControl>
                                               <SelectTrigger className="text-base cursor-pointer flex h-12 max-h-none items-center px-6 gap-2 border border-gray rounded-3xl text-black w-full">
-                                                  <SelectValue placeholder="Alege disponibilitate stoc" />
+                                                  <SelectValue placeholder={t('availability')} />
                                                   <ChevronDown className='size-5' strokeWidth={1.5}/>
                                               </SelectTrigger>
                                           </FormControl>  

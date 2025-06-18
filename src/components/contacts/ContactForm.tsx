@@ -41,6 +41,7 @@ export default function ContactForm() {
     function onSubmit(values: z.infer<typeof sendMessageRequest>) {
         console.log(values)
         toast();
+        form.reset()
     }
 
     return (

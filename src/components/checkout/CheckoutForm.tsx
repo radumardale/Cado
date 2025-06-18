@@ -50,17 +50,32 @@ const determineAvailableDeliveryHours = (hour: number): DeliveryHours[] => {
         : DeliveryHoursArr.slice(sliceIndex) as DeliveryHours[];
 }
 
+const orderMessages = {
+  orderSuccess: {
+    "ro": "Comanda a fost plasată cu succes!",
+    "ru": "Заказ был успешно размещен!",
+    "en": "Order has been placed successfully!"
+  },
+  orderError: {
+    "ro": "Comanda nu a putut fi efectuata!",
+    "ru": "Заказ не удалось выполнить!",
+    "en": "Order could not be completed!"
+  }
+};
+
 export default function CheckoutForm({items, setDeliveryRegion, setDeliveryHour, totalCost, products}: CheckoutFormProps) {
+    const locale = useLocale() as "ro" | "ru" | "en";
+    const successMessage = orderMessages.orderSuccess[locale] || orderMessages.orderSuccess.ro;
+    const errorMessage = orderMessages.orderError[locale] || orderMessages.orderError.ro;
+
     const trpc = useTRPC();
     const t = useTranslations("CheckoutPage.CheckoutForm");
     const router = useRouter();
 
-    const locale = useLocale()
-
     const { mutate } = useMutation(trpc.order.addOrder.mutationOptions({
         onSuccess: async (data) => {
             if (!data.success) {
-                toast.error("Comanda nu a putut fi efectuata!");
+                toast.error(errorMessage);
                 return;
             }
 
@@ -88,7 +103,7 @@ export default function CheckoutForm({items, setDeliveryRegion, setDeliveryHour,
             }
 
             if (data.order) {
-                toast.success("Comanda a fost plasată cu succes!");
+                toast.success(successMessage);
                 router.push({pathname: "/confirmation/[id]", params: {id: data?.order?.custom_id || ""}})
             }
           }

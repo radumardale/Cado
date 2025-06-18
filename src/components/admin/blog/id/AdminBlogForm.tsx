@@ -13,7 +13,7 @@ import { BlogTags } from '@/lib/enums/BlogTags';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import Image from 'next/image';
 import { useFieldArray } from 'react-hook-form';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import BlogImageUpload from '../BlogImageUpload';
 import { SectionImagesInterface } from '@/models/blog/types/SectionImagesInterface';
 import { toast } from 'sonner';
@@ -26,7 +26,17 @@ interface AdminBlogFormProps {
   id: string;
 }
 
+const toastMessages = {
+  "ro": "Articolul a fost actualizat cu succes!",
+  "ru": "Статья была успешно обновлена!",
+  "en": "Article has been updated successfully!"
+}
+
 export default function AdminBlogForm({ id }: AdminBlogFormProps) {
+
+    const locale = useLocale() as "ro" | "ru" | "en";
+    const toastMessage = toastMessages[locale] || toastMessages.ro; // Default to Romanian
+
     const trpc = useTRPC();
     const { data } = useQuery(trpc.blog.getBlogById.queryOptions({id: id}));
     const {isSuccess, mutate, data: MutatedData, isPending} = useMutation(trpc.blog.updateBlog.mutationOptions());
@@ -49,7 +59,7 @@ export default function AdminBlogForm({ id }: AdminBlogFormProps) {
 
     useEffect(() => {
         if (UpdateIsSuccess) {
-            toast.success("Articolul a fost actualizat cu succes!");
+            toast.success(toastMessage);
             setInitialSectionImages(UpdateData.sectionImages);
             setSectionImages(UpdateData.sectionImages);
 
@@ -219,7 +229,7 @@ export default function AdminBlogForm({ id }: AdminBlogFormProps) {
             if (form.getValues("data.imagesChanged") || form.getValues("data.isImageNew")) {
                 uploadImagesInOrder();
             } else {
-                toast.success("Articolul a fost actualizat cu succes!");
+                toast.success(toastMessage);
             }
             
              // Reset form with updated product data

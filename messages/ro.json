@@ -352,7 +352,9 @@
         "preference" : "Modul preferat de contact?",
         "agreement_slice_1" : "Sunt de acord cu",
         "agreement_slice_2" : "Termenii și condițiile și cu Politica de confidențialitate",
-        "send" : "Transmite mesajul"
+        "send" : "Transmite mesajul",
+        "success" : "Mesaj trimis cu succes",
+        "success_info" : "Echipa noastră a primit solicitarea ta și va reveni cu un răspuns în cel mai scurt timp posibil."
       }
     },
     "CatalogPage" : {
@@ -621,7 +623,7 @@
         "is_uploading" : "Se încarcă...",
         "select_image" : "Selectează sau trage o imagine aici",
         "type" : "Tip noutate",
-        "choose_stock" : "Alege disponibilitate stoc",
+        "choose_stock" : "Alege disponibilitate stoc", 
         "delete_paragraph" : "Șterge paragraf",
         "add_paragraph" : "Adaugă paragraf",
         "delete_blog" : "Șterge articol",

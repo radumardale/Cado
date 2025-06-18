@@ -12,7 +12,7 @@ import { BlogTags } from '@/lib/enums/BlogTags';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import Image from 'next/image';
 import { useFieldArray } from 'react-hook-form';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import BlogImageUpload from '../BlogImageUpload';
 import { SectionImagesInterface } from '@/models/blog/types/SectionImagesInterface';
 import { toast } from 'sonner';
@@ -21,7 +21,17 @@ import { useRouter } from '@/i18n/navigation';
 
 import { useMutation } from "@tanstack/react-query";
 
+const toastMessages = {
+  "ro": "Produsul a fost actualizat cu succes!",
+  "ru": "Товар был успешно обновлен!",
+  "en": "Product has been updated successfully!"
+}
+
 export default function NewAdminBlogForm() {
+
+    const locale = useLocale() as "ro" | "ru" | "en";
+    const toastMessage = toastMessages[locale] || toastMessages.ro; // Default to Romanian
+
     const trpc = useTRPC();
     const {isSuccess, mutate, data: MutatedData, isPending} = useMutation(trpc.blog.createBlog.mutationOptions());
     const { mutate: UpdateMutate, isSuccess: UpdateIsSuccess } = useMutation(trpc.image.uploadBlogImages.mutationOptions());
@@ -180,7 +190,7 @@ export default function NewAdminBlogForm() {
             if (form.getValues("data.imagesChanged") || form.getValues("data.isImageNew")) {
                 uploadImagesInOrder();
             } else {
-                toast.success("Produsul a fost actualizat cu succes!");
+                toast.success(toastMessage);
             }
             
              // Reset form with updated product data
