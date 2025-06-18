@@ -22,8 +22,6 @@ export default function ListProductCard({product}: ProductCardInterface) {
     const [value, setValue] = useLocalStorage<CartInterface[]>("cart", []);
     const [activeIndex, setActiveIndex] = useState(-1);
 
-    console.log(product)
-
   return (
     <div className='col-span-full grid grid-cols-8 lg:grid-cols-10 gap-x-2 lg:gap-x-6 not-last:border-b not-last:border-lightgray lg:not-last:border-gray not-last:pb-4 lg:not-last:pb-6 not-last:mb-6 lg:not-last:mb-0'>
         <Link href={{pathname: '/catalog/product/[id]', params: {id: product.custom_id}}} className='relative col-span-full lg:col-span-3 group aspect-[4/5] h-full max-w-full'>

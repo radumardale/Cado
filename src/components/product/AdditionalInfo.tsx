@@ -16,8 +16,6 @@ export default function AdditionalInfo({product, locale}: AdditionalInfoInterfac
 
     const prod_t = useTranslations("ProductPage");
 
-    console.log(product);
-
   return (
     <div className='mt-12 lg:mt-0'>
         {
