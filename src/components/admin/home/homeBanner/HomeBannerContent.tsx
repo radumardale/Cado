@@ -8,6 +8,7 @@ import NewBannerForm from './NewBannerForm';
 import DeleteBannerForm from './DeleteBannerForm';
 
 import { useQuery } from "@tanstack/react-query";
+import { useTranslations } from 'next-intl';
 
 export enum carousellDirection {
     "FORWARD",
@@ -24,12 +25,23 @@ export default function HomeBannerContent() {
     const [isAnimationPlaying, setIsAnimationPlaying] = useState(false);
     const [direction, setDirection] = useState<carousellDirection>(carousellDirection.FORWARD);
     const intervalRef = useRef<NodeJS.Timeout>(null);
-    const [selectedImage, setSelectedImage] = useState<string | null>(null);
+
+    const [selectedImages, setSelectedImages] = useState<{
+        ro: string | null;
+        ru: string | null;
+        en: string | null;
+    }>({
+        ro: null,
+        ru: null,
+        en: null
+    });
 
     // Computed values to track banner state
     const totalExistingBanners = HomeBannerQuery?.banners?.length || 0;
-    const newBannerSlideIndex = totalExistingBanners; // Last position is for new banner
-    const totalSlides = totalExistingBanners + 1; // Including new banner slide
+    const newBannerSlideIndex = totalExistingBanners; // Romanian new banner index
+    const ruNewBannerSlideIndex = totalExistingBanners + 1; // Russian new banner index  
+    const enNewBannerSlideIndex = totalExistingBanners + 2; // English new banner index
+    const totalSlides = totalExistingBanners + 1;
 
     // Current banner tracking
     const currentBanner = slideNumber < totalExistingBanners ? HomeBannerQuery?.banners[slideNumber] : null;
@@ -38,8 +50,19 @@ export default function HomeBannerContent() {
       refetch()
     }
 
-    const handleMainImageAdded = (imageBase64: string) => {
-        setSelectedImage(imageBase64);
+    const handleMainImageAdded = (imageBase64: string, language: string = "ro") => {
+        setSelectedImages(prev => ({
+            ...prev,
+            [language]: imageBase64
+        }));
+    };
+
+    const resetSelectedImages = () => {
+        setSelectedImages({
+            ro: null,
+            ru: null,
+            en: null
+        });
     };
 
     const nextSlide = () => {
@@ -124,9 +147,12 @@ export default function HomeBannerContent() {
         };
     }, []);
 
+    const t = useTranslations("Admin.AdminHomePage");
+
     return (
         <>
-            <div className='col-span-full overflow-hidden rounded-2xl lg:rounded-3xl relative mb-6 mt-16'>
+            <p className='mt-[3rem] font-manrope text-[1.5rem] font-bold mb-[1.5rem] col-span-full'>{t('banner_ro')}</p>
+            <div className='col-span-full overflow-hidden rounded-2xl lg:rounded-3xl relative mb-6'>
                 <ArrowRight className='absolute top-1/2 -translate-y-1/2 right-2 lg:right-6 z-20 text-blue-4 cursor-pointer' onClick={nextSlide}/>
                 <ArrowLeft className='absolute top-1/2 -translate-y-1/2 left-2 lg:left-6 z-20 text-blue-4 cursor-pointer' onClick={previousSlide}/>
                 
@@ -147,7 +173,7 @@ export default function HomeBannerContent() {
                         return (
                             <ImageSlide 
                                 key={banner._id || index} 
-                                src={banner.image} 
+                                src={banner.images.ro} 
                                 index={index} 
                                 slide={slide} 
                                 nextSlide={nextSlideState} 
@@ -156,18 +182,82 @@ export default function HomeBannerContent() {
                         )
                     })}
                     <NewBannerSlide 
-                        selectedImage={selectedImage} 
+                        selectedImage={selectedImages.ro} 
                         index={newBannerSlideIndex} 
                         slide={slide} 
                         nextSlide={nextSlideState} 
                         direction={direction} 
                         onImageAdded={handleMainImageAdded}
+                        language='ro'
                     />
+                </div>
+            </div>
+
+            {/* Russian and English banners */}
+            <div className="col-span-full w-full flex gap-4 lg:gap-6 mb-6">
+                {/* Russian banner */}
+                <div className='flex-1'>
+                    <p className='font-manrope text-[1.5rem] font-bold mb-[1.5rem]'>{t('banner_ru')}</p>
+                    <div className='overflow-hidden rounded-2xl lg:rounded-3xl relative'>
+                        <div className='aspect-[358/362] lg:aspect-[112/50] relative w-full h-full'>
+                            {HomeBannerQuery?.banners.map((banner, index) => {
+                                return (
+                                    <ImageSlide 
+                                        key={`ru-${banner._id || index}`} 
+                                        src={banner.images.ru} 
+                                        index={index} 
+                                        slide={slide} 
+                                        nextSlide={nextSlideState} 
+                                        direction={direction}
+                                    />
+                                )
+                            })}
+                            <NewBannerSlide 
+                                selectedImage={selectedImages.ru} 
+                                index={ruNewBannerSlideIndex} 
+                                slide={slide} 
+                                nextSlide={nextSlideState} 
+                                direction={direction} 
+                                onImageAdded={handleMainImageAdded}
+                                language='ru'
+                            />
+                        </div>
+                    </div>
+                </div>
+
+                {/* English banner */}
+                <div className='flex-1 '>
+                    <p className='font-manrope text-[1.5rem] font-bold mb-[1.5rem]'>{t('banner_en')}</p>
+                    <div className='overflow-hidden rounded-2xl lg:rounded-3xl relative'>
+                        <div className='aspect-[358/362] lg:aspect-[112/50] relative w-full h-full'>
+                            {HomeBannerQuery?.banners.map((banner, index) => {
+                                return (
+                                    <ImageSlide 
+                                        key={`en-${banner._id || index}`} 
+                                        src={banner.images.en} 
+                                        index={index} 
+                                        slide={slide} 
+                                        nextSlide={nextSlideState} 
+                                        direction={direction}
+                                    />
+                                )
+                            })}
+                            <NewBannerSlide 
+                                selectedImage={selectedImages.en} 
+                                index={enNewBannerSlideIndex} 
+                                slide={slide} 
+                                nextSlide={nextSlideState} 
+                                direction={direction} 
+                                onImageAdded={handleMainImageAdded}
+                                language='en'
+                            />
+                        </div>
+                    </div>
                 </div>
             </div>
             
             {!currentBanner ? 
-                <NewBannerForm selectedImage={selectedImage} refetchBanners={refetchBanners} setSelectedImage={setSelectedImage}/> :
+                <NewBannerForm selectedImages={selectedImages} refetchBanners={refetchBanners} resetSelectedImages={resetSelectedImages}/> :
                 <DeleteBannerForm id={currentBanner._id} ocasion={currentBanner.ocasion} refetchBanners={refetchBanners}/>
             }
         </>

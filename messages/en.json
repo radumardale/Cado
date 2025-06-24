@@ -641,6 +641,9 @@
       "AdminHomePage": {
         "banner_filter": "Banner filter",
         "save_banner": "Save banner",
+        "banner_ro" : "Banner RO",
+        "banner_en" : "Banner EN",
+        "banner_ru" : "Banner RU",
         "choose_filter": "Choose filter",
         "delete_banner_question": "Are you sure you want to delete the banner?",
         "cancel": "Cancel",

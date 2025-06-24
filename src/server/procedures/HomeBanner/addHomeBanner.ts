@@ -9,7 +9,11 @@ import { DestinationEnum, generateUploadLinks } from "../image/generateUploadLin
 import { HomeBannerInterface } from "@/models/home_banner/types/HomeBannerInterface";
 
 interface addHomeBannerI extends ActionResponse {
-    imageLink: string,
+    imageLinks: {
+        ro: string;
+        ru: string;
+        en: string;
+    },
     homeBanner: HomeBannerInterface | null
 }
 
@@ -17,28 +21,51 @@ export const addHomeBannerProcedure = protectedProcedure
     .input(addHomeBannerRequestSchema)
     .mutation(async ({ input }): Promise<addHomeBannerI> => {
         try {
-
             await connectMongo();
 
             const homeBanner = await HomeBanner.create({
                 ocasion: input.ocasion,
+                images: {
+                    ro: "",
+                    ru: "",
+                    en: ""
+                }
             });
 
-            const imageUrl = await generateUploadLinks({
-                id: homeBanner._id.toString(),
+            // Generate upload links for all 3 languages
+            const roUploadLink = await generateUploadLinks({
+                id: `${homeBanner._id.toString()}-ro`,
+                destination: DestinationEnum.BANNER
+            });
+            
+            const ruUploadLink = await generateUploadLinks({
+                id: `${homeBanner._id.toString()}-ru`,
+                destination: DestinationEnum.BANNER
+            });
+            
+            const enUploadLink = await generateUploadLinks({
+                id: `${homeBanner._id.toString()}-en`,
                 destination: DestinationEnum.BANNER
             });
 
             return {
                 success: true,
-                imageLink: imageUrl.imageUrl,
+                imageLinks: {
+                    ro: roUploadLink.imageUrl,
+                    ru: ruUploadLink.imageUrl,
+                    en: enUploadLink.imageUrl
+                },
                 homeBanner: homeBanner
             }
         } catch (e: any) {
             return {
-                imageLink: "",
+                imageLinks: {
+                    ro: "",
+                    ru: "",
+                    en: ""
+                },
                 error: e.message,
-                success: true,
+                success: false,
                 homeBanner: null
             }
         }

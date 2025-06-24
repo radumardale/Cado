@@ -11,10 +11,15 @@ interface NewBannerSlideInterface {
     index: number,
     direction: carousellDirection,
     selectedImage: string | null,
-    onImageAdded: (imageBase64: string) => void
+    onImageAdded: (imageBase64: string, language?: string) => void
+    language?: "ro" | "ru" | "en"
 }
 
-export default function NewBannerSlide({slide, nextSlide, index, direction, onImageAdded, selectedImage}: NewBannerSlideInterface) {
+export default function NewBannerSlide({slide, nextSlide, index, direction, onImageAdded, selectedImage, language = "ro"}: NewBannerSlideInterface) {
+
+    const handleImageUpload = (imageBase64: string) => {
+        onImageAdded(imageBase64, language);
+    };
 
     const slideVariants = {
         initial: {
@@ -41,7 +46,7 @@ export default function NewBannerSlide({slide, nextSlide, index, direction, onIm
             selectedImage ? 
             <Image unoptimized quality={100} priority src={selectedImage} alt="hero1" width={3584} height={1600} className='w-full h-full object-cover'/>
             :
-            <HomeBannerImageUpload onImageAdded={onImageAdded}/>
+            <HomeBannerImageUpload onImageAdded={handleImageUpload}/>
         }
         
     </motion.div>

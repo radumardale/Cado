@@ -4,10 +4,22 @@ import { Ocasions } from "@/lib/enums/Ocasions";
 
 // Product Schema
 const HomeBannerSchema = new mongoose.Schema<HomeBannerInterface>({
-    image: {
-        type: String,
-        required: false,
-        default: ""
+    images: {
+        ro: {
+            type: String,
+            required: false,
+            default: ""
+        },
+        ru: {
+            type: String,
+            required: false,
+            default: ""
+        },
+        en: {
+            type: String,
+            required: false,
+            default: ""
+        }
     },
     ocasion: {
         type: String,

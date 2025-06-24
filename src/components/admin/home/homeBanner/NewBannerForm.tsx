@@ -36,14 +36,20 @@ const toastMessages = {
 };
 
 interface NewBannerFormProps {
-  selectedImage: string | null,
-  setSelectedImage: (img: string | null) => void,
+  selectedImages: {
+      ro: string | null;
+      ru: string | null;
+      en: string | null;
+  };
+  resetSelectedImages: () => void
   refetchBanners: () => void
 }
 
-export default function NewBannerForm({ selectedImage, refetchBanners, setSelectedImage }: NewBannerFormProps) {
+export default function NewBannerForm({ selectedImages, refetchBanners, resetSelectedImages }: NewBannerFormProps) {
 
   const locale = useLocale() as "ro" | "ru" | "en";
+
+  const allImagesUploaded = selectedImages.ro && selectedImages.ru && selectedImages.en;
 
   const trpc = useTRPC();
   const ocastionsT = useTranslations("ocasions");
@@ -56,14 +62,14 @@ export default function NewBannerForm({ selectedImage, refetchBanners, setSelect
     useMutation(trpc.image.uploadBannerImage.mutationOptions());
 
   useEffect(() => {
-    if (UpdateIsSuccess) {
-      revalidateServerPath("/[locale]", 'page');
+  if (UpdateIsSuccess) {
+    revalidateServerPath("/[locale]", 'page');
 
-      setSelectedImage(null);
-      toast.success(toastMessages.success[locale])
-      refetchBanners();
-    }
-  }, [UpdateIsSuccess]);
+    resetSelectedImages();
+    toast.success(toastMessages.success[locale])
+    refetchBanners();
+  }
+}, [UpdateIsSuccess]);
 
   const form = useForm<z.infer<typeof addHomeBannerRequestSchema>>({
     resolver: zodResolver(addHomeBannerRequestSchema),
@@ -75,74 +81,79 @@ export default function NewBannerForm({ selectedImage, refetchBanners, setSelect
   const { isDirty } = useFormState({ control: form.control });
 
   useEffect(() => {
-    // Define an async function for sequential uploads
-    const uploadImagesInOrder = async () => {
-      if (isSuccess && MutatedData && selectedImage) {
-        let newMainImageKey = null;
+  // Define an async function for sequential uploads
+  const uploadImagesInOrder = async () => {
+    if (isSuccess && MutatedData && allImagesUploaded) {
+      const uploadedKeys = {
+        ro: null as string | null,
+        ru: null as string | null,
+        en: null as string | null
+      };
 
-        try {
-          const dataUrl = MutatedData.imageLink;
+      try {
+        // Upload all 3 images
+        for (const [lang, imageBase64] of Object.entries(selectedImages)) {
+          if (imageBase64) {
+            const dataUrl = MutatedData.imageLinks[lang as keyof typeof MutatedData.imageLinks];
+            
+            // Convert base64 to Buffer
+            const base64Data = imageBase64.replace(/^data:image\/\w+;base64,/, "");
+            const buf = Buffer.from(base64Data, "base64");
 
-          // Convert base64 to Buffer
-          const base64Data = selectedImage.replace(
-            /^data:image\/\w+;base64,/,
-            ""
-          );
-          const buf = Buffer.from(base64Data, "base64");
+            // Upload to S3
+            const response = await fetch(dataUrl, {
+              method: "PUT",
+              body: buf,
+            });
 
-          // Upload to S3
-          const response = await fetch(dataUrl, {
-            method: "PUT",
-            body: buf,
-          });
+            // Extract key from URL
+            const extractedKey = dataUrl.split(".com/")[1]?.split("?")[0];
 
-          // Extract key from URL
-          const extractedKey = dataUrl.split(".com/")[1]?.split("?")[0];
-
-          if (response.ok && extractedKey) {
-            newMainImageKey = extractedKey;
-          } else {
-            console.log(
-              `Failed to upload main image: ${response.statusText}`
-            );
+            if (response.ok && extractedKey) {
+              uploadedKeys[lang as keyof typeof uploadedKeys] = extractedKey;
+            } else {
+              console.log(`Failed to upload ${lang} image: ${response.statusText}`);
+            }
           }
-        } catch (error) {
-          console.log(`Error uploading main image:`, error);
         }
-
-        if (MutatedData.homeBanner?._id) {
-          UpdateMutate({
-            id: MutatedData.homeBanner._id,
-            newMainImageKey,
-          });
-        }
-      }
-    };
-
-    // Call the async function if we have successful mutation
-    if (isSuccess && MutatedData) {
-      if (selectedImage) {
-        uploadImagesInOrder();
-      } else {
-        toast.error(toastMessages.noImage[locale]);
+      } catch (error) {
+        console.log(`Error uploading images:`, error);
       }
 
-      // Reset form with updated product data
-      form.reset(
-        {
-          ...MutatedData.homeBanner,
-        },
-        {
-          keepDirty: false,
-          keepDefaultValues: false,
-        }
-      );
+      // Update banner with all image keys
+      if (MutatedData.homeBanner?._id) {
+        UpdateMutate({
+          id: MutatedData.homeBanner._id,
+          newImageKeys: uploadedKeys
+        });
+      }
     }
-  }, [isSuccess, MutatedData, form]);
+  };
+
+  // Call the async function if we have successful mutation
+  if (isSuccess && MutatedData) {
+    if (allImagesUploaded) {
+      uploadImagesInOrder();
+    } else {
+      toast.error(toastMessages.noImage[locale]);
+    }
+
+    // Reset form with updated product data
+    form.reset(
+      {
+        ...MutatedData.homeBanner,
+      },
+      {
+        keepDirty: false,
+        keepDefaultValues: false,
+      }
+    );
+  }
+}, [isSuccess, MutatedData, form]);
 
   const onSubmit = (values: z.infer<typeof addHomeBannerRequestSchema>) => {
-    if (!selectedImage) {
-      toast.error("Introduceti imaginea!"); 
+    if (!allImagesUploaded) {
+      toast.error(toastMessages.noImage[locale]); 
     } else {
       mutate(values);
     }

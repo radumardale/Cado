@@ -11,20 +11,18 @@ export const deleteHomeBannerProcedure = protectedProcedure
     .input(deleteHomeBannerRequestSchema)
     .mutation(async ({ input }): Promise<ActionResponse> => {
         try {
-
             await connectMongo();
-
             
             const homeBanner = await HomeBanner.findByIdAndDelete(input.id);
 
-            if (homeBanner && homeBanner.image) {
-                await deleteFromBucket(homeBanner.image);
-            }
-
-            if (!homeBanner) {
-                return {
-                    success: true,
-                }
+            // Delete all language-specific images
+            if (homeBanner && homeBanner.images) {
+                const deletePromises = [];
+                if (homeBanner.images.ro) deletePromises.push(deleteFromBucket(homeBanner.images.ro));
+                if (homeBanner.images.ru) deletePromises.push(deleteFromBucket(homeBanner.images.ru));
+                if (homeBanner.images.en) deletePromises.push(deleteFromBucket(homeBanner.images.en));
+                
+                await Promise.all(deletePromises);
             }
 
             return {
@@ -33,7 +31,7 @@ export const deleteHomeBannerProcedure = protectedProcedure
         } catch (e: any) {
             return {
                 error: e.message,
-                success: true,
+                success: false, // Should be false on error
             }
         }
     })

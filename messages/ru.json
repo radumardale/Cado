@@ -641,6 +641,9 @@
       "AdminHomePage": {
         "banner_filter": "Фильтр баннера",
         "save_banner": "Сохранить баннер",
+        "banner_ro" : "Баннер RO",
+        "banner_en" : "Баннер EN", 
+        "banner_ru" : "Баннер RU",
         "choose_filter": "Выбрать фильтр",
         "delete_banner_question": "Вы уверены, что хотите удалить баннер?",
         "cancel": "Отмена",

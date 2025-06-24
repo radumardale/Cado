@@ -642,6 +642,9 @@
       },
       "AdminHomePage" : {
         "banner_filter" : "Filtru banner",
+        "banner_ro" : "Banner RO",
+        "banner_en" : "Banner EN",
+        "banner_ru" : "Banner RU",
         "save_banner": "Salvează banner",
         "choose_filter" : "Alege filtru",
         "delete_banner_question" : "Ești sigur că vrei să ștergi banerul?",

@@ -5,6 +5,7 @@ import { ArrowLeft, ArrowRight } from 'lucide-react';
 import { useTRPC } from '@/app/_trpc/client';
 
 import { useQuery } from "@tanstack/react-query";
+import { useLocale } from 'next-intl';
 
 export enum carousellDirection {
   "FORWARD",
@@ -12,6 +13,9 @@ export enum carousellDirection {
 }
 
 export default function Hero() {
+
+  const locale = useLocale() as 'ro' | 'ru' | 'en';
+
   const trpc = useTRPC();
   const { data: AllBanners, isSuccess } = useQuery(trpc.home_banner.getAllHomeBanners.queryOptions(undefined, {staleTime: Infinity}));
   const { data: FistBanner } = useQuery(trpc.home_banner.getFirstHomeBanner.queryOptions(undefined, {staleTime: Infinity}));
@@ -151,7 +155,7 @@ export default function Hero() {
           <ImageSlide 
             ocasion={banner.ocasion}
             key={banner._id || index} 
-            src={banner.image} 
+            src={banner.images[locale]} 
             index={index} 
             slide={slide} 
             nextSlide={nextSlideState} 
