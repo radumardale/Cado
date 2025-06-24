@@ -16,7 +16,7 @@ import { Categories } from '@/lib/enums/Categories';
 import CartIcon from './CartIcon';
 import MobileMenuIcon from './MobileMenuIcon';
 import LangIcon from './LangIcon';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 
 interface HeaderProps {
     category?: Categories | null,
@@ -28,6 +28,21 @@ interface HeaderProps {
 }
 
 export default function Header({category, breadcrumbs = false, productInfo}: HeaderProps) {
+
+    const locale = useLocale()
+
+    const getLogoSrc = (locale: string) => {
+        switch (locale) {
+            case 'en':
+                return '/logo/CADO-en.svg';
+            case 'ru':
+                return '/logo/CADO-ru.svg';
+            case 'ro':
+                return '/logo/CADO-ro.svg';
+            default:
+                return '/logo/CADO-ro.svg.svg';
+        }
+    }
 
     const t = useTranslations("NavBar")
 
@@ -100,7 +115,7 @@ export default function Header({category, breadcrumbs = false, productInfo}: Hea
                                     <LangIcon />
                                 </div>
                                 <Link href="/" className='lg:max-w-[14vw]'>
-                                    <Image unoptimized src="/logo/logo-white.svg" width={228} height={56} alt='logo' className='h-8 lg:h-14 w-fit'/>
+                                    <Image unoptimized src={getLogoSrc(locale)} width={228} height={56} alt='logo' className='h-8 lg:h-14 w-fit'/>
                                 </Link>
                                 <div className='hidden gap-8 items-center absolute left-1/2 -translate-x-1/2 lg:flex'>
                                     <CatalogMenuButton isCatalogMenuOpen={isCatalogMenuOpen} setCatalogButtonActive={setCatalogButtonActive} />
