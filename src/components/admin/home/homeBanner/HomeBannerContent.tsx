@@ -38,9 +38,7 @@ export default function HomeBannerContent() {
 
     // Computed values to track banner state
     const totalExistingBanners = HomeBannerQuery?.banners?.length || 0;
-    const newBannerSlideIndex = totalExistingBanners; // Romanian new banner index
-    const ruNewBannerSlideIndex = totalExistingBanners + 1; // Russian new banner index  
-    const enNewBannerSlideIndex = totalExistingBanners + 2; // English new banner index
+    const newBannerSlideIndex = totalExistingBanners; 
     const totalSlides = totalExistingBanners + 1;
 
     // Current banner tracking
@@ -214,7 +212,7 @@ export default function HomeBannerContent() {
                             })}
                             <NewBannerSlide 
                                 selectedImage={selectedImages.ru} 
-                                index={ruNewBannerSlideIndex} 
+                                index={newBannerSlideIndex} 
                                 slide={slide} 
                                 nextSlide={nextSlideState} 
                                 direction={direction} 
@@ -244,7 +242,7 @@ export default function HomeBannerContent() {
                             })}
                             <NewBannerSlide 
                                 selectedImage={selectedImages.en} 
-                                index={enNewBannerSlideIndex} 
+                                index={newBannerSlideIndex} 
                                 slide={slide} 
                                 nextSlide={nextSlideState} 
                                 direction={direction} 
