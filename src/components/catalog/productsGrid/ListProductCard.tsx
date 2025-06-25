@@ -1,3 +1,5 @@
+'use client'
+
 import Accordion from '@/components/home/faq/Accordion';
 import { Link } from '@/i18n/navigation';
 import { CartInterface } from '@/lib/types/CartInterface';
@@ -22,6 +24,21 @@ export default function ListProductCard({product}: ProductCardInterface) {
     const [value, setValue] = useLocalStorage<CartInterface[]>("cart", []);
     const [activeIndex, setActiveIndex] = useState(-1);
 
+    const [isFirstImageVertical, setIsFirstImageVertical] = useState(false);
+    const [isSecondImageVertical, setIsSecondImageVertical] = useState(false);
+
+    const handleFirstImageLoad = (e: React.SyntheticEvent<HTMLImageElement>) => {
+        const img = e.currentTarget;
+        const isVertical = img.naturalHeight > img.naturalWidth;
+        setIsFirstImageVertical(isVertical);
+    };
+
+    const handleSecondImageLoad = (e: React.SyntheticEvent<HTMLImageElement>) => {
+        const img = e.currentTarget;
+        const isVertical = img.naturalHeight > img.naturalWidth;
+        setIsSecondImageVertical(isVertical);
+    };
+
   return (
     <div className='col-span-full grid grid-cols-8 lg:grid-cols-10 gap-x-2 lg:gap-x-6 not-last:border-b not-last:border-lightgray lg:not-last:border-gray not-last:pb-4 lg:not-last:pb-6 not-last:mb-6 lg:not-last:mb-0'>
         <Link href={{pathname: '/catalog/product/[id]', params: {id: product.custom_id}}} className='relative col-span-full lg:col-span-3 group aspect-[4/5] h-full max-w-full'>
@@ -32,10 +49,10 @@ export default function ListProductCard({product}: ProductCardInterface) {
               </div>
           }
           <div className='bg-purewhite w-full h-full rounded-lg lg:rounded-2xl overflow-hidden opacity-100 group-hover:opacity-0 z-10 transition duration-300 relative'>
-            <Image unoptimized src={product.images[0]} width={1596} height={2396} alt={product.title.ro} className='max-w-full w-fit max-h-full object-contain z-10 absolute left-1/2 top-1/2 -translate-1/2'/>  
+            <Image onLoad={handleFirstImageLoad} src={product.images[0]} width={500} height={751} alt={product.title.ro} className={`max-w-full w-fit max-h-full object-contain z-10 absolute left-1/2 top-1/2 -translate-1/2 ${isFirstImageVertical ? 'object-cover w-full h-full' : 'object-contain'}`}/>  
           </div>
           <div className='bg-purewhite w-full h-full absolute left-0 top-0 transition duration-300 -z-10 rounded-lg lg:rounded-2xl overflow-hidden'>
-            <Image unoptimized src={product.images[1] || product.images[0]} width={1596} height={2396} alt={product.title.ro} className={`absolute left-0 top-1/2 -translate-y-1/2 max-w-full max-h-full object-contain`}/>  
+            <Image onLoad={handleSecondImageLoad} src={product.images[1] || product.images[0]} width={500} height={751} alt={product.title.ro} className={`${isSecondImageVertical ? 'object-cover' : 'object-contain'} absolute left-0 top-1/2 -translate-y-1/2 max-w-full max-h-full object-contain`}/>  
           </div>
         </Link>
         <div className='col-span-full lg:col-span-4 flex flex-col mt-4 lg:mt-0'>
