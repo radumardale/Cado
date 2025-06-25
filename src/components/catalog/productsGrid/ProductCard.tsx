@@ -26,6 +26,23 @@ export default function ProductCard({product, category, section="RECOMMENDATIONS
 
     const t = useTranslations("HomePage.Recommendations");
 
+    const [isFirstImageVertical, setIsFirstImageVertical] = useState(false);
+    const [isSecondImageVertical, setIsSecondImageVertical] = useState(false);
+
+    const handleFirstImageLoad = (e: React.SyntheticEvent<HTMLImageElement>) => {
+        const img = e.currentTarget;
+        const isVertical = img.naturalHeight > img.naturalWidth;
+        setIsFirstImageVertical(isVertical);
+        setImageLoaded(true);
+    };
+
+    // Handle second image load
+    const handleSecondImageLoad = (e: React.SyntheticEvent<HTMLImageElement>) => {
+        const img = e.currentTarget;
+        const isVertical = img.naturalHeight > img.naturalWidth;
+        setIsSecondImageVertical(isVertical);
+    };
+
   return (
     <div className={`flex flex-col h-full ${newLine ? "col-start-1 lg:col-start-1" : ""} col-span-4 lg:col-span-3 group cursor-pointer`} onClick={() => {router.push({pathname: "/catalog/product/[id]", params: {id: product.custom_id}, query: category ? {category: category} : {}})}}>
         <div className='relative overflow-hidden before:content-[""] before:absolute before:left-0 before:top-0 before:w-full before:h-full before:bg-pureblack before:opacity-0 group-hover:before:opacity-25 before:rounded-lg before:lg:rounded-2xl before:transition before:duration-300 before:z-10 mb-4 aspect-[339/425]'>
@@ -36,10 +53,10 @@ export default function ProductCard({product, category, section="RECOMMENDATIONS
               </div>
           }
           <div className='bg-purewhite w-full h-full rounded-lg lg:rounded-2xl overflow-hidden opacity-100 group-hover:opacity-0 z-10 transition duration-300 relative'>
-            <Image onLoad={() => setImageLoaded(true)} src={product.images[0]} width={500} height={751} alt={product.title.ro} className='max-w-full w-fit max-h-full object-contain z-10 absolute left-1/2 top-1/2 -translate-1/2'/>  
+            <Image onLoad={handleFirstImageLoad} src={product.images[0]} width={500} height={751} alt={product.title.ro} className={`max-w-full w-fit max-h-full ${isFirstImageVertical ? 'object-cover w-full h-full' : 'object-contain'} z-10 absolute left-1/2 top-1/2 -translate-1/2`}/>  
           </div>
           <div className='bg-purewhite w-full h-full absolute left-0 top-0 transition duration-300 -z-10 rounded-lg lg:rounded-2xl overflow-hidden'>
-            <Image src={product.images[1] || product.images[0]} width={500} height={751} alt={product.title.ro} className={`${isImageLoaded ? "" : "hidden"} absolute left-0 top-1/2 -translate-y-1/2 max-w-full max-h-full object-contain`}/>  
+            <Image onLoad={handleSecondImageLoad} src={product.images[1] || product.images[0]} width={500} height={751} alt={product.title.ro} className={`${isImageLoaded ? "" : "hidden"} absolute left-0 top-1/2 -translate-y-1/2 max-w-full max-h-full ${isSecondImageVertical ? 'object-cover' : 'object-contain'}`}/>  
           </div>
           <button disabled={product.stock_availability.stock <= 0} onClick={(e) => {e.stopPropagation(); addToCart(product, 1, value, setValue, locale)}} className={`absolute left-4 -bottom-12 h-12 w-[calc(100%-2rem)] bg-white rounded-3xl font-manrope z-20 opacity-100 transition-all duration-300 group-hover:bottom-4 font-semibold cursor-pointer disabled:pointer-events-none hover:bg-lightergray`}>{product.stock_availability.state === StockState.NOT_IN_STOCK ? t("out_of_stock") : product.stock_availability.state === StockState.IN_STOCK ? t("add_to_cart") : t('on_command')}</button>
         </div>
