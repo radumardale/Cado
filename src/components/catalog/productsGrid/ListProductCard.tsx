@@ -56,7 +56,7 @@ export default function ListProductCard({product}: ProductCardInterface) {
           </div>
         </Link>
         <div className='col-span-full lg:col-span-4 flex flex-col mt-4 lg:mt-0'>
-            <p className='font-manrope font-semibold lg:text-2xl'>{product.title[locale]}</p>
+            <Link href={{pathname: '/catalog/product/[id]', params: {id: product.custom_id}}}><p className='font-manrope font-semibold lg:text-2xl'>{product.title[locale]}</p></Link>
             <div className="flex gap-1 items-center mt-2 lg:hidden">
                 {
                     product.sale && product.sale.active &&

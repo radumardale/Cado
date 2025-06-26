@@ -1,5 +1,7 @@
+"use client"
+
 import { ProductInterface } from '@/models/product/types/productInterface'
-import React, { Fragment, useState } from 'react'
+import React, { Fragment, useEffect, useState } from 'react'
 import ProductCard from './ProductCard'
 import Controls from './Controls'
 import ListProductCard from './ListProductCard'
@@ -7,6 +9,7 @@ import LoadingGrid from './LoadingGrid'
 import SortBy from '@/lib/enums/SortBy'
 import { Categories } from '@/lib/enums/Categories'
 import { useTranslations } from 'next-intl'
+import { useLenis } from 'lenis/react'
 
 interface ProductsGridProps {
     products: ProductInterface[],
@@ -21,6 +24,11 @@ interface ProductsGridProps {
 
 export default function ProductsGrid({products, loading, setSortBy, category, setSidebarOpen, isSidebarOpen, searchText, countProducts}: ProductsGridProps) {
     const [gridLayout, setGridLayout] = useState(true);
+    const lenis = useLenis()
+
+    useEffect(() => {
+        lenis?.scrollTo(0, { duration: 0, immediate: true });
+    }, [gridLayout, lenis]);
 
     const t = useTranslations('CatalogPage.ProductsSection');
 
