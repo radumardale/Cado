@@ -31,7 +31,11 @@ export default function Breadcrums({category, productInfo}: BreadcrumsInterface)
                     {
                         pathNames.map( (link, index) => {
                             const href = `/${pathNames.slice(0, index + 1).join('/')}` as Pathnames;
-                            const itemLink = link[0].toUpperCase() + link.slice(1, link.length);
+                            // const itemLink = link[0].toUpperCase() + link.slice(1, link.length);
+                            const itemLink = link === 'katalog'
+                                ? 'Каталог' 
+                                : link[0].toUpperCase() + link.slice(1, link.length);
+                            
                             if (category && index == 0) {
                                 return (
                                     <Fragment key={index}>

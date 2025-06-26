@@ -287,11 +287,10 @@ const handleDragEnd = (
 
     <Image
       onDragStart={(e) => e.preventDefault()}
-      quality={100}
       src={image}
       alt={`${product.title[locale]} - Image ${index + 1}`}
-      width={1476}
-      height={1838}
+      width={500}
+      height={751}
       className={`max-h-full w-auto mx-auto max-w-full object-contain select-none ${
         imageIndex === index ? "z-10" : "z-0"
       }`}
