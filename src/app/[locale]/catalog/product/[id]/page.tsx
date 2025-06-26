@@ -24,7 +24,11 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   const descriptionResponse = productData.product?.long_description?.[locale] || '';
   const description = htmlToText(descriptionResponse);
 
-  const image = productData.product?.images?.[0] || 'https://your-default-image-url.com/default.jpg';
+  // const image = `${productData.product?.images?.[0]}` || 'https://your-default-image-url.com/default.jpg';
+  const originalImage = productData.product?.images?.[0];
+  const optimizedImage = originalImage 
+    ? `/_next/image?url=${encodeURIComponent(originalImage)}`
+    : 'https://your-default-image-url.com/default.jpg';
 
   return {
     title: title,
@@ -34,7 +38,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
       description : description ,
       images: [
         {
-          url: image,
+          url: optimizedImage,
           alt: title
         },
       ],
@@ -43,7 +47,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
       card: "summary_large_image",
       title,
       description,
-      images: [image],
+      images: [optimizedImage],
     },
   };
 }
