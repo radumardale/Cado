@@ -43,7 +43,7 @@ export default function ProductsGrid({products, loading, setSortBy, category, se
                 ) : (
                     products.map((product, index) => {
                         return (
-                            <Fragment key={index}>
+                            <Fragment key={product._id}>
                                 {
                                     products[index].relevance < 1 && products[index - 1] && products[index - 1].relevance > 0 && 
                                     <>
