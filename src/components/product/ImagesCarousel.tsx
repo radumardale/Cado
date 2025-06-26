@@ -203,7 +203,6 @@ export default function ImagesCarousel({setCarouselOpen, product, locale, initia
                         }}
                     >
                         <Image
-                            quality={10}
                             src={image}
                             alt={`${product.title[locale]} - Image ${index + 1}`}
                             fill
