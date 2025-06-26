@@ -203,11 +203,9 @@ export default function ImagesCarousel({setCarouselOpen, product, locale, initia
                         }}
                     >
                         <Image
-                            quality={100}
                             src={image}
                             alt={`${product.title[locale]} - Image ${index + 1}`}
-                            width={1476}
-                            height={1838}
+                            fill
                             className={`max-h-full lg:h-full w-auto max-w-full mx-auto rounded-lg lg:rounded-2xl object-contain ${activeImage === index ? "z-[1000]" : "z-0"}`}
                         />
                     </motion.div>
