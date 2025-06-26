@@ -203,6 +203,7 @@ export default function ImagesCarousel({setCarouselOpen, product, locale, initia
                         }}
                     >
                         <Image
+                            quality={10}
                             src={image}
                             alt={`${product.title[locale]} - Image ${index + 1}`}
                             fill
@@ -224,8 +225,6 @@ export default function ImagesCarousel({setCarouselOpen, product, locale, initia
                         aria-current={activeImage === index ? "true" : "false"}
                     >
                         <Image
-                            unoptimized
-                            quality={100}
                             src={image}
                             alt={`${product.title[locale]} thumbnail ${index + 1}`}
                             width={194} // Doubled width
