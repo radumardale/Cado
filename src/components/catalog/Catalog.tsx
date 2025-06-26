@@ -75,7 +75,6 @@ export default function Catalog() {
 
     const { data, fetchNextPage, hasNextPage, isFetchingNextPage, status } = useInfiniteQuery(trpc.products.getProducts.infiniteQueryOptions(queryData, {
         getNextPageParam: (lastPage) => lastPage.nextCursor,
-        refetchOnMount: true
     }));
 
     const allProducts = data?.pages.flatMap(page => page.products) || [];
