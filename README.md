@@ -257,20 +257,67 @@ Access the admin panel at `/admin` with features for:
 
 ## 🚢 Deployment
 
-### Production Build
+### Platform: Vercel
+
+This application is deployed on [Vercel](https://vercel.com), the platform built by the creators of Next.js.
+
+### Production Deployment
 
 ```bash
+# Build for production
 npm run build
+
+# Test production build locally
 npm start
 ```
 
-### Environment Variables
+### Vercel Deployment Process
 
-Ensure all production environment variables are set in your hosting platform:
-- Vercel, Netlify, or similar for the Next.js app
-- MongoDB Atlas for database
-- AWS S3 for image storage
-- Production SMTP credentials
+1. **Automatic Deployments**
+   - Push to `main` branch triggers production deployment
+   - Pull requests create preview deployments automatically
+   - Each commit gets a unique deployment URL
+
+2. **Environment Variables**
+
+   Set these in Vercel Dashboard (Settings → Environment Variables):
+   ```
+   MONGO_URI              # MongoDB Atlas connection string
+   NEXTAUTH_SECRET        # Authentication secret key
+   AWS_PUBLIC_ACCESS_KEY  # AWS S3 access key
+   AWS_SECRET_ACCESS_KEY  # AWS S3 secret key
+   EMAIL_ADDRESS          # SMTP email
+   EMAIL_PASSWORD         # SMTP password
+   BASE_URL               # https://cado.md
+   # ... and all other env variables
+   ```
+
+3. **Build Settings in Vercel**
+   - **Framework Preset**: Next.js (auto-detected)
+   - **Build Command**: `npm run build`
+   - **Output Directory**: `.next` (default)
+   - **Install Command**: `npm install`
+   - **Node.js Version**: 20.x
+
+### Deploying with Vercel CLI
+
+```bash
+# Install Vercel CLI
+npm i -g vercel
+
+# Deploy to preview
+vercel
+
+# Deploy to production
+vercel --prod
+```
+
+### Preview Deployments
+
+- Every pull request gets a preview deployment
+- Preview URLs format: `https://cado-pr-{number}.vercel.app`
+- Preview deployments have separate environment variables
+- Comments are automatically added to PRs with deployment URLs
 
 ## 📈 Performance
 
@@ -288,6 +335,8 @@ This is a private repository. For contributions:
 2. Make your changes
 3. Run tests and linting
 4. Submit a pull request
+5. Vercel will automatically create a preview deployment
+6. After review, merge to `main` for automatic production deployment
 
 ## 📄 License
 
@@ -301,9 +350,10 @@ For technical support or questions:
 
 ## 🔗 Links
 
-- **Production**: [https://cado.md](https://cado.md)
+- **Production**: [https://cado.md](https://cado.md) (Vercel deployment)
 - **Documentation**: See `/docs` folder
 - **API Documentation**: Available in tRPC procedures
+- **Vercel Dashboard**: Manage deployments and environment variables
 
 ---
 
