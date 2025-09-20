@@ -51,3 +51,113 @@ Next.js 15 e-commerce platform (Cado) with Romanian/Russian/English support, usi
 - Never create documentation files elsewhere
 - Create `/docs/` if it doesn't exist
 - This includes all markdown files, guides, and documentation artifacts
+
+## Git Flow Workflow (Personal - Not Enforced on Others)
+
+### ⚠️ IMPORTANT: Branch Protection Rules for Claude Code
+
+**ALWAYS CHECK CURRENT BRANCH BEFORE MAKING CHANGES!**
+
+When working with Claude Code, the following Git Flow discipline applies:
+
+### Protected Branches - NO DIRECT COMMITS
+- **`main`** - Production branch (NEVER commit directly)
+- **`develop`** - Integration branch (NEVER commit directly)
+
+**Claude Code must WARN when on these branches:**
+```
+⚠️ WARNING: You are on the 'main' or 'develop' branch!
+Do NOT make direct changes. Create a feature branch first.
+```
+
+### Required Workflow Process
+
+1. **Before Starting Any Work:**
+   - Check for existing GitHub issue or create one
+   - Note the issue number for branch naming
+   - Switch to `develop` branch and pull latest
+   - Create a feature branch
+
+2. **Branch Naming Conventions:**
+   - **Features**: `feature/issue-{number}-{brief-description}`
+     - Example: `feature/issue-1-seo-sitemap`
+   - **Hotfixes**: `hotfix/issue-{number}-{brief-description}`
+     - Example: `hotfix/issue-99-payment-error`
+   - **Releases**: `release/{version}`
+     - Example: `release/1.2.0`
+
+3. **Development Process:**
+   ```bash
+   # Start new feature
+   git checkout develop
+   git pull origin develop
+   git checkout -b feature/issue-1-seo-sitemap
+
+   # Work on the feature
+   # ... make changes ...
+
+   # Push feature branch
+   git push -u origin feature/issue-1-seo-sitemap
+
+   # Create PR to develop (not main!)
+   ```
+
+4. **Merge Strategy:**
+   - Features → `develop` (via PR)
+   - Release → `main` (via PR from develop)
+   - Hotfix → `main` AND `develop` (via PRs)
+
+### Claude Code Behavioral Rules
+
+**When user asks to make changes:**
+1. First check current branch with `git branch --show-current`
+2. If on `main` or `develop`, immediately warn:
+   ```
+   ⚠️ You're currently on the '{branch}' branch.
+   According to Git Flow, we should not make direct changes here.
+
+   Should I:
+   1. Create a feature branch from develop? (recommended)
+   2. Continue anyway? (not recommended)
+
+   Is there a GitHub issue for this work? (Issue #___)
+   ```
+
+3. Suggest proper branch name based on the task
+4. Only proceed after branch is confirmed
+
+### Quick Reference Commands
+
+```bash
+# Check current branch
+git branch --show-current
+
+# Start new feature (from develop)
+git checkout develop && git pull
+git checkout -b feature/issue-XX-description
+
+# Start hotfix (from main)
+git checkout main && git pull
+git checkout -b hotfix/issue-XX-description
+
+# View all branches
+git branch -a
+
+# Delete local feature branch after merge
+git branch -d feature/issue-XX-description
+```
+
+### Why This Workflow?
+
+- **Personal Discipline**: Maintains clean history and organized development
+- **Safety**: Prevents accidental commits to production
+- **Traceability**: Every change linked to an issue
+- **Flexibility**: Other contributors not forced to follow
+- **Professional**: Follows industry best practices
+
+### Note for Other Contributors
+
+This Git Flow workflow is a personal preference and is NOT required for other contributors. Others may:
+- Work directly on branches as needed
+- Use their preferred workflow
+- Submit PRs following the project's general guidelines
