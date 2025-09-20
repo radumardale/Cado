@@ -2,8 +2,8 @@ import { Product } from '@/models/product/product';
 import { Blog } from '@/models/blog/blog';
 import connectMongo from '@/lib/connect-mongo';
 import type { MetadataRoute } from 'next';
-import { Categories, CategoriesArr } from '@/lib/enums/Categories';
-import { Ocasions, OcasionsArr } from '@/lib/enums/Ocasions';
+import { CategoriesArr } from '@/lib/enums/Categories';
+import { OcasionsArr } from '@/lib/enums/Ocasions';
 import { StockState } from '@/lib/enums/StockState';
 
 interface SitemapEntry {
@@ -62,7 +62,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   try {
     const products = await Product.find({
       'stock_availability.state': StockState.IN_STOCK
-    }).select('custom_id updatedAt').lean();
+    }).select('custom_id updatedAt').lean() as Array<{ custom_id: string; updatedAt?: Date }>;
 
     for (const product of products) {
       for (const locale of SUPPORTED_LOCALES) {
@@ -90,7 +90,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   try {
     const blogs = await Blog.find({})
       .select('_id date')
-      .lean();
+      .lean() as Array<{ _id: string; date?: Date }>;
 
     for (const blog of blogs) {
       for (const locale of SUPPORTED_LOCALES) {
