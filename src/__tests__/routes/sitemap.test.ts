@@ -4,32 +4,46 @@ import { Product } from '@/models/product/product';
 import { Blog } from '@/models/blog/blog';
 import connectMongo from '@/lib/connect-mongo';
 import { StockState } from '@/lib/enums/StockState';
+import type { Query } from 'mongoose';
 
 // Mock the database connection and models
 vi.mock('@/lib/connect-mongo');
 vi.mock('@/models/product/product');
 vi.mock('@/models/blog/blog');
 
+// Helper to create mock query chain
+function createMockQuery<T>(data: T[]): Partial<Query<unknown, unknown>> {
+  return {
+    select: vi.fn().mockReturnValue({
+      lean: vi.fn().mockResolvedValue(data)
+    })
+  };
+}
+
+function createMockQueryWithError(error: Error): Partial<Query<unknown, unknown>> {
+  return {
+    select: vi.fn().mockReturnValue({
+      lean: vi.fn().mockRejectedValue(error)
+    })
+  };
+}
+
 describe('Sitemap Generation', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     // Mock successful DB connection
-    vi.mocked(connectMongo).mockResolvedValue({} as any);
+    vi.mocked(connectMongo).mockResolvedValue({} as unknown as Awaited<ReturnType<typeof connectMongo>>);
   });
 
   it('should generate sitemap with static pages', async () => {
     // Mock empty product and blog responses
-    vi.mocked(Product.find).mockReturnValue({
-      select: vi.fn().mockReturnValue({
-        lean: vi.fn().mockResolvedValue([])
-      })
-    } as any);
+    vi.mocked(Product.find).mockReturnValue(
+      createMockQuery([]) as unknown as ReturnType<typeof Product.find>
+    );
 
-    vi.mocked(Blog.find).mockReturnValue({
-      select: vi.fn().mockReturnValue({
-        lean: vi.fn().mockResolvedValue([])
-      })
-    } as any);
+    vi.mocked(Blog.find).mockReturnValue(
+      createMockQuery([]) as unknown as ReturnType<typeof Blog.find>
+    );
 
     const result = await sitemap();
 
@@ -53,17 +67,13 @@ describe('Sitemap Generation', () => {
 
   it('should include hreflang annotations for all pages', async () => {
     // Mock empty responses
-    vi.mocked(Product.find).mockReturnValue({
-      select: vi.fn().mockReturnValue({
-        lean: vi.fn().mockResolvedValue([])
-      })
-    } as any);
+    vi.mocked(Product.find).mockReturnValue(
+      createMockQuery([]) as unknown as ReturnType<typeof Product.find>
+    );
 
-    vi.mocked(Blog.find).mockReturnValue({
-      select: vi.fn().mockReturnValue({
-        lean: vi.fn().mockResolvedValue([])
-      })
-    } as any);
+    vi.mocked(Blog.find).mockReturnValue(
+      createMockQuery([]) as unknown as ReturnType<typeof Blog.find>
+    );
 
     const result = await sitemap();
 
@@ -82,19 +92,15 @@ describe('Sitemap Generation', () => {
     ];
 
     // Mock Product.find to return in-stock products
-    const mockFind = vi.fn().mockReturnValue({
-      select: vi.fn().mockReturnValue({
-        lean: vi.fn().mockResolvedValue(mockProducts)
-      })
-    });
-    vi.mocked(Product.find).mockImplementation(mockFind);
+    const mockFind = vi.fn().mockReturnValue(
+      createMockQuery(mockProducts)
+    );
+    vi.mocked(Product.find).mockImplementation(mockFind as typeof Product.find);
 
     // Mock empty blogs
-    vi.mocked(Blog.find).mockReturnValue({
-      select: vi.fn().mockReturnValue({
-        lean: vi.fn().mockResolvedValue([])
-      })
-    } as any);
+    vi.mocked(Blog.find).mockReturnValue(
+      createMockQuery([]) as unknown as ReturnType<typeof Blog.find>
+    );
 
     await sitemap();
 
@@ -109,17 +115,13 @@ describe('Sitemap Generation', () => {
       { custom_id: 'test123', updatedAt: new Date('2024-01-01') }
     ];
 
-    vi.mocked(Product.find).mockReturnValue({
-      select: vi.fn().mockReturnValue({
-        lean: vi.fn().mockResolvedValue(mockProducts)
-      })
-    } as any);
+    vi.mocked(Product.find).mockReturnValue(
+      createMockQuery(mockProducts) as unknown as ReturnType<typeof Product.find>
+    );
 
-    vi.mocked(Blog.find).mockReturnValue({
-      select: vi.fn().mockReturnValue({
-        lean: vi.fn().mockResolvedValue([])
-      })
-    } as any);
+    vi.mocked(Blog.find).mockReturnValue(
+      createMockQuery([]) as unknown as ReturnType<typeof Blog.find>
+    );
 
     const result = await sitemap();
 
@@ -145,17 +147,13 @@ describe('Sitemap Generation', () => {
       { _id: 'blog123', date: new Date('2024-01-01') }
     ];
 
-    vi.mocked(Product.find).mockReturnValue({
-      select: vi.fn().mockReturnValue({
-        lean: vi.fn().mockResolvedValue([])
-      })
-    } as any);
+    vi.mocked(Product.find).mockReturnValue(
+      createMockQuery([]) as unknown as ReturnType<typeof Product.find>
+    );
 
-    vi.mocked(Blog.find).mockReturnValue({
-      select: vi.fn().mockReturnValue({
-        lean: vi.fn().mockResolvedValue(mockBlogs)
-      })
-    } as any);
+    vi.mocked(Blog.find).mockReturnValue(
+      createMockQuery(mockBlogs) as unknown as ReturnType<typeof Blog.find>
+    );
 
     const result = await sitemap();
 
@@ -171,17 +169,13 @@ describe('Sitemap Generation', () => {
   });
 
   it('should include category and occasion filter pages', async () => {
-    vi.mocked(Product.find).mockReturnValue({
-      select: vi.fn().mockReturnValue({
-        lean: vi.fn().mockResolvedValue([])
-      })
-    } as any);
+    vi.mocked(Product.find).mockReturnValue(
+      createMockQuery([]) as unknown as ReturnType<typeof Product.find>
+    );
 
-    vi.mocked(Blog.find).mockReturnValue({
-      select: vi.fn().mockReturnValue({
-        lean: vi.fn().mockResolvedValue([])
-      })
-    } as any);
+    vi.mocked(Blog.find).mockReturnValue(
+      createMockQuery([]) as unknown as ReturnType<typeof Blog.find>
+    );
 
     const result = await sitemap();
 
@@ -210,17 +204,13 @@ describe('Sitemap Generation', () => {
 
   it('should handle database errors gracefully', async () => {
     // Mock Product.find to throw an error
-    vi.mocked(Product.find).mockReturnValue({
-      select: vi.fn().mockReturnValue({
-        lean: vi.fn().mockRejectedValue(new Error('Database connection failed'))
-      })
-    } as any);
+    vi.mocked(Product.find).mockReturnValue(
+      createMockQueryWithError(new Error('Database connection failed')) as unknown as ReturnType<typeof Product.find>
+    );
 
-    vi.mocked(Blog.find).mockReturnValue({
-      select: vi.fn().mockReturnValue({
-        lean: vi.fn().mockRejectedValue(new Error('Database connection failed'))
-      })
-    } as any);
+    vi.mocked(Blog.find).mockReturnValue(
+      createMockQueryWithError(new Error('Database connection failed')) as unknown as ReturnType<typeof Blog.find>
+    );
 
     // Should not throw, but continue with static pages
     const result = await sitemap();
@@ -232,17 +222,13 @@ describe('Sitemap Generation', () => {
   });
 
   it('should set correct changeFrequency and priority values', async () => {
-    vi.mocked(Product.find).mockReturnValue({
-      select: vi.fn().mockReturnValue({
-        lean: vi.fn().mockResolvedValue([])
-      })
-    } as any);
+    vi.mocked(Product.find).mockReturnValue(
+      createMockQuery([]) as unknown as ReturnType<typeof Product.find>
+    );
 
-    vi.mocked(Blog.find).mockReturnValue({
-      select: vi.fn().mockReturnValue({
-        lean: vi.fn().mockResolvedValue([])
-      })
-    } as any);
+    vi.mocked(Blog.find).mockReturnValue(
+      createMockQuery([]) as unknown as ReturnType<typeof Blog.find>
+    );
 
     const result = await sitemap();
 
@@ -270,17 +256,13 @@ describe('Sitemap Generation', () => {
     vi.resetModules();
     const { default: sitemapWithEnv } = await import('@/app/sitemap');
 
-    vi.mocked(Product.find).mockReturnValue({
-      select: vi.fn().mockReturnValue({
-        lean: vi.fn().mockResolvedValue([])
-      })
-    } as any);
+    vi.mocked(Product.find).mockReturnValue(
+      createMockQuery([]) as unknown as ReturnType<typeof Product.find>
+    );
 
-    vi.mocked(Blog.find).mockReturnValue({
-      select: vi.fn().mockReturnValue({
-        lean: vi.fn().mockResolvedValue([])
-      })
-    } as any);
+    vi.mocked(Blog.find).mockReturnValue(
+      createMockQuery([]) as unknown as ReturnType<typeof Blog.find>
+    );
 
     const result = await sitemapWithEnv();
 
