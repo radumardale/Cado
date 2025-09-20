@@ -1,10 +1,19 @@
 import type { MetadataRoute } from 'next';
 
-const BASE_URL = process.env.BASE_URL || (process.env.NODE_ENV === 'production'
-  ? 'https://cado.md'
-  : 'http://localhost:3000');
+function getBaseUrl(): string {
+  // First check for BASE_URL environment variable
+  if (process.env.BASE_URL && process.env.BASE_URL !== '/') {
+    return process.env.BASE_URL;
+  }
+
+  // Fallback to production or development URL
+  return process.env.NODE_ENV === 'production'
+    ? 'https://cado.md'
+    : 'http://localhost:3000';
+}
 
 export default function robots(): MetadataRoute.Robots {
+  const BASE_URL = getBaseUrl();
   return {
     rules: [
       {

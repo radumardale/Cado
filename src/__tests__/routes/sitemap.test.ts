@@ -248,7 +248,7 @@ describe('Sitemap Generation', () => {
 
     // Check homepage has highest priority
     const homepage = result.find(entry =>
-      entry.url === 'http://localhost:3000/ro' && !entry.url.includes('/')
+      entry.url === 'http://localhost:3000/ro'
     );
     expect(homepage?.priority).toBe(1.0);
     expect(homepage?.changeFrequency).toBe('daily');
