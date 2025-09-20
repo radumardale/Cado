@@ -75,8 +75,15 @@ cado-site/
 │   ├── states/             # Global state management
 │   └── i18n/               # Internationalization config
 ├── messages/               # Translation files (ro/ru/en)
+├── scripts/               # Automation and database scripts
+│   ├── setup-local.sh    # Automated setup script
+│   ├── db-export.sh     # Export production database
+│   ├── db-import.sh     # Import to local MongoDB
+│   └── db-sync.sh       # Sync production to local
 ├── public/                # Static assets
 ├── docs/                  # Documentation
+│   └── LOCAL_SETUP.md   # Detailed local setup guide
+├── db-backup/            # Database backups (gitignored)
 └── types/                # TypeScript type definitions
 ```
 
@@ -89,7 +96,7 @@ cado-site/
 - AWS Account (for S3 storage)
 - SMTP Server (Gmail, SendGrid, etc.)
 
-### Setup Steps
+### Quick Start
 
 1. **Clone the repository**
 ```bash
@@ -97,45 +104,86 @@ git clone https://github.com/your-org/cado-site.git
 cd cado-site
 ```
 
-2. **Install dependencies**
+2. **Run automated setup** (Recommended)
+```bash
+npm run setup
+```
+
+This will automatically:
+- ✅ Check prerequisites (Node.js, MongoDB)
+- ✅ Start MongoDB locally
+- ✅ Create `.env.local` from production template
+- ✅ Install dependencies
+- ✅ Optionally sync production database
+
+3. **Start development**
+```bash
+npm run dev
+```
+
+### Manual Setup
+
+For manual configuration:
+
+1. **Install dependencies**
 ```bash
 npm install
 ```
 
-3. **Configure environment variables**
+2. **Configure environment**
 ```bash
 cp .env.local.example .env.local
+# Edit .env.local with your credentials
 ```
 
-Edit `.env.local` with your credentials:
-```env
-# Database
-MONGO_URI=mongodb://localhost:27017/cado
-
-# Authentication
-NEXTAUTH_SECRET=your-secret-key-here
-
-# AWS S3
-AWS_PUBLIC_ACCESS_KEY=your-aws-key
-AWS_SECRET_ACCESS_KEY=your-aws-secret
-
-# Email
-EMAIL_ADDRESS=your-email@gmail.com
-EMAIL_PASSWORD=your-app-password
-
-# Application
-BASE_URL=http://localhost:3000
+3. **Sync database** (optional)
+```bash
+npm run db:sync  # Sync production data to local MongoDB
 ```
 
-4. **Run the development server**
+4. **Start server**
 ```bash
 npm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) to see the application.
 
+For detailed setup instructions, see [docs/LOCAL_SETUP.md](docs/LOCAL_SETUP.md).
+
+## 🔄 Local Development
+
+### Database Synchronization
+
+Sync production data to your local environment:
+
+```bash
+# Complete sync (export + import)
+npm run db:sync
+
+# With automatic confirmations
+npm run db:sync -- -y
+
+# Use existing backup
+npm run db:sync -- --skip-export
+```
+
+**Features:**
+- 🔒 **Safe exports** - Production database is never modified
+- 💾 **Local MongoDB** - Complete isolation from production
+- 🖼️ **CDN assets** - Images load from CloudFront
+- 📦 **Timestamped backups** - Stored in `/db-backup/`
+
+### Environment Configuration
+
+**Local development** uses modified settings:
+- MongoDB: `mongodb://localhost:27017/cado`
+- Base URL: `http://localhost:3000`
+- Assets: Production CDN (automatic)
+- Email/Payments: Can be mocked
+
 ## 📝 Available Scripts
 
+### Development
 ```bash
 # Development with Turbopack
 npm run dev
@@ -151,6 +199,21 @@ npm test
 
 # Lint code
 npm run lint
+```
+
+### Database Management
+```bash
+# Automated local setup
+npm run setup
+
+# Sync production database to local
+npm run db:sync
+
+# Export production database
+npm run db:export
+
+# Import to local MongoDB
+npm run db:import
 ```
 
 ## 🌍 Internationalization

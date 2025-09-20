@@ -33,6 +33,14 @@ npm run lint
 
 # Run tests
 npm test
+
+# Local environment setup
+npm run setup
+
+# Database synchronization
+npm run db:sync      # Complete sync from production
+npm run db:export    # Export production database
+npm run db:import    # Import to local MongoDB
 ```
 
 ## Architecture
@@ -58,6 +66,14 @@ npm test
 - `/src/hooks/` - Custom React hooks
 - `/src/states/` - State management (likely Zustand)
 - `/messages/` - i18n translation files
+- `/scripts/` - Automation and database management scripts
+  - `setup-local.sh` - Automated local environment setup
+  - `db-export.sh` - Export production database (read-only)
+  - `db-import.sh` - Import to local MongoDB
+  - `db-sync.sh` - Complete sync workflow
+- `/docs/` - Project documentation
+  - `LOCAL_SETUP.md` - Comprehensive local development guide
+- `/db-backup/` - Database backups (gitignored)
 
 ### Key Patterns
 
@@ -83,7 +99,8 @@ npm test
 - Protected admin routes under `/admin/*`
 
 ## Environment Variables
-Required environment variables:
+
+### Required Variables
 - `MONGO_URI` - MongoDB connection string
 - `EMAIL_ADDRESS` - SMTP email account
 - `EMAIL_PASSWORD` - SMTP password
@@ -92,6 +109,16 @@ Required environment variables:
 - `FEEDBACK_EMAIL_ADDRESS` - Feedback recipient
 - `CONTACT_EMAIL_ADDRESS` - Contact form recipient
 - `API_BASE_URL` - API endpoint base
+- `AWS_PUBLIC_ACCESS_KEY` - AWS access key for S3
+- `AWS_SECRET_ACCESS_KEY` - AWS secret key
+- `NEXTAUTH_SECRET` - NextAuth encryption key
+
+### Local vs Production
+- **Local MongoDB**: `mongodb://localhost:27017/cado`
+- **Production MongoDB**: MongoDB Atlas cluster
+- **Local URL**: `http://localhost:3000`
+- **Production URL**: `https://cado.md`
+- **Assets**: Always served from CloudFront CDN
 
 ## Testing
 Tests are configured with Vitest and use:
@@ -107,6 +134,39 @@ Tests are configured with Vitest and use:
 - Multilingual data stored as `{ro: string, ru: string, en: string}`
 - Use existing UI components from `/src/components/ui/`
 - Follow existing tRPC procedure patterns for new API endpoints
+
+## Local Development Setup
+
+### Quick Setup
+Run `npm run setup` for automated configuration that:
+- Checks prerequisites (Node.js, MongoDB, Database Tools)
+- Starts MongoDB locally
+- Creates `.env.local` from production template
+- Installs dependencies
+- Optionally syncs production database
+
+### Database Synchronization
+The project includes scripts for safe production data synchronization:
+- **Export**: Creates read-only backup from production
+- **Import**: Restores backup to local MongoDB
+- **Sync**: Combines export and import
+- **Safety**: Production is never modified
+- **Backups**: Timestamped in `/db-backup/`
+
+### Asset Strategy
+- Images are served from production CloudFront CDN
+- No need to download assets locally
+- Automatic CDN URL: `d3rus23k068yq9.cloudfront.net`
+- Reduces local storage requirements
+
+### Development Workflow
+1. Run `npm run db:sync` to get latest production data
+2. Start dev server with `npm run dev`
+3. Local changes don't affect production
+4. Test with real production data
+5. Email/payments can be mocked for testing
+
+For detailed instructions, see `/docs/LOCAL_SETUP.md`
 
 ## Documentation Rules
 - **ALL generated documentation MUST be saved in the `/docs` folder at the root of the project**
