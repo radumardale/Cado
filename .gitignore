@@ -48,3 +48,5 @@ notes/
 
 # Database backups
 /db-backup/
+
+.claude/settings.local.json
