@@ -45,7 +45,7 @@ export default function LinksMenu() {
             className={`${isMenuOpen ? "" : "pointer-events-none"} absolute left-0 -top-54`}
             >
                 <Link href="tel:+37369645153" target='_blank' className='size-14 flex items-center justify-center bg-blue-2 rounded-full mb-4 shadow-sm border border-white'>
-                    <Image unoptimized src="/icons/call.svg" alt="telegram logo" height={28} width={28} className='size-7 text-white'/>
+                    <Image src="/icons/call.svg" alt="call icon" height={28} width={28} className='size-7 text-white'/>
                 </Link>
         </motion.div>
         <motion.div 
@@ -54,7 +54,7 @@ export default function LinksMenu() {
             className={`${isMenuOpen ? "" : "pointer-events-none"} absolute left-0 -top-36`}
             >
                 <Link href="https://t.me/+37369645153" target='_blank' className='size-14 flex items-center justify-center bg-blue-2 rounded-full mb-4 shadow-sm border border-white'>
-                    <Image unoptimized src="/icons/telegram.svg" alt="telegram logo" height={28} width={28} className='size-7 text-white'/>
+                    <Image src="/icons/telegram.svg" alt="telegram logo" height={28} width={28} className='size-7 text-white'/>
                 </Link>
         </motion.div>
         <motion.div 
@@ -63,7 +63,7 @@ export default function LinksMenu() {
             className={`${isMenuOpen ? "" : "pointer-events-none"} absolute left-0 -top-18`}
             >
                 <Link href="https://api.whatsapp.com/send?phone=37369645153" target='_blank' className='size-14 flex items-center justify-center bg-blue-2 rounded-full mb-4 shadow-sm border border-white'>
-                    <Image unoptimized src="/icons/whatsapp.svg" alt="telegram logo" height={28} width={28} className='size-7 text-white'/>
+                    <Image src="/icons/whatsapp.svg" alt="whatsapp logo" height={28} width={28} className='size-7 text-white'/>
                 </Link>
         </motion.div>
         <div className='size-16 3xl:size-14 flex items-center justify-center bg-blue-2 rounded-full relative cursor-pointer group shadow-sm border border-white' onClick={() => {setMenuOpen(!isMenuOpen)}}>
