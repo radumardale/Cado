@@ -45,7 +45,7 @@ export function generateHreflangLinks(
       });
     } else {
       routing.locales.forEach(locale => {
-        let localizedPath = routeConfig[locale as Locale];
+        let localizedPath = routeConfig[locale as Locale] as string;
 
         if (params) {
           Object.entries(params).forEach(([key, value]) => {
