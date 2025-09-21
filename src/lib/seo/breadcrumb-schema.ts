@@ -28,7 +28,9 @@ export interface BreadcrumbConfig {
  * Generates BreadcrumbList JSON-LD schema for different page types
  */
 export function generateBreadcrumbSchema(config: BreadcrumbConfig): BreadcrumbListSchema {
-  const { locale, baseUrl, category, ocasion, productTitle, productId, sortBy } = config;
+  const { locale, category, ocasion, productTitle, productId, sortBy } = config;
+  // Normalize baseUrl by removing trailing slashes to prevent double slashes in URLs
+  const baseUrl = config.baseUrl.replace(/\/+$/, '');
 
   const breadcrumbItems: BreadcrumbItem[] = [];
   let position = 1;
@@ -135,6 +137,8 @@ function getLocalizedText(key: string, locale: string): string {
  * Generate breadcrumb schema for homepage
  */
 export function generateHomeBreadcrumbSchema(baseUrl: string, locale: string): BreadcrumbListSchema {
+  // Normalize baseUrl by removing trailing slashes
+  const normalizedBaseUrl = baseUrl.replace(/\/+$/, '');
   return {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
@@ -143,7 +147,7 @@ export function generateHomeBreadcrumbSchema(baseUrl: string, locale: string): B
         "@type": "ListItem",
         position: 1,
         name: getLocalizedText("home", locale),
-        item: `${baseUrl}/${locale}`
+        item: `${normalizedBaseUrl}/${locale}`
       }
     ]
   };
