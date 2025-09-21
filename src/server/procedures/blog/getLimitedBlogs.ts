@@ -6,35 +6,35 @@ import { BlogInterface } from '@/models/blog/types/BlogInterface';
 import { getLimitedBlogsRequestSchema } from '@/lib/validation/blog/getLimitedBlogsRequest';
 
 export interface getLimitedBlogsResponseInterface extends ActionResponse {
-  blogs: BlogInterface[] | null
+  blogs: BlogInterface[] | null;
 }
 
 export const getLimitedBlogsProcedure = publicProcedure
-    .input(getLimitedBlogsRequestSchema)
-    .query(async ({input}): Promise<getLimitedBlogsResponseInterface> => {
-        try {
-        await connectMongo();
-        
-        const blogs = await Blog.find().limit(input.limit);
+  .input(getLimitedBlogsRequestSchema)
+  .query(async ({ input }): Promise<getLimitedBlogsResponseInterface> => {
+    try {
+      await connectMongo();
 
-        if (!blogs) {
-            return {
-            success: false,
-            error: "No blogs found",
-            blogs: null
-            };
-        }
+      const blogs = await Blog.find().limit(input.limit);
 
+      if (!blogs) {
         return {
-            success: true,
-            blogs: blogs
+          success: false,
+          error: 'No blogs found',
+          blogs: null,
         };
-        } catch (error) {
-        console.error("Error fetching blogs:", error);
-        return {
-            success: false,
-            error: error instanceof Error ? error.message : "Failed to fetch blogs",
-            blogs: null
-        };
-        }
-    });
+      }
+
+      return {
+        success: true,
+        blogs: blogs,
+      };
+    } catch (error) {
+      console.error('Error fetching blogs:', error);
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Failed to fetch blogs',
+        blogs: null,
+      };
+    }
+  });

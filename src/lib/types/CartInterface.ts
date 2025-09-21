@@ -1,4 +1,4 @@
 export interface CartInterface {
-    productId: string,
-    quantity: number
+  productId: string;
+  quantity: number;
 }

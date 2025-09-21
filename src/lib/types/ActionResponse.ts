@@ -1,4 +1,4 @@
 export interface ActionResponse {
-    success: boolean,
-    error?: string
+  success: boolean;
+  error?: string;
 }

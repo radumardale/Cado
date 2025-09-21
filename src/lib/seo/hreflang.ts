@@ -12,9 +12,7 @@ function getBaseUrl(): string {
     // Remove trailing slash(es) and trim whitespace
     return process.env.BASE_URL.trim().replace(/\/+$/, '');
   }
-  return process.env.NODE_ENV === 'production'
-    ? 'https://cado.md'
-    : 'http://localhost:3000';
+  return process.env.NODE_ENV === 'production' ? 'https://cado.md' : 'http://localhost:3000';
 }
 
 export function generateHreflangLinks(
@@ -68,7 +66,7 @@ export function generateHreflangLinks(
       routing.locales.forEach(locale => {
         links.push({
           locale,
-          url: `${baseUrl}/${locale}${routeConfig}`
+          url: `${baseUrl}/${locale}${routeConfig}`,
         });
       });
     } else {
@@ -83,7 +81,7 @@ export function generateHreflangLinks(
 
         links.push({
           locale,
-          url: `${baseUrl}/${locale}${localizedPath}`
+          url: `${baseUrl}/${locale}${localizedPath}`,
         });
       });
     }
@@ -99,7 +97,7 @@ export function generateHreflangLinks(
 
       links.push({
         locale,
-        url: `${baseUrl}/${locale}${localizedPath}`
+        url: `${baseUrl}/${locale}${localizedPath}`,
       });
     });
   }
@@ -107,7 +105,7 @@ export function generateHreflangLinks(
   const defaultUrl = links.find(link => link.locale === 'ro')?.url || links[0].url;
   links.push({
     locale: 'x-default',
-    url: defaultUrl
+    url: defaultUrl,
   });
 
   return links;
@@ -124,7 +122,7 @@ export function generateHreflangLinksWithQuery(
   if (searchParams && searchParams.toString()) {
     return links.map(link => ({
       ...link,
-      url: `${link.url}?${searchParams.toString()}`
+      url: `${link.url}?${searchParams.toString()}`,
     }));
   }
 

@@ -13,10 +13,10 @@ This report presents a comprehensive TypeScript analysis of the Cado e-commerce 
 ```json
 {
   "compilerOptions": {
-    "strict": true,              // ✅ Good - strict mode enabled
-    "skipLibCheck": true,        // ⚠️ Skips library type checking
-    "allowJs": true,             // Allows JavaScript files
-    "noEmit": true,              // TypeScript used only for type checking
+    "strict": true, // ✅ Good - strict mode enabled
+    "skipLibCheck": true, // ⚠️ Skips library type checking
+    "allowJs": true, // Allows JavaScript files
+    "noEmit": true, // TypeScript used only for type checking
     "target": "ES2017",
     "module": "esnext",
     "moduleResolution": "bundler"
@@ -25,6 +25,7 @@ This report presents a comprehensive TypeScript analysis of the Cado e-commerce 
 ```
 
 ### Configuration Assessment
+
 - ✅ **Strict mode is enabled** - This is excellent for type safety
 - ⚠️ **skipLibCheck**: While this speeds up compilation, it may miss type issues in dependencies
 - ✅ **Path aliases configured**: `@/*` maps to `./src/*`
@@ -33,29 +34,40 @@ This report presents a comprehensive TypeScript analysis of the Cado e-commerce 
 
 ### Error Distribution by Category
 
-| Category | Count | Severity |
-|----------|-------|----------|
-| Test Files | 52 | Quick Win |
-| Missing Properties | 28 | Quick Win |
-| Implicit Any | 8 | Quick Win |
-| Read-only Property Assignment | 13 | Medium |
-| Type Assertion Issues | 2 | Medium |
-| API Inconsistencies | 4 | Complex |
+| Category                      | Count | Severity  |
+| ----------------------------- | ----- | --------- |
+| Test Files                    | 52    | Quick Win |
+| Missing Properties            | 28    | Quick Win |
+| Implicit Any                  | 8     | Quick Win |
+| Read-only Property Assignment | 13    | Medium    |
+| Type Assertion Issues         | 2     | Medium    |
+| API Inconsistencies           | 4     | Complex   |
 
 ### Most Common Errors
 
 #### 1. Missing `en` Property in Test Files (28 instances)
+
 **Location**: `src/__tests__/actions/blog/addBlog.test.ts`
+
 ```typescript
 // ❌ Current - Missing 'en' property
-{ ro: string; ru: string; }
+{
+  ro: string;
+  ru: string;
+}
 
 // ✅ Fix
-{ ro: string; ru: string; en: string; }
+{
+  ro: string;
+  ru: string;
+  en: string;
+}
 ```
 
 #### 2. Read-only Property Assignment in Tests (13 instances)
+
 **Location**: `src/__tests__/routes/robots.test.ts`, `src/lib/seo/hreflang.test.ts`
+
 ```typescript
 // ❌ Current
 process.env.NODE_ENV = 'production';
@@ -64,12 +76,14 @@ process.env.NODE_ENV = 'production';
 const originalEnv = process.env.NODE_ENV;
 Object.defineProperty(process.env, 'NODE_ENV', {
   value: 'production',
-  writable: true
+  writable: true,
 });
 ```
 
 #### 3. Type Assertion on MetadataRoute.Robots (Multiple instances)
+
 **Location**: `src/__tests__/routes/robots.test.ts`
+
 ```typescript
 // ❌ Current - Type system doesn't recognize array methods
 result.rules?.find(rule => ...)
@@ -82,6 +96,7 @@ rules.find(rule => ...)
 ## Usage of `any` Type
 
 ### Statistics
+
 - **Total occurrences**: 95 across 39 files
 - **eslint-disable comments**: 50+ files disable TypeScript strict rules
 - **Direct `any` usage**: 12 instances in production code
@@ -93,6 +108,7 @@ rules.find(rule => ...)
    - Indicates systematic type safety issues
 
 2. **Critical `any` Usage**
+
    ```typescript
    // src/app/_trpc/server.tsx
    export async function prefetch<T extends ReturnType<TRPCQueryOptions<any>>>
@@ -109,16 +125,18 @@ rules.find(rule => ...)
 ### @ts-expect-error Usage
 
 1. **Questionable Usage** - `src/app/[locale]/catalog/product/[id]/page.tsx:20`
+
    ```typescript
    // @ts-expect-error ggg
    import { htmlToText } from 'html-to-text';
    ```
+
    **Assessment**: This appears to be a typing issue with the html-to-text library. Should be fixable with proper type definitions.
 
 2. **Potentially Valid Usage** - TipTap Editor Components
    ```typescript
    // @ts-expect-error Assuming `setTextAlign` is a valid command
-   return editor.can().setTextAlign(align)
+   return editor.can().setTextAlign(align);
    ```
    **Assessment**: This is dealing with dynamic editor commands that may not have proper TypeScript definitions.
 
@@ -131,20 +149,21 @@ The pattern `{ro: string, ru: string, en: string}` appears in **171+ files** wit
 #### Current Implementation Issues
 
 1. **Type Inconsistency in ProductInfo**
+
    ```typescript
    // Type definition (INCORRECT - missing 'en')
    export type ProductInfo = {
-     ro: string
-     ru: string
-     [key: string]: string;  // Dangerous - masks the missing 'en'
-   }
+     ro: string;
+     ru: string;
+     [key: string]: string; // Dangerous - masks the missing 'en'
+   };
 
    // Mongoose Schema (CORRECT)
    export const ProductInfoSchema = new mongoose.Schema<ProductInfo>({
      ro: { type: String, required: true },
      ru: { type: String, required: true },
-     en: { type: String, required: true },  // ← This exists in schema but not in type!
-   })
+     en: { type: String, required: true }, // ← This exists in schema but not in type!
+   });
    ```
 
 2. **Repeated Definitions**
@@ -185,6 +204,7 @@ declare global {
 ## global.d.ts Assessment
 
 ### Current Usage
+
 The `global.d.ts` file is currently **underutilized**, containing only next-intl configuration:
 
 ```typescript
@@ -203,6 +223,7 @@ declare module 'next-intl' {
 **✅ RECOMMENDED**: Expand global.d.ts to include commonly repeated types
 
 **Benefits**:
+
 1. **Single source of truth** for multilingual types
 2. **Reduces code duplication** across 171+ files
 3. **Ensures consistency** across the codebase
@@ -210,36 +231,42 @@ declare module 'next-intl' {
 5. **Better IntelliSense** support
 
 **Risks**:
+
 1. Global namespace pollution (mitigated by using specific namespaces)
 2. Potential circular dependencies (avoided with proper structure)
 
 ## Quick Wins (< 1 day of work)
 
 ### 1. Fix Test File Type Errors
+
 - **Files**: 5 test files
 - **Issues**: Missing `en` property in multilingual objects
 - **Effort**: 2 hours
 - **Impact**: Eliminates 28 type errors
 
 ### 2. Remove Unnecessary @ts-expect-error
+
 - **File**: `src/app/[locale]/catalog/product/[id]/page.tsx`
 - **Issue**: html-to-text import doesn't need ignore
 - **Effort**: 30 minutes
 - **Solution**: Install @types/html-to-text or add type declaration
 
 ### 3. Fix Simple `any` Types
+
 - **Files**: 12 instances in production code
 - **Effort**: 3 hours
 - **Priority Fixes**:
+
   ```typescript
   // Before
-  function isLegalAddress(address: any)
+  function isLegalAddress(address: any);
 
   // After
-  function isLegalAddress(address: unknown)
+  function isLegalAddress(address: unknown);
   ```
 
 ### 4. Fix Process.env Assignments in Tests
+
 - **Files**: 2 test files
 - **Effort**: 1 hour
 - **Solution**: Use proper environment mocking
@@ -247,6 +274,7 @@ declare module 'next-intl' {
 ## Medium Complexity Issues (1-3 days)
 
 ### 1. Create Shared Type System
+
 - Create `src/types/common.d.ts` with shared types
 - Update all files to use shared `MultilingualString` type
 - Fix ProductInfo type inconsistency
@@ -254,6 +282,7 @@ declare module 'next-intl' {
 - **Impact**: Reduces duplication, ensures consistency
 
 ### 2. Remove eslint-disable Comments
+
 - **Files**: 38 server procedure files
 - **Approach**: Add proper types gradually
 - **Effort**: 2-3 days
@@ -262,11 +291,13 @@ declare module 'next-intl' {
 ## Complex Issues (3+ days)
 
 ### 1. TRPC Type Safety Improvements
+
 - Fix generic constraints in prefetch function
 - Add proper typing to all procedures
 - **Effort**: 3-5 days
 
 ### 2. Complete Test Type Overhaul
+
 - Fix all test file type errors
 - Add proper test utilities with correct typing
 - Create test helper types
@@ -275,18 +306,21 @@ declare module 'next-intl' {
 ## Prioritized Action Plan
 
 ### Phase 1: Quick Wins (Week 1)
+
 1. ✅ Fix all test file multilingual property errors
 2. ✅ Remove unnecessary @ts-expect-error comments
 3. ✅ Fix obvious `any` types in production code
 4. ✅ Fix process.env assignments in tests
 
 ### Phase 2: Type System (Week 2)
+
 1. 📋 Create global type definitions
 2. 📋 Migrate to shared `MultilingualString` type
 3. 📋 Fix ProductInfo type inconsistency
 4. 📋 Create proper type exports structure
 
 ### Phase 3: Deep Improvements (Week 3-4)
+
 1. 🔄 Remove all eslint-disable comments systematically
 2. 🔄 Improve TRPC type safety
 3. 🔄 Add comprehensive type tests
@@ -294,28 +328,31 @@ declare module 'next-intl' {
 
 ## Metrics for Success
 
-| Metric | Current | Target | Timeline |
-|--------|---------|--------|----------|
-| TypeScript Errors | 65 | 0 | 2 weeks |
-| `any` Usage | 95 | <10 | 3 weeks |
-| eslint-disable Comments | 50+ | <5 | 4 weeks |
-| Shared Type Usage | 0% | 90% | 2 weeks |
-| Type Coverage | ~70% | >95% | 4 weeks |
+| Metric                  | Current | Target | Timeline |
+| ----------------------- | ------- | ------ | -------- |
+| TypeScript Errors       | 65      | 0      | 2 weeks  |
+| `any` Usage             | 95      | <10    | 3 weeks  |
+| eslint-disable Comments | 50+     | <5     | 4 weeks  |
+| Shared Type Usage       | 0%      | 90%    | 2 weeks  |
+| Type Coverage           | ~70%    | >95%   | 4 weeks  |
 
 ## Recommendations
 
 ### Immediate Actions
+
 1. **Create shared type definitions** in global.d.ts or dedicated type files
 2. **Fix all test errors** - these are low-hanging fruit
 3. **Remove unnecessary type suppressions**
 
 ### Long-term Improvements
+
 1. **Establish type review process** in PR reviews
 2. **Add type coverage metrics** to CI/CD
 3. **Create type documentation** for complex types
 4. **Consider stricter TypeScript settings** once errors are resolved
 
 ### Best Practices to Adopt
+
 1. ✅ Always define explicit return types for functions
 2. ✅ Use `unknown` instead of `any` when type is truly unknown
 3. ✅ Create type guards for runtime type checking
@@ -327,6 +364,7 @@ declare module 'next-intl' {
 The Cado codebase has a solid TypeScript foundation with strict mode enabled, but there are significant opportunities for improvement. Most issues are concentrated in test files and can be resolved quickly. The biggest win would be creating a shared type system for the multilingual pattern used throughout the application.
 
 The investment in fixing these TypeScript issues will pay dividends in:
+
 - **Reduced runtime errors**
 - **Better developer experience**
 - **Easier refactoring**
@@ -388,4 +426,4 @@ export type ProductInfo = MultilingualString;
 
 ---
 
-*This report provides a roadmap for improving TypeScript usage in the Cado codebase. Following these recommendations will result in a more maintainable, type-safe, and developer-friendly codebase.*
+_This report provides a roadmap for improving TypeScript usage in the Cado codebase. Following these recommendations will result in a more maintainable, type-safe, and developer-friendly codebase._

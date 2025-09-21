@@ -13,7 +13,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   const hreflangMeta = generateHreflangMetadata({
     pathname: '/confirmation/[id]',
     locale: locale as 'ro' | 'ru' | 'en',
-    params: { id }
+    params: { id },
   });
 
   return {
@@ -23,22 +23,24 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   };
 }
 
-export default async function OrderConfirmationPage({ params }: { params: Promise<{ id: string }> }) {
-    const { id } = await params;
+export default async function OrderConfirmationPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
 
-    await prefetch(
-        trpc.order.getOrderById.queryOptions({ id })
-    );
-    const queryClient = getQueryClient();
-    await queryClient.prefetchQuery(trpc.order.getOrderById.queryOptions({ id }));
+  await prefetch(trpc.order.getOrderById.queryOptions({ id }));
+  const queryClient = getQueryClient();
+  await queryClient.prefetchQuery(trpc.order.getOrderById.queryOptions({ id }));
 
-    return (
-        <HydrateClient>
-            <div className="grid grid-cols-8 lg:grid-cols-15 gap-x-2 lg:gap-x-6 px-4 lg:px-16 max-w-3xl mx-auto relative">
-                <Header />
-                <ConfirmationContent id={id} />
-            </div>
-            <Footer />
-        </HydrateClient>
-    );
+  return (
+    <HydrateClient>
+      <div className='grid grid-cols-8 lg:grid-cols-15 gap-x-2 lg:gap-x-6 px-4 lg:px-16 max-w-3xl mx-auto relative'>
+        <Header />
+        <ConfirmationContent id={id} />
+      </div>
+      <Footer />
+    </HydrateClient>
+  );
 }

@@ -1,9 +1,4 @@
-import {
-  getQueryClient,
-  HydrateClient,
-  prefetch,
-  trpc,
-} from '@/app/_trpc/server';
+import { getQueryClient, HydrateClient, prefetch, trpc } from '@/app/_trpc/server';
 import Footer from '@/components/footer/Footer';
 import Faq from '@/components/home/faq/Faq';
 import Recommendations from '@/components/home/recommendations/Recommendations';
@@ -33,13 +28,11 @@ export async function generateMetadata({
   const productData = await queryClient.fetchQuery(queryOptions);
 
   const title = productData.product?.title[locale] || 'Product';
-  const descriptionResponse =
-    productData.product?.long_description?.[locale] || '';
+  const descriptionResponse = productData.product?.long_description?.[locale] || '';
   const description = htmlToText(descriptionResponse);
 
   const image =
-    `${productData.product?.images?.[0]}` ||
-    'https://your-default-image-url.com/default.jpg';
+    `${productData.product?.images?.[0]}` || 'https://your-default-image-url.com/default.jpg';
 
   const hreflangMeta = generateHreflangMetadata({
     pathname: '/catalog/product/[id]',
@@ -79,16 +72,12 @@ export default async function Product({
 
   const queryClient = getQueryClient();
 
-  const queryOptions = trpc.products.getProductById.queryOptions(
-    { id },
-    { staleTime: 10000 }
-  );
+  const queryOptions = trpc.products.getProductById.queryOptions({ id }, { staleTime: 10000 });
   await prefetch(queryOptions);
 
   // Access cached product data for breadcrumb generation (no additional database call)
   const productData =
-    queryClient.getQueryData(queryOptions.queryKey) ||
-    (await queryClient.fetchQuery(queryOptions)); // Fallback if not cached
+    queryClient.getQueryData(queryOptions.queryKey) || (await queryClient.fetchQuery(queryOptions)); // Fallback if not cached
 
   // Generate breadcrumb schema
   const baseUrl = process.env.BASE_URL || 'https://cado.md';
@@ -105,7 +94,7 @@ export default async function Product({
     <>
       <BreadcrumbJsonLd breadcrumbSchema={breadcrumbSchema} />
       <HydrateClient>
-        <div className="grid grid-cols-8 lg:grid-cols-15 gap-x-2 lg:gap-x-6 px-4 lg:px-16 max-w-3xl mx-auto relative">
+        <div className='grid grid-cols-8 lg:grid-cols-15 gap-x-2 lg:gap-x-6 px-4 lg:px-16 max-w-3xl mx-auto relative'>
           <ProductInfo id={id} />
           <Recommendations indProductSection={true} />
           <Faq />

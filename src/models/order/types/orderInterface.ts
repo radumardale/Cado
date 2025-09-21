@@ -1,37 +1,37 @@
-import { AdditionalInfoInterface, ResAdditionalInfoInterface } from "./additionalInfo";
-import { OrderPaymentMethod } from "./orderPaymentMethod";
-import { OrderState } from "./orderState";
-import { Types } from "mongoose";
-import { ClientInterface } from "@/models/client/types/clientInterface";
-import { DeliveryMethod } from "./deliveryMethod";
-import { DeliveryDetailsInterface } from "./deliveryDetails";
-import { CartProducts } from "./cartProducts";
+import { AdditionalInfoInterface, ResAdditionalInfoInterface } from './additionalInfo';
+import { OrderPaymentMethod } from './orderPaymentMethod';
+import { OrderState } from './orderState';
+import { Types } from 'mongoose';
+import { ClientInterface } from '@/models/client/types/clientInterface';
+import { DeliveryMethod } from './deliveryMethod';
+import { DeliveryDetailsInterface } from './deliveryDetails';
+import { CartProducts } from './cartProducts';
 
 export interface OrderInterface {
-    products: CartProducts[],
-    client: Types.ObjectId | ClientInterface,
-    additional_info: AdditionalInfoInterface,
-    state: OrderState,
-    payment_method: OrderPaymentMethod,
-    delivery_method: DeliveryMethod,
-    custom_id: string,
-    invoice_id: number,
-    createdAt: Date,
-    total_cost: number,
-    delivery_details: DeliveryDetailsInterface,
-    paynet_id: number
+  products: CartProducts[];
+  client: Types.ObjectId | ClientInterface;
+  additional_info: AdditionalInfoInterface;
+  state: OrderState;
+  payment_method: OrderPaymentMethod;
+  delivery_method: DeliveryMethod;
+  custom_id: string;
+  invoice_id: number;
+  createdAt: Date;
+  total_cost: number;
+  delivery_details: DeliveryDetailsInterface;
+  paynet_id: number;
 }
 
 export interface ResOrderInterface {
-    _id: string,
-    products: CartProducts[],
-    client: ClientInterface,
-    additional_info: ResAdditionalInfoInterface,
-    state: OrderState,
-    payment_method: OrderPaymentMethod,
-    delivery_method: DeliveryMethod,
-    custom_id: string,
-    createdAt: Date,
-    total_cost: number,
-    delivery_details: DeliveryDetailsInterface
+  _id: string;
+  products: CartProducts[];
+  client: ClientInterface;
+  additional_info: ResAdditionalInfoInterface;
+  state: OrderState;
+  payment_method: OrderPaymentMethod;
+  delivery_method: DeliveryMethod;
+  custom_id: string;
+  createdAt: Date;
+  total_cost: number;
+  delivery_details: DeliveryDetailsInterface;
 }

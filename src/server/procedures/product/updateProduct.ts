@@ -4,7 +4,7 @@ import { Product } from '@/models/product/product';
 import { ProductInterface } from '@/models/product/types/productInterface';
 import { ActionResponse } from '@/lib/types/ActionResponse';
 import { updateProductRequestSchema } from '@/lib/validation/product/updateProductRequest';
-import { protectedProcedure } from "@/server/trpc";
+import { protectedProcedure } from '@/server/trpc';
 import connectMongo from '@/lib/connect-mongo';
 import { DestinationEnum, generateUploadLinks } from '../image/generateUploadLinks';
 
@@ -18,37 +18,36 @@ export const updateProductProcedure = protectedProcedure
   .input(updateProductRequestSchema)
   .mutation(async ({ input }): Promise<updateProductResponseInterface> => {
     try {
-      
       await connectMongo();
 
-      const oldProduct = await Product.findById(input.id).select("images").lean() as any;
+      const oldProduct = (await Product.findById(input.id).select('images').lean()) as any;
 
       const imagesLinks = [];
-  
+
       for (let i = 0; i < input.data.imagesNumber; i++) {
-          const imageUrl = await generateUploadLinks({
-            id: oldProduct._id.toString(),
-            destination: DestinationEnum.PRODUCT
-          });
-  
-          imagesLinks.push(imageUrl.imageUrl);
+        const imageUrl = await generateUploadLinks({
+          id: oldProduct._id.toString(),
+          destination: DestinationEnum.PRODUCT,
+        });
+
+        imagesLinks.push(imageUrl.imageUrl);
       }
 
       if (!oldProduct) {
         return {
           success: false,
-          error: "This product does not exist",
+          error: 'This product does not exist',
           product: null,
-          imagesLinks: []
+          imagesLinks: [],
         };
       }
 
       const product = await Product.findByIdAndUpdate(
-        input.id, 
+        input.id,
         {
           $set: {
             ...input.data,
-          }
+          },
         },
         { new: true }
       );
@@ -56,9 +55,9 @@ export const updateProductProcedure = protectedProcedure
       if (!product) {
         return {
           success: false,
-          error: "This product does not exist",
+          error: 'This product does not exist',
           imagesLinks: [],
-          product: null
+          product: null,
         };
       }
 
@@ -68,12 +67,12 @@ export const updateProductProcedure = protectedProcedure
         imagesLinks: imagesLinks,
       };
     } catch (error) {
-      console.error("Error updating product:", error);
+      console.error('Error updating product:', error);
       return {
         success: false,
-        error: error instanceof Error ? error.message : "Failed to update product",
+        error: error instanceof Error ? error.message : 'Failed to update product',
         product: null,
-        imagesLinks: []
+        imagesLinks: [],
       };
     }
   });

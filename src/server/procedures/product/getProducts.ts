@@ -1,12 +1,12 @@
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 
-import { publicProcedure } from "../../trpc";
-import { Product } from "@/models/product/product";
-import { ActionResponse } from "@/lib/types/ActionResponse";
-import connectMongo from "@/lib/connect-mongo";
-import { getAllProductsRequestSchema } from "@/lib/validation/product/getAllProductsRequest";
-import SortBy from "@/lib/enums/SortBy";
-import { ReccProduct } from "@/models/reccProduct/ReccProduct";
+import { publicProcedure } from '../../trpc';
+import { Product } from '@/models/product/product';
+import { ActionResponse } from '@/lib/types/ActionResponse';
+import connectMongo from '@/lib/connect-mongo';
+import { getAllProductsRequestSchema } from '@/lib/validation/product/getAllProductsRequest';
+import SortBy from '@/lib/enums/SortBy';
+import { ReccProduct } from '@/models/reccProduct/ReccProduct';
 
 export interface GetProductResponseInterface extends ActionResponse {
   products: any;
@@ -25,201 +25,200 @@ export const getProductsProcedure = publicProcedure
 
       const normalizedSearch = input.title
         ? input.title
-            .normalize("NFD")
-            .replace(/[\u0300-\u036f]/g, "")
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '')
             .toLowerCase()
         : null;
 
       const tokenizedNormalizedSearch = normalizedSearch
-        ? normalizedSearch.split("+").filter((word) => word.length > 1)
+        ? normalizedSearch.split('+').filter(word => word.length > 1)
         : null;
 
-      const recommendedValue = 
-        input.sortBy === SortBy.RECOMMENDED ? {
-          $cond: [
-        {
-          $in: ["$_id", { 
-              $map: { 
-              input: await ReccProduct.find({}, { product: 1 }).lean(),
-              as: "reccProduct",
-              in: "$$reccProduct.product"
+      const recommendedValue =
+        input.sortBy === SortBy.RECOMMENDED
+          ? {
+              $cond: [
+                {
+                  $in: [
+                    '$_id',
+                    {
+                      $map: {
+                        input: await ReccProduct.find({}, { product: 1 }).lean(),
+                        as: 'reccProduct',
+                        in: '$$reccProduct.product',
+                      },
+                    },
+                  ],
+                },
+                1,
+                0,
+              ],
             }
-          }]
-        },
-        1,
-        0
-          ]
-        } : 0
+          : 0;
 
-      const relevanceValue = 
+      const relevanceValue =
         input.sortBy === SortBy.PRICE_ASC || input.sortBy === SortBy.PRICE_DESC
-        ? {
-          $cond: [
-            {
-              $or: [
-                // Title match in Romanian or Russian
+          ? {
+              $cond: [
                 {
-                  $gt: [
+                  $or: [
+                    // Title match in Romanian or Russian
                     {
-                      $sum: (tokenizedNormalizedSearch || []).map((word) => ({
-                        $cond: {
-                          if: {
-                            $or: [
-                              {
-                                $regexMatch: {
-                                  input: "$normalized_title.ro",
-                                  regex: word,
-                                },
+                      $gt: [
+                        {
+                          $sum: (tokenizedNormalizedSearch || []).map(word => ({
+                            $cond: {
+                              if: {
+                                $or: [
+                                  {
+                                    $regexMatch: {
+                                      input: '$normalized_title.ro',
+                                      regex: word,
+                                    },
+                                  },
+                                  {
+                                    $regexMatch: {
+                                      input: '$normalized_title.ru',
+                                      regex: word,
+                                    },
+                                  },
+                                  {
+                                    $regexMatch: {
+                                      input: '$normalized_title.en',
+                                      regex: word,
+                                    },
+                                  },
+                                ],
                               },
-                              {
-                                $regexMatch: {
-                                  input: "$normalized_title.ru",
-                                  regex: word,
-                                },
+                              then: 1,
+                              else: 0,
+                            },
+                          })),
+                        },
+                        0,
+                      ],
+                    },
+                    // Category match
+                    { $in: [input.category, '$categories'] },
+                    // Occasions match
+                    {
+                      $and: [
+                        { $isArray: ['$ocasions'] },
+                        { $gt: [{ $size: { $ifNull: [input.ocasions, []] } }, 0] },
+                        {
+                          $gt: [
+                            {
+                              $size: {
+                                $setIntersection: [
+                                  { $ifNull: ['$ocasions', []] },
+                                  { $ifNull: [input.ocasions, []] },
+                                ],
                               },
-                              {
-                                $regexMatch: {
-                                  input: "$normalized_title.en",
-                                  regex: word,
-                                },
+                            },
+                            0,
+                          ],
+                        },
+                      ],
+                    },
+                    // Product content match
+                    {
+                      $and: [
+                        { $isArray: ['$product_content'] },
+                        { $gt: [{ $size: { $ifNull: [input.productContent, []] } }, 0] },
+                        {
+                          $gt: [
+                            {
+                              $size: {
+                                $setIntersection: [
+                                  { $ifNull: ['$product_content', []] },
+                                  { $ifNull: [input.productContent, []] },
+                                ],
                               },
-                            ],
+                            },
+                            0,
+                          ],
+                        },
+                      ],
+                    },
+                  ],
+                },
+                1, // If any condition matches, return 1
+                0, // If no condition matches, return 0
+              ],
+            }
+          : {
+              $add: [
+                {
+                  $sum: (tokenizedNormalizedSearch || []).map(word => ({
+                    $cond: {
+                      if: {
+                        $or: [
+                          {
+                            $regexMatch: {
+                              input: '$normalized_title.ro',
+                              regex: word,
+                            },
                           },
-                          then: 1,
-                          else: 0,
-                        }
-                      })),
+                          {
+                            $regexMatch: {
+                              input: '$normalized_title.ru',
+                              regex: word,
+                            },
+                          },
+                        ],
+                      },
+                      then: 5,
+                      else: 0,
                     },
-                    0
-                  ]
+                  })),
                 },
-                // Category match
-                { $in: [input.category, "$categories"] },
-                // Occasions match
                 {
-                  $and: [
-                    { $isArray: ["$ocasions"] },
-                    { $gt: [{ $size: { $ifNull: [input.ocasions, []] } }, 0] },
-                    { 
-                      $gt: [
-                        {
-                          $size: {
-                            $setIntersection: [
-                              { $ifNull: ["$ocasions", []] },
-                              { $ifNull: [input.ocasions, []] },
-                            ]
-                          }
-                        },
-                        0
-                      ] 
-                    }
-                  ]
+                  $cond: [{ $in: [input.category, '$categories'] }, 1, 0],
                 },
-                // Product content match
                 {
-                  $and: [
-                    { $isArray: ["$product_content"] },
-                    { $gt: [{ $size: { $ifNull: [input.productContent, []] } }, 0] },
-                    { 
-                      $gt: [
-                        {
-                          $size: {
-                            $setIntersection: [
-                              { $ifNull: ["$product_content", []] },
-                              { $ifNull: [input.productContent, []] },
-                            ]
-                          }
-                        },
-                        0
-                      ] 
-                    }
-                  ]
-                },
-              ]
-            },
-            1,  // If any condition matches, return 1
-            0   // If no condition matches, return 0
-          ]
-        }
-        : {
-          $add: [
-            {
-              $sum: (tokenizedNormalizedSearch || []).map((word) => ({
-                $cond: {
-                  if: {
-                    $or: [
-                      {
-                        $regexMatch: {
-                          input: "$normalized_title.ro",
-                          regex: word,
-                        },
-                      },
-                      {
-                        $regexMatch: {
-                          input: "$normalized_title.ru",
-                          regex: word,
-                        },
-                      },
-                    ],
-                  },
-                  then: 5,
-                  else: 0,
-                },
-              })),
-            },
-            {
-              $cond: [{ $in: [input.category, "$categories"] }, 1, 0],
-            },
-            {
-              $cond: [
-                {
-                  $and: [
-                    { $isArray: ["$ocasions"] },
+                  $cond: [
                     {
-                      $gt: [
-                        { $size: { $ifNull: [input.ocasions, []] } },
-                        0,
+                      $and: [
+                        { $isArray: ['$ocasions'] },
+                        {
+                          $gt: [{ $size: { $ifNull: [input.ocasions, []] } }, 0],
+                        },
                       ],
                     },
+                    {
+                      $size: {
+                        $setIntersection: [
+                          { $ifNull: ['$ocasions', []] },
+                          { $ifNull: [input.ocasions, []] },
+                        ],
+                      },
+                    },
+                    0,
                   ],
                 },
                 {
-                  $size: {
-                    $setIntersection: [
-                      { $ifNull: ["$ocasions", []] },
-                      { $ifNull: [input.ocasions, []] },
-                    ],
-                  },
-                },
-                0,
-              ],
-            },
-            {
-              $cond: [
-                {
-                  $and: [
-                    { $isArray: ["$product_content"] },
+                  $cond: [
                     {
-                      $gt: [
-                        { $size: { $ifNull: [input.productContent, []] } },
-                        0,
+                      $and: [
+                        { $isArray: ['$product_content'] },
+                        {
+                          $gt: [{ $size: { $ifNull: [input.productContent, []] } }, 0],
+                        },
                       ],
                     },
+                    {
+                      $size: {
+                        $setIntersection: [
+                          { $ifNull: ['$product_content', []] },
+                          { $ifNull: [input.productContent, []] },
+                        ],
+                      },
+                    },
+                    0,
                   ],
                 },
-                {
-                  $size: {
-                    $setIntersection: [
-                      { $ifNull: ["$product_content", []] },
-                      { $ifNull: [input.productContent, []] },
-                    ],
-                  },
-                },
-                0,
               ],
-            },
-          ],
-        }
+            };
 
       const aggregationResults = await Product.aggregate([
         {
@@ -235,10 +234,10 @@ export const getProductsProcedure = publicProcedure
           },
         },
         {
-          $set: { 
+          $set: {
             relevance: relevanceValue,
-            recommended: recommendedValue
-          }
+            recommended: recommendedValue,
+          },
         },
         {
           $facet: {
@@ -247,16 +246,13 @@ export const getProductsProcedure = publicProcedure
                 $sort: {
                   relevance: -1,
                   ...getSortOptions(input.sortBy),
-                }
+                },
               },
               { $skip: cursor || 0 },
               { $limit: limit + 1 },
             ],
-            totalCount: [{ $count: "count" }],
-            relevantCount: [
-              { $match: { relevance: { $gt: 0 } } },
-              { $count: "count" },
-            ],
+            totalCount: [{ $count: 'count' }],
+            relevantCount: [{ $match: { relevance: { $gt: 0 } } }, { $count: 'count' }],
           },
         },
       ]);
@@ -275,8 +271,8 @@ export const getProductsProcedure = publicProcedure
         totalCount,
       };
     } catch (error) {
-      console.error("Error fetching products:", error);
-      throw new Error("Failed to fetch products");
+      console.error('Error fetching products:', error);
+      throw new Error('Failed to fetch products');
     }
   });
 
@@ -285,7 +281,7 @@ function getSortOptions(sortBy: SortBy): Record<string, 1 | -1> {
     case SortBy.DISCOUNT:
       return { sale: -1, createdAt: -1 };
     case SortBy.RECOMMENDED:
-        return { recommended: -1, createdAt: -1 };
+      return { recommended: -1, createdAt: -1 };
     case SortBy.PRICE_ASC:
       return { price: 1 };
     case SortBy.PRICE_DESC:

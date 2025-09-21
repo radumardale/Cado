@@ -1,4 +1,4 @@
 export const COLORS = {
-    white: "#FAFAFA",
-    black: "#1A2433",
-}
+  white: '#FAFAFA',
+  black: '#1A2433',
+};

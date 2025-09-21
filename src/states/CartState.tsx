@@ -1,21 +1,21 @@
-import { create } from 'zustand'
-import { devtools, persist } from 'zustand/middleware'
+import { create } from 'zustand';
+import { devtools, persist } from 'zustand/middleware';
 
 interface CartState {
-  isOpen: boolean
-  setOpen: (value: boolean) => void,
+  isOpen: boolean;
+  setOpen: (value: boolean) => void;
 }
 
 export const useCartStore = create<CartState>()(
   devtools(
     persist(
-      (set) => ({
+      set => ({
         isOpen: false,
-        setOpen: (value) => set({isOpen: value}),
+        setOpen: value => set({ isOpen: value }),
       }),
       {
-        name: "cart-storage"
+        name: 'cart-storage',
       }
-    ),
-  ),
-)
+    )
+  )
+);

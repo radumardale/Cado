@@ -1,12 +1,13 @@
-import { StockState } from "@/lib/enums/StockState";
-import mongoose from "mongoose";
+import { StockState } from '@/lib/enums/StockState';
+import mongoose from 'mongoose';
 
 export type StockAvailability = {
-    stock: number,
-    state: StockState
-  }
+  stock: number;
+  state: StockState;
+};
 
-export const StockAvailabilitySchema = new mongoose.Schema<StockAvailability>({
+export const StockAvailabilitySchema = new mongoose.Schema<StockAvailability>(
+  {
     stock: {
       type: Number,
       required: true,
@@ -16,4 +17,6 @@ export const StockAvailabilitySchema = new mongoose.Schema<StockAvailability>({
       enum: StockState,
       required: true,
     },
-},  { _id: false });
+  },
+  { _id: false }
+);

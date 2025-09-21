@@ -32,9 +32,7 @@ describe('Robots.txt Generation', () => {
     const result = robots();
 
     // Find the rule for all user agents
-    const allAgentsRule = result.rules?.find(rule =>
-      rule.userAgent === '*'
-    );
+    const allAgentsRule = result.rules?.find(rule => rule.userAgent === '*');
 
     expect(allAgentsRule).toBeDefined();
     expect(allAgentsRule?.allow).toBe('/');
@@ -54,9 +52,7 @@ describe('Robots.txt Generation', () => {
   it('should have specific rules for Googlebot', () => {
     const result = robots();
 
-    const googlebotRule = result.rules?.find(rule =>
-      rule.userAgent === 'Googlebot'
-    );
+    const googlebotRule = result.rules?.find(rule => rule.userAgent === 'Googlebot');
 
     expect(googlebotRule).toBeDefined();
     expect(googlebotRule?.allow).toBe('/');
@@ -71,9 +67,7 @@ describe('Robots.txt Generation', () => {
   it('should have specific rules for Yandex', () => {
     const result = robots();
 
-    const yandexRule = result.rules?.find(rule =>
-      rule.userAgent === 'Yandex'
-    );
+    const yandexRule = result.rules?.find(rule => rule.userAgent === 'Yandex');
 
     expect(yandexRule).toBeDefined();
     expect(yandexRule?.allow).toBe('/');

@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
 
-@import "tailwindcss";
+@import 'tailwindcss';
 
 @plugin "tailwindcss-animate";
 
@@ -55,8 +55,8 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
-  --font-manrope: "Manrope";
-  --font-roboto: "Roboto";
+  --font-manrope: 'Manrope';
+  --font-roboto: 'Roboto';
 }
 
 @theme inline {
@@ -118,16 +118,26 @@
   --container-3xl: 2048px;
   --text-3xl: 2.5rem;
   --animate-shake: shake 0.35s ease-in-out;
-  --shadow-sm: 2px 2px 8px 0px rgba(0, 0, 0, 0.10);
+  --shadow-sm: 2px 2px 8px 0px rgba(0, 0, 0, 0.1);
   --animate-accordion-up: slideUp 0.4s cubic-bezier(0.65, 0, 0.35, 1);
   --animate-accordion-down: slideDown 0.4s cubic-bezier(0.65, 0, 0.35, 1);
 
   @keyframes shake {
-    0% { transform: translateX(0); }
-    25% { transform: translateX(-5px); }
-    50% { transform: translateX(5px); }
-    75% { transform: translateX(-5px); }
-    100% { transform: translateX(0); }
+    0% {
+      transform: translateX(0);
+    }
+    25% {
+      transform: translateX(-5px);
+    }
+    50% {
+      transform: translateX(5px);
+    }
+    75% {
+      transform: translateX(-5px);
+    }
+    100% {
+      transform: translateX(0);
+    }
   }
 
   @keyframes slideDown {
@@ -138,7 +148,7 @@
       height: var(--radix-accordion-content-height);
     }
   }
-  
+
   @keyframes slideUp {
     from {
       height: var(--radix-accordion-content-height);
@@ -151,20 +161,17 @@
 
 @layer base {
   body {
-    @apply bg-white text-black ;
+    @apply bg-white text-black;
   }
-  .scroll-bar-custom::-webkit-scrollbar-track
-  {
+  .scroll-bar-custom::-webkit-scrollbar-track {
     background-color: #f1f1f1;
   }
 
-  .scroll-bar-custom::-webkit-scrollbar
-  {
+  .scroll-bar-custom::-webkit-scrollbar {
     width: 10px;
   }
 
-  .scroll-bar-custom::-webkit-scrollbar-thumb
-  {
+  .scroll-bar-custom::-webkit-scrollbar-thumb {
     border: #f1f1f1 solid 2px;
     border-radius: 7px;
     background-color: #6b6b6b90;
@@ -172,7 +179,7 @@
 }
 
 html {
-  font-family: "Roboto", sans-serif;
+  font-family: 'Roboto', sans-serif;
   line-height: 1.125rem;
 }
 
@@ -189,10 +196,11 @@ html {
     font-size: 14px;
   }
 
-  input, textarea {
+  input,
+  textarea {
     font-size: 14px;
   }
-  
+
   .grid-cols-full {
     grid-template-columns: repeat(13, minmax(0, 1fr));
   }
@@ -207,7 +215,8 @@ html {
     font-size: 14px;
   }
 
-  input, textarea {
+  input,
+  textarea {
     font-size: 16px;
   }
 
@@ -225,7 +234,8 @@ html {
     font-size: 16px;
   }
 
-  input, textarea {
+  input,
+  textarea {
     font-size: 16px;
   }
 }
@@ -245,14 +255,16 @@ body.carousel {
     padding-right: 10px !important;
   }
 
-  body.carousel #links-menu, body[data-scroll-locked] #links-menu {
+  body.carousel #links-menu,
+  body[data-scroll-locked] #links-menu {
     right: calc(2rem + 10px);
   }
-  
+
   .footer-link img {
-    filter: brightness(0) saturate(100%) invert(100%) sepia(100%) saturate(0%) hue-rotate(252deg) brightness(108%) contrast(96%);
+    filter: brightness(0) saturate(100%) invert(100%) sepia(100%) saturate(0%) hue-rotate(252deg)
+      brightness(108%) contrast(96%);
   }
-  
+
   .footer-link:hover img {
     filter: none;
   }
@@ -262,12 +274,12 @@ div[data-radix-popper-content-wrapper] {
   z-index: 45 !important;
 }
 
-input[type=number]::-webkit-inner-spin-button, 
-input[type=number]::-webkit-outer-spin-button { 
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-    margin: 0; 
+input[type='number']::-webkit-inner-spin-button,
+input[type='number']::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  margin: 0;
 }
 
 .swiper-slide {

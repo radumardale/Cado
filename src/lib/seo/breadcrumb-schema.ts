@@ -2,15 +2,15 @@ import { Categories, categoryTranslations } from '@/lib/enums/Categories';
 import { Ocasions, ocasionTranslations } from '@/lib/enums/Ocasions';
 
 export interface BreadcrumbItem {
-  "@type": "ListItem";
+  '@type': 'ListItem';
   position: number;
   name: string;
   item?: string;
 }
 
 export interface BreadcrumbListSchema {
-  "@context": "https://schema.org";
-  "@type": "BreadcrumbList";
+  '@context': 'https://schema.org';
+  '@type': 'BreadcrumbList';
   itemListElement: BreadcrumbItem[];
 }
 
@@ -37,14 +37,14 @@ export function generateBreadcrumbSchema(config: BreadcrumbConfig): BreadcrumbLi
 
   // Home page
   breadcrumbItems.push({
-    "@type": "ListItem",
+    '@type': 'ListItem',
     position: position++,
-    name: getLocalizedText("home", locale),
-    item: `${baseUrl}/${locale}`
+    name: getLocalizedText('home', locale),
+    item: `${baseUrl}/${locale}`,
   });
 
   // Catalog page
-  const catalogPath = getLocalizedPath("catalog", locale);
+  const catalogPath = getLocalizedPath('catalog', locale);
   let catalogUrl = `${baseUrl}/${locale}${catalogPath}`;
 
   // Add query parameters if they exist
@@ -58,42 +58,42 @@ export function generateBreadcrumbSchema(config: BreadcrumbConfig): BreadcrumbLi
   }
 
   breadcrumbItems.push({
-    "@type": "ListItem",
+    '@type': 'ListItem',
     position: position++,
-    name: getLocalizedText("catalog", locale),
-    item: catalogUrl
+    name: getLocalizedText('catalog', locale),
+    item: catalogUrl,
   });
 
   // Category or Ocasion breadcrumb
   if (category) {
     breadcrumbItems.push({
-      "@type": "ListItem",
+      '@type': 'ListItem',
       position: position++,
       name: categoryTranslations[category]?.title[locale as 'ro' | 'ru' | 'en'] || category,
-      item: catalogUrl
+      item: catalogUrl,
     });
   } else if (ocasion) {
     breadcrumbItems.push({
-      "@type": "ListItem",
+      '@type': 'ListItem',
       position: position++,
       name: ocasionTranslations[ocasion]?.title[locale as 'ro' | 'ru' | 'en'] || ocasion,
-      item: catalogUrl
+      item: catalogUrl,
     });
   }
 
   // Product page (final item without URL)
   if (productTitle && productId) {
     breadcrumbItems.push({
-      "@type": "ListItem",
+      '@type': 'ListItem',
       position: position++,
-      name: productTitle
+      name: productTitle,
     });
   }
 
   return {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    itemListElement: breadcrumbItems
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: breadcrumbItems,
   };
 }
 
@@ -103,10 +103,10 @@ export function generateBreadcrumbSchema(config: BreadcrumbConfig): BreadcrumbLi
 function getLocalizedPath(page: string, locale: string): string {
   const pathMappings: Record<string, Record<string, string>> = {
     catalog: {
-      en: "/catalog",
-      ro: "/catalog",
-      ru: "/katalog"
-    }
+      en: '/catalog',
+      ro: '/catalog',
+      ru: '/katalog',
+    },
   };
 
   return pathMappings[page]?.[locale] || `/${page}`;
@@ -118,38 +118,40 @@ function getLocalizedPath(page: string, locale: string): string {
 function getLocalizedText(key: string, locale: string): string {
   const translations: Record<string, Record<string, string>> = {
     home: {
-      en: "Home",
-      ro: "Acasă",
-      ru: "Главная"
+      en: 'Home',
+      ro: 'Acasă',
+      ru: 'Главная',
     },
     catalog: {
-      en: "Catalog",
-      ro: "Catalog",
-      ru: "Каталог"
-    }
+      en: 'Catalog',
+      ro: 'Catalog',
+      ru: 'Каталог',
+    },
   };
 
   return translations[key]?.[locale] || key;
 }
 
-
 /**
  * Generate breadcrumb schema for homepage
  */
-export function generateHomeBreadcrumbSchema(baseUrl: string, locale: string): BreadcrumbListSchema {
+export function generateHomeBreadcrumbSchema(
+  baseUrl: string,
+  locale: string
+): BreadcrumbListSchema {
   // Normalize baseUrl by removing trailing slashes
   const normalizedBaseUrl = baseUrl.replace(/\/+$/, '');
   return {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
     itemListElement: [
       {
-        "@type": "ListItem",
+        '@type': 'ListItem',
         position: 1,
-        name: getLocalizedText("home", locale),
-        item: `${normalizedBaseUrl}/${locale}`
-      }
-    ]
+        name: getLocalizedText('home', locale),
+        item: `${normalizedBaseUrl}/${locale}`,
+      },
+    ],
   };
 }
 
@@ -170,7 +172,7 @@ export function generateCatalogBreadcrumbSchema(
     baseUrl,
     category: filters?.category,
     ocasion: filters?.ocasion,
-    sortBy: filters?.sortBy
+    sortBy: filters?.sortBy,
   });
 }
 
@@ -191,6 +193,6 @@ export function generateProductBreadcrumbSchema(
     category,
     ocasion,
     productTitle,
-    productId
+    productId,
   });
 }

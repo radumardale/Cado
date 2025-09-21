@@ -1,780 +1,944 @@
 'use client';
-import { Form, FormControl, FormField, FormItem, FormMessage } from '../ui/form'
-import { addOrderRequestSchema } from '@/lib/validation/order/addOrderRequest'
-import { z } from 'zod'
-import { DeliveryMethod } from '@/models/order/types/deliveryMethod'
-import { RadioGroup } from '../ui/radio-group'
-import { RadioGroupItem } from '@radix-ui/react-radio-group'
-import { useForm } from 'react-hook-form'
-import { BanknoteIcon, BriefcaseBusiness, CalendarIcon, ChevronDown, Clock, CreditCard, MapPin, Truck, User } from 'lucide-react'
-import { Input } from '../ui/input'
-import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '../ui/select'
-import { Fragment, useEffect } from 'react'
-import { Checkbox } from '../ui/checkbox'
-import { ClientEntity } from '@/models/order/types/orderEntity'
-import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover'
-import { Button } from '../ui/button'
-import { cn } from '@/lib/utils'
-import { format, Locale } from 'date-fns'
-import { ro, enUS, ru } from "date-fns/locale"
-import { Calendar } from '../ui/calendar'
-import { Textarea } from '../ui/textarea'
-import { OrderPaymentMethod } from '@/models/order/types/orderPaymentMethod'
-import { Link, useRouter } from '@/i18n/navigation'
-import { CartInterface } from '@/lib/types/CartInterface'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { DeliveryRegions, DeliveryRegionsArr } from '@/lib/enums/DeliveryRegions'
-import { useLocale, useTranslations } from 'next-intl'
-import { DeliveryHours, DeliveryHoursArr } from '@/lib/enums/DeliveryHours'
-import { useTRPC } from '@/app/_trpc/client'
-import { toast } from 'sonner'
-import { ProductInterface } from '@/models/product/types/productInterface'
+import { Form, FormControl, FormField, FormItem, FormMessage } from '../ui/form';
+import { addOrderRequestSchema } from '@/lib/validation/order/addOrderRequest';
+import { z } from 'zod';
+import { DeliveryMethod } from '@/models/order/types/deliveryMethod';
+import { RadioGroup } from '../ui/radio-group';
+import { RadioGroupItem } from '@radix-ui/react-radio-group';
+import { useForm } from 'react-hook-form';
+import {
+  BanknoteIcon,
+  BriefcaseBusiness,
+  CalendarIcon,
+  ChevronDown,
+  Clock,
+  CreditCard,
+  MapPin,
+  Truck,
+  User,
+} from 'lucide-react';
+import { Input } from '../ui/input';
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '../ui/select';
+import { Fragment, useEffect } from 'react';
+import { Checkbox } from '../ui/checkbox';
+import { ClientEntity } from '@/models/order/types/orderEntity';
+import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
+import { Button } from '../ui/button';
+import { cn } from '@/lib/utils';
+import { format, Locale } from 'date-fns';
+import { ro, enUS, ru } from 'date-fns/locale';
+import { Calendar } from '../ui/calendar';
+import { Textarea } from '../ui/textarea';
+import { OrderPaymentMethod } from '@/models/order/types/orderPaymentMethod';
+import { Link, useRouter } from '@/i18n/navigation';
+import { CartInterface } from '@/lib/types/CartInterface';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { DeliveryRegions, DeliveryRegionsArr } from '@/lib/enums/DeliveryRegions';
+import { useLocale, useTranslations } from 'next-intl';
+import { DeliveryHours, DeliveryHoursArr } from '@/lib/enums/DeliveryHours';
+import { useTRPC } from '@/app/_trpc/client';
+import { toast } from 'sonner';
+import { ProductInterface } from '@/models/product/types/productInterface';
 
-import { useMutation } from "@tanstack/react-query";
+import { useMutation } from '@tanstack/react-query';
 import { revalidateServerPath } from '@/server/actions/revalidateServerPath';
 
 interface CheckoutFormProps {
-    items: CartInterface[],
-    setDeliveryRegion: (v: DeliveryRegions | null) => void,
-    setDeliveryHour: (v: DeliveryHours | null) => void,
-    totalCost: number,
-    products: ProductInterface[]
+  items: CartInterface[];
+  setDeliveryRegion: (v: DeliveryRegions | null) => void;
+  setDeliveryHour: (v: DeliveryHours | null) => void;
+  totalCost: number;
+  products: ProductInterface[];
 }
 
 const determineAvailableDeliveryHours = (hour: number): DeliveryHours[] => {
-    const thresholds = [5, 9, 13, 19, 24];
-    const sliceIndex = thresholds.findIndex(threshold => hour < threshold);
-    
-    return sliceIndex === -1 
-        ? [] 
-        : DeliveryHoursArr.slice(sliceIndex) as DeliveryHours[];
-}
+  const thresholds = [5, 9, 13, 19, 24];
+  const sliceIndex = thresholds.findIndex(threshold => hour < threshold);
+
+  return sliceIndex === -1 ? [] : (DeliveryHoursArr.slice(sliceIndex) as DeliveryHours[]);
+};
 
 const orderMessages = {
   orderSuccess: {
-    "ro": "Comanda a fost plasată cu succes!",
-    "ru": "Заказ был успешно размещен!",
-    "en": "Order has been placed successfully!"
+    ro: 'Comanda a fost plasată cu succes!',
+    ru: 'Заказ был успешно размещен!',
+    en: 'Order has been placed successfully!',
   },
   orderError: {
-    "ro": "Comanda nu a putut fi efectuata!",
-    "ru": "Заказ не удалось выполнить!",
-    "en": "Order could not be completed!"
-  }
+    ro: 'Comanda nu a putut fi efectuata!',
+    ru: 'Заказ не удалось выполнить!',
+    en: 'Order could not be completed!',
+  },
 };
 
-export default function CheckoutForm({items, setDeliveryRegion, setDeliveryHour, totalCost, products}: CheckoutFormProps) {
-    const locale = useLocale() as "ro" | "ru" | "en";
-    const successMessage = orderMessages.orderSuccess[locale] || orderMessages.orderSuccess.ro;
-    const errorMessage = orderMessages.orderError[locale] || orderMessages.orderError.ro;
+export default function CheckoutForm({
+  items,
+  setDeliveryRegion,
+  setDeliveryHour,
+  totalCost,
+  products,
+}: CheckoutFormProps) {
+  const locale = useLocale() as 'ro' | 'ru' | 'en';
+  const successMessage = orderMessages.orderSuccess[locale] || orderMessages.orderSuccess.ro;
+  const errorMessage = orderMessages.orderError[locale] || orderMessages.orderError.ro;
 
-    const trpc = useTRPC();
-    const t = useTranslations("CheckoutPage.CheckoutForm");
-    const router = useRouter();
+  const trpc = useTRPC();
+  const t = useTranslations('CheckoutPage.CheckoutForm');
+  const router = useRouter();
 
-    const { mutate } = useMutation(trpc.order.addOrder.mutationOptions({
-        onSuccess: async (data) => {
-            if (!data.success) {
-                toast.error(errorMessage);
-                return;
-            }
-
-            revalidateServerPath('/[locale]/catalog/product/[id]', 'page');
-            revalidateServerPath("/ro/catalog");
-            revalidateServerPath("/ru/catalog");
-            revalidateServerPath("/en/catalog");
-
-            if (data.paymentForm) {
-              const form = document.createElement('form');
-              form.method = data.paymentForm.method;
-              form.action = data.paymentForm.action;
-        
-              Object.entries(data.paymentForm.fields).forEach(([key, value]) => {
-                const input = document.createElement('input');
-                input.type = 'hidden';
-                input.name = key;
-                input.value = value as string;
-                form.appendChild(input);
-              });
-        
-              document.body.appendChild(form);
-              form.submit();
-              document.body.removeChild(form);
-            }
-
-            if (data.order) {
-                toast.success(successMessage);
-                router.push({pathname: "/confirmation/[id]", params: {id: data?.order?.custom_id || ""}})
-            }
-          }
-    }));
-
-    const form = useForm<z.infer<typeof addOrderRequestSchema>>({
-        resolver: zodResolver(addOrderRequestSchema),
-        defaultValues: {
-            products: [],
-            delivery_method: DeliveryMethod.HOME_DELIVERY,
-            additional_info: {
-                delivery_address: {
-                    region: "CHISINAU",
-                    city: "",
-                    home_address: "",
-                    home_nr: ""
-                },
-                entity_type: ClientEntity.Natural,
-                user_data: {
-                    email: "",
-                    tel_number: "",
-                    firstname: "",
-                    lastname: ""
-                },
-                billing_address: {
-                    company_name: "",
-                    firstname: "",
-                    idno: "",
-                    lastname: "",
-                    home_address: "",
-                    home_nr: "",
-                    region: "CHISINAU",
-                    city: "",
-                },
-                billing_checkbox: true,
-            },
-            payment_method: OrderPaymentMethod.Paynet,
-            termsAccepted: false
+  const { mutate } = useMutation(
+    trpc.order.addOrder.mutationOptions({
+      onSuccess: async data => {
+        if (!data.success) {
+          toast.error(errorMessage);
+          return;
         }
+
+        revalidateServerPath('/[locale]/catalog/product/[id]', 'page');
+        revalidateServerPath('/ro/catalog');
+        revalidateServerPath('/ru/catalog');
+        revalidateServerPath('/en/catalog');
+
+        if (data.paymentForm) {
+          const form = document.createElement('form');
+          form.method = data.paymentForm.method;
+          form.action = data.paymentForm.action;
+
+          Object.entries(data.paymentForm.fields).forEach(([key, value]) => {
+            const input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = key;
+            input.value = value as string;
+            form.appendChild(input);
+          });
+
+          document.body.appendChild(form);
+          form.submit();
+          document.body.removeChild(form);
+        }
+
+        if (data.order) {
+          toast.success(successMessage);
+          router.push({
+            pathname: '/confirmation/[id]',
+            params: { id: data?.order?.custom_id || '' },
+          });
+        }
+      },
+    })
+  );
+
+  const form = useForm<z.infer<typeof addOrderRequestSchema>>({
+    resolver: zodResolver(addOrderRequestSchema),
+    defaultValues: {
+      products: [],
+      delivery_method: DeliveryMethod.HOME_DELIVERY,
+      additional_info: {
+        delivery_address: {
+          region: 'CHISINAU',
+          city: '',
+          home_address: '',
+          home_nr: '',
+        },
+        entity_type: ClientEntity.Natural,
+        user_data: {
+          email: '',
+          tel_number: '',
+          firstname: '',
+          lastname: '',
+        },
+        billing_address: {
+          company_name: '',
+          firstname: '',
+          idno: '',
+          lastname: '',
+          home_address: '',
+          home_nr: '',
+          region: 'CHISINAU',
+          city: '',
+        },
+        billing_checkbox: true,
+      },
+      payment_method: OrderPaymentMethod.Paynet,
+      termsAccepted: false,
+    },
+  });
+  function onSubmit(values: z.infer<typeof addOrderRequestSchema>) {
+    mutate(values);
+  }
+
+  useEffect(() => {
+    const updatedProducts = products.map(product => {
+      const cartItem = items.find(item => item.productId === product.custom_id);
+      return {
+        product: {
+          ...product,
+          title: {
+            ro: product.title?.ro || '',
+            ru: product.title?.ru || '',
+            en: product.title?.en || '',
+          },
+        },
+        quantity: cartItem?.quantity || 1,
+      };
     });
-    function onSubmit(values: z.infer<typeof addOrderRequestSchema>) {
-        mutate(values);
+    form.setValue('products', updatedProducts || []);
+  }, [products, items, form]);
+
+  const deliveryMethod = form.watch('delivery_method');
+  const entityType = form.watch('additional_info.entity_type');
+  const deliveryRegion = form.watch('additional_info.delivery_address.region');
+  const deliveryHour = form.watch('delivery_details.hours_intervals');
+  const deliveryDate = form.watch('delivery_details.delivery_date');
+  const isBillingAddress = form.watch('additional_info.billing_checkbox');
+
+  useEffect(() => {
+    form.setValue('total_cost', totalCost);
+  }, [totalCost]);
+
+  useEffect(() => {
+    setDeliveryRegion(
+      deliveryRegion ? (deliveryRegion as DeliveryRegions) : DeliveryRegions.CHISINAU
+    );
+  }, [deliveryRegion]);
+
+  useEffect(() => {
+    setDeliveryHour(deliveryHour ? (deliveryHour as DeliveryHours) : null);
+  }, [deliveryHour]);
+
+  useEffect(() => {
+    if (deliveryMethod === DeliveryMethod.HOME_DELIVERY) {
+      form.setValue('payment_method', OrderPaymentMethod.Paynet);
+      form.setValue('additional_info.billing_checkbox', true);
+      setDeliveryRegion(DeliveryRegions.CHISINAU);
     }
 
-    useEffect(() => {
-        const updatedProducts = products.map(product => {
-            const cartItem = items.find(item => item.productId === product.custom_id);
-            return {
-                product: {
-                    ...product,
-                    title: {
-                        ro: product.title?.ro || '',
-                        ru: product.title?.ru || '',
-                        en: product.title?.en || ''
-                    }
-                },
-                quantity: cartItem?.quantity || 1
-            };
-        });
-        form.setValue("products", updatedProducts || []);
-    }, [products, items, form]);
+    if (deliveryMethod === DeliveryMethod.PICKUP) {
+      form.resetField('additional_info.delivery_address.city');
+      form.resetField('additional_info.delivery_address.home_address');
+      form.resetField('delivery_details.hours_intervals');
+      form.setValue('additional_info.billing_checkbox', false);
+      setDeliveryRegion(null);
+      setDeliveryHour(null);
+    }
+  }, [deliveryMethod]);
 
-    const deliveryMethod = form.watch("delivery_method");
-    const entityType = form.watch("additional_info.entity_type");
-    const deliveryRegion = form.watch("additional_info.delivery_address.region");
-    const deliveryHour = form.watch("delivery_details.hours_intervals");
-    const deliveryDate = form.watch("delivery_details.delivery_date");
-    const isBillingAddress = form.watch("additional_info.billing_checkbox");
-
-    useEffect(() => {
-        form.setValue("total_cost", totalCost);
-    }, [totalCost])
-
-    useEffect(() => {
-        setDeliveryRegion(deliveryRegion ? deliveryRegion as DeliveryRegions : DeliveryRegions.CHISINAU);
-    }, [deliveryRegion])
-
-    useEffect(() => {
-        setDeliveryHour(deliveryHour ? deliveryHour as DeliveryHours : null);
-    }, [deliveryHour])
-
-    useEffect(() => {
-        if (deliveryMethod === DeliveryMethod.HOME_DELIVERY) {
-            form.setValue("payment_method", OrderPaymentMethod.Paynet);
-            form.setValue("additional_info.billing_checkbox", true);
-            setDeliveryRegion(DeliveryRegions.CHISINAU);
-        }
-
-        if (deliveryMethod === DeliveryMethod.PICKUP) {
-            form.resetField("additional_info.delivery_address.city");
-            form.resetField("additional_info.delivery_address.home_address");
-            form.resetField("delivery_details.hours_intervals");
-            form.setValue("additional_info.billing_checkbox", false);
-            setDeliveryRegion(null);
-            setDeliveryHour(null);
-        }
-    }, [deliveryMethod])
-
-    useEffect(() => {
-        if (entityType === ClientEntity.Legal) {
-            form.resetField("additional_info.billing_address.firstname");
-            form.resetField("additional_info.billing_address.lastname");
-        }
-
-        if (entityType === ClientEntity.Natural) {
-            form.resetField("additional_info.billing_address.company_name");
-            form.resetField("additional_info.billing_address.idno");
-        }
-    }, [entityType])
-
-
-    let calLocale : Locale;
-    switch(locale){
-        case 'ro' : calLocale = ro; break;
-        case 'en' : calLocale = enUS; break;
-        case 'ru' : calLocale = ru; break;
-        default : calLocale = enUS; break;
+  useEffect(() => {
+    if (entityType === ClientEntity.Legal) {
+      form.resetField('additional_info.billing_address.firstname');
+      form.resetField('additional_info.billing_address.lastname');
     }
 
-    return (
-      <div className='col-span-full lg:col-span-7 2xl:col-span-6 lg:col-start-2 2xl:col-start-3 grid grid-cols-8 lg:grid-cols-6 gap-x-2 lg:gap-x-6 h-fit'>
-          <Form {...form}>
-              <form id="checkout-form" onSubmit={form.handleSubmit(onSubmit)} className='col-span-full grid grid-cols-6 gap-x-6 h-fit'>
-                  <p className='text-2xl font-semibold leading-7 mb-4 lg:mb-6 col-span-full font-manrope'>{ t("method") }</p>
+    if (entityType === ClientEntity.Natural) {
+      form.resetField('additional_info.billing_address.company_name');
+      form.resetField('additional_info.billing_address.idno');
+    }
+  }, [entityType]);
 
-                  {/* Delivery method */}
-                  <FormField 
-                      control={form.control}
-                      name="delivery_method"
-                      render={({ field }) => (
-                          <FormItem className='col-span-full'>
-                              <FormMessage />
-                              <FormControl>
-                                  <RadioGroup
-                                      onValueChange={field.onChange}
-                                      defaultValue={field.value}
-                                      className="flex flex-col lg:flex-row gap-2 lg:gap-6 col-span-full"
-                                  >
-                                      <FormItem className='w-full lg:w-auto lg:flex-1 gap-0'>
-                                          <FormControl>
-                                              <RadioGroupItem className='' value={DeliveryMethod.HOME_DELIVERY} id="home-delivery" />
-                                          </FormControl>
-                                          <label 
-                                              htmlFor="home-delivery" 
-                                              className={`${field.value === DeliveryMethod.HOME_DELIVERY ? "bg-black text-white" : "bg-white"} transition duration-300 py-3 w-full flex gap-2 font-semibold justify-center items-center rounded-3xl border border-black cursor-pointer`}
-                                          >
-                                              <Truck strokeWidth={1.25} className='size-6' />
-                                              <p className=' font-semibold'>{ t("delivery") }</p>
-                                          </label>
-                                      </FormItem>
+  let calLocale: Locale;
+  switch (locale) {
+    case 'ro':
+      calLocale = ro;
+      break;
+    case 'en':
+      calLocale = enUS;
+      break;
+    case 'ru':
+      calLocale = ru;
+      break;
+    default:
+      calLocale = enUS;
+      break;
+  }
 
-                                      <FormItem className='w-full lg:w-auto lg:flex-1 gap-0'>
-                                          <FormControl>
-                                              <RadioGroupItem className='' value={DeliveryMethod.PICKUP} id="pickup" />
-                                          </FormControl>
-                                          <label 
-                                              htmlFor="pickup" 
-                                              className={`${field.value === DeliveryMethod.PICKUP ? "bg-black text-white" : "bg-white"} transition duration-300 py-3 flex gap-2 justify-center items-center font-semibold rounded-3xl border border-black cursor-pointer`}
-                                          >
-                                              <MapPin strokeWidth={1.25} className='size-6' />
-                                              <p className=' font-semibold'>{ t("pickup") }</p>
-                                          </label>
-                                      </FormItem>
+  return (
+    <div className='col-span-full lg:col-span-7 2xl:col-span-6 lg:col-start-2 2xl:col-start-3 grid grid-cols-8 lg:grid-cols-6 gap-x-2 lg:gap-x-6 h-fit'>
+      <Form {...form}>
+        <form
+          id='checkout-form'
+          onSubmit={form.handleSubmit(onSubmit)}
+          className='col-span-full grid grid-cols-6 gap-x-6 h-fit'
+        >
+          <p className='text-2xl font-semibold leading-7 mb-4 lg:mb-6 col-span-full font-manrope'>
+            {t('method')}
+          </p>
 
-                                  </RadioGroup>
-                              </FormControl>
-                          </FormItem>
-                      )}
+          {/* Delivery method */}
+          <FormField
+            control={form.control}
+            name='delivery_method'
+            render={({ field }) => (
+              <FormItem className='col-span-full'>
+                <FormMessage />
+                <FormControl>
+                  <RadioGroup
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                    className='flex flex-col lg:flex-row gap-2 lg:gap-6 col-span-full'
+                  >
+                    <FormItem className='w-full lg:w-auto lg:flex-1 gap-0'>
+                      <FormControl>
+                        <RadioGroupItem
+                          className=''
+                          value={DeliveryMethod.HOME_DELIVERY}
+                          id='home-delivery'
+                        />
+                      </FormControl>
+                      <label
+                        htmlFor='home-delivery'
+                        className={`${field.value === DeliveryMethod.HOME_DELIVERY ? 'bg-black text-white' : 'bg-white'} transition duration-300 py-3 w-full flex gap-2 font-semibold justify-center items-center rounded-3xl border border-black cursor-pointer`}
+                      >
+                        <Truck strokeWidth={1.25} className='size-6' />
+                        <p className=' font-semibold'>{t('delivery')}</p>
+                      </label>
+                    </FormItem>
+
+                    <FormItem className='w-full lg:w-auto lg:flex-1 gap-0'>
+                      <FormControl>
+                        <RadioGroupItem className='' value={DeliveryMethod.PICKUP} id='pickup' />
+                      </FormControl>
+                      <label
+                        htmlFor='pickup'
+                        className={`${field.value === DeliveryMethod.PICKUP ? 'bg-black text-white' : 'bg-white'} transition duration-300 py-3 flex gap-2 justify-center items-center font-semibold rounded-3xl border border-black cursor-pointer`}
+                      >
+                        <MapPin strokeWidth={1.25} className='size-6' />
+                        <p className=' font-semibold'>{t('pickup')}</p>
+                      </label>
+                    </FormItem>
+                  </RadioGroup>
+                </FormControl>
+              </FormItem>
+            )}
+          />
+
+          {deliveryMethod === DeliveryMethod.PICKUP && (
+            <>
+              <p className=' text-2xl font-semibold leading-7 mb-2 col-span-full mt-8 lg:mt-12'>
+                {t('pickup_place')}
+              </p>
+              <p className='col-span-full'>
+                {t('pickup_info_slice_1')}{' '}
+                <span className='font-semibold'>{t('pickup_info_slice_2')}</span>{' '}
+              </p>
+            </>
+          )}
+
+          <p className=' text-2xl font-semibold leading-7 mb-2 col-span-full mt-8 lg:mt-12 font-manrope'>
+            {t('customer_info')}
+          </p>
+          <p className='col-span-full mb-4 lg:mb-6'>{t('address_info')}</p>
+
+          {/* Client information */}
+          <FormField
+            control={form.control}
+            name='additional_info.user_data.email'
+            render={({ field }) => (
+              <FormItem className='col-span-full lg:col-span-3 lg:mt-4'>
+                <FormMessage />
+                <FormControl className='border  rounded-3xl border-gray shadow-none p-0 text-black placeholder:text-black focus-visible:outline-none'>
+                  <Input
+                    className='h-12 w-full px-6 rounded-3xl text-base text-black'
+                    placeholder={`${t('email')}*`}
+                    {...field}
                   />
-
-                  {
-                      deliveryMethod === DeliveryMethod.PICKUP && 
-                      <>
-                          <p className=' text-2xl font-semibold leading-7 mb-2 col-span-full mt-8 lg:mt-12'>{t("pickup_place")}</p>
-                          <p className='col-span-full'>{t("pickup_info_slice_1")} <span className='font-semibold'>{t("pickup_info_slice_2")}</span> </p>
-                      </>
-                  }
-
-                  <p className=' text-2xl font-semibold leading-7 mb-2 col-span-full mt-8 lg:mt-12 font-manrope'>{t("customer_info")}</p>
-                  <p className='col-span-full mb-4 lg:mb-6'>{t("address_info")}</p>
-
-                  {/* Client information */}
-                  <FormField
-                      control={form.control}
-                      name="additional_info.user_data.email"
-                      render={({ field }) => (
-                          <FormItem className="col-span-full lg:col-span-3 lg:mt-4">
-                              <FormMessage />
-                              <FormControl className="border  rounded-3xl border-gray shadow-none p-0 text-black placeholder:text-black focus-visible:outline-none">
-                                  <Input className="h-12 w-full px-6 rounded-3xl text-base text-black" placeholder={`${t('email')}*`} {...field} />
-                              </FormControl>
-                          </FormItem>
-                      )}
+                </FormControl>
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name='additional_info.user_data.tel_number'
+            render={({ field }) => (
+              <FormItem className='col-span-full lg:col-span-3 mt-2 lg:mt-4'>
+                <FormMessage />
+                <FormControl className='border  rounded-3xl border-gray shadow-none p-0 text-black placeholder:text-black focus-visible:outline-none'>
+                  <Input
+                    className='h-12 w-full px-6 rounded-3xl text-base text-black'
+                    placeholder={`${t('phone')}*`}
+                    {...field}
                   />
-                   <FormField
-                      control={form.control}
-                      name="additional_info.user_data.tel_number"
-                      render={({ field }) => (
-                          <FormItem className="col-span-full lg:col-span-3 mt-2 lg:mt-4">
-                              <FormMessage />
-                              <FormControl className="border  rounded-3xl border-gray shadow-none p-0 text-black placeholder:text-black focus-visible:outline-none">
-                                  <Input className="h-12 w-full px-6 rounded-3xl text-base text-black" placeholder={`${t('phone')}*`} {...field} />
-                              </FormControl>
-                          </FormItem>
-                      )}
+                </FormControl>
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name='additional_info.user_data.firstname'
+            render={({ field }) => (
+              <FormItem className='col-span-full lg:col-span-3 mt-2 lg:mt-4'>
+                <FormMessage />
+                <FormControl className='border  rounded-3xl border-gray shadow-none p-0 text-black placeholder:text-black focus-visible:outline-none'>
+                  <Input
+                    className='h-12 w-full px-6 rounded-3xl text-base text-black'
+                    placeholder={`${t('first_name')}*`}
+                    {...field}
                   />
-                   <FormField
-                      control={form.control}
-                      name="additional_info.user_data.firstname"
-                      render={({ field }) => (
-                          <FormItem className="col-span-full lg:col-span-3 mt-2 lg:mt-4">
-                              <FormMessage />
-                              <FormControl className="border  rounded-3xl border-gray shadow-none p-0 text-black placeholder:text-black focus-visible:outline-none">
-                                  <Input className="h-12 w-full px-6 rounded-3xl text-base text-black" placeholder={`${t('first_name')}*`} {...field} />
-                              </FormControl>
-                          </FormItem>
-                      )}
+                </FormControl>
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name='additional_info.user_data.lastname'
+            render={({ field }) => (
+              <FormItem className='col-span-full lg:col-span-3 mt-2 lg:mt-4'>
+                <FormMessage />
+                <FormControl className='border  rounded-3xl border-gray shadow-none p-0 text-black placeholder:text-black focus-visible:outline-none'>
+                  <Input
+                    className='h-12 w-full px-6 rounded-3xl text-base text-black'
+                    placeholder={`${t('last_name')}*`}
+                    {...field}
                   />
-                   <FormField
-                      control={form.control}
-                      name="additional_info.user_data.lastname"
-                      render={({ field }) => (
-                          <FormItem className="col-span-full lg:col-span-3 mt-2 lg:mt-4">
-                              <FormMessage />
-                              <FormControl className="border  rounded-3xl border-gray shadow-none p-0 text-black placeholder:text-black focus-visible:outline-none">
-                                  <Input className="h-12 w-full px-6 rounded-3xl text-base text-black" placeholder={`${t('last_name')}*`} {...field} />
-                              </FormControl>
-                          </FormItem>
-                      )}
-                  />
+                </FormControl>
+              </FormItem>
+            )}
+          />
 
-                  {
-                      deliveryMethod === DeliveryMethod.HOME_DELIVERY && 
-                      <>
-                         <FormField
-                          control={form.control}
-                          name="additional_info.delivery_address.region"
-                          render={({ field }) => (
-                              <FormItem className="col-span-full lg:col-span-3 mt-2 lg:mt-4"> 
-                                  <FormMessage />
-                                      <Select onValueChange={field.onChange} defaultValue={"CHISINAU"}>
-                                          <FormControl>
-                                              <SelectTrigger className="cursor-pointer flex h-12 max-h-none items-center px-6 gap-2 border border-gray rounded-3xl text-base text-black w-full max-w-full *:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:text-left">
-                                                  <SelectValue placeholder="Alege subiectul"/>
-                                                  <ChevronDown className='min-w-5 size-5' strokeWidth={1.5}/>
-                                              </SelectTrigger>
-                                          </FormControl>  
-                                          <SelectContent className="border-gray">
-                                          <SelectGroup className='max-h-[20rem] overflow-auto z-10' data-lenis-prevent>
-                                              {
-                                                  DeliveryRegionsArr.map((region, index) => {
-                                                      return (
-                                                          <SelectItem key={index} className="text-base cursor-pointer" value={DeliveryRegions[region as DeliveryRegions]}>{t(`delivery_regions.${region}`)}</SelectItem>
-                                                      )
-                                                  })
-                                              }
-                                          </SelectGroup>
-                                          </SelectContent>
-                                      </Select>
-                              </FormItem>
-                          )}
-                          />
-                          <FormField
-                              control={form.control}
-                              name="additional_info.delivery_address.city"
-                              render={({ field }) => (
-                                  <FormItem className="col-span-full lg:col-span-3 mt-2 lg:mt-4">
-                                      <FormMessage />
-                                      <FormControl className="border  rounded-3xl border-gray shadow-none p-0 text-black placeholder:text-black focus-visible:outline-none">
-                                          <Input className="h-12 w-full px-6 rounded-3xl text-base text-black" placeholder={`${t('city')}*`} {...field} />
-                                      </FormControl>
-                                  </FormItem>
-                              )}
-                          />
-                          <FormField
-                              control={form.control}
-                              name="additional_info.delivery_address.home_address"
-                              render={({ field }) => (
-                                  <FormItem className="col-span-full lg:col-span-3 mt-2 lg:mt-4">
-                                      <FormMessage />
-                                      <FormControl className="border  rounded-3xl border-gray shadow-none p-0 text-black placeholder:text-black focus-visible:outline-none">
-                                          <Input className="h-12 w-full px-6 rounded-3xl text-base text-black" placeholder={t('address')} {...field} />
-                                      </FormControl>
-                                  </FormItem>
-                              )}
-                          />
-                          <FormField
-                              control={form.control}
-                              name="additional_info.delivery_address.home_nr"
-                              render={({ field }) => (
-                                  <FormItem className="col-span-full lg:col-span-3 mt-2 lg:mt-4">
-                                      <FormMessage />
-                                      <FormControl className="border  rounded-3xl border-gray shadow-none p-0 text-black placeholder:text-black focus-visible:outline-none">
-                                          <Input className="h-12 w-full px-6 rounded-3xl text-base text-black" placeholder={t('number')}{...field} />
-                                      </FormControl>
-                                  </FormItem>
-                              )}
-                          />
-                      </>
-                  }
-
-                  <p className=' text-2xl font-semibold leading-7 mb-4 lg:mb-6 col-span-full mt-8 lg:mt-12 font-manrope'>{t("billing_address")}</p>
-                  {
-                      deliveryMethod === DeliveryMethod.HOME_DELIVERY && 
-                      <div className="flex mb-6 col-span-full gap-2">
-                          <Checkbox 
-                              id='billing_address_check' 
-                              checked={isBillingAddress} 
-                              onCheckedChange={(checked) => form.setValue("additional_info.billing_checkbox", checked === true)} 
-                          />
-                          <label htmlFor='billing_address_check'>{t("billing_address_checkbox")}</label>
-                      </div>
-                  }
-
-                  {
-                      (!isBillingAddress ) && 
-                      <>
-                          {/* Entity Type Radio Group */}
-                          <FormField 
-                          control={form.control}
-                          name="additional_info.entity_type"
-                          render={({ field }) => (
-                              <FormItem className='col-span-full'>
-                              <FormMessage />
-                              <FormControl>
-                                  <RadioGroup
-                                  onValueChange={field.onChange}
-                                  defaultValue={field.value}
-                                  className="flex flex-col lg:flex-row gap-2 lg:gap-6 col-span-full"
-                                  >
-                                  <FormItem className='gap-0 lg:flex-1'>
-                                      <FormControl>
-                                          <RadioGroupItem className='' value={ClientEntity.Natural} id="entity-natural" />
-                                      </FormControl>
-                                      <label 
-                                      htmlFor="entity-natural" 
-                                      className={`${field.value === ClientEntity.Natural ? "bg-black text-white" : "bg-white"} transition duration-300 py-3 w-full flex gap-2 font-semibold justify-center items-center rounded-3xl border border-black cursor-pointer`}
-                                      >
-                                      <User strokeWidth={1.25} className='size-6' />
-                                      <p className='font-semibold'>{t("individual")}</p>
-                                      </label>
-                                  </FormItem>
-
-                                  <FormItem className='gap-0 lg:flex-1'>
-                                      <FormControl>
-                                          <RadioGroupItem className='' value={ClientEntity.Legal} id="entity-legal" />
-                                      </FormControl>
-                                      <label 
-                                      htmlFor="entity-legal" 
-                                      className={`${field.value === ClientEntity.Legal ? "bg-black text-white" : "bg-white"} transition duration-300 py-3 flex gap-2 justify-center items-center font-semibold rounded-3xl border border-black cursor-pointer`}
-                                      >
-                                      <BriefcaseBusiness strokeWidth={1.25} className='size-6' />
-                                      <p className='font-semibold'>{t("company")}</p>
-                                      </label>
-                                  </FormItem>
-                                  </RadioGroup>
-                              </FormControl>
-                              </FormItem>
-                          )}
-                          />
-
-                          {
-                              entityType === ClientEntity.Natural ? 
-                              <Fragment key="natural-fields">
-                                  <FormField
-                                      control={form.control}
-                                      name="additional_info.billing_address.firstname"
-                                      render={({ field }) => (
-                                          <FormItem className="col-span-full lg:col-span-3 mt-2 lg:mt-4">
-                                              <FormMessage />
-                                              <FormControl className="border  rounded-3xl border-gray shadow-none p-0 text-black placeholder:text-black focus-visible:outline-none">
-                                                  <Input className="h-12 w-full px-6 rounded-3xl text-base text-black" placeholder={`${t("first_name")}*`} {...field} />
-                                              </FormControl>
-                                          </FormItem>
-                                      )}
-                                  />
-                                  <FormField
-                                      control={form.control}
-                                      name="additional_info.billing_address.lastname"
-                                      render={({ field }) => (
-                                          <FormItem className="col-span-full lg:col-span-3 mt-2 lg:mt-4">
-                                              <FormMessage />
-                                              <FormControl className="border  rounded-3xl border-gray shadow-none p-0 text-black placeholder:text-black focus-visible:outline-none">
-                                                  <Input className="h-12 w-full px-6 rounded-3xl text-base text-black" placeholder={`${t("last_name")}*`} {...field} />
-                                              </FormControl>
-                                          </FormItem>
-                                      )}
-                                  />
-                              </Fragment>
-                              :
-                              <Fragment key="legal-fields">
-                                  <FormField
-                                      control={form.control}
-                                      name="additional_info.billing_address.company_name"
-                                      render={({ field }) => (
-                                          <FormItem className="col-span-full lg:col-span-3 mt-2 lg:mt-4">
-                                              <FormMessage />
-                                              <FormControl className="border  rounded-3xl border-gray shadow-none p-0 text-black placeholder:text-black focus-visible:outline-none">
-                                                  <Input className="h-12 w-full px-6 rounded-3xl text-base text-black" placeholder={`${t("company_name")}*`} {...field} />
-                                              </FormControl>
-                                          </FormItem>
-                                      )}
-                                  />
-                                  <FormField
-                                      control={form.control}
-                                      name="additional_info.billing_address.idno"
-                                      render={({ field }) => (
-                                          <FormItem className="col-span-full lg:col-span-3 mt-2 lg:mt-4">
-                                              <FormMessage />
-                                              <FormControl className="border  rounded-3xl border-gray shadow-none p-0 text-black placeholder:text-black focus-visible:outline-none">
-                                                  <Input className="h-12 w-full px-6 rounded-3xl text-base text-black" placeholder={`${t("company_id")}*`} {...field} />
-                                              </FormControl>
-                                          </FormItem>
-                                      )}
-                                  />
-                              </Fragment>
-                          }
-                          <FormField
-                              control={form.control}
-                              name="additional_info.billing_address.region"
-                              render={({ field }) => (
-                                  <FormItem className="col-span-full lg:col-span-3 mt-2 lg:mt-4"> 
-                                      <FormMessage />
-                                          <Select onValueChange={field.onChange} defaultValue={"CHISINAU"} >
-                                              <FormControl>
-                                                  <SelectTrigger className="cursor-pointer flex h-12 max-h-none items-center px-6 gap-2 border border-gray rounded-3xl text-base text-black w-full">
-                                                      <SelectValue placeholder="Alege subiectul"/>
-                                                      <ChevronDown className='size-5' strokeWidth={1.5}/>
-                                                  </SelectTrigger>
-                                              </FormControl>  
-                                              <SelectContent className="border-gray">
-                                                  <SelectGroup className='max-h-[20rem] overflow-auto z-10' data-lenis-prevent>
-                                                      {
-                                                          DeliveryRegionsArr.map((region, index) => {
-                                                              return (
-                                                                  <SelectItem key={index} className="text-base cursor-pointer" value={DeliveryRegions[region as DeliveryRegions]}>{t(`delivery_regions.${region}`).split(" - ")[0]}</SelectItem>
-                                                              )
-                                                          })
-                                                      }
-                                                  </SelectGroup>
-                                              </SelectContent>
-                                          </Select>
-                                  </FormItem>
-                              )}
-                          />
-                              <FormField
-                                  control={form.control}
-                                  name="additional_info.billing_address.city"
-                                  render={({ field }) => (
-                                      <FormItem className="col-span-full lg:col-span-3 mt-2 lg:mt-4">
-                                          <FormMessage />
-                                          <FormControl className="border  rounded-3xl border-gray shadow-none p-0 text-black placeholder:text-black focus-visible:outline-none">
-                                              <Input className="h-12 w-full px-6 rounded-3xl text-base text-black" placeholder={`${t("city")}*`} {...field} />
-                                          </FormControl>
-                                      </FormItem>
-                                  )}
-                              />
-                           <FormField
-                              control={form.control}
-                              name="additional_info.billing_address.home_address"
-                              render={({ field }) => (
-                                  <FormItem className="col-span-full lg:col-span-3 mt-2 lg:mt-4">
-                                      <FormMessage />
-                                      <FormControl className="border  rounded-3xl border-gray shadow-none p-0 text-black placeholder:text-black focus-visible:outline-none">
-                                          <Input className="h-12 w-full px-6 rounded-3xl text-base text-black" placeholder={t("address")} {...field} />
-                                      </FormControl>
-                                  </FormItem>
-                              )}
-                          />
-                          <FormField
-                              control={form.control}
-                              name="additional_info.billing_address.home_nr"
-                              render={({ field }) => (
-                                  <FormItem className="col-span-full lg:col-span-3 mt-2 lg:mt-4">
-                                      <FormMessage />
-                                      <FormControl className="border  rounded-3xl border-gray shadow-none p-0 text-black placeholder:text-black focus-visible:outline-none">
-                                          <Input className="h-12 w-full px-6 rounded-3xl text-base text-black" placeholder={t("number")} {...field} />
-                                      </FormControl>
-                                  </FormItem>
-                              )}
-                          />
-                          </>
-                  }
-
-                  <p className=' text-2xl font-semibold leading-7 mb-2 col-span-full mt-8 lg:mt-12 font-manrope'>{t("delivery_details")}</p>
-                  {
-                      deliveryMethod === DeliveryMethod.HOME_DELIVERY && 
-                      <>
-                          <p className='col-span-full mb-4 lg:mb-6'>{t("more_delivery_info")} <br /> {t("delivery_info")}</p>
-                          <FormField
-                              control={form.control}
-                              name="delivery_details.delivery_date"
-                              render={({ field }) => (
-                                  <FormItem className="col-span-full lg:col-span-3">
-                                      <FormMessage />
-                                      <Popover>
-                                          <PopoverTrigger asChild>
-                                          <FormControl>
-                                              <Button
-                                              className={cn(
-                                                  "w-full h-12 pl-6 text-left font-normal bg-white rounded-3xl border border-gray text-base hover:bg-white cursor-pointer text-black justify-start",
-                                                  !field.value && "text-black"
-                                              )}
-                                              >
-                                              <CalendarIcon className="size-5" strokeWidth={1.25} />
-                                              {field.value ? (
-                                                  format(field.value, "PPP")
-                                              ) : (
-                                                  <span className='mr-auto leading-0'>{t("date")}</span>
-                                              )}
-                                              </Button>
-                                          </FormControl>
-                                          </PopoverTrigger>
-                                          <PopoverContent className="w-auto p-0" align="start">
-                                          <Calendar
-                                              locale={calLocale}
-                                              mode="single"
-                                              selected={field.value ? new Date(field.value) : new Date()}
-                                              onSelect={(date) => field.onChange(date ? date.toISOString() : '')}
-                                              disabled={(date) =>
-                                                  date < new Date()
-                                              }
-                                              weekStartsOn={1}
-                                              initialFocus
-                                          />
-                                          </PopoverContent>
-                                      </Popover>
-                                  </FormItem>
-                              )}
-                          />
-          
-                          <FormField
-                              control={form.control}
-                              name="delivery_details.hours_intervals"
-                              render={({ field }) => (
-                                  <FormItem className="col-span-full lg:col-span-3 mt-2 lg:mt-0"> 
-                                      <FormMessage />
-                                          <Select onValueChange={field.onChange} >
-                                              <FormControl>
-                                                  <SelectTrigger className="cursor-pointer flex h-div12 max-h-none items-center px-6 gap-2 border border-gray rounded-3xl text-base text-black w-full max-w-full *:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:mr-auto">
-                                                      <div>
-                                                          <Clock strokeWidth={1.25} className='size-5'/>
-                                                      </div>
-                                                      <SelectValue placeholder={t("time")}/>
-                                                      <ChevronDown className='size-5' strokeWidth={1.5}/>
-                                                  </SelectTrigger>
-                                              </FormControl>  
-                                              <SelectContent className="border-gray">
-                                                  <SelectGroup>
-                                                      {
-                                                          DeliveryHoursArr.map((hour, index) => {
-                                                                const currDate = new Date();
-                                                                const isHourDisabled = deliveryDate ? new Date(deliveryDate).getDate() - currDate.getDate() <= 1 ? !determineAvailableDeliveryHours(currDate.getHours()).includes(hour as DeliveryHours) : false : false;
-                                                              return (
-                                                                  <SelectItem disabled={isHourDisabled} key={index} className="text-base cursor-pointer" value={DeliveryHours[hour as DeliveryHours]}>{t(`delivery_hours.${hour}`)}</SelectItem>
-                                                              )
-                                                          })
-                                                      }
-                                                  </SelectGroup>
-                                              </SelectContent>
-                                          </Select>
-                                  </FormItem>
-                              )}
-                          />  
-                      </>
-                  }
-
-
-                  <FormField
-                      control={form.control}
-                      name="delivery_details.message"
-                      render={({ field }) => (
-                          <FormItem className="col-span-full lg:col-span-3 mt-2 lg:mt-4">
-                              <FormControl>
-                                  <Textarea className="placeholder:text-black h-40 items-center px-6 border border-gray rounded-3xl text-base text-black col-span-full" placeholder={t('print')} {...field}/>
-                              </FormControl>
-                              <FormMessage />
-                          </FormItem>
-                      )}
-                  />      
-
-                  <FormField
-                      control={form.control}
-                      name="delivery_details.comments"
-                      render={({ field }) => (
-                          <FormItem className="col-span-full lg:col-span-3 mt-2 lg:mt-4">
-                              <FormControl>
-                                  <Textarea className="placeholder:text-black h-40 items-center px-6 border border-gray rounded-3xl text-base text-black col-span-full" placeholder={t('comment')} {...field}/>
-                              </FormControl>
-                              <FormMessage />
-                          </FormItem>
-                      )}
-                  />      
-
-                  <p className='font-semibold col-span-full mt-2 lg:mt-4'>*{t("not_req")}</p>
-
-                  <p className=' text-2xl font-semibold leading-7 mb-4 lg:mb-6 col-span-full mt-8 lg:mt-12'>{t('payment_method')}</p>
-
-                  {/* Payment Method Radio Group */}
-                      <FormField 
-                      control={form.control}
-                      name="payment_method"
-                      render={({ field }) => (
-                          <FormItem className='col-span-full'>
-                              <FormControl>
-                                  <RadioGroup
-                                  onValueChange={field.onChange}
-                                  defaultValue={field.value}
-                                  className="flex gap-2 lg:gap-6 col-span-full flex-col lg:flex-row"
-                                  >
-                                  <FormItem className='gap-0 lg:flex-1'>
-                                      <FormControl>
-                                      <RadioGroupItem className='' value={OrderPaymentMethod.Paynet} id="payment-card" />
-                                      </FormControl>
-                                      <label 
-                                      htmlFor="payment-card" 
-                                      className={`${field.value === OrderPaymentMethod.Paynet ? "bg-black text-white" : "bg-white"} transition duration-300 py-3 w-full flex gap-2 font-semibold justify-center items-center rounded-3xl border border-black cursor-pointer`}
-                                      >
-                                      <CreditCard strokeWidth={1.25} className='size-6' />
-                                      <p className='font-semibold'>{t("online")}</p>
-                                      </label>
-                                  </FormItem>
-
-                                  <FormItem className='gap-0 lg:flex-1'>
-                                      <FormControl>
-                                      <RadioGroupItem
-                                      disabled={deliveryMethod === DeliveryMethod.HOME_DELIVERY} 
-                                      className='peer' value={OrderPaymentMethod.Cash} id="payment-cash" />
-                                      </FormControl>
-                                      <label 
-                                      htmlFor="payment-cash" 
-                                      className={`${field.value === OrderPaymentMethod.Cash ? "bg-black text-white" : "bg-white"} peer-disabled:cursor-default peer-disabled:opacity-25 transition duration-300 py-3 flex gap-2 justify-center items-center font-semibold rounded-3xl border border-black cursor-pointer`}
-                                      >
-                                      <BanknoteIcon strokeWidth={1.25} className='size-6' />
-                                      <p className='font-semibold'>{t("cash")}</p>
-                                      </label>
-                                  </FormItem>
-                                  </RadioGroup>
-                              </FormControl>
-                              <FormMessage />
-                          </FormItem>
-                      )}
+          {deliveryMethod === DeliveryMethod.HOME_DELIVERY && (
+            <>
+              <FormField
+                control={form.control}
+                name='additional_info.delivery_address.region'
+                render={({ field }) => (
+                  <FormItem className='col-span-full lg:col-span-3 mt-2 lg:mt-4'>
+                    <FormMessage />
+                    <Select onValueChange={field.onChange} defaultValue={'CHISINAU'}>
+                      <FormControl>
+                        <SelectTrigger className='cursor-pointer flex h-12 max-h-none items-center px-6 gap-2 border border-gray rounded-3xl text-base text-black w-full max-w-full *:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:text-left'>
+                          <SelectValue placeholder='Alege subiectul' />
+                          <ChevronDown className='min-w-5 size-5' strokeWidth={1.5} />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent className='border-gray'>
+                        <SelectGroup
+                          className='max-h-[20rem] overflow-auto z-10'
+                          data-lenis-prevent
+                        >
+                          {DeliveryRegionsArr.map((region, index) => {
+                            return (
+                              <SelectItem
+                                key={index}
+                                className='text-base cursor-pointer'
+                                value={DeliveryRegions[region as DeliveryRegions]}
+                              >
+                                {t(`delivery_regions.${region}`)}
+                              </SelectItem>
+                            );
+                          })}
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select>
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name='additional_info.delivery_address.city'
+                render={({ field }) => (
+                  <FormItem className='col-span-full lg:col-span-3 mt-2 lg:mt-4'>
+                    <FormMessage />
+                    <FormControl className='border  rounded-3xl border-gray shadow-none p-0 text-black placeholder:text-black focus-visible:outline-none'>
+                      <Input
+                        className='h-12 w-full px-6 rounded-3xl text-base text-black'
+                        placeholder={`${t('city')}*`}
+                        {...field}
                       />
-                  <p className='font-semibold col-span-full mt-2 lg:mt-4'>*{t("payment_info")}</p>
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name='additional_info.delivery_address.home_address'
+                render={({ field }) => (
+                  <FormItem className='col-span-full lg:col-span-3 mt-2 lg:mt-4'>
+                    <FormMessage />
+                    <FormControl className='border  rounded-3xl border-gray shadow-none p-0 text-black placeholder:text-black focus-visible:outline-none'>
+                      <Input
+                        className='h-12 w-full px-6 rounded-3xl text-base text-black'
+                        placeholder={t('address')}
+                        {...field}
+                      />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name='additional_info.delivery_address.home_nr'
+                render={({ field }) => (
+                  <FormItem className='col-span-full lg:col-span-3 mt-2 lg:mt-4'>
+                    <FormMessage />
+                    <FormControl className='border  rounded-3xl border-gray shadow-none p-0 text-black placeholder:text-black focus-visible:outline-none'>
+                      <Input
+                        className='h-12 w-full px-6 rounded-3xl text-base text-black'
+                        placeholder={t('number')}
+                        {...field}
+                      />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+            </>
+          )}
 
+          <p className=' text-2xl font-semibold leading-7 mb-4 lg:mb-6 col-span-full mt-8 lg:mt-12 font-manrope'>
+            {t('billing_address')}
+          </p>
+          {deliveryMethod === DeliveryMethod.HOME_DELIVERY && (
+            <div className='flex mb-6 col-span-full gap-2'>
+              <Checkbox
+                id='billing_address_check'
+                checked={isBillingAddress}
+                onCheckedChange={checked =>
+                  form.setValue('additional_info.billing_checkbox', checked === true)
+                }
+              />
+              <label htmlFor='billing_address_check'>{t('billing_address_checkbox')}</label>
+            </div>
+          )}
+
+          {!isBillingAddress && (
+            <>
+              {/* Entity Type Radio Group */}
+              <FormField
+                control={form.control}
+                name='additional_info.entity_type'
+                render={({ field }) => (
+                  <FormItem className='col-span-full'>
+                    <FormMessage />
+                    <FormControl>
+                      <RadioGroup
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                        className='flex flex-col lg:flex-row gap-2 lg:gap-6 col-span-full'
+                      >
+                        <FormItem className='gap-0 lg:flex-1'>
+                          <FormControl>
+                            <RadioGroupItem
+                              className=''
+                              value={ClientEntity.Natural}
+                              id='entity-natural'
+                            />
+                          </FormControl>
+                          <label
+                            htmlFor='entity-natural'
+                            className={`${field.value === ClientEntity.Natural ? 'bg-black text-white' : 'bg-white'} transition duration-300 py-3 w-full flex gap-2 font-semibold justify-center items-center rounded-3xl border border-black cursor-pointer`}
+                          >
+                            <User strokeWidth={1.25} className='size-6' />
+                            <p className='font-semibold'>{t('individual')}</p>
+                          </label>
+                        </FormItem>
+
+                        <FormItem className='gap-0 lg:flex-1'>
+                          <FormControl>
+                            <RadioGroupItem
+                              className=''
+                              value={ClientEntity.Legal}
+                              id='entity-legal'
+                            />
+                          </FormControl>
+                          <label
+                            htmlFor='entity-legal'
+                            className={`${field.value === ClientEntity.Legal ? 'bg-black text-white' : 'bg-white'} transition duration-300 py-3 flex gap-2 justify-center items-center font-semibold rounded-3xl border border-black cursor-pointer`}
+                          >
+                            <BriefcaseBusiness strokeWidth={1.25} className='size-6' />
+                            <p className='font-semibold'>{t('company')}</p>
+                          </label>
+                        </FormItem>
+                      </RadioGroup>
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+
+              {entityType === ClientEntity.Natural ? (
+                <Fragment key='natural-fields'>
                   <FormField
-                      control={form.control}
-                      name="termsAccepted"
-                      render={({ field }) => (
-                          <FormItem className="col-span-full mb-24">
-                                  <div className="flex gap-2 col-span-full mt-8 lg:mt-12">
-                                          <FormControl>
-                                              <Checkbox 
-                                                  id="termeni" 
-                                                  className="border-gray size-4 cursor-pointer"
-                                                  checked={field.value}
-                                                  onCheckedChange={(checked) => {
-                                                      field.onChange(checked)
-                                                  }}
-                                              />
-                                          </FormControl>
-                                          <div className={`${form.formState.errors.termsAccepted ? 'text-destructive' : ''}`}>
-                                              {t("agreement_slice_1")} <Link href="/terms" className="underline">{t("agreement_slice_2")}</Link> {t("agreement_slice_3")} <Link href="/terms" className="underline">{t("agreement_slice_4")}</Link>
-                                          </div>
-                                  </div>
-                          </FormItem>
-                      )}
-                  />  
-              </form>
-          </Form>
+                    control={form.control}
+                    name='additional_info.billing_address.firstname'
+                    render={({ field }) => (
+                      <FormItem className='col-span-full lg:col-span-3 mt-2 lg:mt-4'>
+                        <FormMessage />
+                        <FormControl className='border  rounded-3xl border-gray shadow-none p-0 text-black placeholder:text-black focus-visible:outline-none'>
+                          <Input
+                            className='h-12 w-full px-6 rounded-3xl text-base text-black'
+                            placeholder={`${t('first_name')}*`}
+                            {...field}
+                          />
+                        </FormControl>
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name='additional_info.billing_address.lastname'
+                    render={({ field }) => (
+                      <FormItem className='col-span-full lg:col-span-3 mt-2 lg:mt-4'>
+                        <FormMessage />
+                        <FormControl className='border  rounded-3xl border-gray shadow-none p-0 text-black placeholder:text-black focus-visible:outline-none'>
+                          <Input
+                            className='h-12 w-full px-6 rounded-3xl text-base text-black'
+                            placeholder={`${t('last_name')}*`}
+                            {...field}
+                          />
+                        </FormControl>
+                      </FormItem>
+                    )}
+                  />
+                </Fragment>
+              ) : (
+                <Fragment key='legal-fields'>
+                  <FormField
+                    control={form.control}
+                    name='additional_info.billing_address.company_name'
+                    render={({ field }) => (
+                      <FormItem className='col-span-full lg:col-span-3 mt-2 lg:mt-4'>
+                        <FormMessage />
+                        <FormControl className='border  rounded-3xl border-gray shadow-none p-0 text-black placeholder:text-black focus-visible:outline-none'>
+                          <Input
+                            className='h-12 w-full px-6 rounded-3xl text-base text-black'
+                            placeholder={`${t('company_name')}*`}
+                            {...field}
+                          />
+                        </FormControl>
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name='additional_info.billing_address.idno'
+                    render={({ field }) => (
+                      <FormItem className='col-span-full lg:col-span-3 mt-2 lg:mt-4'>
+                        <FormMessage />
+                        <FormControl className='border  rounded-3xl border-gray shadow-none p-0 text-black placeholder:text-black focus-visible:outline-none'>
+                          <Input
+                            className='h-12 w-full px-6 rounded-3xl text-base text-black'
+                            placeholder={`${t('company_id')}*`}
+                            {...field}
+                          />
+                        </FormControl>
+                      </FormItem>
+                    )}
+                  />
+                </Fragment>
+              )}
+              <FormField
+                control={form.control}
+                name='additional_info.billing_address.region'
+                render={({ field }) => (
+                  <FormItem className='col-span-full lg:col-span-3 mt-2 lg:mt-4'>
+                    <FormMessage />
+                    <Select onValueChange={field.onChange} defaultValue={'CHISINAU'}>
+                      <FormControl>
+                        <SelectTrigger className='cursor-pointer flex h-12 max-h-none items-center px-6 gap-2 border border-gray rounded-3xl text-base text-black w-full'>
+                          <SelectValue placeholder='Alege subiectul' />
+                          <ChevronDown className='size-5' strokeWidth={1.5} />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent className='border-gray'>
+                        <SelectGroup
+                          className='max-h-[20rem] overflow-auto z-10'
+                          data-lenis-prevent
+                        >
+                          {DeliveryRegionsArr.map((region, index) => {
+                            return (
+                              <SelectItem
+                                key={index}
+                                className='text-base cursor-pointer'
+                                value={DeliveryRegions[region as DeliveryRegions]}
+                              >
+                                {t(`delivery_regions.${region}`).split(' - ')[0]}
+                              </SelectItem>
+                            );
+                          })}
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select>
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name='additional_info.billing_address.city'
+                render={({ field }) => (
+                  <FormItem className='col-span-full lg:col-span-3 mt-2 lg:mt-4'>
+                    <FormMessage />
+                    <FormControl className='border  rounded-3xl border-gray shadow-none p-0 text-black placeholder:text-black focus-visible:outline-none'>
+                      <Input
+                        className='h-12 w-full px-6 rounded-3xl text-base text-black'
+                        placeholder={`${t('city')}*`}
+                        {...field}
+                      />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name='additional_info.billing_address.home_address'
+                render={({ field }) => (
+                  <FormItem className='col-span-full lg:col-span-3 mt-2 lg:mt-4'>
+                    <FormMessage />
+                    <FormControl className='border  rounded-3xl border-gray shadow-none p-0 text-black placeholder:text-black focus-visible:outline-none'>
+                      <Input
+                        className='h-12 w-full px-6 rounded-3xl text-base text-black'
+                        placeholder={t('address')}
+                        {...field}
+                      />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name='additional_info.billing_address.home_nr'
+                render={({ field }) => (
+                  <FormItem className='col-span-full lg:col-span-3 mt-2 lg:mt-4'>
+                    <FormMessage />
+                    <FormControl className='border  rounded-3xl border-gray shadow-none p-0 text-black placeholder:text-black focus-visible:outline-none'>
+                      <Input
+                        className='h-12 w-full px-6 rounded-3xl text-base text-black'
+                        placeholder={t('number')}
+                        {...field}
+                      />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+            </>
+          )}
 
-      </div>
-    )
+          <p className=' text-2xl font-semibold leading-7 mb-2 col-span-full mt-8 lg:mt-12 font-manrope'>
+            {t('delivery_details')}
+          </p>
+          {deliveryMethod === DeliveryMethod.HOME_DELIVERY && (
+            <>
+              <p className='col-span-full mb-4 lg:mb-6'>
+                {t('more_delivery_info')} <br /> {t('delivery_info')}
+              </p>
+              <FormField
+                control={form.control}
+                name='delivery_details.delivery_date'
+                render={({ field }) => (
+                  <FormItem className='col-span-full lg:col-span-3'>
+                    <FormMessage />
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <FormControl>
+                          <Button
+                            className={cn(
+                              'w-full h-12 pl-6 text-left font-normal bg-white rounded-3xl border border-gray text-base hover:bg-white cursor-pointer text-black justify-start',
+                              !field.value && 'text-black'
+                            )}
+                          >
+                            <CalendarIcon className='size-5' strokeWidth={1.25} />
+                            {field.value ? (
+                              format(field.value, 'PPP')
+                            ) : (
+                              <span className='mr-auto leading-0'>{t('date')}</span>
+                            )}
+                          </Button>
+                        </FormControl>
+                      </PopoverTrigger>
+                      <PopoverContent className='w-auto p-0' align='start'>
+                        <Calendar
+                          locale={calLocale}
+                          mode='single'
+                          selected={field.value ? new Date(field.value) : new Date()}
+                          onSelect={date => field.onChange(date ? date.toISOString() : '')}
+                          disabled={date => date < new Date()}
+                          weekStartsOn={1}
+                          initialFocus
+                        />
+                      </PopoverContent>
+                    </Popover>
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name='delivery_details.hours_intervals'
+                render={({ field }) => (
+                  <FormItem className='col-span-full lg:col-span-3 mt-2 lg:mt-0'>
+                    <FormMessage />
+                    <Select onValueChange={field.onChange}>
+                      <FormControl>
+                        <SelectTrigger className='cursor-pointer flex h-div12 max-h-none items-center px-6 gap-2 border border-gray rounded-3xl text-base text-black w-full max-w-full *:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:mr-auto'>
+                          <div>
+                            <Clock strokeWidth={1.25} className='size-5' />
+                          </div>
+                          <SelectValue placeholder={t('time')} />
+                          <ChevronDown className='size-5' strokeWidth={1.5} />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent className='border-gray'>
+                        <SelectGroup>
+                          {DeliveryHoursArr.map((hour, index) => {
+                            const currDate = new Date();
+                            const isHourDisabled = deliveryDate
+                              ? new Date(deliveryDate).getDate() - currDate.getDate() <= 1
+                                ? !determineAvailableDeliveryHours(currDate.getHours()).includes(
+                                    hour as DeliveryHours
+                                  )
+                                : false
+                              : false;
+                            return (
+                              <SelectItem
+                                disabled={isHourDisabled}
+                                key={index}
+                                className='text-base cursor-pointer'
+                                value={DeliveryHours[hour as DeliveryHours]}
+                              >
+                                {t(`delivery_hours.${hour}`)}
+                              </SelectItem>
+                            );
+                          })}
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select>
+                  </FormItem>
+                )}
+              />
+            </>
+          )}
+
+          <FormField
+            control={form.control}
+            name='delivery_details.message'
+            render={({ field }) => (
+              <FormItem className='col-span-full lg:col-span-3 mt-2 lg:mt-4'>
+                <FormControl>
+                  <Textarea
+                    className='placeholder:text-black h-40 items-center px-6 border border-gray rounded-3xl text-base text-black col-span-full'
+                    placeholder={t('print')}
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name='delivery_details.comments'
+            render={({ field }) => (
+              <FormItem className='col-span-full lg:col-span-3 mt-2 lg:mt-4'>
+                <FormControl>
+                  <Textarea
+                    className='placeholder:text-black h-40 items-center px-6 border border-gray rounded-3xl text-base text-black col-span-full'
+                    placeholder={t('comment')}
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <p className='font-semibold col-span-full mt-2 lg:mt-4'>*{t('not_req')}</p>
+
+          <p className=' text-2xl font-semibold leading-7 mb-4 lg:mb-6 col-span-full mt-8 lg:mt-12'>
+            {t('payment_method')}
+          </p>
+
+          {/* Payment Method Radio Group */}
+          <FormField
+            control={form.control}
+            name='payment_method'
+            render={({ field }) => (
+              <FormItem className='col-span-full'>
+                <FormControl>
+                  <RadioGroup
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                    className='flex gap-2 lg:gap-6 col-span-full flex-col lg:flex-row'
+                  >
+                    <FormItem className='gap-0 lg:flex-1'>
+                      <FormControl>
+                        <RadioGroupItem
+                          className=''
+                          value={OrderPaymentMethod.Paynet}
+                          id='payment-card'
+                        />
+                      </FormControl>
+                      <label
+                        htmlFor='payment-card'
+                        className={`${field.value === OrderPaymentMethod.Paynet ? 'bg-black text-white' : 'bg-white'} transition duration-300 py-3 w-full flex gap-2 font-semibold justify-center items-center rounded-3xl border border-black cursor-pointer`}
+                      >
+                        <CreditCard strokeWidth={1.25} className='size-6' />
+                        <p className='font-semibold'>{t('online')}</p>
+                      </label>
+                    </FormItem>
+
+                    <FormItem className='gap-0 lg:flex-1'>
+                      <FormControl>
+                        <RadioGroupItem
+                          disabled={deliveryMethod === DeliveryMethod.HOME_DELIVERY}
+                          className='peer'
+                          value={OrderPaymentMethod.Cash}
+                          id='payment-cash'
+                        />
+                      </FormControl>
+                      <label
+                        htmlFor='payment-cash'
+                        className={`${field.value === OrderPaymentMethod.Cash ? 'bg-black text-white' : 'bg-white'} peer-disabled:cursor-default peer-disabled:opacity-25 transition duration-300 py-3 flex gap-2 justify-center items-center font-semibold rounded-3xl border border-black cursor-pointer`}
+                      >
+                        <BanknoteIcon strokeWidth={1.25} className='size-6' />
+                        <p className='font-semibold'>{t('cash')}</p>
+                      </label>
+                    </FormItem>
+                  </RadioGroup>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <p className='font-semibold col-span-full mt-2 lg:mt-4'>*{t('payment_info')}</p>
+
+          <FormField
+            control={form.control}
+            name='termsAccepted'
+            render={({ field }) => (
+              <FormItem className='col-span-full mb-24'>
+                <div className='flex gap-2 col-span-full mt-8 lg:mt-12'>
+                  <FormControl>
+                    <Checkbox
+                      id='termeni'
+                      className='border-gray size-4 cursor-pointer'
+                      checked={field.value}
+                      onCheckedChange={checked => {
+                        field.onChange(checked);
+                      }}
+                    />
+                  </FormControl>
+                  <div
+                    className={`${form.formState.errors.termsAccepted ? 'text-destructive' : ''}`}
+                  >
+                    {t('agreement_slice_1')}{' '}
+                    <Link href='/terms' className='underline'>
+                      {t('agreement_slice_2')}
+                    </Link>{' '}
+                    {t('agreement_slice_3')}{' '}
+                    <Link href='/terms' className='underline'>
+                      {t('agreement_slice_4')}
+                    </Link>
+                  </div>
+                </div>
+              </FormItem>
+            )}
+          />
+        </form>
+      </Form>
+    </div>
+  );
 }

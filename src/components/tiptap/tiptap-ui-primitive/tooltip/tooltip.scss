@@ -1,7 +1,7 @@
 .tiptap-tooltip {
   --tt-tooltip-bg: var(--white);
-    --tt-tooltip-text: var(--tt-gray-light-600);
-    --tt-kbd: var(--tt-gray-light-a-400);
+  --tt-tooltip-text: var(--tt-gray-light-600);
+  --tt-kbd: var(--tt-gray-light-a-400);
 
   .dark & {
     --tt-tooltip-bg: var(--white);
@@ -31,11 +31,11 @@
       system-ui,
       -apple-system,
       BlinkMacSystemFont,
-      "Segoe UI",
+      'Segoe UI',
       Roboto,
-      "Helvetica Neue",
+      'Helvetica Neue',
       Arial,
-      "Noto Sans",
+      'Noto Sans',
       sans-serif;
     text-transform: capitalize;
     color: var(--tt-kbd);

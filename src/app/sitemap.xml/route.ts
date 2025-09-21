@@ -10,35 +10,38 @@ function escapeXml(text: string): string {
 }
 
 function generateSitemapXML(entries: SitemapEntry[]): string {
-  const xmlEntries = entries.map(entry => {
-    let xml = '  <url>\n';
-    xml += `    <loc>${escapeXml(entry.url)}</loc>\n`;
+  const xmlEntries = entries
+    .map(entry => {
+      let xml = '  <url>\n';
+      xml += `    <loc>${escapeXml(entry.url)}</loc>\n`;
 
-    if (entry.lastModified) {
-      const date = entry.lastModified instanceof Date
-        ? entry.lastModified.toISOString()
-        : entry.lastModified;
-      xml += `    <lastmod>${date}</lastmod>\n`;
-    }
-
-    if (entry.changeFrequency) {
-      xml += `    <changefreq>${entry.changeFrequency}</changefreq>\n`;
-    }
-
-    if (entry.priority !== undefined) {
-      xml += `    <priority>${entry.priority}</priority>\n`;
-    }
-
-    // Add hreflang annotations using xhtml:link
-    if (entry.alternates?.languages) {
-      for (const [lang, url] of Object.entries(entry.alternates.languages)) {
-        xml += `    <xhtml:link rel="alternate" hreflang="${lang}" href="${escapeXml(url)}"/>\n`;
+      if (entry.lastModified) {
+        const date =
+          entry.lastModified instanceof Date
+            ? entry.lastModified.toISOString()
+            : entry.lastModified;
+        xml += `    <lastmod>${date}</lastmod>\n`;
       }
-    }
 
-    xml += '  </url>';
-    return xml;
-  }).join('\n');
+      if (entry.changeFrequency) {
+        xml += `    <changefreq>${entry.changeFrequency}</changefreq>\n`;
+      }
+
+      if (entry.priority !== undefined) {
+        xml += `    <priority>${entry.priority}</priority>\n`;
+      }
+
+      // Add hreflang annotations using xhtml:link
+      if (entry.alternates?.languages) {
+        for (const [lang, url] of Object.entries(entry.alternates.languages)) {
+          xml += `    <xhtml:link rel="alternate" hreflang="${lang}" href="${escapeXml(url)}"/>\n`;
+        }
+      }
+
+      xml += '  </url>';
+      return xml;
+    })
+    .join('\n');
 
   return `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"

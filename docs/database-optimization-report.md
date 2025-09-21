@@ -9,6 +9,7 @@
 A comprehensive database query analysis revealed **critical performance issues** affecting the Cado e-commerce platform. The most severe issue is an N+1 query pattern in the main product listing query that executes on every request. Combined with missing indexes and inefficient aggregations, these issues are causing unnecessary database load and slow response times.
 
 **Impact**: Current inefficiencies are likely causing:
+
 - 200-300% slower query execution than necessary
 - 5x higher database load
 - Poor user experience with slow page loads
@@ -23,54 +24,64 @@ A comprehensive database query analysis revealed **critical performance issues**
 
 ```javascript
 const recommendedValue =
-  input.sortBy === SortBy.RECOMMENDED ? {
-    $cond: [
-      {
-        $in: ["$_id", {
-          $map: {
-            input: await ReccProduct.find({}, { product: 1 }).lean(), // N+1 PATTERN!
-            as: "reccProduct",
-            in: "$$reccProduct.product"
-          }
-        }]
-      },
-      1,
-      0
-    ]
-  } : 0
+  input.sortBy === SortBy.RECOMMENDED
+    ? {
+        $cond: [
+          {
+            $in: [
+              '$_id',
+              {
+                $map: {
+                  input: await ReccProduct.find({}, { product: 1 }).lean(), // N+1 PATTERN!
+                  as: 'reccProduct',
+                  in: '$$reccProduct.product',
+                },
+              },
+            ],
+          },
+          1,
+          0,
+        ],
+      }
+    : 0;
 ```
 
 **Problem**: The `ReccProduct.find()` query executes **inside** the aggregation pipeline definition, meaning:
+
 - This query runs every time getProducts is called
 - It blocks the aggregation pipeline construction
 - It cannot be optimized by MongoDB
 - Creates unnecessary database round trips
 
 **Performance Impact**:
+
 - **Extra latency**: +100-200ms per request
 - **Database load**: 2x unnecessary queries
 - **Scalability**: Performance degrades linearly with traffic
 
 **Solution**:
+
 ```javascript
 // Move query outside aggregation
-const recommendedProductIds = input.sortBy === SortBy.RECOMMENDED
-  ? await ReccProduct.find({}, { product: 1 }).lean()
-      .then(docs => docs.map(doc => doc.product))
-  : [];
+const recommendedProductIds =
+  input.sortBy === SortBy.RECOMMENDED
+    ? await ReccProduct.find({}, { product: 1 })
+        .lean()
+        .then(docs => docs.map(doc => doc.product))
+    : [];
 
-const recommendedValue = input.sortBy === SortBy.RECOMMENDED ? {
-  $cond: [
-    { $in: ["$_id", recommendedProductIds] },
-    1,
-    0
-  ]
-} : 0;
+const recommendedValue =
+  input.sortBy === SortBy.RECOMMENDED
+    ? {
+        $cond: [{ $in: ['$_id', recommendedProductIds] }, 1, 0],
+      }
+    : 0;
 ```
 
 ### 2. 🔴 HIGH: Missing .lean() on Read Queries
 
 **Impact**: Returning full Mongoose documents instead of plain JavaScript objects causes:
+
 - **3x memory overhead** per document
 - **Slower serialization** for API responses
 - **Unnecessary change tracking** overhead
@@ -88,6 +99,7 @@ const recommendedValue = input.sortBy === SortBy.RECOMMENDED ? {
 | `uploadProductImages.ts` | 22 | `Product.findById()` | Product for updates |
 
 **Quick Fix** - Add `.lean()` to all read-only queries:
+
 ```javascript
 // Before
 const products = await Product.find();
@@ -101,42 +113,48 @@ const products = await Product.find().lean();
 **Current Index Analysis**:
 
 #### Product Model ✅ (Well Indexed)
+
 ```javascript
-ProductSchema.index({"normalized_title.ro": 1});
-ProductSchema.index({"normalized_title.ru": 1});
-ProductSchema.index({"categories": 1, "ocasions": 1, "product_content": 1});
+ProductSchema.index({ 'normalized_title.ro': 1 });
+ProductSchema.index({ 'normalized_title.ru': 1 });
+ProductSchema.index({ categories: 1, ocasions: 1, product_content: 1 });
 ```
 
 #### Order Model ❌ (Missing Indexes)
+
 **No indexes found!** Critical queries are scanning entire collection.
 
 **Required Indexes**:
+
 ```javascript
 // Single field indexes for filtering
-OrderSchema.index({ "state": 1 });
-OrderSchema.index({ "createdAt": -1 });
-OrderSchema.index({ "custom_id": 1 }, { unique: true });
-OrderSchema.index({ "client": 1 });
-OrderSchema.index({ "payment_method": 1 });
+OrderSchema.index({ state: 1 });
+OrderSchema.index({ createdAt: -1 });
+OrderSchema.index({ custom_id: 1 }, { unique: true });
+OrderSchema.index({ client: 1 });
+OrderSchema.index({ payment_method: 1 });
 
 // Compound indexes for common query patterns
-OrderSchema.index({ "state": 1, "createdAt": -1 }); // Admin dashboard
-OrderSchema.index({ "client": 1, "createdAt": -1 }); // User order history
+OrderSchema.index({ state: 1, createdAt: -1 }); // Admin dashboard
+OrderSchema.index({ client: 1, createdAt: -1 }); // User order history
 ```
 
 #### Blog Model ❌ (No Indexes)
+
 **No indexes found!**
 
 **Required Indexes**:
+
 ```javascript
-BlogSchema.index({ "date": -1 }); // For sorting
-BlogSchema.index({ "tag": 1 });
-BlogSchema.index({ "tag": 1, "date": -1 }); // Common query pattern
+BlogSchema.index({ date: -1 }); // For sorting
+BlogSchema.index({ tag: 1 });
+BlogSchema.index({ tag: 1, date: -1 }); // Common query pattern
 ```
 
 #### Client Model (Needs Verification)
+
 ```javascript
-ClientSchema.index({ "email": 1 }, { unique: true }); // For login/search
+ClientSchema.index({ email: 1 }, { unique: true }); // For login/search
 ```
 
 ### 4. 🟡 MEDIUM: Overly Complex Aggregation Pipelines
@@ -145,25 +163,28 @@ ClientSchema.index({ "email": 1 }, { unique: true }); // For login/search
 **Lines**: 54-222
 
 The relevance calculation is extremely complex with nested conditions:
+
 - Multiple regex matches per search token
 - Complex set operations for occasions and content
 - Redundant calculations
 
-**Current Complexity**: O(n * m * 3) where n = products, m = search tokens
+**Current Complexity**: O(n _ m _ 3) where n = products, m = search tokens
 
 **Optimization Strategy**:
+
 1. Pre-calculate search tokens once
 2. Use text search instead of multiple regex
 3. Simplify scoring logic
 4. Consider using MongoDB Atlas Search
 
 **Optimized Version**:
+
 ```javascript
 // Use MongoDB text search
 ProductSchema.index({
-  "normalized_title.ro": "text",
-  "normalized_title.ru": "text",
-  "normalized_title.en": "text"
+  'normalized_title.ro': 'text',
+  'normalized_title.ru': 'text',
+  'normalized_title.en': 'text',
 });
 
 // Simplified relevance scoring
@@ -171,17 +192,17 @@ const pipeline = [
   {
     $match: {
       $text: { $search: searchQuery },
-      ...priceFilter
-    }
+      ...priceFilter,
+    },
   },
   {
     $addFields: {
-      relevance: { $meta: "textScore" }
-    }
+      relevance: { $meta: 'textScore' },
+    },
   },
   {
-    $sort: { relevance: -1, ...sortOptions }
-  }
+    $sort: { relevance: -1, ...sortOptions },
+  },
 ];
 ```
 
@@ -203,11 +224,13 @@ const pipeline = [
 ```
 
 **Problem**:
+
 - Joins client data for every order even when not needed
 - $unwind creates document duplication in pipeline
 - No index on the join field
 
 **Solution**:
+
 ```javascript
 // Only lookup when searching by client data
 const needsClientData = tokenizedNormalizedSearch?.some(token =>
@@ -215,14 +238,18 @@ const needsClientData = tokenizedNormalizedSearch?.some(token =>
 );
 
 const pipeline = [
-  ...(needsClientData ? [{
-    $lookup: {
-      from: "clients",
-      localField: "client",
-      foreignField: "_id",
-      as: "clientData"
-    }
-  }] : []),
+  ...(needsClientData
+    ? [
+        {
+          $lookup: {
+            from: 'clients',
+            localField: 'client',
+            foreignField: '_id',
+            as: 'clientData',
+          },
+        },
+      ]
+    : []),
   // rest of pipeline
 ];
 ```
@@ -235,36 +262,34 @@ const pipeline = [
 ```javascript
 // After aggregation, if no results, runs another query
 const fallbackProducts = await Product.find(excludeFilter)
-  .select("-description -long_description -set_description")
+  .select('-description -long_description -set_description')
   .limit(5);
 ```
 
 **Problem**: Two database round trips when one would suffice.
 
 **Solution**: Use single aggregation with conditional stages:
+
 ```javascript
 const pipeline = [
   { $match: primaryFilter },
   {
     $facet: {
       similar: [{ $limit: 5 }],
-      fallback: [
-        { $match: fallbackFilter },
-        { $limit: 5 }
-      ]
-    }
+      fallback: [{ $match: fallbackFilter }, { $limit: 5 }],
+    },
   },
   {
     $project: {
       products: {
         $cond: {
-          if: { $gt: [{ $size: "$similar" }, 0] },
-          then: "$similar",
-          else: "$fallback"
-        }
-      }
-    }
-  }
+          if: { $gt: [{ $size: '$similar' }, 0] },
+          then: '$similar',
+          else: '$fallback',
+        },
+      },
+    },
+  },
 ];
 ```
 
@@ -281,6 +306,7 @@ const pipeline = [
 | getHomeBanners | 1 hour | On banner update |
 
 **Implementation Example**:
+
 ```javascript
 import { Redis } from 'ioredis';
 const redis = new Redis();
@@ -304,9 +330,7 @@ Many queries fetch entire documents when only specific fields are needed:
 const products = await Product.find();
 
 // Good - fetches only needed fields
-const products = await Product.find()
-  .select('title price images custom_id categories')
-  .lean();
+const products = await Product.find().select('title price images custom_id categories').lean();
 ```
 
 ### 3. Batch Operations
@@ -322,14 +346,16 @@ Properly implements connection caching ✅
 ## Query Performance Metrics
 
 ### Current Performance (Estimated)
-| Query | Current Time | After Optimization | Improvement |
-|-------|-------------|-------------------|-------------|
-| getProducts | 500-800ms | 150-200ms | 70% faster |
-| getAllOrders | 300-400ms | 100-150ms | 65% faster |
-| getAllProducts | 200-300ms | 50-80ms | 75% faster |
-| getSimilarProducts | 150-200ms | 80-100ms | 45% faster |
+
+| Query              | Current Time | After Optimization | Improvement |
+| ------------------ | ------------ | ------------------ | ----------- |
+| getProducts        | 500-800ms    | 150-200ms          | 70% faster  |
+| getAllOrders       | 300-400ms    | 100-150ms          | 65% faster  |
+| getAllProducts     | 200-300ms    | 50-80ms            | 75% faster  |
+| getSimilarProducts | 150-200ms    | 80-100ms           | 45% faster  |
 
 ### Database Load Impact
+
 - **Current**: ~1000 queries/minute at peak
 - **After Optimization**: ~400 queries/minute (60% reduction)
 - **Cost Savings**: Estimated 40-50% reduction in MongoDB Atlas costs
@@ -337,6 +363,7 @@ Properly implements connection caching ✅
 ## Implementation Priority
 
 ### Phase 1: Quick Wins (1 hour)
+
 1. **Add .lean() to all read queries** (15 minutes)
    - Immediate 30% memory reduction
    - Faster serialization
@@ -347,6 +374,7 @@ Properly implements connection caching ✅
    - Reduce data transfer by 60%
 
 ### Phase 2: Critical Fixes (2-3 hours)
+
 1. **Fix N+1 pattern in getProducts.ts** (1 hour)
    - Eliminates redundant queries
    - Critical for scalability
@@ -358,6 +386,7 @@ Properly implements connection caching ✅
    - Use text search
 
 ### Phase 3: Advanced Optimizations (4-6 hours)
+
 1. **Implement caching layer** (2 hours)
    - Redis/Memory cache
    - Cache invalidation strategy
@@ -371,6 +400,7 @@ Properly implements connection caching ✅
 ## Testing Recommendations
 
 ### Performance Testing
+
 ```javascript
 // Add query performance logging
 const startTime = Date.now();
@@ -385,6 +415,7 @@ if (duration > 200) {
 ```
 
 ### Load Testing
+
 - Use Apache JMeter or k6 to simulate concurrent users
 - Monitor query response times under load
 - Verify index usage with `explain()`
@@ -392,6 +423,7 @@ if (duration > 200) {
 ## Monitoring Queries
 
 ### MongoDB Explain Plans
+
 ```javascript
 // Check if indexes are being used
 const explainResult = await Product.find(query).explain('executionStats');
@@ -400,6 +432,7 @@ console.log('Documents examined:', explainResult.executionStats.totalDocsExamine
 ```
 
 ### Key Metrics to Monitor
+
 - Query execution time
 - Documents scanned vs returned
 - Index hit rate
@@ -409,6 +442,7 @@ console.log('Documents examined:', explainResult.executionStats.totalDocsExamine
 ## Prevention Strategies
 
 ### Code Review Checklist
+
 - [ ] All read-only queries use `.lean()`
 - [ ] Appropriate indexes exist for query patterns
 - [ ] No queries inside loops
@@ -417,6 +451,7 @@ console.log('Documents examined:', explainResult.executionStats.totalDocsExamine
 - [ ] Caching considered for static data
 
 ### Development Best Practices
+
 1. Always run `explain()` on new queries
 2. Use MongoDB Compass to analyze query performance
 3. Set up slow query logging in development
@@ -428,11 +463,13 @@ console.log('Documents examined:', explainResult.executionStats.totalDocsExamine
 The identified database performance issues are severely impacting the application's performance and scalability. The most critical issue is the N+1 query pattern in the main product listing, followed by missing indexes and lack of `.lean()` optimization.
 
 **Immediate actions required**:
+
 1. Add `.lean()` to all read queries (30% immediate improvement)
 2. Create missing indexes (50-70% query speed improvement)
 3. Fix the N+1 pattern in getProducts.ts (critical for scale)
 
 **Expected overall impact**:
+
 - **70% reduction** in query execution time
 - **60% reduction** in database load
 - **40% reduction** in MongoDB costs
@@ -442,4 +479,4 @@ All optimizations are safe to implement with proper testing and can be rolled ou
 
 ---
 
-*This report provides a roadmap for achieving optimal database performance in the Cado e-commerce platform.*
+_This report provides a roadmap for achieving optimal database performance in the Cado e-commerce platform._

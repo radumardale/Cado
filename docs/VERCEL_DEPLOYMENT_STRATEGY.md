@@ -1,9 +1,11 @@
 # Vercel Development Deployment Strategy
 
 ## Overview
+
 This document outlines the strategy for setting up a secure, private development deployment from the `develop` branch that won't interfere with the production deployment on cado.md.
 
 ## Current Setup
+
 - **Production**: `main` branch → cado.md (public)
 - **Development**: `develop` branch → needs private deployment
 - **Goal**: Isolated development environment with no public access or SEO indexing
@@ -11,6 +13,7 @@ This document outlines the strategy for setting up a secure, private development
 ## Recommended Approach: Branch Deployment with Password Protection
 
 ### How It Works
+
 1. **Automatic URL**: Vercel will create a unique URL like `cado-develop-{hash}.vercel.app`
 2. **Password Protection**: Enable Vercel Authentication for non-production deployments
 3. **No Search Engine Indexing**: Protected deployments are automatically blocked from crawlers
@@ -46,6 +49,7 @@ This document outlines the strategy for setting up a secure, private development
 ### Step 4: Add Deployment Protection Files
 
 #### Create `vercel.json`
+
 ```json
 {
   "git": {
@@ -69,6 +73,7 @@ This document outlines the strategy for setting up a secure, private development
 ```
 
 #### Create `src/middleware.ts`
+
 ```typescript
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
@@ -92,6 +97,7 @@ export const config = {
 ```
 
 #### Update `app/robots.ts`
+
 ```typescript
 import { MetadataRoute } from 'next';
 
@@ -121,6 +127,7 @@ export default function robots(): MetadataRoute.Robots {
 ```
 
 #### Add Development Indicator (Optional)
+
 ```typescript
 // components/DevIndicator.tsx
 export function DevIndicator() {
@@ -151,6 +158,7 @@ If you prefer a permanent development URL like `dev.cado.md`:
 ## Environment Variable Strategy
 
 ### Production Environment (main branch)
+
 ```env
 BASE_URL=https://cado.md
 NEXT_PUBLIC_ENV=production
@@ -159,6 +167,7 @@ MONGODB_URI=<production_mongodb_uri>
 ```
 
 ### Development Environment (develop branch)
+
 ```env
 BASE_URL=https://cado-develop.vercel.app
 NEXT_PUBLIC_ENV=development
@@ -170,12 +179,14 @@ ROBOTS_DISALLOW=true
 ## Security Measures
 
 ### 1. Vercel Authentication (Recommended)
+
 - Built-in Vercel feature
 - Requires Vercel account login
 - Can generate temporary shareable links
 - No additional code needed
 
 ### 2. Basic Authentication (Alternative)
+
 If you need custom authentication:
 
 ```typescript
@@ -194,6 +205,7 @@ if (process.env.VERCEL_ENV === 'preview') {
 ```
 
 ### 3. IP Whitelisting
+
 - Available on Vercel Enterprise plans
 - Can restrict access to specific IP addresses
 
@@ -226,12 +238,14 @@ if (process.env.VERCEL_ENV === 'preview') {
 ## Quick Setup Checklist
 
 ### In Vercel Dashboard:
+
 - [ ] Enable `develop` branch in Git settings
 - [ ] Turn on Vercel Authentication for preview deployments
 - [ ] Configure environment variables for Preview environment
 - [ ] (Optional) Add custom domain for development
 
 ### In Your Codebase:
+
 - [ ] Create `vercel.json` with robot headers
 - [ ] Add middleware.ts for additional protection
 - [ ] Update/create robots.ts file
@@ -239,6 +253,7 @@ if (process.env.VERCEL_ENV === 'preview') {
 - [ ] Commit and push to `develop` branch
 
 ### Testing:
+
 - [ ] Push a commit to `develop`
 - [ ] Verify password protection is active
 - [ ] Check robots headers in browser DevTools
@@ -268,20 +283,25 @@ Once configured, your deployments will be available at:
 ## Troubleshooting
 
 ### Issue: Development site is publicly accessible
+
 - **Solution**: Verify Vercel Authentication is enabled for Preview Deployments in project settings
 
 ### Issue: Wrong environment variables in development
+
 - **Solution**: Check that variables are scoped to "Preview" not "Production" in Vercel Dashboard
 
 ### Issue: Search engines might index development
+
 - **Solution**: Verify middleware is running and X-Robots-Tag headers are present
 
 ### Issue: Can't access development site
+
 - **Solution**: Make sure you're logged into Vercel or have a valid shareable link
 
 ## Conclusion
 
 This setup provides a completely isolated development environment that:
+
 - Is secure and private
 - Won't affect production
 - Won't be indexed by search engines

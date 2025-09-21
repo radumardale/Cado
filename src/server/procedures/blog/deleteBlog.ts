@@ -11,22 +11,24 @@ export const deleteBlogProcedure = protectedProcedure
   .mutation(async ({ input }): Promise<ActionResponse> => {
     try {
       await connectMongo();
-      
+
       const blog = await Blog.findByIdAndDelete(input.id);
-      
+
       // If the blog has images, delete them from storage
       if (blog && blog.image) {
         await deleteMultipleFromBucket([blog.image]);
       }
 
       if (blog && blog.section_images) {
-        await deleteMultipleFromBucket(blog.section_images.map((obj: SectionImagesInterface) => obj.image));
+        await deleteMultipleFromBucket(
+          blog.section_images.map((obj: SectionImagesInterface) => obj.image)
+        );
       }
 
       if (!blog) {
         return {
           success: false,
-          error: "This blog does not exist",
+          error: 'This blog does not exist',
         };
       }
 
@@ -34,10 +36,10 @@ export const deleteBlogProcedure = protectedProcedure
         success: true,
       };
     } catch (error) {
-      console.error("Error deleting blog:", error);
+      console.error('Error deleting blog:', error);
       return {
         success: false,
-        error: error instanceof Error ? error.message : "Failed to delete blog",
+        error: error instanceof Error ? error.message : 'Failed to delete blog',
       };
     }
   });

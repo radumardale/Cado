@@ -11,9 +11,9 @@ interface BreadcrumbJsonLdProps {
 export default function BreadcrumbJsonLd({ breadcrumbSchema }: BreadcrumbJsonLdProps) {
   return (
     <script
-      type="application/ld+json"
+      type='application/ld+json'
       dangerouslySetInnerHTML={{
-        __html: JSON.stringify(breadcrumbSchema, null, 0)
+        __html: JSON.stringify(breadcrumbSchema, null, 0),
       }}
     />
   );

@@ -2,7 +2,7 @@
 
 import { ProductInterface } from '@/models/product/types/productInterface';
 import { ActionResponse } from '@/lib/types/ActionResponse';
-import { protectedProcedure } from "@/server/trpc";
+import { protectedProcedure } from '@/server/trpc';
 import connectMongo from '@/lib/connect-mongo';
 import { updateReccProductRequestSchema } from '@/lib/validation/reccProducts/updateReccProductRequestSchema';
 import { ReccProduct } from '@/models/reccProduct/ReccProduct';
@@ -17,28 +17,28 @@ export const updateReccProductProcedure = protectedProcedure
   .input(updateReccProductRequestSchema)
   .mutation(async ({ input }): Promise<ActionResponse> => {
     try {
-      
       await connectMongo();
 
       await ReccProduct.findOneAndUpdate(
         {
-          product: input.replaceId
+          product: input.replaceId,
         },
         {
-            $set: {
-                product: input.productId
-            }
-        }, {new: true})
+          $set: {
+            product: input.productId,
+          },
+        },
+        { new: true }
+      );
 
-        return {
-            success: true
-        }
-
+      return {
+        success: true,
+      };
     } catch (error) {
-      console.error("Error updating product:", error);
+      console.error('Error updating product:', error);
       return {
         success: false,
-        error: error instanceof Error ? error.message : "Failed to update product",
+        error: error instanceof Error ? error.message : 'Failed to update product',
       };
     }
   });

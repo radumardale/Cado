@@ -9,28 +9,27 @@ export const deleteProductProcedure = protectedProcedure
   .input(deleteProductRequestSchema)
   .mutation(async ({ input }): Promise<ActionResponse> => {
     try {
-      
-        await connectMongo();
-        
-        const product = await Product.findByIdAndDelete(input.id);
+      await connectMongo();
+
+      const product = await Product.findByIdAndDelete(input.id);
 
       if (!product) {
         return {
           success: false,
-          error: "This product does not exist",
+          error: 'This product does not exist',
         };
       }
 
-        await deleteMultipleFromBucket(product.images);
+      await deleteMultipleFromBucket(product.images);
 
       return {
         success: true,
       };
     } catch (error) {
-      console.error("Error deleting product:", error);
+      console.error('Error deleting product:', error);
       return {
         success: false,
-        error: error instanceof Error ? error.message : "Failed to delete product",
+        error: error instanceof Error ? error.message : 'Failed to delete product',
       };
     }
   });

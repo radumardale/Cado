@@ -1,4 +1,4 @@
 export enum OrderPaymentMethod {
-    Paynet = "PAYNET",
-    Cash = "CASH"
+  Paynet = 'PAYNET',
+  Cash = 'CASH',
 }
