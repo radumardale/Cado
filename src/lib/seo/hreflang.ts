@@ -9,7 +9,8 @@ interface HreflangLink {
 
 function getBaseUrl(): string {
   if (process.env.BASE_URL && process.env.BASE_URL !== '/') {
-    return process.env.BASE_URL;
+    // Remove trailing slash(es) and trim whitespace
+    return process.env.BASE_URL.trim().replace(/\/+$/, '');
   }
   return process.env.NODE_ENV === 'production'
     ? 'https://cado.md'

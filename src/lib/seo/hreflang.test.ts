@@ -75,6 +75,48 @@ describe('hreflang.ts', () => {
       expect(links[0].url).toContain('https://example.com');
     });
 
+    test('should remove trailing slash from BASE_URL', () => {
+      process.env.BASE_URL = 'https://example.com/';
+      process.env.NODE_ENV = 'test';
+
+      const links = generateHreflangLinks('/', 'ro');
+      expect(links[0].url).toBe('https://example.com/ro/');
+      // Should not have double slashes
+      expect(links[0].url).not.toContain('//ro');
+    });
+
+    test('should remove multiple trailing slashes from BASE_URL', () => {
+      process.env.BASE_URL = 'https://example.com///';
+      process.env.NODE_ENV = 'test';
+
+      const links = generateHreflangLinks('/', 'ro');
+      expect(links[0].url).toBe('https://example.com/ro/');
+      // Check for double slashes after the protocol (not in https://)
+      const afterProtocol = links[0].url.split('://')[1];
+      expect(afterProtocol).not.toContain('//');
+    });
+
+    test('should trim whitespace from BASE_URL', () => {
+      process.env.BASE_URL = '  https://example.com/  ';
+      process.env.NODE_ENV = 'test';
+
+      const links = generateHreflangLinks('/', 'ro');
+      expect(links[0].url).toBe('https://example.com/ro/');
+      expect(links[0].url).not.toContain(' ');
+      expect(links[0].url).not.toContain('//ro');
+    });
+
+    test('should handle BASE_URL with spaces and trailing slash (like in .env.production.local)', () => {
+      process.env.BASE_URL = ' https://cado-henna.vercel.app/ ';
+      process.env.NODE_ENV = 'test';
+
+      const links = generateHreflangLinks('/', 'ro');
+      expect(links[0].url).toBe('https://cado-henna.vercel.app/ro/');
+      // Check for double slashes after the protocol (not in https://)
+      const afterProtocol = links[0].url.split('://')[1];
+      expect(afterProtocol).not.toContain('//');
+    });
+
     test('should ignore BASE_URL when it is "/"', () => {
       process.env.BASE_URL = '/';
       process.env.NODE_ENV = 'development';
@@ -105,6 +147,28 @@ describe('hreflang.ts', () => {
 
       const links = generateHreflangLinks('/', 'ro');
       expect(links[0].url).toContain('http://localhost:3000');
+    });
+
+    test('should never produce double slashes in URLs', () => {
+      const testCases = [
+        'https://example.com',
+        'https://example.com/',
+        'https://example.com//',
+        '  https://example.com/  '
+      ];
+
+      testCases.forEach(baseUrl => {
+        process.env.BASE_URL = baseUrl;
+        process.env.NODE_ENV = 'test';
+
+        const links = generateHreflangLinks('/catalog', 'ro');
+
+        links.forEach(link => {
+          // Check that no URL contains double slashes after the protocol
+          const afterProtocol = link.url.split('://')[1];
+          expect(afterProtocol).not.toContain('//');
+        });
+      });
     });
   });
 
