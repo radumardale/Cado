@@ -25,7 +25,7 @@ export default function AdminSidebar({ page }: AdminSidebarProps) {
           <ChevronRight className={`text-white size-6 transition duration-300 ${isOpen ? "rotate-180" : ""}`} strokeWidth={1.5}/>
         </button>
         <Link href="/" className='w-fit'>
-          <Image unoptimized src="/logo/logo-blue.svg" alt='logo cado' className='h-12 w-auto' width={196} height={48}/>
+          <Image src="/logo/logo-blue.svg" alt='logo cado' className='h-12 w-auto' width={196} height={48}/>
         </Link>
         <p className='font-manrope font-semibold leading-5 text-white mt-16 mb-4'>{t(`titles.0`)}</p>
         {
