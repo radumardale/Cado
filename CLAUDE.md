@@ -46,6 +46,14 @@ Next.js 15 e-commerce platform (Cado) with Romanian/Russian/English support, usi
 - **TypeScript**: Strict mode enabled
 - **File endings**: Always ensure files end with a newline
 
+### Code Formatting
+
+- **Prettier**: Project uses Prettier for consistent formatting
+- **Format on save**: Configure your editor to auto-format
+- **Check formatting**: Run `npm run format:check` before commits
+- **Apply formatting**: Run `npm run format` to format all files
+- See `/docs/code-formatting.md` for detailed setup
+
 ## Environment Context
 
 - **Production**: Environment variables in Vercel Dashboard

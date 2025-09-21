@@ -54,6 +54,7 @@ CADO is a modern e-commerce platform specializing in corporate and personal gift
 - **Package Manager**: npm
 - **Testing**: [Vitest](https://vitest.dev/) + React Testing Library
 - **Linting**: ESLint with Next.js config
+- **Code Formatting**: [Prettier](https://prettier.io/) with ESLint integration
 - **Dev Server**: Turbopack for fast HMR
 
 ## 📁 Project Structure
@@ -231,6 +232,72 @@ npm run db:export
 # Import to local MongoDB
 npm run db:import
 ```
+
+## 🎨 Code Formatting
+
+This project uses **Prettier** for consistent code formatting across the entire codebase.
+
+### Quick Commands
+
+```bash
+# Format all files
+npm run format
+
+# Check if files are formatted (CI/PR checks)
+npm run format:check
+```
+
+### IDE Setup for Format on Save
+
+#### VS Code
+1. Install the [Prettier extension](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)
+2. Add to your settings (`.vscode/settings.json` or User Settings):
+```json
+{
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  }
+}
+```
+
+#### WebStorm / IntelliJ IDEA
+1. Prettier is built-in (no plugin needed)
+2. Go to **Settings → Languages & Frameworks → JavaScript → Prettier**
+3. Set Prettier package path: `./node_modules/prettier`
+4. Check **On save** to enable format on save
+5. Configure file patterns: `{**/*,*}.{js,ts,jsx,tsx,json,css,scss,md}`
+
+#### Sublime Text
+1. Install [JsPrettier package](https://packagecontrol.io/packages/JsPrettier)
+2. Set `"auto_format_on_save": true` in JsPrettier settings
+
+#### Vim/Neovim
+1. Install [vim-prettier plugin](https://github.com/prettier/vim-prettier)
+2. Add to your config: `let g:prettier#autoformat = 1`
+
+#### Cursor
+1. Prettier support is built-in
+2. Add to settings: `"editor.formatOnSave": true`
+
+### Formatting Rules
+
+Our Prettier configuration (`.prettierrc`) enforces:
+- ✅ Single quotes for strings
+- ✅ Semicolons always
+- ✅ 2-space indentation
+- ✅ 100 character line width
+- ✅ Trailing commas (ES5 style)
+- ✅ Unix line endings (LF)
+
+For detailed configuration and troubleshooting, see [docs/code-formatting.md](docs/code-formatting.md).
 
 ## 🌍 Internationalization
 
