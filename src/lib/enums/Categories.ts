@@ -17,7 +17,7 @@ export enum Categories {
     };
   }
 
-  const categoryTranslations: Record<Categories, CategoryTranslation> = {
+  export const categoryTranslations: Record<Categories, CategoryTranslation> = {
     [Categories.FOR_HIM]: {
       title: {
         ro: "Pentru El",

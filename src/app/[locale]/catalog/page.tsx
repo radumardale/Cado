@@ -6,6 +6,10 @@ import Footer from "@/components/footer/Footer";
 import SortBy from "@/lib/enums/SortBy";
 import { Metadata } from "next";
 import { getLocale, getTranslations, setRequestLocale } from "next-intl/server";
+import BreadcrumbJsonLd from "@/components/seo/BreadcrumbJsonLd";
+import { generateCatalogBreadcrumbSchema } from "@/lib/seo/breadcrumb-schema";
+import { Categories } from "@/lib/enums/Categories";
+import { Ocasions } from "@/lib/enums/Ocasions";
 export const dynamic = 'force-static'
 export const revalidate = 3600; // Cache for 1 hour
 
@@ -48,8 +52,19 @@ export async function generateMetadata() : Promise<Metadata> {
   };
 }
 
-export default async function CatalogPage({params}: {params: Promise<{locale: string}>;}) {
+export default async function CatalogPage({
+  params,
+  searchParams
+}: {
+  params: Promise<{locale: string}>;
+  searchParams: Promise<{
+    category?: Categories;
+    ocasions?: Ocasions;
+    sort_by?: string;
+  }>;
+}) {
   const {locale} = await params;
+  const urlSearchParams = await searchParams;
   setRequestLocale(locale);
 
   const queryClient = getQueryClient();
@@ -74,9 +89,22 @@ export default async function CatalogPage({params}: {params: Promise<{locale: st
   await prefetch(
     trpc.seasonCatalog.getSeasonCatalog.queryOptions()
   )
-  
+
+  // Generate breadcrumb schema
+  const baseUrl = process.env.BASE_URL || 'https://cado.md';
+  const breadcrumbSchema = generateCatalogBreadcrumbSchema(
+    baseUrl,
+    locale,
+    {
+      category: urlSearchParams.category,
+      ocasion: urlSearchParams.ocasions,
+      sortBy: urlSearchParams.sort_by
+    }
+  );
+
   return (
     <>
+    <BreadcrumbJsonLd breadcrumbSchema={breadcrumbSchema} />
     <div className="grid grid-cols-8 lg:grid-cols-15 gap-x-2 lg:gap-x-6 px-4 lg:px-16 max-w-3xl mx-auto relative">
       <div className="grid grid-cols-full gap-x-6 col-span-full">
           <HydrateClient>
