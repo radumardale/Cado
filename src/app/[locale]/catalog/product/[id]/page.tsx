@@ -55,13 +55,12 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 
     const queryClient = getQueryClient();
 
-    await prefetch(
-      trpc.products.getProductById.queryOptions({ id }, { staleTime: 10000 })
-    );
+    const queryOptions = trpc.products.getProductById.queryOptions({ id }, { staleTime: 10000 });
+    await prefetch(queryOptions);
 
-    // Fetch product data for breadcrumb generation
-    const queryOptions = trpc.products.getProductById.queryOptions({ id });
-    const productData = await queryClient.fetchQuery(queryOptions);
+    // Access cached product data for breadcrumb generation (no additional database call)
+    const productData = queryClient.getQueryData(queryOptions.queryKey) ||
+      await queryClient.fetchQuery(queryOptions); // Fallback if not cached
 
     // Generate breadcrumb schema
     const baseUrl = process.env.BASE_URL || 'https://cado.md';
