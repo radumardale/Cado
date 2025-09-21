@@ -206,7 +206,7 @@ export default function LogoCarousel() {
                             className={`size-24 lg:size-34 rounded-2xl overflow-hidden absolute transition-[z-index] delay-300`}
                         >
                             <Image 
-                                unoptimized
+                               
                                 quality={100} 
                                 src={obj.src} 
                                 alt={`Carousel item ${index + 1}`} 

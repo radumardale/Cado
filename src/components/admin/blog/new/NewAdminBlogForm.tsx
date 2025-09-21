@@ -288,7 +288,7 @@ export default function NewAdminBlogForm() {
                                   form.setValue("data.isImageNew", true, {shouldDirty: true});
                               }}
                           />
-                          <Image unoptimized src={selectedImage} alt='image' className='aspect-[3/2] rounded-2xl object-cover' width={703} height={464}/>
+                          <Image src={selectedImage} alt='image' className='aspect-[3/2] rounded-2xl object-cover' width={703} height={464}/>
                       </div>
                   }
           </>
@@ -432,7 +432,7 @@ export default function NewAdminBlogForm() {
                                               form.setValue("data.imagesChanged", true, {shouldDirty: true});
                                           }}
                                       />
-                                      <Image unoptimized src={sectionImage.image} alt='image' className='aspect-[3/2] rounded-2xl object-cover' width={703} height={464}/>
+                                      <Image src={sectionImage.image} alt='image' className='aspect-[3/2] rounded-2xl object-cover' width={703} height={464}/>
                                   </div>
                               }
                           </div>
