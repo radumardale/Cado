@@ -2,15 +2,23 @@ import CheckoutSection from '@/components/checkout/CheckoutSection'
 import Footer from '@/components/footer/Footer'
 import Header from '@/components/header/Header'
 import LinksMenu from '@/components/LinksMenu'
-import { getTranslations } from 'next-intl/server'
+import { getLocale, getTranslations } from 'next-intl/server'
+import { generateHreflangMetadata } from '@/components/seo/HreflangLinks'
 import React from 'react'
 
 export async function generateMetadata() {
   const t = await getTranslations('PageTitles');
- 
+  const locale = await getLocale();
+
+  const hreflangMeta = generateHreflangMetadata({
+    pathname: '/checkout',
+    locale: locale as 'ro' | 'ru' | 'en'
+  });
+
   return {
     title: t('checkout'),
     description: '',
+    ...hreflangMeta,
   };
 }
 

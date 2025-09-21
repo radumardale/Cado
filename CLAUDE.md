@@ -96,7 +96,11 @@ Do NOT make direct changes. Create a feature branch first.
    # Work on the feature
    # ... make changes ...
 
-   # Push feature branch
+   # BEFORE committing: Run quality checks
+   npm run typecheck  # Check for TypeScript errors
+   npm run build      # Ensure build succeeds
+
+   # Only if both pass, commit and push
    git push -u origin feature/issue-1-seo-sitemap
 
    # Create PR to develop (not main!)
@@ -173,3 +177,43 @@ When creating pull requests, follow these formatting rules:
 ### Emoji Usage
 - **Allowed but don't overuse**: Emojis can enhance readability but should be used sparingly
 - Use them to highlight key sections or important points, not in every sentence
+
+## Quality Checks Before Commits & PRs
+
+### ⚠️ MANDATORY: Pre-Push Checklist
+
+**Claude Code MUST run these checks before pushing commits or creating PRs:**
+
+1. **TypeScript Check** - MUST pass with no errors
+   ```bash
+   npm run typecheck
+   ```
+
+2. **Build Check** - MUST complete successfully
+   ```bash
+   npm run build
+   ```
+
+3. **Only proceed if BOTH checks pass!**
+
+**If errors are found:**
+- Fix all TypeScript errors first
+- Resolve any build issues
+- Re-run both checks
+- Only push/create PR when everything passes
+
+### Why This Matters
+
+- **TypeScript errors** can cause runtime failures in production
+- **Build failures** mean the code won't deploy
+- **Early detection** saves time and prevents broken deployments
+- **Clean PRs** are easier to review and merge
+
+### Claude Code Behavior
+
+When asked to commit/push/create PR, Claude Code should:
+1. Automatically run `npm run typecheck`
+2. If TypeScript check passes, run `npm run build`
+3. If both pass, proceed with git operations
+4. If either fails, stop and fix the issues first
+5. Inform the user of any issues found and fixed

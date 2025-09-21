@@ -61,7 +61,7 @@ export default function AdminPage() {
           <div className='col-start-6 col-span-5 justify-center z-10 h-screen grid grid-cols-5'>
             <div className='col-span-full bg-white h-fit grid grid-cols-5 my-auto py-12 rounded-3xl'>            
                 <form onSubmit={(e) => {e.preventDefault(); logIn();}} className='z-50 h-fit bg-white col-start-2 col-span-3'>
-                  <Image unoptimized src="/logo/logo-black.svg" alt='logo cado' className='h-12 w-auto mx-auto' width={196} height={48}/>
+                  <Image src="/logo/logo-black.svg" alt='logo cado' className='h-12 w-auto mx-auto' width={196} height={48}/>
                   <Input className="mt-8 mb-4 h-12 w-full px-6 rounded-3xl text-base text-black border-gray shadow-none placeholder:text-black" placeholder={`${t('username')}*`} value={username} onChange={(e) => {setUsername(e.currentTarget.value)}}/>
 
                   <div className='w-full relative'>

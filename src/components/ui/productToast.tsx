@@ -34,7 +34,7 @@ function ToastCustom(props: ToastProps) {
         </div>
         <div className="flex gap-2 mb-6">
           <div className='w-32 aspect-[339/425] bg-purewhite rounded-lg overflow-hidden relative'>
-            <Image unoptimized src={image} alt={title} width={129} height={164} className='w-full absolute top-1/2 -translate-y-1/2'/>
+            <Image src={image} alt={title} width={129} height={164} className='w-full absolute top-1/2 -translate-y-1/2'/>
           </div>
           <div>
               <p className='font-manrope text-sm font-semibold mb-2'>{title}</p>

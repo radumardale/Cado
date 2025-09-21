@@ -115,7 +115,7 @@ export default function Header({category, breadcrumbs = false, productInfo}: Hea
                                     <LangIcon />
                                 </div>
                                 <Link href="/" className='lg:max-w-[14vw]'>
-                                    <Image unoptimized src={getLogoSrc(locale)} width={228} height={56} alt='logo' className='h-8 lg:h-14 w-fit'/>
+                                    <Image src={getLogoSrc(locale)} width={228} height={56} alt='logo' className='h-8 lg:h-14 w-fit'/>
                                 </Link>
                                 <div className='hidden gap-8 items-center absolute left-1/2 -translate-x-1/2 lg:flex'>
                                     <CatalogMenuButton isCatalogMenuOpen={isCatalogMenuOpen} setCatalogButtonActive={setCatalogButtonActive} />

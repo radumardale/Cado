@@ -1,14 +1,24 @@
 import Footer from "@/components/footer/Footer";
 import Header from "@/components/header/Header";
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
+import { generateHreflangMetadata } from '@/components/seo/HreflangLinks';
 import { PageContent } from "./PageContent";
 
-export async function generateMetadata() {
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
   const t = await getTranslations("PageTitles");
+  const locale = await getLocale();
+  const { id } = await params;
+
+  const hreflangMeta = generateHreflangMetadata({
+    pathname: '/payment-error/[id]',
+    locale: locale as 'ro' | 'ru' | 'en',
+    params: { id }
+  });
 
   return {
     title: t("payment_err"),
     description: "",
+    ...hreflangMeta,
   };
 }
 

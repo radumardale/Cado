@@ -41,10 +41,10 @@ export default function ImageSlide({src, slide, nextSlide, index, direction, oca
         {
             ocasion ?
             <Link href={{pathname: "/catalog", query: {ocasions: ocasion}}} className='w-full h-full'>
-                <Image unoptimized quality={100} priority src={src} alt="hero1" width={3584} height={1600} className='w-full h-full object-cover'/>
+                <Image quality={90} priority src={src} alt="hero1" width={3584} height={1600} className='w-full h-full object-cover'/>
             </Link>
             :
-            <Image unoptimized quality={100} priority src={src} alt="hero1" width={3584} height={1600} className='w-full h-full object-cover'/>
+            <Image quality={90} priority src={src} alt="hero1" width={3584} height={1600} className='w-full h-full object-cover'/>
         }
     </motion.div>
   )

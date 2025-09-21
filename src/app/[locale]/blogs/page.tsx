@@ -8,6 +8,7 @@ import Recommendations from "@/components/home/recommendations/Recommendations";
 import LinksMenu from "@/components/LinksMenu";
 import { Metadata } from "next";
 import { getLocale, getTranslations } from "next-intl/server";
+import { generateHreflangMetadata } from "@/components/seo/HreflangLinks";
 export const dynamic = 'force-static'
 
 export async function generateMetadata() : Promise<Metadata> {
@@ -15,18 +16,24 @@ export async function generateMetadata() : Promise<Metadata> {
   const desc_t = await getTranslations('PageDescriptions');
 
   const locale = await getLocale();
-      
-      const imagePaths = {
-        en: "/opengraph/en.jpg",
-        ru: "/opengraph/ru.jpg",
-        ro: "/opengraph/ro.jpg",
-      }
-    
-      const imageUrl = imagePaths[locale as keyof typeof imagePaths] || imagePaths.ro;
- 
+
+  const imagePaths = {
+    en: "/opengraph/en.jpg",
+    ru: "/opengraph/ru.jpg",
+    ro: "/opengraph/ro.jpg",
+  }
+
+  const imageUrl = imagePaths[locale as keyof typeof imagePaths] || imagePaths.ro;
+
+  const hreflangMeta = generateHreflangMetadata({
+    pathname: '/blogs',
+    locale: locale as 'ro' | 'ru' | 'en'
+  });
+
   return {
     title: t('blogs'),
     description: desc_t('blogs'),
+    ...hreflangMeta,
     openGraph: {
       type: "website",
       title: t('blogs'),

@@ -44,7 +44,7 @@ export default function NewBannerSlide({slide, nextSlide, index, direction, onIm
     >
         {
             selectedImage ? 
-            <Image unoptimized quality={100} priority src={selectedImage} alt="hero1" width={3584} height={1600} className='w-full h-full object-cover'/>
+            <Image quality={100} priority src={selectedImage} alt="hero1" width={3584} height={1600} className='w-full h-full object-cover'/>
             :
             <HomeBannerImageUpload onImageAdded={handleImageUpload}/>
         }

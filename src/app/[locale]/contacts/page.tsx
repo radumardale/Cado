@@ -5,6 +5,7 @@ import Header from '@/components/header/Header'
 import LinksMenu from '@/components/LinksMenu'
 import { Metadata } from 'next'
 import { getLocale, getTranslations } from 'next-intl/server'
+import { generateHreflangMetadata } from '@/components/seo/HreflangLinks'
 import React from 'react'
 
 export async function generateMetadata() : Promise<Metadata> {
@@ -20,10 +21,16 @@ export async function generateMetadata() : Promise<Metadata> {
   }
 
   const imageUrl = imagePaths[locale as keyof typeof imagePaths] || imagePaths.ro;
- 
+
+  const hreflangMeta = generateHreflangMetadata({
+    pathname: '/contacts',
+    locale: locale as 'ro' | 'ru' | 'en'
+  });
+
   return {
     title: t('contact'),
     description: desc_t('contact'),
+    ...hreflangMeta,
     openGraph: {
       type: "website",
       title: t('contact'),

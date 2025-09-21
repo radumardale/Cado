@@ -9,24 +9,31 @@ import Reviews from "@/components/home/reviews/Reviews";
 import { getLocale, getTranslations } from "next-intl/server";
 import LinksMenu from "@/components/LinksMenu";
 import { Metadata } from "next";
+import { generateHreflangMetadata } from "@/components/seo/HreflangLinks";
 
 export async function generateMetadata() : Promise<Metadata> {
   const t = await getTranslations('PageTitles');
   const desc_t = await getTranslations('PageDescriptions');
 
   const locale = await getLocale();
-      
-      const imagePaths = {
-        en: "/opengraph/en.jpg",
-        ru: "/opengraph/ru.jpg",
-        ro: "/opengraph/ro.jpg",
-      }
-    
-      const imageUrl = imagePaths[locale as keyof typeof imagePaths] || imagePaths.ro;
- 
+
+  const imagePaths = {
+    en: "/opengraph/en.jpg",
+    ru: "/opengraph/ru.jpg",
+    ro: "/opengraph/ro.jpg",
+  }
+
+  const imageUrl = imagePaths[locale as keyof typeof imagePaths] || imagePaths.ro;
+
+  const hreflangMeta = generateHreflangMetadata({
+    pathname: '/about-us',
+    locale: locale as 'ro' | 'ru' | 'en'
+  });
+
   return {
     title: t('about'),
     description: desc_t('about'),
+    ...hreflangMeta,
     openGraph: {
       type: "website",
       title: t('about'),

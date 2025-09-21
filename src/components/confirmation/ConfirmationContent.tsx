@@ -45,7 +45,7 @@ export default function ConfirmationContent({ id }: ConfirmationContentProps) {
               data?.order?.products.map((product, index) => (
                 <div key={index} className='w-full flex gap-2 lg:gap-4'>
                     <Link href={{pathname: '/catalog/product/[id]', params: {id: product.product.custom_id}}} className='peer bg-purewhite rounded-lg'>
-                        <Image unoptimized src={product.product.images[0]} alt={product.product.title[locale]} width={129} height={164} className='w-32 aspect-[129/164] object-contain peer' />
+                        <Image src={product.product.images[0]} alt={product.product.title[locale]} width={129} height={164} className='w-32 aspect-[129/164] object-contain peer' />
                     </Link>
                     <div className='flex flex-col justify-between flex-1 peer-hover:[&>div>p]:after:w-full'>
                         <div>

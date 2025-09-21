@@ -12,6 +12,7 @@ import { getLocale, getTranslations, setRequestLocale } from "next-intl/server";
 import LinksMenu from "@/components/LinksMenu";
 import { HydrateClient, prefetch, trpc } from "../_trpc/server";
 import { Metadata } from "next";
+import { generateHreflangMetadata } from "@/components/seo/HreflangLinks";
 export const dynamic = 'force-static'
 
 export async function generateMetadata() : Promise<Metadata> {
@@ -19,7 +20,7 @@ export async function generateMetadata() : Promise<Metadata> {
   const desc_t = await getTranslations('PageDescriptions');
 
   const locale = await getLocale();
-  
+
   const imagePaths = {
     en: "/opengraph/en.jpg",
     ru: "/opengraph/ru.jpg",
@@ -27,10 +28,16 @@ export async function generateMetadata() : Promise<Metadata> {
   }
 
   const imageUrl = imagePaths[locale as keyof typeof imagePaths] || imagePaths.ro;
- 
+
+  const hreflangMeta = generateHreflangMetadata({
+    pathname: '/',
+    locale: locale as 'ro' | 'ru' | 'en'
+  });
+
   return {
     title: t('home'),
     description: desc_t('home'),
+    ...hreflangMeta,
     openGraph: {
       type: "website",
       title: t('home'),
