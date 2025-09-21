@@ -134,32 +134,37 @@ function getLocalizedText(key: string, locale: string): string {
  * Get localized category name
  */
 function getCategoryLocalizedName(category: Categories, locale: string): string {
-  // Category translations mapping
+  // Category translations mapping - using correct Categories enum values
   const categoryTranslations: Record<Categories, Record<string, string>> = {
-    [Categories.ACCESORII]: {
+    [Categories.FOR_HER]: {
+      en: "For Her",
+      ro: "Pentru Ea",
+      ru: "Для Нее"
+    },
+    [Categories.FOR_HIM]: {
+      en: "For Him",
+      ro: "Pentru El",
+      ru: "Для Него"
+    },
+    [Categories.FOR_KIDS]: {
+      en: "For Kids",
+      ro: "Pentru Copii",
+      ru: "Для Детей"
+    },
+    [Categories.ACCESSORIES]: {
       en: "Accessories",
       ro: "Accesorii",
       ru: "Аксессуары"
     },
-    [Categories.BORSETE]: {
-      en: "Handbags",
-      ro: "Borsete",
-      ru: "Сумки"
+    [Categories.FLOWERS_AND_BALLOONS]: {
+      en: "Flowers & Balloons",
+      ro: "Flori & Baloane",
+      ru: "Цветы и Шары"
     },
-    [Categories.GENTI]: {
-      en: "Bags",
-      ro: "Genți",
-      ru: "Сумки"
-    },
-    [Categories.INCALTAMINTE]: {
-      en: "Footwear",
-      ro: "Încălțăminte",
-      ru: "Обувь"
-    },
-    [Categories.IMBRACAMINTE]: {
-      en: "Clothing",
-      ro: "Îmbrăcăminte",
-      ru: "Одежда"
+    [Categories.GIFT_SET]: {
+      en: "Gift Sets",
+      ro: "Seturi cadou",
+      ru: "Подарочные наборы"
     }
   };
 
