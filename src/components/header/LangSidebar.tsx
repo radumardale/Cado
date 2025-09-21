@@ -60,7 +60,7 @@ export default function LangSidebar({setSidebarOpen}: LangSidebarInterface) {
             className='bg-white h-full w-full lg:w-1/3 pt-3 lg:pt-6 px-4 lg:pl-6 z-100 lg:pr-8 relative flex flex-col pb-32 lg:pb-42' 
             onMouseDown={(e) => {e.stopPropagation()}}
         >
-            <Image unoptimized src="/ribbon/lang-ribbon.png" className='absolute right-0 bottom-0 w-1/2' alt="ribbon" width={270} height={277} />
+            <Image src="/ribbon/lang-ribbon.png" className='absolute right-0 bottom-0 w-1/2' alt="ribbon" width={270} height={277} />
              <div className="flex justify-between items-center mb-6 lg:mb-12">
                 <p className='text-2xl leading-7 font-manrope font-semibold'>{ t("title") }</p>
                 <button className='cursor-pointer' onClick={() => {setSidebarOpen(false)}}>
