@@ -6,6 +6,8 @@ import LinksMenu from '@/components/LinksMenu';
 import ProductInfo from '@/components/product/ProductInfo';
 import { Metadata } from 'next';
 import { setRequestLocale } from 'next-intl/server';
+import BreadcrumbJsonLd from '@/components/seo/BreadcrumbJsonLd';
+import { generateProductBreadcrumbSchema } from '@/lib/seo/breadcrumb-schema';
 export const dynamic = 'force-static'
 export const revalidate = 3600;
 // @ts-expect-error ggg
@@ -51,11 +53,30 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
     const { locale, id } = await params;
     setRequestLocale(locale);
 
+    const queryClient = getQueryClient();
+
     await prefetch(
       trpc.products.getProductById.queryOptions({ id }, { staleTime: 10000 })
     );
 
+    // Fetch product data for breadcrumb generation
+    const queryOptions = trpc.products.getProductById.queryOptions({ id });
+    const productData = await queryClient.fetchQuery(queryOptions);
+
+    // Generate breadcrumb schema
+    const baseUrl = process.env.BASE_URL || 'https://cado.md';
+    const breadcrumbSchema = generateProductBreadcrumbSchema(
+      baseUrl,
+      locale,
+      productData.product?.title[locale] || 'Product',
+      id,
+      productData.product?.category,
+      productData.product?.ocasions?.[0] // Use first ocasion if available
+    );
+
     return (
+      <>
+      <BreadcrumbJsonLd breadcrumbSchema={breadcrumbSchema} />
       <HydrateClient>
         <div className="grid grid-cols-8 lg:grid-cols-15 gap-x-2 lg:gap-x-6 px-4 lg:px-16 max-w-3xl mx-auto relative">
           <ProductInfo id={id} />
@@ -65,5 +86,6 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
         <Footer />
         <LinksMenu />
       </HydrateClient>
+      </>
     );
 }
