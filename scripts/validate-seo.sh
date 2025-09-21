@@ -98,6 +98,10 @@ echo "---------------------"
 run_test "sitemap.xml is accessible" \
     "curl -f -s -o /dev/null -w '%{http_code}' $BASE_URL/sitemap.xml | grep -q 200"
 
+# Test content-type header is application/xml
+run_test "Content-Type is application/xml" \
+    "curl -I $BASE_URL/sitemap.xml 2>/dev/null | grep -i content-type | grep -q 'application/xml'"
+
 # Test XML is well-formed
 run_test "Valid XML structure" \
     "curl -s $BASE_URL/sitemap.xml | xmllint --noout - 2>/dev/null"
@@ -190,9 +194,9 @@ echo ""
 echo "🔗 Testing URL Validity"
 echo "----------------------"
 
-# Test that URLs are properly encoded
+# Test that URLs are properly encoded (no spaces within URL tags)
 run_test "URLs are properly encoded" \
-    "! curl -s $BASE_URL/sitemap.xml | grep -q ' '"
+    "! curl -s $BASE_URL/sitemap.xml | grep '<loc>' | grep -E 'http[^<]*[ ]+[^<]*</loc>'"
 
 # Test for lastmod dates
 run_test "Has lastmod dates" \

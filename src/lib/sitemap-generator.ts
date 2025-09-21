@@ -1,12 +1,11 @@
 import { Product } from '@/models/product/product';
 import { Blog } from '@/models/blog/blog';
 import connectMongo from '@/lib/connect-mongo';
-import type { MetadataRoute } from 'next';
 import { CategoriesArr } from '@/lib/enums/Categories';
 import { OcasionsArr } from '@/lib/enums/Ocasions';
 import { StockState } from '@/lib/enums/StockState';
 
-interface SitemapEntry {
+export interface SitemapEntry {
   url: string;
   lastModified?: string | Date;
   changeFrequency?: 'always' | 'hourly' | 'daily' | 'weekly' | 'monthly' | 'yearly' | 'never';
@@ -30,7 +29,7 @@ function getBaseUrl(): string {
 
 const SUPPORTED_LOCALES = ['ro', 'ru', 'en'] as const;
 
-export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+export async function generateSitemapEntries(): Promise<SitemapEntry[]> {
   const BASE_URL = getBaseUrl();
   await connectMongo();
 
@@ -165,3 +164,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   return sitemapEntries;
 }
+
+// Default export removed to allow route handler to take precedence
+// Export only the helper function for use in route handler

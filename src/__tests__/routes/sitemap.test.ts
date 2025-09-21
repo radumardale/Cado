@@ -1,5 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import sitemap from '@/app/sitemap';
+import { generateSitemapEntries } from '@/lib/sitemap-generator';
+import { GET } from '@/app/sitemap.xml/route';
 import { Product } from '@/models/product/product';
 import { Blog } from '@/models/blog/blog';
 import connectMongo from '@/lib/connect-mongo';
@@ -45,7 +46,7 @@ describe('Sitemap Generation', () => {
       createMockQuery([]) as unknown as ReturnType<typeof Blog.find>
     );
 
-    const result = await sitemap();
+    const result = await generateSitemapEntries();
 
     // Check that static pages are included
     const urls = result.map(entry => entry.url);
@@ -75,7 +76,7 @@ describe('Sitemap Generation', () => {
       createMockQuery([]) as unknown as ReturnType<typeof Blog.find>
     );
 
-    const result = await sitemap();
+    const result = await generateSitemapEntries();
 
     // Check first entry (homepage) has hreflang
     const homepage = result.find(entry => entry.url === 'http://localhost:3000/ro');
@@ -102,7 +103,7 @@ describe('Sitemap Generation', () => {
       createMockQuery([]) as unknown as ReturnType<typeof Blog.find>
     );
 
-    await sitemap();
+    await generateSitemapEntries();
 
     // Verify that Product.find was called with the correct filter
     expect(mockFind).toHaveBeenCalledWith({
@@ -123,7 +124,7 @@ describe('Sitemap Generation', () => {
       createMockQuery([]) as unknown as ReturnType<typeof Blog.find>
     );
 
-    const result = await sitemap();
+    const result = await generateSitemapEntries();
 
     // Check that product URLs are generated correctly for all languages
     const productUrls = result.filter(entry =>
@@ -155,7 +156,7 @@ describe('Sitemap Generation', () => {
       createMockQuery(mockBlogs) as unknown as ReturnType<typeof Blog.find>
     );
 
-    const result = await sitemap();
+    const result = await generateSitemapEntries();
 
     // Check that blog URLs are generated correctly
     const blogUrls = result.filter(entry =>
@@ -177,7 +178,7 @@ describe('Sitemap Generation', () => {
       createMockQuery([]) as unknown as ReturnType<typeof Blog.find>
     );
 
-    const result = await sitemap();
+    const result = await generateSitemapEntries();
 
     // Check for category pages
     const categoryUrls = result.filter(entry =>
@@ -213,7 +214,7 @@ describe('Sitemap Generation', () => {
     );
 
     // Should not throw, but continue with static pages
-    const result = await sitemap();
+    const result = await generateSitemapEntries();
 
     // Should still have static pages even if dynamic content fails
     expect(result.length).toBeGreaterThan(0);
@@ -230,7 +231,7 @@ describe('Sitemap Generation', () => {
       createMockQuery([]) as unknown as ReturnType<typeof Blog.find>
     );
 
-    const result = await sitemap();
+    const result = await generateSitemapEntries();
 
     // Check homepage has highest priority
     const homepage = result.find(entry =>
@@ -254,7 +255,7 @@ describe('Sitemap Generation', () => {
 
     // Need to re-import to get the new BASE_URL
     vi.resetModules();
-    const { default: sitemapWithEnv } = await import('@/app/sitemap');
+    const { generateSitemapEntries: sitemapWithEnv } = await import('@/lib/sitemap-generator');
 
     vi.mocked(Product.find).mockReturnValue(
       createMockQuery([]) as unknown as ReturnType<typeof Product.find>
@@ -271,5 +272,147 @@ describe('Sitemap Generation', () => {
 
     // Restore original BASE_URL
     process.env.BASE_URL = originalBaseUrl;
+  });
+});
+
+describe('Sitemap Route Handler', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    // Mock successful DB connection
+    vi.mocked(connectMongo).mockResolvedValue({} as unknown as Awaited<ReturnType<typeof connectMongo>>);
+  });
+
+  it('should return XML with correct content-type header', async () => {
+    // Mock empty product and blog responses
+    vi.mocked(Product.find).mockReturnValue(
+      createMockQuery([]) as unknown as ReturnType<typeof Product.find>
+    );
+
+    vi.mocked(Blog.find).mockReturnValue(
+      createMockQuery([]) as unknown as ReturnType<typeof Blog.find>
+    );
+
+    const response = await GET();
+
+    // Check content-type header
+    expect(response.headers.get('content-type')).toBe('application/xml; charset=utf-8');
+    expect(response.headers.get('cache-control')).toBe('public, s-maxage=86400, stale-while-revalidate');
+    expect(response.status).toBe(200);
+  });
+
+  it('should return valid XML structure', async () => {
+    // Mock empty product and blog responses
+    vi.mocked(Product.find).mockReturnValue(
+      createMockQuery([]) as unknown as ReturnType<typeof Product.find>
+    );
+
+    vi.mocked(Blog.find).mockReturnValue(
+      createMockQuery([]) as unknown as ReturnType<typeof Blog.find>
+    );
+
+    const response = await GET();
+    const xmlContent = await response.text();
+
+    // Check XML structure
+    expect(xmlContent).toContain('<?xml version="1.0" encoding="UTF-8"?>');
+    expect(xmlContent).toContain('<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"');
+    expect(xmlContent).toContain('xmlns:xhtml="http://www.w3.org/1999/xhtml"');
+    expect(xmlContent).toContain('</urlset>');
+
+    // Check for URLs
+    expect(xmlContent).toContain('<url>');
+    expect(xmlContent).toContain('<loc>');
+    expect(xmlContent).toContain('</url>');
+  });
+
+  it('should include hreflang annotations in XML', async () => {
+    // Mock empty product and blog responses
+    vi.mocked(Product.find).mockReturnValue(
+      createMockQuery([]) as unknown as ReturnType<typeof Product.find>
+    );
+
+    vi.mocked(Blog.find).mockReturnValue(
+      createMockQuery([]) as unknown as ReturnType<typeof Blog.find>
+    );
+
+    const response = await GET();
+    const xmlContent = await response.text();
+
+    // Check for hreflang annotations
+    expect(xmlContent).toContain('<xhtml:link rel="alternate" hreflang="ro"');
+    expect(xmlContent).toContain('<xhtml:link rel="alternate" hreflang="ru"');
+    expect(xmlContent).toContain('<xhtml:link rel="alternate" hreflang="en"');
+  });
+
+  it('should properly escape XML entities', async () => {
+    const mockProducts = [
+      { custom_id: 'test&123', updatedAt: new Date() }
+    ];
+
+    vi.mocked(Product.find).mockReturnValue(
+      createMockQuery(mockProducts) as unknown as ReturnType<typeof Product.find>
+    );
+
+    vi.mocked(Blog.find).mockReturnValue(
+      createMockQuery([]) as unknown as ReturnType<typeof Blog.find>
+    );
+
+    const response = await GET();
+    const xmlContent = await response.text();
+
+    // Check that & is properly escaped
+    expect(xmlContent).toContain('test&amp;123');
+    expect(xmlContent).not.toContain('test&123');
+  });
+
+  it('should handle database errors gracefully', async () => {
+    // Mock database error
+    vi.mocked(Product.find).mockReturnValue(
+      createMockQueryWithError(new Error('Database error')) as unknown as ReturnType<typeof Product.find>
+    );
+
+    vi.mocked(Blog.find).mockReturnValue(
+      createMockQueryWithError(new Error('Database error')) as unknown as ReturnType<typeof Blog.find>
+    );
+
+    const response = await GET();
+
+    // Should still return XML response even on error
+    expect(response.headers.get('content-type')).toBe('application/xml; charset=utf-8');
+
+    const xmlContent = await response.text();
+    expect(xmlContent).toContain('<?xml version="1.0" encoding="UTF-8"?>');
+    expect(xmlContent).toContain('<urlset');
+  });
+
+  it('should include products and blogs in XML output', async () => {
+    const mockProducts = [
+      { custom_id: 'product123', updatedAt: new Date('2024-01-01') }
+    ];
+
+    const mockBlogs = [
+      { _id: 'blog456', date: new Date('2024-01-01') }
+    ];
+
+    vi.mocked(Product.find).mockReturnValue(
+      createMockQuery(mockProducts) as unknown as ReturnType<typeof Product.find>
+    );
+
+    vi.mocked(Blog.find).mockReturnValue(
+      createMockQuery(mockBlogs) as unknown as ReturnType<typeof Blog.find>
+    );
+
+    const response = await GET();
+    const xmlContent = await response.text();
+
+    // Check for product URLs
+    expect(xmlContent).toContain('<loc>http://localhost:3000/ro/catalog/product/product123</loc>');
+    expect(xmlContent).toContain('<loc>http://localhost:3000/ru/catalog/product/product123</loc>');
+    expect(xmlContent).toContain('<loc>http://localhost:3000/en/catalog/product/product123</loc>');
+
+    // Check for blog URLs
+    expect(xmlContent).toContain('<loc>http://localhost:3000/ro/blog/blog456</loc>');
+    expect(xmlContent).toContain('<loc>http://localhost:3000/ru/blog/blog456</loc>');
+    expect(xmlContent).toContain('<loc>http://localhost:3000/en/blog/blog456</loc>');
   });
 });
