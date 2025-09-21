@@ -16,15 +16,20 @@ export interface SitemapEntry {
 }
 
 function getBaseUrl(): string {
+  let baseUrl: string;
+
   // First check for BASE_URL environment variable
   if (process.env.BASE_URL && process.env.BASE_URL !== '/') {
-    return process.env.BASE_URL;
+    baseUrl = process.env.BASE_URL;
+  } else {
+    // Fallback to production or development URL
+    baseUrl = process.env.NODE_ENV === 'production'
+      ? 'https://cado.md'
+      : 'http://localhost:3000';
   }
 
-  // Fallback to production or development URL
-  return process.env.NODE_ENV === 'production'
-    ? 'https://cado.md'
-    : 'http://localhost:3000';
+  // Remove trailing slash if present to avoid double slashes in URLs
+  return baseUrl.endsWith('/') ? baseUrl.slice(0, -1) : baseUrl;
 }
 
 const SUPPORTED_LOCALES = ['ro', 'ru', 'en'] as const;
