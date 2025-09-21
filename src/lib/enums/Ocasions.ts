@@ -28,7 +28,7 @@ interface OcasionTranslation {
 }
 
 // Create the translations record for Ocasions
-const ocasionTranslations: Record<Ocasions, OcasionTranslation> = {
+export const ocasionTranslations: Record<Ocasions, OcasionTranslation> = {
   [Ocasions.WELCOME_KIT]: {
     title: {
       ro: "Welcome Kit",

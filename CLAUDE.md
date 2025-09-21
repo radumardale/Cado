@@ -166,6 +166,18 @@ This Git Flow workflow is a personal preference and is NOT required for other co
 - Use their preferred workflow
 - Submit PRs following the project's general guidelines
 
+## Pull Request Guidelines
+
+When creating pull requests, follow these formatting rules:
+
+### Description Format
+- **TLDR in the beginning**: Start with a concise summary of what was implemented/changed
+- **Details afterwards**: Provide comprehensive information about the changes following the TLDR
+
+### Emoji Usage
+- **Allowed but don't overuse**: Emojis can enhance readability but should be used sparingly
+- Use them to highlight key sections or important points, not in every sentence
+
 ## Quality Checks Before Commits & PRs
 
 ### ⚠️ MANDATORY: Pre-Push Checklist
