@@ -6,6 +6,7 @@ import Faq from "@/components/home/faq/Faq";
 import Recommendations from "@/components/home/recommendations/Recommendations";
 import LinksMenu from "@/components/LinksMenu";
 import { setRequestLocale } from "next-intl/server";
+import { generateHreflangMetadata } from '@/components/seo/HreflangLinks';
 
 export async function generateMetadata({ params } : {params: Promise<{locale: string, id: string}>}) {
   
@@ -21,9 +22,16 @@ export async function generateMetadata({ params } : {params: Promise<{locale: st
   const description = blogData.blog?.sections[0].content[locale] || "";
   const image = blogData.blog?.image || "https://your-default-image-url.com/default.jpg";
 
+  const hreflangMeta = generateHreflangMetadata({
+    pathname: '/blog/[id]',
+    locale: locale as 'ro' | 'ru' | 'en',
+    params: { id }
+  });
+
   return {
     title: title,
     description: description,
+    ...hreflangMeta,
     openGraph: {
       title : title,
       description : description ,

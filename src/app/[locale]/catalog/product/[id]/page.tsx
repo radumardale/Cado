@@ -6,13 +6,14 @@ import LinksMenu from '@/components/LinksMenu';
 import ProductInfo from '@/components/product/ProductInfo';
 import { Metadata } from 'next';
 import { setRequestLocale } from 'next-intl/server';
+import { generateHreflangMetadata } from '@/components/seo/HreflangLinks';
 export const dynamic = 'force-static'
 export const revalidate = 3600;
 // @ts-expect-error ggg
 import { htmlToText } from 'html-to-text';
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string, id: string }> }) : Promise<Metadata> {
-  
+
   const { locale, id } = await params;
 
   const queryClient = getQueryClient();
@@ -26,9 +27,16 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 
   const image = `${productData.product?.images?.[0]}` || 'https://your-default-image-url.com/default.jpg';
 
+  const hreflangMeta = generateHreflangMetadata({
+    pathname: '/catalog/product/[id]',
+    locale: locale as 'ro' | 'ru' | 'en',
+    params: { id }
+  });
+
   return {
     title: title,
     description: description,
+    ...hreflangMeta,
     openGraph: {
       title : title,
       description : description ,
