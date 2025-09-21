@@ -70,7 +70,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
       locale,
       productData.product?.title[locale] || 'Product',
       id,
-      productData.product?.category,
+      productData.product?.categories?.[0], // Use first category if available
       productData.product?.ocasions?.[0] // Use first ocasion if available
     );
 
