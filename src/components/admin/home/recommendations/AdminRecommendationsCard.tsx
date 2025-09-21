@@ -26,10 +26,10 @@ export default function AdminRecommendationsCard({product, setAddProductOpen}: A
               </div>
           }
           <div className='bg-purewhite w-full h-full rounded-lg lg:rounded-2xl overflow-hidden opacity-100 group-hover:opacity-0 z-10 transition duration-300 relative'>
-            <Image unoptimized onLoad={() => setImageLoaded(true)} src={product.images[0]} width={1596} height={2396} alt={product.title.ro} className='max-w-full w-fit max-h-full object-contain z-10 absolute left-1/2 top-1/2 -translate-1/2'/>  
+            <Image onLoad={() => setImageLoaded(true)} src={product.images[0]} width={1596} height={2396} alt={product.title.ro} className='max-w-full w-fit max-h-full object-contain z-10 absolute left-1/2 top-1/2 -translate-1/2'/>  
           </div>
           <div className='bg-purewhite w-full h-full absolute left-0 top-0 transition duration-300 -z-10 rounded-lg lg:rounded-2xl overflow-hidden'>
-            <Image unoptimized src={product.images[1] || product.images[0]} width={1596} height={2396} alt={product.title.ro} className={`${isImageLoaded ? "" : "hidden"} absolute left-0 top-1/2 -translate-y-1/2 max-w-full max-h-full object-contain`}/>  
+            <Image src={product.images[1] || product.images[0]} width={1596} height={2396} alt={product.title.ro} className={`${isImageLoaded ? "" : "hidden"} absolute left-0 top-1/2 -translate-y-1/2 max-w-full max-h-full object-contain`}/>  
           </div>
           <button className='absolute left-4 -bottom-12 h-12 w-[calc(100%-2rem)] bg-white rounded-3xl font-manrope z-20 opacity-100 transition-all duration-300 group-hover:bottom-4 font-semibold cursor-pointer hover:bg-lightergray'>{t("change_prod")}</button>
         </div>

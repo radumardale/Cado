@@ -56,7 +56,7 @@ export default function BlogSection({id}: BlogSectionInteface) {
                                     {section.content[locale]}
                                 </p>
                                 {
-                                   image && <Image className='w-full aspect-[824/544] object-cover lg:mb-4 rounded-lg lg:rounded-2xl mt-8' unoptimized src={image.image} alt='blog' width={708} height={464}/>
+                                   image && <Image className='w-full aspect-[824/544] object-cover lg:mb-4 rounded-lg lg:rounded-2xl mt-8' src={image.image} alt='blog' width={708} height={464}/>
                                 }
                             </Fragment>
                         )

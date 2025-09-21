@@ -21,13 +21,12 @@ export default function BlogCard({src, tag ,title, date, id}: BlogCardInterface)
   return (
     <Link href={{pathname: '/blog/[id]', params: {id: id}}} className='cursor-pointer col-span-full lg:col-span-6 group block'>
         <div className="overflow-hidden rounded-lg lg:rounded-2xl mb-2 lg:mb-4 relative before:content-[''] before:absolute before:left-0 before:top-0 before:w-full before:h-full before:bg-pureblack before:opacity-0 group-hover:before:opacity-25 before:rounded-2xl before:transition before:duration-300 before:z-10">
-            <Image 
-            unoptimized
-            src={src} 
-            alt={title} 
-            width={920} 
-            height={920} 
-            className='w-full aspect-[708/464] object-cover transition-transform duration-300 ease-in-out group-hover:scale-105' 
+            <Image
+            src={src}
+            alt={title}
+            width={920}
+            height={920}
+            className='w-full aspect-[708/464] object-cover transition-transform duration-300 ease-in-out group-hover:scale-105'
             />
         </div>
         <div className="flex justify-between items-center mb-4">

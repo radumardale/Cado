@@ -349,7 +349,7 @@ const handleDragEnd = (
                   }}
                 >
                   <Image
-                    unoptimized
+                   
                     quality={100}
                     src={image}
                     alt={product.title[locale]}
@@ -393,7 +393,7 @@ const handleDragEnd = (
                   }}
                 >
                   <Image
-                    unoptimized
+                   
                     quality={100}
                     src={image}
                     alt={product.title[locale]}

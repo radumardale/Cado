@@ -80,7 +80,7 @@ export default function AdminRecommnendationsSearch({replaceProduct, handleRefre
                   {
                       localCount == 0 &&
                       <div className='absolute left-1/2 top-1/2 -translate-1/2 w-full lg:w-auto px-13 lg:px-0 flex flex-col items-center'>
-                          <Image unoptimized src="/icons/shopping-bag-sad.svg" alt='sad shopping bag' width={48} height={48} className='size-12 translate-y-12' />
+                          <Image src="/icons/shopping-bag-sad.svg" alt='sad shopping bag' width={48} height={48} className='size-12 translate-y-12' />
                           <p className='mt-2 text-sm leading-4 lg:leading-5 lg:text-base text-center mb-12 translate-y-12'>{t("no_match")}</p>
                       </div>
                   }
@@ -96,10 +96,10 @@ export default function AdminRecommnendationsSearch({replaceProduct, handleRefre
                                       </div>
                                   }
                                   <div className='w-full aspect-[339/425] bg-purewhite rounded-lg lg:rounded-2xl opacity-100 group-hover:opacity-0 overflow-hidden transition duration-300 z-10 flex items-center relative'>
-                                      <Image unoptimized src={selectedProduct.images[0]} width={798} height={1198} alt={selectedProduct.title.ro} className='w-full max-h-full object-contain'/>  
+                                      <Image src={selectedProduct.images[0]} width={798} height={1198} alt={selectedProduct.title.ro} className='w-full max-h-full object-contain'/>  
                                   </div>
                                   <div className='absolute left-0 top-0 h-full w-full rounded-lg lg:rounded-2xl transition duration-300 z-0 bg-purewhite flex items-center'>
-                                      <Image unoptimized src={selectedProduct.images[1] || selectedProduct.images[0]} width={798} height={1198} alt={selectedProduct.title.ro} className={`w-full max-h-full object-contain`}/>  
+                                      <Image src={selectedProduct.images[1] || selectedProduct.images[0]} width={798} height={1198} alt={selectedProduct.title.ro} className={`w-full max-h-full object-contain`}/>  
                                   </div>
                                   <button onClick={(e) => {e.stopPropagation()}} className='absolute right-2 top-2 rounded-3xl font-manrope z-20 opacity-0 group-hover:opacity-100 transition-all duration-300 font-semibold'>
                                       <Pin strokeWidth={1.5} fill='white' className='size-4 text-white' />
@@ -131,10 +131,10 @@ export default function AdminRecommnendationsSearch({replaceProduct, handleRefre
                                               </div>
                                           }
                                           <div className='w-full aspect-[339/425] bg-purewhite rounded-lg lg:rounded-2xl opacity-100 group-hover:opacity-0 overflow-hidden transition duration-300 z-10 flex items-center relative'>
-                                              <Image unoptimized src={product.images[0]} width={798} height={1198} alt={product.title.ro} className='w-full max-h-full object-contain'/>  
+                                              <Image src={product.images[0]} width={798} height={1198} alt={product.title.ro} className='w-full max-h-full object-contain'/>  
                                           </div>
                                           <div className='absolute left-0 top-0 h-full w-full rounded-lg lg:rounded-2xl transition duration-300 z-0 bg-purewhite flex items-center'>
-                                              <Image unoptimized src={product.images[1] || product.images[0]} width={798} height={1198} alt={product.title.ro} className={`w-full max-h-full object-contain`}/>  
+                                              <Image src={product.images[1] || product.images[0]} width={798} height={1198} alt={product.title.ro} className={`w-full max-h-full object-contain`}/>  
                                           </div>
                                           <button onClick={(e) => {e.stopPropagation(); setSelectedProduct(product)}} className='absolute right-2 top-2 rounded-3xl font-manrope z-20 opacity-0 group-hover:opacity-100 transition-all duration-300 font-semibold cursor-pointer'>
                                               <Pin strokeWidth={1.5} className='size-4 text-white' />
