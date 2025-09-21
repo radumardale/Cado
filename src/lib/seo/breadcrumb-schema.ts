@@ -1,5 +1,5 @@
-import { Categories } from '@/lib/enums/Categories';
-import { Ocasions } from '@/lib/enums/Ocasions';
+import { Categories, categoryTranslations } from '@/lib/enums/Categories';
+import { Ocasions, ocasionTranslations } from '@/lib/enums/Ocasions';
 
 export interface BreadcrumbItem {
   "@type": "ListItem";
@@ -67,14 +67,14 @@ export function generateBreadcrumbSchema(config: BreadcrumbConfig): BreadcrumbLi
     breadcrumbItems.push({
       "@type": "ListItem",
       position: position++,
-      name: getCategoryLocalizedName(category, locale),
+      name: categoryTranslations[category]?.title[locale] || category,
       item: catalogUrl
     });
   } else if (ocasion) {
     breadcrumbItems.push({
       "@type": "ListItem",
       position: position++,
-      name: getOcasionLocalizedName(ocasion, locale),
+      name: ocasionTranslations[ocasion]?.title[locale] || ocasion,
       item: catalogUrl
     });
   }
@@ -130,77 +130,6 @@ function getLocalizedText(key: string, locale: string): string {
   return translations[key]?.[locale] || key;
 }
 
-/**
- * Get localized category name
- */
-function getCategoryLocalizedName(category: Categories, locale: string): string {
-  // Category translations mapping - using correct Categories enum values
-  const categoryTranslations: Record<Categories, Record<string, string>> = {
-    [Categories.FOR_HER]: {
-      en: "For Her",
-      ro: "Pentru Ea",
-      ru: "Для Нее"
-    },
-    [Categories.FOR_HIM]: {
-      en: "For Him",
-      ro: "Pentru El",
-      ru: "Для Него"
-    },
-    [Categories.FOR_KIDS]: {
-      en: "For Kids",
-      ro: "Pentru Copii",
-      ru: "Для Детей"
-    },
-    [Categories.ACCESSORIES]: {
-      en: "Accessories",
-      ro: "Accesorii",
-      ru: "Аксессуары"
-    },
-    [Categories.FLOWERS_AND_BALLOONS]: {
-      en: "Flowers & Balloons",
-      ro: "Flori & Baloane",
-      ru: "Цветы и Шары"
-    },
-    [Categories.GIFT_SET]: {
-      en: "Gift Sets",
-      ro: "Seturi cadou",
-      ru: "Подарочные наборы"
-    }
-  };
-
-  return categoryTranslations[category]?.[locale] || category;
-}
-
-/**
- * Get localized ocasion name
- */
-function getOcasionLocalizedName(ocasion: Ocasions, locale: string): string {
-  // Ocasion translations mapping
-  const ocasionTranslations: Record<Ocasions, Record<string, string>> = {
-    [Ocasions.CASUAL]: {
-      en: "Casual",
-      ro: "Casual",
-      ru: "Повседневный"
-    },
-    [Ocasions.ELEGANT]: {
-      en: "Elegant",
-      ro: "Elegant",
-      ru: "Элегантный"
-    },
-    [Ocasions.SPORT]: {
-      en: "Sport",
-      ro: "Sport",
-      ru: "Спорт"
-    },
-    [Ocasions.BUSINESS]: {
-      en: "Business",
-      ro: "Business",
-      ru: "Деловой"
-    }
-  };
-
-  return ocasionTranslations[ocasion]?.[locale] || ocasion;
-}
 
 /**
  * Generate breadcrumb schema for homepage
