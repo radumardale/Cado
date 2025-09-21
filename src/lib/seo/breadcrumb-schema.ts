@@ -67,14 +67,14 @@ export function generateBreadcrumbSchema(config: BreadcrumbConfig): BreadcrumbLi
     breadcrumbItems.push({
       "@type": "ListItem",
       position: position++,
-      name: categoryTranslations[category]?.title[locale] || category,
+      name: categoryTranslations[category]?.title[locale as 'ro' | 'ru' | 'en'] || category,
       item: catalogUrl
     });
   } else if (ocasion) {
     breadcrumbItems.push({
       "@type": "ListItem",
       position: position++,
-      name: ocasionTranslations[ocasion]?.title[locale] || ocasion,
+      name: ocasionTranslations[ocasion]?.title[locale as 'ro' | 'ru' | 'en'] || ocasion,
       item: catalogUrl
     });
   }
