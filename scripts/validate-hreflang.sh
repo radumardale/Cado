@@ -15,7 +15,7 @@ YELLOW='\033[1;33m'
 NC='\033[0m' # No Color
 
 # Base URL (use localhost for local testing)
-BASE_URL="http://localhost:3000"
+BASE_URL="http://localhost:3001"
 
 # Counter for tracking results
 PASSED=0
@@ -38,25 +38,25 @@ test_url() {
         return
     fi
 
-    # Check for hreflang tags
+    # Check for hreflang tags (case-insensitive due to Next.js using hrefLang)
     local has_ro=false
     local has_ru=false
     local has_en=false
     local has_default=false
 
-    if echo "$response" | grep -q 'hreflang="ro"'; then
+    if echo "$response" | grep -qi 'hreflang="ro"'; then
         has_ro=true
     fi
 
-    if echo "$response" | grep -q 'hreflang="ru"'; then
+    if echo "$response" | grep -qi 'hreflang="ru"'; then
         has_ru=true
     fi
 
-    if echo "$response" | grep -q 'hreflang="en"'; then
+    if echo "$response" | grep -qi 'hreflang="en"'; then
         has_en=true
     fi
 
-    if echo "$response" | grep -q 'hreflang="x-default"'; then
+    if echo "$response" | grep -qi 'hreflang="x-default"'; then
         has_default=true
     fi
 
@@ -122,10 +122,11 @@ test_dynamic_url() {
 }
 
 echo -e "\n${YELLOW}Starting development server check...${NC}"
-if curl -s -o /dev/null -w "%{http_code}" "$BASE_URL" | grep -q "200\|404"; then
+HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" "$BASE_URL")
+if [ "$HTTP_STATUS" = "200" ] || [ "$HTTP_STATUS" = "307" ] || [ "$HTTP_STATUS" = "404" ]; then
     echo -e "${GREEN}✅ Development server is running${NC}"
 else
-    echo -e "${RED}❌ Development server is not running on $BASE_URL${NC}"
+    echo -e "${RED}❌ Development server is not running on $BASE_URL (status: $HTTP_STATUS)${NC}"
     echo "Please run 'npm run dev' first"
     exit 1
 fi

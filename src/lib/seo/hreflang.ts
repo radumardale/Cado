@@ -24,13 +24,40 @@ export function generateHreflangLinks(
   const baseUrl = getBaseUrl();
   const links: HreflangLink[] = [];
 
-  const pathWithoutLocale = pathname.replace(/^\/[^\/]+/, '');
+  // The pathname is already clean (e.g., '/catalog/product/[id]')
+  // No need to remove locale as it's not included
+  const pathWithoutLocale = pathname;
 
   const routeKey = Object.keys(routing.pathnames).find(key => {
-    const pattern = key.replace(/\[([^\]]+)\]/g, (_, param) => {
-      return params?.[param] || `[${param}]`;
-    });
-    return pathWithoutLocale === pattern || pathWithoutLocale.startsWith(pattern.split('[')[0]);
+    // For exact root path matching
+    if (key === '/' && pathWithoutLocale === '/') {
+      return true;
+    }
+
+    // Skip root path for other routes
+    if (key === '/' && pathWithoutLocale !== '/') {
+      return false;
+    }
+
+    // For exact match (including dynamic segments as literal strings)
+    if (pathWithoutLocale === key) {
+      return true;
+    }
+
+    // For parameterized routes with actual param values
+    if (key.includes('[') && params) {
+      // Replace placeholders with actual values
+      let pattern = key;
+      Object.entries(params).forEach(([paramKey, value]) => {
+        pattern = pattern.replace(`[${paramKey}]`, value);
+      });
+
+      if (pathWithoutLocale === pattern) {
+        return true;
+      }
+    }
+
+    return false;
   });
 
   if (routeKey && routing.pathnames[routeKey as keyof typeof routing.pathnames]) {
