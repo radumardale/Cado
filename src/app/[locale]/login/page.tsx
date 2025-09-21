@@ -1,7 +1,7 @@
-import { getLocale, getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from 'next-intl/server';
 import { generateHreflangMetadata } from '@/components/seo/HreflangLinks';
 
-import AdminPage from "./PageContent";
+import AdminPage from './PageContent';
 
 export async function generateMetadata() {
   const t = await getTranslations('PageTitles');
@@ -9,7 +9,7 @@ export async function generateMetadata() {
 
   const hreflangMeta = generateHreflangMetadata({
     pathname: '/login',
-    locale: locale as 'ro' | 'ru' | 'en'
+    locale: locale as 'ro' | 'ru' | 'en',
   });
 
   return {
@@ -18,10 +18,10 @@ export async function generateMetadata() {
     robots: {
       index: false,
       follow: false,
-    }
+    },
   };
 }
 
 export default function Page() {
-  return <AdminPage />
+  return <AdminPage />;
 }

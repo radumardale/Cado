@@ -11,7 +11,7 @@
 }
 
 .tiptap-toolbar {
-  background-color: #F0F0F0 !important;
+  background-color: #f0f0f0 !important;
   padding-top: 0.5rem !important;
   padding-bottom: 0.5rem !important;
   border: 1px solid gray !important;
@@ -35,7 +35,7 @@
     }
   }
 
-  &[data-variant="fixed"] {
+  &[data-variant='fixed'] {
     position: sticky;
     top: 0;
     z-index: 10;
@@ -71,14 +71,13 @@
     }
   }
 
-  &[data-variant="floating"] {
+  &[data-variant='floating'] {
     --tt-toolbar-padding: 0.125rem;
     --tt-toolbar-border-width: 1px;
 
     padding: 0.188rem;
     border-radius: calc(
-      var(--tt-toolbar-padding) + var(--tt-radius-lg) +
-        var(--tt-toolbar-border-width)
+      var(--tt-toolbar-padding) + var(--tt-radius-lg) + var(--tt-toolbar-border-width)
     );
     border: var(--tt-toolbar-border-width) solid var(--tt-toolbar-border-color);
     background-color: var(--tt-toolbar-bg-color);
@@ -86,7 +85,7 @@
     outline: none;
     overflow: hidden;
 
-    &[data-plain="true"] {
+    &[data-plain='true'] {
       padding: 0;
       border-radius: 0;
       border: none;

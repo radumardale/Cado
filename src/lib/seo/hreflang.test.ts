@@ -11,45 +11,45 @@ vi.mock('@/i18n/routing', () => ({
       '/catalog': {
         en: '/catalog',
         ro: '/catalog',
-        ru: '/katalog'
+        ru: '/katalog',
       },
       '/about-us': {
         en: '/about-us',
         ro: '/despre-noi',
-        ru: '/o-kompanii'
+        ru: '/o-kompanii',
       },
       '/blogs': {
         en: '/blogs',
         ro: '/noutati',
-        ru: '/novosti'
+        ru: '/novosti',
       },
       '/blog/[id]': {
         en: '/blog/[id]',
         ro: '/articol/[id]',
-        ru: '/statya/[id]'
+        ru: '/statya/[id]',
       },
       '/catalog/product/[id]': {
         en: '/catalog/product/[id]',
         ro: '/catalog/produs/[id]',
-        ru: '/katalog/tovar/[id]'
+        ru: '/katalog/tovar/[id]',
       },
       '/confirmation/[id]': {
         en: '/confirmation/[id]',
         ro: '/confirmation/[id]',
-        ru: '/podtverzhdenie/[id]'
+        ru: '/podtverzhdenie/[id]',
       },
       '/terms': {
         en: '/terms',
         ro: '/termeni-si-conditii',
-        ru: '/usloviya'
+        ru: '/usloviya',
       },
       '/contacts': {
         en: '/contacts',
         ro: '/contacte',
-        ru: '/kontakty'
-      }
-    }
-  }
+        ru: '/kontakty',
+      },
+    },
+  },
 }));
 
 describe('hreflang.ts', () => {
@@ -154,7 +154,7 @@ describe('hreflang.ts', () => {
         'https://example.com',
         'https://example.com/',
         'https://example.com//',
-        '  https://example.com/  '
+        '  https://example.com/  ',
       ];
 
       testCases.forEach(baseUrl => {
@@ -187,7 +187,7 @@ describe('hreflang.ts', () => {
           { locale: 'ro', url: 'https://test.com/ro/' },
           { locale: 'ru', url: 'https://test.com/ru/' },
           { locale: 'en', url: 'https://test.com/en/' },
-          { locale: 'x-default', url: 'https://test.com/ro/' }
+          { locale: 'x-default', url: 'https://test.com/ro/' },
         ]);
       });
 
@@ -208,7 +208,7 @@ describe('hreflang.ts', () => {
           { locale: 'ro', url: 'https://test.com/ro/' },
           { locale: 'ru', url: 'https://test.com/ru/' },
           { locale: 'en', url: 'https://test.com/en/' },
-          { locale: 'x-default', url: 'https://test.com/ro/' }
+          { locale: 'x-default', url: 'https://test.com/ro/' },
         ]);
       });
     });
@@ -220,41 +220,41 @@ describe('hreflang.ts', () => {
           expected: {
             ro: 'https://test.com/ro/catalog',
             ru: 'https://test.com/ru/katalog',
-            en: 'https://test.com/en/catalog'
-          }
+            en: 'https://test.com/en/catalog',
+          },
         },
         {
           pathname: '/about-us',
           expected: {
             ro: 'https://test.com/ro/despre-noi',
             ru: 'https://test.com/ru/o-kompanii',
-            en: 'https://test.com/en/about-us'
-          }
+            en: 'https://test.com/en/about-us',
+          },
         },
         {
           pathname: '/blogs',
           expected: {
             ro: 'https://test.com/ro/noutati',
             ru: 'https://test.com/ru/novosti',
-            en: 'https://test.com/en/blogs'
-          }
+            en: 'https://test.com/en/blogs',
+          },
         },
         {
           pathname: '/contacts',
           expected: {
             ro: 'https://test.com/ro/contacte',
             ru: 'https://test.com/ru/kontakty',
-            en: 'https://test.com/en/contacts'
-          }
+            en: 'https://test.com/en/contacts',
+          },
         },
         {
           pathname: '/terms',
           expected: {
             ro: 'https://test.com/ro/termeni-si-conditii',
             ru: 'https://test.com/ru/usloviya',
-            en: 'https://test.com/en/terms'
-          }
-        }
+            en: 'https://test.com/en/terms',
+          },
+        },
       ])('should generate correct localized paths for $pathname', ({ pathname, expected }) => {
         const links = generateHreflangLinks(pathname, 'ro');
 
@@ -280,44 +280,87 @@ describe('hreflang.ts', () => {
       test('should replace placeholders when params provided', () => {
         const links = generateHreflangLinks('/blog/[id]', 'ro', { id: 'my-article' });
 
-        expect(links).toContainEqual({ locale: 'ro', url: 'https://test.com/ro/articol/my-article' });
-        expect(links).toContainEqual({ locale: 'ru', url: 'https://test.com/ru/statya/my-article' });
+        expect(links).toContainEqual({
+          locale: 'ro',
+          url: 'https://test.com/ro/articol/my-article',
+        });
+        expect(links).toContainEqual({
+          locale: 'ru',
+          url: 'https://test.com/ru/statya/my-article',
+        });
         expect(links).toContainEqual({ locale: 'en', url: 'https://test.com/en/blog/my-article' });
       });
 
       test('should handle /catalog/product/[id] with params correctly', () => {
-        const links = generateHreflangLinks('/catalog/product/[id]', 'ro', { id: 'test-product-123' });
+        const links = generateHreflangLinks('/catalog/product/[id]', 'ro', {
+          id: 'test-product-123',
+        });
 
-        expect(links).toContainEqual({ locale: 'ro', url: 'https://test.com/ro/catalog/produs/test-product-123' });
-        expect(links).toContainEqual({ locale: 'ru', url: 'https://test.com/ru/katalog/tovar/test-product-123' });
-        expect(links).toContainEqual({ locale: 'en', url: 'https://test.com/en/catalog/product/test-product-123' });
+        expect(links).toContainEqual({
+          locale: 'ro',
+          url: 'https://test.com/ro/catalog/produs/test-product-123',
+        });
+        expect(links).toContainEqual({
+          locale: 'ru',
+          url: 'https://test.com/ru/katalog/tovar/test-product-123',
+        });
+        expect(links).toContainEqual({
+          locale: 'en',
+          url: 'https://test.com/en/catalog/product/test-product-123',
+        });
       });
 
       test('should handle /confirmation/[id] with same path for some locales', () => {
         const links = generateHreflangLinks('/confirmation/[id]', 'ro', { id: 'order-456' });
 
-        expect(links).toContainEqual({ locale: 'ro', url: 'https://test.com/ro/confirmation/order-456' });
-        expect(links).toContainEqual({ locale: 'ru', url: 'https://test.com/ru/podtverzhdenie/order-456' });
-        expect(links).toContainEqual({ locale: 'en', url: 'https://test.com/en/confirmation/order-456' });
+        expect(links).toContainEqual({
+          locale: 'ro',
+          url: 'https://test.com/ro/confirmation/order-456',
+        });
+        expect(links).toContainEqual({
+          locale: 'ru',
+          url: 'https://test.com/ru/podtverzhdenie/order-456',
+        });
+        expect(links).toContainEqual({
+          locale: 'en',
+          url: 'https://test.com/en/confirmation/order-456',
+        });
       });
 
       test('should handle dynamic route with special characters in params', () => {
-        const links = generateHreflangLinks('/blog/[id]', 'ro', { id: 'article-with-special_chars-123' });
+        const links = generateHreflangLinks('/blog/[id]', 'ro', {
+          id: 'article-with-special_chars-123',
+        });
 
-        expect(links).toContainEqual({ locale: 'ro', url: 'https://test.com/ro/articol/article-with-special_chars-123' });
-        expect(links).toContainEqual({ locale: 'ru', url: 'https://test.com/ru/statya/article-with-special_chars-123' });
-        expect(links).toContainEqual({ locale: 'en', url: 'https://test.com/en/blog/article-with-special_chars-123' });
+        expect(links).toContainEqual({
+          locale: 'ro',
+          url: 'https://test.com/ro/articol/article-with-special_chars-123',
+        });
+        expect(links).toContainEqual({
+          locale: 'ru',
+          url: 'https://test.com/ru/statya/article-with-special_chars-123',
+        });
+        expect(links).toContainEqual({
+          locale: 'en',
+          url: 'https://test.com/en/blog/article-with-special_chars-123',
+        });
       });
 
       test('should handle extra params (not used in route)', () => {
         const links = generateHreflangLinks('/blog/[id]', 'ro', {
           id: 'my-article',
           category: 'tech',
-          unused: 'param'
+          unused: 'param',
         });
 
-        expect(links).toContainEqual({ locale: 'ro', url: 'https://test.com/ro/articol/my-article' });
-        expect(links).toContainEqual({ locale: 'ru', url: 'https://test.com/ru/statya/my-article' });
+        expect(links).toContainEqual({
+          locale: 'ro',
+          url: 'https://test.com/ro/articol/my-article',
+        });
+        expect(links).toContainEqual({
+          locale: 'ru',
+          url: 'https://test.com/ru/statya/my-article',
+        });
         expect(links).toContainEqual({ locale: 'en', url: 'https://test.com/en/blog/my-article' });
       });
     });
@@ -334,12 +377,21 @@ describe('hreflang.ts', () => {
       test('should handle non-existent dynamic routes with params', () => {
         const links = generateHreflangLinks('/unknown/[type]/[id]', 'ro', {
           type: 'category',
-          id: '123'
+          id: '123',
         });
 
-        expect(links).toContainEqual({ locale: 'ro', url: 'https://test.com/ro/unknown/category/123' });
-        expect(links).toContainEqual({ locale: 'ru', url: 'https://test.com/ru/unknown/category/123' });
-        expect(links).toContainEqual({ locale: 'en', url: 'https://test.com/en/unknown/category/123' });
+        expect(links).toContainEqual({
+          locale: 'ro',
+          url: 'https://test.com/ro/unknown/category/123',
+        });
+        expect(links).toContainEqual({
+          locale: 'ru',
+          url: 'https://test.com/ru/unknown/category/123',
+        });
+        expect(links).toContainEqual({
+          locale: 'en',
+          url: 'https://test.com/en/unknown/category/123',
+        });
       });
     });
 
@@ -391,12 +443,23 @@ describe('hreflang.ts', () => {
       });
 
       test('should handle params with URL-unsafe characters', () => {
-        const links = generateHreflangLinks('/blog/[id]', 'ro', { id: 'article?with&special=chars' });
+        const links = generateHreflangLinks('/blog/[id]', 'ro', {
+          id: 'article?with&special=chars',
+        });
 
         // Note: The function doesn't URL-encode params, that's the caller's responsibility
-        expect(links).toContainEqual({ locale: 'ro', url: 'https://test.com/ro/articol/article?with&special=chars' });
-        expect(links).toContainEqual({ locale: 'ru', url: 'https://test.com/ru/statya/article?with&special=chars' });
-        expect(links).toContainEqual({ locale: 'en', url: 'https://test.com/en/blog/article?with&special=chars' });
+        expect(links).toContainEqual({
+          locale: 'ro',
+          url: 'https://test.com/ro/articol/article?with&special=chars',
+        });
+        expect(links).toContainEqual({
+          locale: 'ru',
+          url: 'https://test.com/ru/statya/article?with&special=chars',
+        });
+        expect(links).toContainEqual({
+          locale: 'en',
+          url: 'https://test.com/en/blog/article?with&special=chars',
+        });
       });
     });
 
@@ -452,15 +515,32 @@ describe('hreflang.ts', () => {
       const searchParams = new URLSearchParams({ category: 'tech', sort: 'price' });
       const links = generateHreflangLinksWithQuery('/catalog', 'ro', undefined, searchParams);
 
-      expect(links).toContainEqual({ locale: 'ro', url: 'https://test.com/ro/catalog?category=tech&sort=price' });
-      expect(links).toContainEqual({ locale: 'ru', url: 'https://test.com/ru/katalog?category=tech&sort=price' });
-      expect(links).toContainEqual({ locale: 'en', url: 'https://test.com/en/catalog?category=tech&sort=price' });
-      expect(links).toContainEqual({ locale: 'x-default', url: 'https://test.com/ro/catalog?category=tech&sort=price' });
+      expect(links).toContainEqual({
+        locale: 'ro',
+        url: 'https://test.com/ro/catalog?category=tech&sort=price',
+      });
+      expect(links).toContainEqual({
+        locale: 'ru',
+        url: 'https://test.com/ru/katalog?category=tech&sort=price',
+      });
+      expect(links).toContainEqual({
+        locale: 'en',
+        url: 'https://test.com/en/catalog?category=tech&sort=price',
+      });
+      expect(links).toContainEqual({
+        locale: 'x-default',
+        url: 'https://test.com/ro/catalog?category=tech&sort=price',
+      });
     });
 
     test('should handle empty URLSearchParams', () => {
       const searchParams = new URLSearchParams();
-      const linksWithEmptyParams = generateHreflangLinksWithQuery('/catalog', 'ro', undefined, searchParams);
+      const linksWithEmptyParams = generateHreflangLinksWithQuery(
+        '/catalog',
+        'ro',
+        undefined,
+        searchParams
+      );
       const linksWithoutParams = generateHreflangLinks('/catalog', 'ro');
 
       expect(linksWithEmptyParams).toEqual(linksWithoutParams);
@@ -470,8 +550,8 @@ describe('hreflang.ts', () => {
       const searchParams = new URLSearchParams({
         'filter[color]': 'red',
         'filter[size]': 'large',
-        'page': '2',
-        'q': 'search term'
+        page: '2',
+        q: 'search term',
       });
       const links = generateHreflangLinksWithQuery('/catalog', 'ro', undefined, searchParams);
 
@@ -486,7 +566,7 @@ describe('hreflang.ts', () => {
     test('should handle special characters in query params', () => {
       const searchParams = new URLSearchParams({
         q: 'search with spaces & special',
-        'filter[]': 'value'
+        'filter[]': 'value',
       });
       const links = generateHreflangLinksWithQuery('/catalog', 'ro', undefined, searchParams);
 
@@ -506,15 +586,15 @@ describe('hreflang.ts', () => {
 
       expect(links).toContainEqual({
         locale: 'ro',
-        url: 'https://test.com/ro/articol/my-article?sort=newest&category=tech'
+        url: 'https://test.com/ro/articol/my-article?sort=newest&category=tech',
       });
       expect(links).toContainEqual({
         locale: 'ru',
-        url: 'https://test.com/ru/statya/my-article?sort=newest&category=tech'
+        url: 'https://test.com/ru/statya/my-article?sort=newest&category=tech',
       });
       expect(links).toContainEqual({
         locale: 'en',
-        url: 'https://test.com/en/blog/my-article?sort=newest&category=tech'
+        url: 'https://test.com/en/blog/my-article?sort=newest&category=tech',
       });
     });
 
@@ -537,7 +617,7 @@ describe('hreflang.ts', () => {
         category: 'electronics',
         'filter[price]': '100-500',
         sort: 'popularity',
-        page: '3'
+        page: '3',
       });
 
       const links = generateHreflangLinksWithQuery(
@@ -550,15 +630,15 @@ describe('hreflang.ts', () => {
       expect(links).toHaveLength(4);
       expect(links).toContainEqual({
         locale: 'ro',
-        url: 'https://cado.md/ro/catalog/produs/iphone-15-pro-max?category=electronics&filter%5Bprice%5D=100-500&sort=popularity&page=3'
+        url: 'https://cado.md/ro/catalog/produs/iphone-15-pro-max?category=electronics&filter%5Bprice%5D=100-500&sort=popularity&page=3',
       });
       expect(links).toContainEqual({
         locale: 'ru',
-        url: 'https://cado.md/ru/katalog/tovar/iphone-15-pro-max?category=electronics&filter%5Bprice%5D=100-500&sort=popularity&page=3'
+        url: 'https://cado.md/ru/katalog/tovar/iphone-15-pro-max?category=electronics&filter%5Bprice%5D=100-500&sort=popularity&page=3',
       });
       expect(links).toContainEqual({
         locale: 'en',
-        url: 'https://cado.md/en/catalog/product/iphone-15-pro-max?category=electronics&filter%5Bprice%5D=100-500&sort=popularity&page=3'
+        url: 'https://cado.md/en/catalog/product/iphone-15-pro-max?category=electronics&filter%5Bprice%5D=100-500&sort=popularity&page=3',
       });
     });
 
@@ -567,7 +647,7 @@ describe('hreflang.ts', () => {
         { path: '/', params: undefined },
         { path: '/catalog', params: undefined },
         { path: '/blog/[id]', params: { id: 'test' } },
-        { path: '/unknown/path', params: undefined }
+        { path: '/unknown/path', params: undefined },
       ];
 
       testCases.forEach(({ path, params }) => {

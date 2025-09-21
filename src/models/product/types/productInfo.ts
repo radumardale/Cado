@@ -1,13 +1,14 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 
-export type ProductInfo =  {
-    ro: string
-    ru: string
-    [key: string]: string;
-  }
+export type ProductInfo = {
+  ro: string;
+  ru: string;
+  [key: string]: string;
+};
 
-  // ProductInfo Schema
-export const ProductInfoSchema = new mongoose.Schema<ProductInfo>({
+// ProductInfo Schema
+export const ProductInfoSchema = new mongoose.Schema<ProductInfo>(
+  {
     ro: {
       type: String,
       required: true,
@@ -20,5 +21,6 @@ export const ProductInfoSchema = new mongoose.Schema<ProductInfo>({
       type: String,
       required: true,
     },
-},  { _id: false });
-  
+  },
+  { _id: false }
+);

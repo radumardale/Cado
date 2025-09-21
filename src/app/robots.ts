@@ -7,9 +7,7 @@ function getBaseUrl(): string {
   }
 
   // Fallback to production or development URL
-  return process.env.NODE_ENV === 'production'
-    ? 'https://cado.md'
-    : 'http://localhost:3000';
+  return process.env.NODE_ENV === 'production' ? 'https://cado.md' : 'http://localhost:3000';
 }
 
 export default function robots(): MetadataRoute.Robots {
@@ -35,26 +33,12 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: 'Googlebot',
         allow: '/',
-        disallow: [
-          '/admin/',
-          '/api/',
-          '/auth/',
-          '/checkout/',
-          '/confirmation/',
-          '/payment-error/',
-        ],
+        disallow: ['/admin/', '/api/', '/auth/', '/checkout/', '/confirmation/', '/payment-error/'],
       },
       {
         userAgent: 'Yandex',
         allow: '/',
-        disallow: [
-          '/admin/',
-          '/api/',
-          '/auth/',
-          '/checkout/',
-          '/confirmation/',
-          '/payment-error/',
-        ],
+        disallow: ['/admin/', '/api/', '/auth/', '/checkout/', '/confirmation/', '/payment-error/'],
       },
     ],
     sitemap: `${BASE_URL}/sitemap.xml`,

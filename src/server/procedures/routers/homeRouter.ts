@@ -5,8 +5,8 @@ import { getAllHomeBanners } from '../HomeBanner/getAllHomeBanners';
 import { getFirstHomeBanner } from '../HomeBanner/getFirstHomeBanner';
 
 export const homeRouter = router({
-    addHomeBanner: addHomeBannerProcedure,
-    getAllHomeBanners: getAllHomeBanners,
-    getFirstHomeBanner: getFirstHomeBanner,
-    deleteHomebanner: deleteHomeBannerProcedure,
+  addHomeBanner: addHomeBannerProcedure,
+  getAllHomeBanners: getAllHomeBanners,
+  getFirstHomeBanner: getFirstHomeBanner,
+  deleteHomebanner: deleteHomeBannerProcedure,
 });

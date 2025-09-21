@@ -2,21 +2,23 @@
 
 import { Blog } from '@/models/blog/blog';
 import { ActionResponse } from '@/lib/types/ActionResponse';
-import { addBlogRequestSchema } from '@/lib/validation/blog/addBlogRequest'; 
-import { protectedProcedure } from "@/server/trpc";
+import { addBlogRequestSchema } from '@/lib/validation/blog/addBlogRequest';
+import { protectedProcedure } from '@/server/trpc';
 import connectMongo from '@/lib/connect-mongo';
 import { BlogInterface } from '@/models/blog/types/BlogInterface';
 import { DestinationEnum, generateUploadLinks } from '../image/generateUploadLinks';
 
 // Define the response interface for TypeScript type checking
-export interface createBlogResponseInterface extends ActionResponse { // Changed from updateBlogResponseInterface
-  blog: BlogInterface | null,
+export interface createBlogResponseInterface extends ActionResponse {
+  // Changed from updateBlogResponseInterface
+  blog: BlogInterface | null;
   imagesLinks: string[];
 }
 
 export const createBlogProcedure = protectedProcedure
-  .input(addBlogRequestSchema) 
-  .mutation(async ({ input }): Promise<createBlogResponseInterface> => { // Changed return type
+  .input(addBlogRequestSchema)
+  .mutation(async ({ input }): Promise<createBlogResponseInterface> => {
+    // Changed return type
     try {
       await connectMongo();
 
@@ -33,7 +35,7 @@ export const createBlogProcedure = protectedProcedure
       if (input.data.isImageNew) {
         const imageUrl = await generateUploadLinks({
           id: newBlog._id.toString(),
-          destination: DestinationEnum.BLOG
+          destination: DestinationEnum.BLOG,
         });
 
         imagesLinks.push(imageUrl.imageUrl);
@@ -43,7 +45,7 @@ export const createBlogProcedure = protectedProcedure
       for (let i = 0; i < input.data.sectionsImagesCount; i++) {
         const imageUrl = await generateUploadLinks({
           id: newBlog._id.toString(),
-          destination: DestinationEnum.BLOG
+          destination: DestinationEnum.BLOG,
         });
 
         imagesLinks.push(imageUrl.imageUrl);
@@ -54,14 +56,13 @@ export const createBlogProcedure = protectedProcedure
         blog: newBlog,
         imagesLinks: imagesLinks,
       };
-
     } catch (error: any) {
-      console.error("Error creating blog:", error);
+      console.error('Error creating blog:', error);
       return {
         success: false,
-        error: error.message || "Failed to create blog",
+        error: error.message || 'Failed to create blog',
         blog: null,
-        imagesLinks: []
+        imagesLinks: [],
       };
     }
   });

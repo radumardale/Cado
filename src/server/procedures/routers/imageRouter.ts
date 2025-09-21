@@ -5,8 +5,8 @@ import { UploadBlogImagesProcedure } from '../image/uploadBlogImages';
 import { UploadProductImagesProcedure } from '../image/uploadProductImages';
 
 export const imageRouter = router({
-    deleteImage: deleteImageProcedure,
-    uploadProductImages: UploadProductImagesProcedure,
-    uploadBlogImages: UploadBlogImagesProcedure,
-    uploadBannerImage: uploadBannerImageProcedure
+  deleteImage: deleteImageProcedure,
+  uploadProductImages: UploadProductImagesProcedure,
+  uploadBlogImages: UploadBlogImagesProcedure,
+  uploadBannerImage: uploadBannerImageProcedure,
 });

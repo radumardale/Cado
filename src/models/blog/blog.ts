@@ -1,9 +1,9 @@
-import mongoose from "mongoose";
-import { ProductInfoSchema } from "../product/types/productInfo";
-import { BlogInterface } from "./types/BlogInterface";
-import { BlogTags } from "@/lib/enums/BlogTags";
-import { SectionSchema } from "./types/SectionInterface";
-import { SectionImagesSchema } from "./types/SectionImagesInterface";
+import mongoose from 'mongoose';
+import { ProductInfoSchema } from '../product/types/productInfo';
+import { BlogInterface } from './types/BlogInterface';
+import { BlogTags } from '@/lib/enums/BlogTags';
+import { SectionSchema } from './types/SectionInterface';
+import { SectionImagesSchema } from './types/SectionImagesInterface';
 
 // Product Schema
 const BlogSchema = new mongoose.Schema<BlogInterface>({
@@ -13,7 +13,7 @@ const BlogSchema = new mongoose.Schema<BlogInterface>({
   },
   image: {
     type: String,
-    default: ""
+    default: '',
   },
   tag: {
     type: String,
@@ -23,7 +23,7 @@ const BlogSchema = new mongoose.Schema<BlogInterface>({
   date: {
     type: Date,
     required: false,
-    default: new Date()
+    default: new Date(),
   },
   sections: {
     type: [SectionSchema],
@@ -32,10 +32,10 @@ const BlogSchema = new mongoose.Schema<BlogInterface>({
   section_images: {
     type: [SectionImagesSchema],
     required: true,
-    default: []
-  }
+    default: [],
+  },
 });
 
-const Blog = mongoose.models.Blog || mongoose.model<BlogInterface>("Blog", BlogSchema);
+const Blog = mongoose.models.Blog || mongoose.model<BlogInterface>('Blog', BlogSchema);
 
 export { Blog };

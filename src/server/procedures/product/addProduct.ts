@@ -30,25 +30,25 @@ export const addProductProcedure = protectedProcedure
         en: input.data.title.en
           .normalize('NFD')
           .replace(/[\u0300-\u036f]/g, '')
-          .toLowerCase()
+          .toLowerCase(),
       };
 
       // Include normalized_title when creating product
       const product = await Product.create({
         ...input.data,
         normalized_title: normalizedTitle,
-        images: []
+        images: [],
       });
-      
+
       const imagesLinks = [];
-  
+
       for (let i = 0; i < input.data.imagesNumber; i++) {
-          const imageUrl = await generateUploadLinks({
-            id: product._id.toString(),
-            destination: DestinationEnum.PRODUCT
-          });
-  
-          imagesLinks.push(imageUrl.imageUrl);
+        const imageUrl = await generateUploadLinks({
+          id: product._id.toString(),
+          destination: DestinationEnum.PRODUCT,
+        });
+
+        imagesLinks.push(imageUrl.imageUrl);
       }
 
       // Update images
@@ -60,14 +60,13 @@ export const addProductProcedure = protectedProcedure
         imagesLinks: imagesLinks,
         product: product,
       };
-
     } catch (error) {
-      console.error("Error creating product:", error);
+      console.error('Error creating product:', error);
       return {
         success: false,
-        error: error instanceof Error ? error.message : "Failed to create product",
+        error: error instanceof Error ? error.message : 'Failed to create product',
         product: null,
-        imagesLinks: []
+        imagesLinks: [],
       };
     }
   });

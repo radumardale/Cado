@@ -1,17 +1,17 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 
 export type ProductSale = {
-    active: boolean
-    sale_price: number
-  }
+  active: boolean;
+  sale_price: number;
+};
 
 export const SaleSchema = new mongoose.Schema<ProductSale>({
-    active: {
-      type: Boolean,
-      required: true,
-    },
-    sale_price: {
-      type: Number,
-      required: true,
-    },
+  active: {
+    type: Boolean,
+    required: true,
+  },
+  sale_price: {
+    type: Number,
+    required: true,
+  },
 });

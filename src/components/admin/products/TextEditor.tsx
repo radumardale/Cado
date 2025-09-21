@@ -1,10 +1,7 @@
-import { SimpleEditor } from "@/components/tiptap/tiptap-templates/simple/simple-editor";
+import { SimpleEditor } from '@/components/tiptap/tiptap-templates/simple/simple-editor';
 
-export function TextEditor({ ...props  } : React.ComponentProps<"textarea">) {
+export function TextEditor({ ...props }: React.ComponentProps<'textarea'>) {
+  const { value, onChange } = props;
 
-    const { value, onChange } = props;
-
-  return (
-    <SimpleEditor value={value} onChange={onChange} />
-  );
+  return <SimpleEditor value={value} onChange={onChange} />;
 }

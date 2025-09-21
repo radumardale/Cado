@@ -26,7 +26,7 @@ function getQueryClient() {
 export function TRPCReactProvider(
   props: Readonly<{
     children: React.ReactNode;
-  }>,
+  }>
 ) {
   // NOTE: Avoid useState when initializing the query client if you don't
   //       have a suspense boundary between this and the code that may
@@ -37,12 +37,12 @@ export function TRPCReactProvider(
     createTRPCClient<AppRouter>({
       links: [
         httpBatchLink({
-          url: "/api/trpc",
+          url: '/api/trpc',
         }),
       ],
-    }),
+    })
   );
-  
+
   return (
     <QueryClientProvider client={queryClient}>
       <TRPCProvider trpcClient={trpcClient} queryClient={queryClient}>

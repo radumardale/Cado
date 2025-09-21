@@ -3,12 +3,13 @@
 <div align="center">
   <img src="public/logo/CADO-en.svg" alt="CADO Logo" width="200"/>
 
-  **Premium gift sets and personalized products for Moldova**
+**Premium gift sets and personalized products for Moldova**
 
-  [![Next.js](https://img.shields.io/badge/Next.js-15.2-black)](https://nextjs.org/)
-  [![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue)](https://www.typescriptlang.org/)
-  [![React](https://img.shields.io/badge/React-19.0-61dafb)](https://reactjs.org/)
-  [![License](https://img.shields.io/badge/license-Private-red)](LICENSE)
+[![Next.js](https://img.shields.io/badge/Next.js-15.2-black)](https://nextjs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue)](https://www.typescriptlang.org/)
+[![React](https://img.shields.io/badge/React-19.0-61dafb)](https://reactjs.org/)
+[![License](https://img.shields.io/badge/license-Private-red)](LICENSE)
+
 </div>
 
 ## 📋 Overview
@@ -31,6 +32,7 @@ CADO is a modern e-commerce platform specializing in corporate and personal gift
 ## 🚀 Tech Stack
 
 ### Frontend
+
 - **Framework**: [Next.js 15](https://nextjs.org/) with App Router
 - **Language**: [TypeScript](https://www.typescriptlang.org/)
 - **UI Library**: [React 19 RC](https://react.dev/)
@@ -40,6 +42,7 @@ CADO is a modern e-commerce platform specializing in corporate and personal gift
 - **Forms**: [React Hook Form](https://react-hook-form.com/) + [Zod](https://zod.dev/) validation
 
 ### Backend
+
 - **API**: [tRPC](https://trpc.io/) for type-safe APIs
 - **Database**: [MongoDB](https://www.mongodb.com/) with [Mongoose](https://mongoosejs.com/) ODM
 - **Authentication**: [NextAuth.js](https://next-auth.js.org/)
@@ -47,6 +50,7 @@ CADO is a modern e-commerce platform specializing in corporate and personal gift
 - **Email**: SMTP integration with Nodemailer
 
 ### Development
+
 - **Package Manager**: npm
 - **Testing**: [Vitest](https://vitest.dev/) + React Testing Library
 - **Linting**: ESLint with Next.js config
@@ -99,17 +103,20 @@ cado-site/
 ### Quick Start
 
 1. **Clone the repository**
+
 ```bash
 git clone https://github.com/your-org/cado-site.git
 cd cado-site
 ```
 
 2. **Run automated setup** (Recommended)
+
 ```bash
 npm run setup
 ```
 
 This will automatically:
+
 - ✅ Check prerequisites (Node.js, MongoDB)
 - ✅ Start MongoDB locally
 - ✅ Create `.env.local` from production template
@@ -117,6 +124,7 @@ This will automatically:
 - ✅ Optionally sync production database
 
 3. **Start development**
+
 ```bash
 npm run dev
 ```
@@ -126,22 +134,26 @@ npm run dev
 For manual configuration:
 
 1. **Install dependencies**
+
 ```bash
 npm install
 ```
 
 2. **Configure environment**
+
 ```bash
 cp .env.local.example .env.local
 # Edit .env.local with your credentials
 ```
 
 3. **Sync database** (optional)
+
 ```bash
 npm run db:sync  # Sync production data to local MongoDB
 ```
 
 4. **Start server**
+
 ```bash
 npm run dev
 ```
@@ -168,6 +180,7 @@ npm run db:sync -- --skip-export
 ```
 
 **Features:**
+
 - 🔒 **Safe exports** - Production database is never modified
 - 💾 **Local MongoDB** - Complete isolation from production
 - 🖼️ **CDN assets** - Images load from CloudFront
@@ -176,6 +189,7 @@ npm run db:sync -- --skip-export
 ### Environment Configuration
 
 **Local development** uses modified settings:
+
 - MongoDB: `mongodb://localhost:27017/cado`
 - Base URL: `http://localhost:3000`
 - Assets: Production CDN (automatic)
@@ -184,6 +198,7 @@ npm run db:sync -- --skip-export
 ## 📝 Available Scripts
 
 ### Development
+
 ```bash
 # Development with Turbopack
 npm run dev
@@ -202,6 +217,7 @@ npm run lint
 ```
 
 ### Database Management
+
 ```bash
 # Automated local setup
 npm run setup
@@ -281,6 +297,7 @@ npm start
 2. **Environment Variables**
 
    Set these in Vercel Dashboard (Settings → Environment Variables):
+
    ```
    MONGO_URI              # MongoDB Atlas connection string
    NEXTAUTH_SECRET        # Authentication secret key
@@ -345,6 +362,7 @@ Private and Confidential - All Rights Reserved
 ## 📞 Support
 
 For technical support or questions:
+
 - Email: info@cado.md
 - Phone: +373 69 645 153
 

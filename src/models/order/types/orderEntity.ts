@@ -1,4 +1,4 @@
 export enum ClientEntity {
-    Natural = "NATURAL",
-    Legal = "LEGAL"
+  Natural = 'NATURAL',
+  Legal = 'LEGAL',
 }

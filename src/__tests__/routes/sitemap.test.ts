@@ -16,16 +16,16 @@ vi.mock('@/models/blog/blog');
 function createMockQuery<T>(data: T[]): Partial<Query<unknown, unknown>> {
   return {
     select: vi.fn().mockReturnValue({
-      lean: vi.fn().mockResolvedValue(data)
-    })
+      lean: vi.fn().mockResolvedValue(data),
+    }),
   };
 }
 
 function createMockQueryWithError(error: Error): Partial<Query<unknown, unknown>> {
   return {
     select: vi.fn().mockReturnValue({
-      lean: vi.fn().mockRejectedValue(error)
-    })
+      lean: vi.fn().mockRejectedValue(error),
+    }),
   };
 }
 
@@ -33,7 +33,9 @@ describe('Sitemap Generation', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     // Mock successful DB connection
-    vi.mocked(connectMongo).mockResolvedValue({} as unknown as Awaited<ReturnType<typeof connectMongo>>);
+    vi.mocked(connectMongo).mockResolvedValue(
+      {} as unknown as Awaited<ReturnType<typeof connectMongo>>
+    );
   });
 
   it('should generate sitemap with static pages', async () => {
@@ -89,13 +91,11 @@ describe('Sitemap Generation', () => {
   it('should only include in-stock products', async () => {
     const mockProducts = [
       { custom_id: 'prod1', updatedAt: new Date() },
-      { custom_id: 'prod2', updatedAt: new Date() }
+      { custom_id: 'prod2', updatedAt: new Date() },
     ];
 
     // Mock Product.find to return in-stock products
-    const mockFind = vi.fn().mockReturnValue(
-      createMockQuery(mockProducts)
-    );
+    const mockFind = vi.fn().mockReturnValue(createMockQuery(mockProducts));
     vi.mocked(Product.find).mockImplementation(mockFind as typeof Product.find);
 
     // Mock empty blogs
@@ -107,14 +107,12 @@ describe('Sitemap Generation', () => {
 
     // Verify that Product.find was called with the correct filter
     expect(mockFind).toHaveBeenCalledWith({
-      'stock_availability.state': StockState.IN_STOCK
+      'stock_availability.state': StockState.IN_STOCK,
     });
   });
 
   it('should include products with proper URLs', async () => {
-    const mockProducts = [
-      { custom_id: 'test123', updatedAt: new Date('2024-01-01') }
-    ];
+    const mockProducts = [{ custom_id: 'test123', updatedAt: new Date('2024-01-01') }];
 
     vi.mocked(Product.find).mockReturnValue(
       createMockQuery(mockProducts) as unknown as ReturnType<typeof Product.find>
@@ -127,26 +125,22 @@ describe('Sitemap Generation', () => {
     const result = await generateSitemapEntries();
 
     // Check that product URLs are generated correctly for all languages
-    const productUrls = result.filter(entry =>
-      entry.url.includes('/catalog/product/')
-    );
+    const productUrls = result.filter(entry => entry.url.includes('/catalog/product/'));
 
     expect(productUrls).toHaveLength(3); // 3 languages
-    expect(productUrls.some(entry =>
-      entry.url === 'http://localhost:3000/ro/catalog/product/test123'
-    )).toBe(true);
-    expect(productUrls.some(entry =>
-      entry.url === 'http://localhost:3000/ru/catalog/product/test123'
-    )).toBe(true);
-    expect(productUrls.some(entry =>
-      entry.url === 'http://localhost:3000/en/catalog/product/test123'
-    )).toBe(true);
+    expect(
+      productUrls.some(entry => entry.url === 'http://localhost:3000/ro/catalog/product/test123')
+    ).toBe(true);
+    expect(
+      productUrls.some(entry => entry.url === 'http://localhost:3000/ru/catalog/product/test123')
+    ).toBe(true);
+    expect(
+      productUrls.some(entry => entry.url === 'http://localhost:3000/en/catalog/product/test123')
+    ).toBe(true);
   });
 
   it('should include blog posts with proper URLs', async () => {
-    const mockBlogs = [
-      { _id: 'blog123', date: new Date('2024-01-01') }
-    ];
+    const mockBlogs = [{ _id: 'blog123', date: new Date('2024-01-01') }];
 
     vi.mocked(Product.find).mockReturnValue(
       createMockQuery([]) as unknown as ReturnType<typeof Product.find>
@@ -159,14 +153,12 @@ describe('Sitemap Generation', () => {
     const result = await generateSitemapEntries();
 
     // Check that blog URLs are generated correctly
-    const blogUrls = result.filter(entry =>
-      entry.url.includes('/blog/')
-    );
+    const blogUrls = result.filter(entry => entry.url.includes('/blog/'));
 
     expect(blogUrls).toHaveLength(3); // 3 languages
-    expect(blogUrls.some(entry =>
-      entry.url === 'http://localhost:3000/ro/blog/blog123'
-    )).toBe(true);
+    expect(blogUrls.some(entry => entry.url === 'http://localhost:3000/ro/blog/blog123')).toBe(
+      true
+    );
   });
 
   it('should include category and occasion filter pages', async () => {
@@ -181,36 +173,32 @@ describe('Sitemap Generation', () => {
     const result = await generateSitemapEntries();
 
     // Check for category pages
-    const categoryUrls = result.filter(entry =>
-      entry.url.includes('category=')
-    );
+    const categoryUrls = result.filter(entry => entry.url.includes('category='));
     expect(categoryUrls.length).toBeGreaterThan(0);
 
     // Check for specific category
-    expect(categoryUrls.some(entry =>
-      entry.url.includes('category=FOR_HER')
-    )).toBe(true);
+    expect(categoryUrls.some(entry => entry.url.includes('category=FOR_HER'))).toBe(true);
 
     // Check for occasion pages
-    const occasionUrls = result.filter(entry =>
-      entry.url.includes('occasion=')
-    );
+    const occasionUrls = result.filter(entry => entry.url.includes('occasion='));
     expect(occasionUrls.length).toBeGreaterThan(0);
 
     // Check for specific occasion
-    expect(occasionUrls.some(entry =>
-      entry.url.includes('occasion=VALENTINES_DAY')
-    )).toBe(true);
+    expect(occasionUrls.some(entry => entry.url.includes('occasion=VALENTINES_DAY'))).toBe(true);
   });
 
   it('should handle database errors gracefully', async () => {
     // Mock Product.find to throw an error
     vi.mocked(Product.find).mockReturnValue(
-      createMockQueryWithError(new Error('Database connection failed')) as unknown as ReturnType<typeof Product.find>
+      createMockQueryWithError(new Error('Database connection failed')) as unknown as ReturnType<
+        typeof Product.find
+      >
     );
 
     vi.mocked(Blog.find).mockReturnValue(
-      createMockQueryWithError(new Error('Database connection failed')) as unknown as ReturnType<typeof Blog.find>
+      createMockQueryWithError(new Error('Database connection failed')) as unknown as ReturnType<
+        typeof Blog.find
+      >
     );
 
     // Should not throw, but continue with static pages
@@ -234,15 +222,13 @@ describe('Sitemap Generation', () => {
     const result = await generateSitemapEntries();
 
     // Check homepage has highest priority
-    const homepage = result.find(entry =>
-      entry.url === 'http://localhost:3000/ro'
-    );
+    const homepage = result.find(entry => entry.url === 'http://localhost:3000/ro');
     expect(homepage?.priority).toBe(1.0);
     expect(homepage?.changeFrequency).toBe('daily');
 
     // Check catalog has high priority
-    const catalog = result.find(entry =>
-      entry.url.includes('/catalog') && !entry.url.includes('?')
+    const catalog = result.find(
+      entry => entry.url.includes('/catalog') && !entry.url.includes('?')
     );
     expect(catalog?.priority).toBe(0.9);
     expect(catalog?.changeFrequency).toBe('daily');
@@ -279,7 +265,9 @@ describe('Sitemap Route Handler', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     // Mock successful DB connection
-    vi.mocked(connectMongo).mockResolvedValue({} as unknown as Awaited<ReturnType<typeof connectMongo>>);
+    vi.mocked(connectMongo).mockResolvedValue(
+      {} as unknown as Awaited<ReturnType<typeof connectMongo>>
+    );
   });
 
   it('should return XML with correct content-type header', async () => {
@@ -296,7 +284,9 @@ describe('Sitemap Route Handler', () => {
 
     // Check content-type header
     expect(response.headers.get('content-type')).toBe('application/xml; charset=utf-8');
-    expect(response.headers.get('cache-control')).toBe('public, s-maxage=86400, stale-while-revalidate');
+    expect(response.headers.get('cache-control')).toBe(
+      'public, s-maxage=86400, stale-while-revalidate'
+    );
     expect(response.status).toBe(200);
   });
 
@@ -345,9 +335,7 @@ describe('Sitemap Route Handler', () => {
   });
 
   it('should properly escape XML entities', async () => {
-    const mockProducts = [
-      { custom_id: 'test&123', updatedAt: new Date() }
-    ];
+    const mockProducts = [{ custom_id: 'test&123', updatedAt: new Date() }];
 
     vi.mocked(Product.find).mockReturnValue(
       createMockQuery(mockProducts) as unknown as ReturnType<typeof Product.find>
@@ -368,11 +356,15 @@ describe('Sitemap Route Handler', () => {
   it('should handle database errors gracefully', async () => {
     // Mock database error
     vi.mocked(Product.find).mockReturnValue(
-      createMockQueryWithError(new Error('Database error')) as unknown as ReturnType<typeof Product.find>
+      createMockQueryWithError(new Error('Database error')) as unknown as ReturnType<
+        typeof Product.find
+      >
     );
 
     vi.mocked(Blog.find).mockReturnValue(
-      createMockQueryWithError(new Error('Database error')) as unknown as ReturnType<typeof Blog.find>
+      createMockQueryWithError(new Error('Database error')) as unknown as ReturnType<
+        typeof Blog.find
+      >
     );
 
     const response = await GET();
@@ -386,13 +378,9 @@ describe('Sitemap Route Handler', () => {
   });
 
   it('should include products and blogs in XML output', async () => {
-    const mockProducts = [
-      { custom_id: 'product123', updatedAt: new Date('2024-01-01') }
-    ];
+    const mockProducts = [{ custom_id: 'product123', updatedAt: new Date('2024-01-01') }];
 
-    const mockBlogs = [
-      { _id: 'blog456', date: new Date('2024-01-01') }
-    ];
+    const mockBlogs = [{ _id: 'blog456', date: new Date('2024-01-01') }];
 
     vi.mocked(Product.find).mockReturnValue(
       createMockQuery(mockProducts) as unknown as ReturnType<typeof Product.find>

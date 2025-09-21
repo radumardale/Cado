@@ -1,37 +1,37 @@
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 
-import { protectedProcedure } from "@/server/trpc";
-import { Client } from "@/models/client/client";
-import { Order } from "@/models/order/order";
-import { OrderInterface, ResOrderInterface } from "@/models/order/types/orderInterface";
-import { ActionResponse } from "@/lib/types/ActionResponse";
-import { addOrderRequestSchema } from "@/lib/validation/order/addOrderRequest";
-import connectMongo from "@/lib/connect-mongo";
-import { DeliveryMethod  } from "@/models/order/types/deliveryMethod";
+import { protectedProcedure } from '@/server/trpc';
+import { Client } from '@/models/client/client';
+import { Order } from '@/models/order/order';
+import { OrderInterface, ResOrderInterface } from '@/models/order/types/orderInterface';
+import { ActionResponse } from '@/lib/types/ActionResponse';
+import { addOrderRequestSchema } from '@/lib/validation/order/addOrderRequest';
+import connectMongo from '@/lib/connect-mongo';
+import { DeliveryMethod } from '@/models/order/types/deliveryMethod';
 import nodemailer from 'nodemailer';
-import { render } from "@react-email/components";
-import OrderConfirmation from "@/components/emails/OrderConfirmation";
-import { APIClient } from "@/lib/apiCLient";
-import { OrderPaymentMethod } from "@/models/order/types/orderPaymentMethod";
-import { Product } from "@/models/product/product";
+import { render } from '@react-email/components';
+import OrderConfirmation from '@/components/emails/OrderConfirmation';
+import { APIClient } from '@/lib/apiCLient';
+import { OrderPaymentMethod } from '@/models/order/types/orderPaymentMethod';
+import { Product } from '@/models/product/product';
 
 const mailConfig = {
-    service: "gmail",
-    host: "smtp.gmail.com",
-    port: 587,
-    secure: false,
-    auth: {
-        user: process.env.EMAIL_ADDRESS,
-        pass: process.env.EMAIL_PASSWORD
-    }
+  service: 'gmail',
+  host: 'smtp.gmail.com',
+  port: 587,
+  secure: false,
+  auth: {
+    user: process.env.EMAIL_ADDRESS,
+    pass: process.env.EMAIL_PASSWORD,
+  },
 };
 
 const subjectLang = new Map([
-  ["en", "ORDER CONFIRMATION | CADO"],
-  ["ro", "CONFIRMARE COMANDA | CADO"],
-  ["fr", "CONFIRMATION DE COMMANDE | CADO"],
-  ["ru", "ПОДТВЕРЖДЕНИЕ ЗАКАЗА | CADO"]
-])
+  ['en', 'ORDER CONFIRMATION | CADO'],
+  ['ro', 'CONFIRMARE COMANDA | CADO'],
+  ['fr', 'CONFIRMATION DE COMMANDE | CADO'],
+  ['ru', 'ПОДТВЕРЖДЕНИЕ ЗАКАЗА | CADO'],
+]);
 
 export interface addOrderResponse extends ActionResponse {
   paymentForm?: {
@@ -45,8 +45,8 @@ export interface addOrderResponse extends ActionResponse {
       Signature: string;
       Lang: string;
     };
-  },
-  order?: OrderInterface
+  };
+  order?: OrderInterface;
 }
 
 export const addOrderProcedure = protectedProcedure
@@ -57,54 +57,57 @@ export const addOrderProcedure = protectedProcedure
 
       let billingAddress;
       if (input.additional_info.billing_checkbox) {
-            billingAddress = {
-              billing_type: input.additional_info.entity_type,
-              region: input.additional_info.delivery_address.region,
-              city: input.additional_info.delivery_address.city,
-              home_address: input.additional_info.delivery_address.home_address,
-              home_nr: input.additional_info.delivery_address.home_nr,
-              firstname: input.additional_info.user_data.firstname,
-              lastname: input.additional_info.user_data.lastname
-          };
+        billingAddress = {
+          billing_type: input.additional_info.entity_type,
+          region: input.additional_info.delivery_address.region,
+          city: input.additional_info.delivery_address.city,
+          home_address: input.additional_info.delivery_address.home_address,
+          home_nr: input.additional_info.delivery_address.home_nr,
+          firstname: input.additional_info.user_data.firstname,
+          lastname: input.additional_info.user_data.lastname,
+        };
       } else {
         billingAddress = input.additional_info.billing_address;
-        Object.assign(billingAddress, {billing_type: input.additional_info.entity_type});
+        Object.assign(billingAddress, { billing_type: input.additional_info.entity_type });
       }
 
       const additionalInfo = {
         user_data: input.additional_info.user_data,
         billing_address: billingAddress,
-        entity_type: input.additional_info.entity_type
-      }
+        entity_type: input.additional_info.entity_type,
+      };
 
       if (input.delivery_method === DeliveryMethod.HOME_DELIVERY) {
-        Object.assign(additionalInfo, {delivery_address: input.additional_info.delivery_address})
+        Object.assign(additionalInfo, { delivery_address: input.additional_info.delivery_address });
       }
 
       const deliveryDetails = {
         hours_intervals: input.delivery_details.hours_intervals,
         message: input.delivery_details.message,
         comments: input.delivery_details.comments,
-      }
+      };
 
-      if (input.delivery_details.delivery_date) Object.assign(deliveryDetails, {delivery_date: new Date(input.delivery_details.delivery_date)})
+      if (input.delivery_details.delivery_date)
+        Object.assign(deliveryDetails, {
+          delivery_date: new Date(input.delivery_details.delivery_date),
+        });
 
       const client = await Client.findOneAndUpdate(
-        { 
+        {
           email: input.additional_info.user_data.email,
-        }, 
+        },
         {
           firstname: input.additional_info.user_data.firstname,
           lastname: input.additional_info.user_data.lastname,
           tel_number: input.additional_info.user_data.tel_number,
-        }, 
+        },
         { upsert: true, new: true }
       );
 
       if (!client) {
         return {
           success: false,
-          error: "Client not found",
+          error: 'Client not found',
         };
       }
 
@@ -115,31 +118,33 @@ export const addOrderProcedure = protectedProcedure
         payment_method: input.payment_method,
         delivery_method: input.delivery_method,
         total_cost: input.total_cost,
-        delivery_details: deliveryDetails
+        delivery_details: deliveryDetails,
       });
 
       client.orders.push(order._id.toString());
       await client.save();
 
-       // Send notification email to admin
-       const adminEmailHtml = await render(OrderConfirmation({
-        order: { 
-          ...order.toObject(), 
-          _id: order._id.toString(),
-          additional_info: order.additional_info,
-        } as unknown as ResOrderInterface,
-        locale: "ro",
-        paymentMethodName: input.payment_method,
-        regionName: input.additional_info.delivery_address?.region || "",
-        baseUrl: process.env.BASE_URL,
-      }));
+      // Send notification email to admin
+      const adminEmailHtml = await render(
+        OrderConfirmation({
+          order: {
+            ...order.toObject(),
+            _id: order._id.toString(),
+            additional_info: order.additional_info,
+          } as unknown as ResOrderInterface,
+          locale: 'ro',
+          paymentMethodName: input.payment_method,
+          regionName: input.additional_info.delivery_address?.region || '',
+          baseUrl: process.env.BASE_URL,
+        })
+      );
 
       const adminEmailData = {
-          from: process.env.FROM_EMAIL_ADDRESS,
-          to: process.env.CONTACT_EMAIL_ADDRESS,
-          subject: `New Order #${order.custom_id}`,
-          html: adminEmailHtml
-      }
+        from: process.env.FROM_EMAIL_ADDRESS,
+        to: process.env.CONTACT_EMAIL_ADDRESS,
+        subject: `New Order #${order.custom_id}`,
+        html: adminEmailHtml,
+      };
 
       const transporter = nodemailer.createTransport(mailConfig);
 
@@ -149,7 +154,7 @@ export const addOrderProcedure = protectedProcedure
       for (const orderProduct of input.products) {
         await Product.findOneAndUpdate(
           { _id: orderProduct.product._id },
-          { $inc: { "stock_availability.stock": -orderProduct.quantity } }
+          { $inc: { 'stock_availability.stock': -orderProduct.quantity } }
         );
       }
 
@@ -161,49 +166,66 @@ export const addOrderProcedure = protectedProcedure
           LinkUrlSuccess: `${process.env.BASE_URL}/confirmation/${order.custom_id}`,
           LinkUrlCancel: `${process.env.BASE_URL}/confirmation/${order.custom_id}`,
           Signature: null,
-          SignVersion: "v01",
+          SignVersion: 'v01',
           Customer: {
             Code: input.additional_info.user_data.email,
             Name: input.additional_info.user_data.firstname,
             NameFirst: input.additional_info.user_data.firstname,
             NameLast: input.additional_info.user_data.lastname,
             email: input.additional_info.user_data.email,
-            Country: "Moldova",
-            City: input.additional_info.delivery_address?.city || input.additional_info.billing_address?.city || "Chisinau",
-            Address: `${input.additional_info.delivery_address?.home_address || input.additional_info.billing_address?.home_address || ""} ${input.additional_info.delivery_address?.home_nr || input.additional_info.billing_address?.home_nr || ""}`.trim(),
-            PhoneNumber: input.additional_info.user_data.tel_number
+            Country: 'Moldova',
+            City:
+              input.additional_info.delivery_address?.city ||
+              input.additional_info.billing_address?.city ||
+              'Chisinau',
+            Address:
+              `${input.additional_info.delivery_address?.home_address || input.additional_info.billing_address?.home_address || ''} ${input.additional_info.delivery_address?.home_nr || input.additional_info.billing_address?.home_nr || ''}`.trim(),
+            PhoneNumber: input.additional_info.user_data.tel_number,
           },
           Payer: null,
           Currency: 498,
-          ExternalDate: new Date().toLocaleString("sv-SE", { timeZone: "Europe/Chisinau" }).replace(" ", "T") + "Z",
-          ExpiryDate: new Date(Date.now() + 2 * 60 * 60 * 1000).toLocaleString("sv-SE", { timeZone: "Europe/Chisinau" }).replace(" ", "T") + "Z",
+          ExternalDate:
+            new Date().toLocaleString('sv-SE', { timeZone: 'Europe/Chisinau' }).replace(' ', 'T') +
+            'Z',
+          ExpiryDate:
+            new Date(Date.now() + 2 * 60 * 60 * 1000)
+              .toLocaleString('sv-SE', { timeZone: 'Europe/Chisinau' })
+              .replace(' ', 'T') + 'Z',
           Services: [
             {
-              Name: "CADO Order",
+              Name: 'CADO Order',
               Description: `Order #${order.custom_id}`,
               Amount: Math.round(input.total_cost * 100),
               Products: input.products.map((product: any, index: number) => ({
-                GroupName: "Produse",
+                GroupName: 'Produse',
                 GroupId: 1,
                 LineNo: index + 1,
                 Code: product.product.custom_id,
                 Barcode: index + 1001,
                 Name: product.product.title.ro,
                 Description: product.product.title.ro,
-                UnitPrice: Math.round(product.product.sale && product.product.sale.active ? product.product.sale.sale_price * 100 : product.product.price * 100),
+                UnitPrice: Math.round(
+                  product.product.sale && product.product.sale.active
+                    ? product.product.sale.sale_price * 100
+                    : product.product.price * 100
+                ),
                 UnitProduct: product.quantity,
-                Amount: Math.round((product.product.sale && product.product.sale.active ? product.product.sale.sale_price * 100 : product.product.price * 100) * product.quantity)
-              }))
-            }
+                Amount: Math.round(
+                  (product.product.sale && product.product.sale.active
+                    ? product.product.sale.sale_price * 100
+                    : product.product.price * 100) * product.quantity
+                ),
+              })),
+            },
           ],
-          MoneyType: null
+          MoneyType: null,
         };
-  
+
         const response = await APIClient.makeAuthenticatedRequest(
           `${process.env.API_BASE_URL}/api/Payments/Send`,
           {
             method: 'POST',
-            body: JSON.stringify(requestBody)
+            body: JSON.stringify(requestBody),
           }
         );
         const data = await response.json();
@@ -219,44 +241,45 @@ export const addOrderProcedure = protectedProcedure
               LinkUrlCancel: `${process.env.BASE_URL}/payment-error/${order.custom_id}`,
               ExpiryDate: data.ExpiryDate,
               Signature: data.Signature,
-              Lang: 'ro'
-            }
-          }
+              Lang: 'ro',
+            },
+          },
         };
       }
 
       // Send email
 
-      const emailHtml = await render(OrderConfirmation({
-        order: { 
-          ...order.toObject(), 
-          _id: order._id.toString(),
-          additional_info: order.additional_info,
-        } as unknown as ResOrderInterface,
-        locale: "ro",
-        paymentMethodName: input.payment_method,
-        regionName: input.additional_info.delivery_address?.region || "",
-        baseUrl: process.env.BASE_URL,
-      }));
+      const emailHtml = await render(
+        OrderConfirmation({
+          order: {
+            ...order.toObject(),
+            _id: order._id.toString(),
+            additional_info: order.additional_info,
+          } as unknown as ResOrderInterface,
+          locale: 'ro',
+          paymentMethodName: input.payment_method,
+          regionName: input.additional_info.delivery_address?.region || '',
+          baseUrl: process.env.BASE_URL,
+        })
+      );
 
       const emailData = {
-          from: process.env.FROM_EMAIL_ADDRESS,
-          to: input.additional_info.user_data.email,
-          subject: subjectLang.get("ro"),
-          html: emailHtml
-      }
+        from: process.env.FROM_EMAIL_ADDRESS,
+        to: input.additional_info.user_data.email,
+        subject: subjectLang.get('ro'),
+        html: emailHtml,
+      };
 
       await transporter.sendMail(emailData);
 
       return {
         success: true,
-        order: order
+        order: order,
       };
-
     } catch (error: any) {
       return {
         success: false,
-        error: error.message || "Failed to create order",
+        error: error.message || 'Failed to create order',
       };
     }
   });

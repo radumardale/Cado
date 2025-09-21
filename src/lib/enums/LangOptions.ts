@@ -1,7 +1,9 @@
 export enum LangOptions {
-    RO = 'ro',
-    RU = 'ru',
-    EN = 'en'
+  RO = 'ro',
+  RU = 'ru',
+  EN = 'en',
 }
 
-export const LangOptionsArr = Object.values(LangOptions).filter(value => typeof value === 'string') as string[];
+export const LangOptionsArr = Object.values(LangOptions).filter(
+  value => typeof value === 'string'
+) as string[];

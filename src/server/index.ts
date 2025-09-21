@@ -20,7 +20,7 @@ export const appRouter = router({
   homeOcasion: homeOcasionRouter,
   seasonCatalog: seasonCatalogRouter,
   getAllClients: getAllClientsProcedure,
-  contact: sendContactEmailProcedure
+  contact: sendContactEmailProcedure,
 });
 
 export type AppRouter = typeof appRouter;

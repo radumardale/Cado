@@ -19,6 +19,7 @@ A comprehensive analysis of the Cado e-commerce platform codebase revealed **4 d
 #### Affected Areas:
 
 **Enum Definitions:**
+
 - `/src/lib/enums/Ocasions.ts` - Main enum file
   - `export enum Ocasions` → Should be `Occasions`
   - `OcasionsArr` → Should be `OccasionsArr`
@@ -27,33 +28,40 @@ A comprehensive analysis of the Cado e-commerce platform codebase revealed **4 d
   - `ocasionTranslations` → Should be `occasionTranslations`
 
 **Directory Names:**
+
 - `/src/models/homeOcasion/` → Should be `/src/models/homeOccasion/`
 - `/src/server/procedures/homeOcasion/` → Should be `/src/server/procedures/homeOccasion/`
 - `/src/components/admin/home/homeOcasion/` → Should be `/src/components/admin/home/homeOccasion/`
 
 **Model Names:**
+
 - `HomeOcasion` model → Should be `HomeOccasion`
 - `HomeOcasionI` interface → Should be `HomeOccasionI`
 - `homeOcasion` collection → Should be `homeOccasion`
 
 **Router Names:**
+
 - `/src/server/procedures/routers/homeOcasionRouter.ts` → Should be `homeOccasionRouter.ts`
 
 **Function Names:**
+
 - `updateHomeOcasion` → Should be `updateHomeOccasion`
 - `getHomeOcasion` → Should be `getHomeOccasion`
 - `findOcasionsByText` → Should be `findOccasionsByText`
 
 **Component Names:**
+
 - `AdminHomeOcasion` → Should be `AdminHomeOccasion`
 
 **Variable Names:**
 Throughout 76+ files, variables like:
+
 - `ocasions` → Should be `occasions`
 - `selectedOcasions` → Should be `selectedOccasions`
 - `ocasion` → Should be `occasion`
 
 #### Sample Files Affected:
+
 ```
 /src/lib/enums/Ocasions.ts
 /src/models/product/product.ts
@@ -73,12 +81,14 @@ Throughout 76+ files, variables like:
 **Impact**: Low - UI component naming
 
 #### Issues:
+
 - **Component File**: `/src/components/Breadcrums.tsx` → Should be `Breadcrumbs.tsx`
 - **Component Name**: `export default function Breadcrums` → Should be `Breadcrumbs`
 - **Interface Name**: `interface BreadcrumsInterface` → Should be `BreadcrumbsInterface`
 - **Imports**: All files importing this component need updating
 
 #### Files Affected:
+
 ```
 /src/components/Breadcrums.tsx
 /src/components/header/Header.tsx
@@ -96,6 +106,7 @@ Throughout 76+ files, variables like:
 **Impact**: Low - Single interface typo
 
 #### Location:
+
 `/src/server/procedures/image/uploadProductImages.ts`
 
 **Line 10**: `interface UploadProdcutImagesResponse extends ActionResponse {`
@@ -111,11 +122,14 @@ Throughout 76+ files, variables like:
 **Impact**: Medium - Inconsistent abbreviation pattern
 
 #### Analysis:
+
 The abbreviation "recc" appears to be intentional for "recommended" but is inconsistent with standard abbreviations. Should be either:
+
 - `recProducts` (standard abbreviation)
 - `recommendedProducts` (full word)
 
 #### Affected Files:
+
 ```
 /src/server/procedures/reccProducts/updateRecProduct.ts
 /src/server/procedures/reccProducts/getRecProducts.ts
@@ -128,6 +142,7 @@ The abbreviation "recc" appears to be intentional for "recommended" but is incon
 ```
 
 Variables and function names:
+
 - `reccProducts` → `recProducts` or `recommendedProducts`
 - `updateReccProduct` → `updateRecProduct`
 - `getReccProducts` → `getRecProducts`
@@ -136,6 +151,7 @@ Variables and function names:
 ## Spelling Checks Passed ✅
 
 The following common misspellings were checked and **NOT found** in the codebase:
+
 - ✅ receive/recieve
 - ✅ occurred/occured
 - ✅ successful/succesful
@@ -150,23 +166,26 @@ The following common misspellings were checked and **NOT found** in the codebase
 
 ## Impact Assessment
 
-| Issue | Severity | Files | Effort | Breaking Change |
-|-------|----------|-------|--------|-----------------|
-| Ocasion → Occasion | Critical | 76 | 4-6 hours | Yes - Database/API |
-| Breadcrums → Breadcrumbs | Minor | 7 | 30 minutes | No |
-| Prodcut → Product | Minor | 1 | 5 minutes | No |
-| reccProducts → recProducts | Minor | 8 | 1 hour | Potentially |
+| Issue                      | Severity | Files | Effort     | Breaking Change    |
+| -------------------------- | -------- | ----- | ---------- | ------------------ |
+| Ocasion → Occasion         | Critical | 76    | 4-6 hours  | Yes - Database/API |
+| Breadcrums → Breadcrumbs   | Minor    | 7     | 30 minutes | No                 |
+| Prodcut → Product          | Minor    | 1     | 5 minutes  | No                 |
+| reccProducts → recProducts | Minor    | 8     | 1 hour     | Potentially        |
 
 ## Migration Strategy
 
 ### Phase 1: Quick Fixes (Non-breaking)
+
 1. Fix "Prodcut" typo - single interface rename
 2. Fix "Breadcrums" component - update component and imports
 
 ### Phase 2: Medium Fixes
+
 3. Standardize "reccProducts" naming - may affect internal APIs
 
 ### Phase 3: Major Refactor (Breaking Changes)
+
 4. Fix "Ocasion" throughout codebase:
    - Create migration script for database
    - Update all model definitions
@@ -178,18 +197,22 @@ The following common misspellings were checked and **NOT found** in the codebase
 ## Recommendations
 
 ### Immediate Actions
+
 1. **Fix the "Prodcut" typo immediately** - it's a simple fix with no side effects
 2. **Rename Breadcrums component** - low risk, improves code quality
 3. **Plan the "Ocasion" migration carefully** - this requires coordination and possibly database migration
 
 ### Prevention Measures
+
 1. **Add spell-check to CI/CD pipeline** using tools like `cspell`
 2. **Code review checklist** should include spelling verification
 3. **IDE spell-check plugins** for developers
 4. **Naming conventions document** to prevent inconsistent abbreviations
 
 ### Database Considerations for "Ocasion" Fix
+
 Since "Ocasion" appears in database models, fixing it requires:
+
 1. Database migration script to rename collections/fields
 2. Backward compatibility during transition
 3. Update all queries and indexes
@@ -198,6 +221,7 @@ Since "Ocasion" appears in database models, fixing it requires:
 ## Code Quality Assessment
 
 Despite these spelling issues, the overall code quality regarding spelling is **good**:
+
 - No common typos found (receive, occurred, etc.)
 - Comments are generally well-written
 - User-facing strings in message files are correctly spelled
@@ -220,4 +244,4 @@ Despite these issues, the overall spelling quality in the codebase is good, with
 
 ---
 
-*This report serves as a comprehensive guide for addressing all spelling mistakes in the Cado e-commerce platform codebase.*
+_This report serves as a comprehensive guide for addressing all spelling mistakes in the Cado e-commerce platform codebase._

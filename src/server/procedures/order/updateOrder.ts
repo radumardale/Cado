@@ -1,15 +1,15 @@
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 
-import { protectedProcedure } from "@/server/trpc";
-import { Client } from "@/models/client/client";
-import { Order } from "@/models/order/order";
-import { ActionResponse } from "@/lib/types/ActionResponse";
+import { protectedProcedure } from '@/server/trpc';
+import { Client } from '@/models/client/client';
+import { Order } from '@/models/order/order';
+import { ActionResponse } from '@/lib/types/ActionResponse';
 import { updateOrderRequestSchema } from '@/lib/validation/order/updateOrderRequest';
-import connectMongo from "@/lib/connect-mongo";
-import { DeliveryMethod } from "@/models/order/types/deliveryMethod";
+import connectMongo from '@/lib/connect-mongo';
+import { DeliveryMethod } from '@/models/order/types/deliveryMethod';
 
 export interface updateOrderResponse extends ActionResponse {
-  order: any | null
+  order: any | null;
 }
 
 export const updateOrderProcedure = protectedProcedure
@@ -20,56 +20,59 @@ export const updateOrderProcedure = protectedProcedure
 
       let billingAddress;
       if (input.additional_info.billing_checkbox) {
-            billingAddress = {
-              billing_type: input.additional_info.entity_type,
-              region: input.additional_info.delivery_address.region,
-              city: input.additional_info.delivery_address.city,
-              home_address: input.additional_info.delivery_address.home_address,
-              home_nr: input.additional_info.delivery_address.home_nr,
-              firstname: input.additional_info.user_data.firstname,
-              lastname: input.additional_info.user_data.lastname,
-          };
+        billingAddress = {
+          billing_type: input.additional_info.entity_type,
+          region: input.additional_info.delivery_address.region,
+          city: input.additional_info.delivery_address.city,
+          home_address: input.additional_info.delivery_address.home_address,
+          home_nr: input.additional_info.delivery_address.home_nr,
+          firstname: input.additional_info.user_data.firstname,
+          lastname: input.additional_info.user_data.lastname,
+        };
       } else {
         billingAddress = input.additional_info.billing_address;
-        Object.assign(billingAddress, {billing_type: input.additional_info.entity_type})
+        Object.assign(billingAddress, { billing_type: input.additional_info.entity_type });
       }
 
       const additionalInfo = {
         billing_checkbox: input.additional_info.billing_checkbox,
         user_data: input.additional_info.user_data,
         billing_address: billingAddress,
-        entity_type: input.additional_info.entity_type
-      }
+        entity_type: input.additional_info.entity_type,
+      };
 
       if (input.delivery_method === DeliveryMethod.HOME_DELIVERY) {
-        Object.assign(additionalInfo, {delivery_address: input.additional_info.delivery_address})
+        Object.assign(additionalInfo, { delivery_address: input.additional_info.delivery_address });
       }
 
       const deliveryDetails = {
         hours_intervals: input.delivery_details.hours_intervals,
         message: input.delivery_details.message,
         comments: input.delivery_details.comments,
-      }
+      };
 
-      if (input.delivery_details.delivery_date) Object.assign(deliveryDetails, {delivery_date: new Date(input.delivery_details.delivery_date)})
+      if (input.delivery_details.delivery_date)
+        Object.assign(deliveryDetails, {
+          delivery_date: new Date(input.delivery_details.delivery_date),
+        });
 
       const client = await Client.findOneAndUpdate(
-        { 
+        {
           email: input.additional_info.user_data.email,
-        }, 
+        },
         {
           firstname: input.additional_info.user_data.firstname,
           lastname: input.additional_info.user_data.lastname,
           tel_number: input.additional_info.user_data.tel_number,
-        }, 
+        },
         { upsert: true, new: true }
       );
 
       if (!client) {
         return {
           success: false,
-          error: "Client not found",
-          order: null
+          error: 'Client not found',
+          order: null,
         };
       }
 
@@ -84,7 +87,7 @@ export const updateOrderProcedure = protectedProcedure
           delivery_method: input.delivery_method,
           total_cost: input.total_cost || 0,
           delivery_details: deliveryDetails,
-          state: input.state
+          state: input.state,
         },
         { new: true }
       );
@@ -92,8 +95,8 @@ export const updateOrderProcedure = protectedProcedure
       if (!order) {
         return {
           success: false,
-          error: "Order not found",
-          order: null
+          error: 'Order not found',
+          order: null,
         };
       }
 
@@ -107,19 +110,20 @@ export const updateOrderProcedure = protectedProcedure
 
       // Add the billing_checkbox field to the response
       if (plainOrder.additional_info) {
-        (plainOrder.additional_info as any).billing_checkbox = input.additional_info.billing_checkbox;
+        (plainOrder.additional_info as any).billing_checkbox =
+          input.additional_info.billing_checkbox;
       }
-      
+
       return {
         success: true,
-        order: plainOrder
+        order: plainOrder,
       };
     } catch (error: any) {
-      console.error("Error updating order:", error);
+      console.error('Error updating order:', error);
       return {
         success: false,
-        error: error.message || "Failed to update order",
-        order: null
+        error: error.message || 'Failed to update order',
+        order: null,
       };
     }
   });

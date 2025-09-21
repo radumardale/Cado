@@ -23,9 +23,7 @@ function getBaseUrl(): string {
     baseUrl = process.env.BASE_URL;
   } else {
     // Fallback to production or development URL
-    baseUrl = process.env.NODE_ENV === 'production'
-      ? 'https://cado.md'
-      : 'http://localhost:3000';
+    baseUrl = process.env.NODE_ENV === 'production' ? 'https://cado.md' : 'http://localhost:3000';
   }
 
   // Remove trailing slash if present to avoid double slashes in URLs
@@ -66,16 +64,18 @@ export async function generateSitemapEntries(): Promise<SitemapEntry[]> {
         lastModified: new Date(),
         changeFrequency: page.changeFreq,
         priority: page.priority,
-        alternates: { languages: alternates }
+        alternates: { languages: alternates },
       });
     }
   }
 
   // Dynamic product pages - only IN_STOCK products
   try {
-    const products = await Product.find({
-      'stock_availability.state': StockState.IN_STOCK
-    }).select('custom_id updatedAt').lean() as Array<{ custom_id: string; updatedAt?: Date }>;
+    const products = (await Product.find({
+      'stock_availability.state': StockState.IN_STOCK,
+    })
+      .select('custom_id updatedAt')
+      .lean()) as Array<{ custom_id: string; updatedAt?: Date }>;
 
     for (const product of products) {
       for (const locale of SUPPORTED_LOCALES) {
@@ -91,7 +91,7 @@ export async function generateSitemapEntries(): Promise<SitemapEntry[]> {
           lastModified: product.updatedAt || new Date(),
           changeFrequency: 'weekly',
           priority: 0.8,
-          alternates: { languages: alternates }
+          alternates: { languages: alternates },
         });
       }
     }
@@ -101,9 +101,10 @@ export async function generateSitemapEntries(): Promise<SitemapEntry[]> {
 
   // Dynamic blog pages
   try {
-    const blogs = await Blog.find({})
-      .select('_id date')
-      .lean() as Array<{ _id: string; date?: Date }>;
+    const blogs = (await Blog.find({}).select('_id date').lean()) as Array<{
+      _id: string;
+      date?: Date;
+    }>;
 
     for (const blog of blogs) {
       for (const locale of SUPPORTED_LOCALES) {
@@ -119,7 +120,7 @@ export async function generateSitemapEntries(): Promise<SitemapEntry[]> {
           lastModified: blog.date || new Date(),
           changeFrequency: 'monthly',
           priority: 0.6,
-          alternates: { languages: alternates }
+          alternates: { languages: alternates },
         });
       }
     }
@@ -134,7 +135,8 @@ export async function generateSitemapEntries(): Promise<SitemapEntry[]> {
 
       const alternates: Record<string, string> = {};
       SUPPORTED_LOCALES.forEach(altLocale => {
-        alternates[altLocale] = `${BASE_URL}/${altLocale}/catalog?category=${encodeURIComponent(category)}`;
+        alternates[altLocale] =
+          `${BASE_URL}/${altLocale}/catalog?category=${encodeURIComponent(category)}`;
       });
 
       sitemapEntries.push({
@@ -142,7 +144,7 @@ export async function generateSitemapEntries(): Promise<SitemapEntry[]> {
         lastModified: new Date(),
         changeFrequency: 'daily',
         priority: 0.7,
-        alternates: { languages: alternates }
+        alternates: { languages: alternates },
       });
     }
   }
@@ -154,7 +156,8 @@ export async function generateSitemapEntries(): Promise<SitemapEntry[]> {
 
       const alternates: Record<string, string> = {};
       SUPPORTED_LOCALES.forEach(altLocale => {
-        alternates[altLocale] = `${BASE_URL}/${altLocale}/catalog?occasion=${encodeURIComponent(occasion)}`;
+        alternates[altLocale] =
+          `${BASE_URL}/${altLocale}/catalog?occasion=${encodeURIComponent(occasion)}`;
       });
 
       sitemapEntries.push({
@@ -162,7 +165,7 @@ export async function generateSitemapEntries(): Promise<SitemapEntry[]> {
         lastModified: new Date(),
         changeFrequency: 'daily',
         priority: 0.7,
-        alternates: { languages: alternates }
+        alternates: { languages: alternates },
       });
     }
   }

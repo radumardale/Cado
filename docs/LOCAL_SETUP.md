@@ -11,6 +11,7 @@ This guide will help you set up a local development environment for the Cado e-c
 ### Installing Prerequisites
 
 #### macOS
+
 ```bash
 # Install MongoDB
 brew tap mongodb/brew
@@ -22,6 +23,7 @@ brew install mongodb-database-tools
 ```
 
 #### Ubuntu/Debian
+
 ```bash
 # Install MongoDB
 # Follow: https://www.mongodb.com/docs/manual/tutorial/install-mongodb-on-ubuntu/
@@ -43,6 +45,7 @@ npm run setup
 ```
 
 This script will:
+
 - ✅ Check all prerequisites
 - ✅ Start MongoDB locally
 - ✅ Create `.env.local` with correct settings
@@ -56,6 +59,7 @@ If you prefer to set up manually:
 #### Step 1: Environment Variables
 
 Your `.env.local` has been configured with:
+
 - `MONGO_URI=mongodb://localhost:27017/cado` (local MongoDB)
 - `BASE_URL=http://localhost:3000` (local URL)
 - AWS credentials (for CDN images)
@@ -134,17 +138,18 @@ All database scripts are located in `/scripts/`:
 
 ### Key Differences: Local vs Production
 
-| Setting | Production | Local |
-|---------|------------|-------|
-| `MONGO_URI` | MongoDB Atlas | `mongodb://localhost:27017/cado` |
-| `BASE_URL` | `https://cado.md` | `http://localhost:3000` |
-| AWS S3 | Production bucket | Same (images via CDN) |
-| Email | Real SMTP | Can mock or use test service |
-| Payments | Live Paynet API | Can mock or use sandbox |
+| Setting     | Production        | Local                            |
+| ----------- | ----------------- | -------------------------------- |
+| `MONGO_URI` | MongoDB Atlas     | `mongodb://localhost:27017/cado` |
+| `BASE_URL`  | `https://cado.md` | `http://localhost:3000`          |
+| AWS S3      | Production bucket | Same (images via CDN)            |
+| Email       | Real SMTP         | Can mock or use test service     |
+| Payments    | Live Paynet API   | Can mock or use sandbox          |
 
 ### Assets Strategy
 
 Images and files are served from the production CloudFront CDN:
+
 - ✅ No need to download assets locally
 - ✅ Always up-to-date with production
 - ✅ Saves disk space and bandwidth
@@ -155,6 +160,7 @@ Images and files are served from the production CloudFront CDN:
 ### MongoDB Issues
 
 **MongoDB not starting:**
+
 ```bash
 # Check if MongoDB is installed
 which mongod
@@ -170,6 +176,7 @@ tail -f /usr/local/var/log/mongodb/mongo.log
 ```
 
 **Port 27017 already in use:**
+
 ```bash
 # Find what's using the port
 lsof -i :27017
@@ -181,17 +188,20 @@ kill -9 <PID>
 ### Database Sync Issues
 
 **"mongodump not found":**
+
 ```bash
 # Install MongoDB Database Tools
 brew install mongodb-database-tools  # macOS
 ```
 
 **Connection timeout during export:**
+
 - Check your internet connection
 - Verify production credentials in `.env.production.local`
 - Try using a VPN if behind a firewall
 
 **Import fails:**
+
 - Ensure MongoDB is running locally
 - Check available disk space
 - Verify local MongoDB connection: `mongosh mongodb://localhost:27017`
@@ -199,11 +209,13 @@ brew install mongodb-database-tools  # macOS
 ### Application Issues
 
 **"Cannot connect to database":**
+
 - Verify MongoDB is running
 - Check `MONGO_URI` in `.env.local`
 - Ensure database was imported successfully
 
 **Images not loading:**
+
 - Check AWS credentials in `.env.local`
 - Verify CloudFront CDN is accessible
 - Check browser console for CORS errors
@@ -246,11 +258,13 @@ npm run db:export  # Backup production state
 For complete isolation from production:
 
 **Email Testing:**
+
 - Use [Mailtrap](https://mailtrap.io/) for email testing
 - Or [MailHog](https://github.com/mailhog/MailHog) locally
 - Update email credentials in `.env.local`
 
 **Payment Testing:**
+
 - Request Paynet sandbox credentials
 - Or create mock API endpoints
 - Update API URLs in `.env.local`
@@ -258,6 +272,7 @@ For complete isolation from production:
 ### Local S3 Alternative (Optional)
 
 To avoid using production AWS:
+
 - Install [LocalStack](https://localstack.cloud/)
 - Or use [MinIO](https://min.io/)
 - Update AWS endpoints in code
@@ -274,6 +289,7 @@ If you encounter issues:
 ## Summary
 
 Your local environment now:
+
 - ✅ Uses production data locally
 - ✅ Isolated from production systems
 - ✅ Images load from CDN

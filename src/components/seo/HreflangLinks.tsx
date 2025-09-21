@@ -25,8 +25,8 @@ export function generateHreflangMetadata({ pathname, locale, params }: HreflangL
       canonical,
       languages: {
         ...languages,
-        'x-default': xDefault
-      }
-    }
+        'x-default': xDefault,
+      },
+    },
   };
 }

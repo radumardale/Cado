@@ -1,15 +1,14 @@
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 
-import { test } from "vitest";
+import { test } from 'vitest';
 
-test.skip("addOrder", async () => {
-
-    await updateProductImageDomains()
-})
+test.skip('addOrder', async () => {
+  await updateProductImageDomains();
+});
 
 // scripts/updateProductImageDomains.ts
 import { Product } from '@/models/product/product';
-import connectMongo from "@/lib/connect-mongo";
+import connectMongo from '@/lib/connect-mongo';
 
 const OLD_DOMAIN = 'd3rus23k068yq9.cloudfront.net';
 const NEW_DOMAIN = 'd3rus23k068yq9.cloudfront.net';
@@ -30,7 +29,7 @@ async function updateProductImageDomains(): Promise<UpdateResult> {
     success: false,
     updatedCount: 0,
     errors: [],
-    details: []
+    details: [],
   };
 
   try {
@@ -72,8 +71,14 @@ async function updateProductImageDomains(): Promise<UpdateResult> {
               let hasContentUpdates = false;
 
               Object.keys((product as any)[field]).forEach(lang => {
-                if (typeof (product as any)[field][lang] === 'string' && (product as any)[field][lang].includes(OLD_DOMAIN)) {
-                  updatedContent[lang] = (product as any)[field][lang].replace(new RegExp(OLD_DOMAIN, 'g'), NEW_DOMAIN);
+                if (
+                  typeof (product as any)[field][lang] === 'string' &&
+                  (product as any)[field][lang].includes(OLD_DOMAIN)
+                ) {
+                  updatedContent[lang] = (product as any)[field][lang].replace(
+                    new RegExp(OLD_DOMAIN, 'g'),
+                    NEW_DOMAIN
+                  );
                   hasContentUpdates = true;
                   fieldsUpdated.push(`${field}.${lang}`);
                 } else {
@@ -86,8 +91,14 @@ async function updateProductImageDomains(): Promise<UpdateResult> {
               }
             }
             // Handle string content
-            else if (typeof (product as any)[field] === 'string' && (product as any)[field].includes(OLD_DOMAIN)) {
-              updates[field] = (product as any)[field].replace(new RegExp(OLD_DOMAIN, 'g'), NEW_DOMAIN);
+            else if (
+              typeof (product as any)[field] === 'string' &&
+              (product as any)[field].includes(OLD_DOMAIN)
+            ) {
+              updates[field] = (product as any)[field].replace(
+                new RegExp(OLD_DOMAIN, 'g'),
+                NEW_DOMAIN
+              );
               fieldsUpdated.push(field);
             }
           }
@@ -100,14 +111,15 @@ async function updateProductImageDomains(): Promise<UpdateResult> {
           result.details.push({
             productId: product._id.toString(),
             title: product.title?.ro || product.title?.en || 'Unknown',
-            fieldsUpdated
+            fieldsUpdated,
           });
 
-          console.log(`✅ Updated product: ${product.title?.ro || product._id} (${fieldsUpdated.length} fields)`);
+          console.log(
+            `✅ Updated product: ${product.title?.ro || product._id} (${fieldsUpdated.length} fields)`
+          );
         } else {
           console.log(`⏭️  No updates needed for product: ${product.title?.ro || product._id}`);
         }
-
       } catch (error) {
         const errorMsg = `Failed to update product ${product._id}: ${error}`;
         result.errors.push(errorMsg);
@@ -119,9 +131,8 @@ async function updateProductImageDomains(): Promise<UpdateResult> {
     console.log(`\n📊 Update Summary:`);
     console.log(`✅ Successfully updated: ${result.updatedCount} products`);
     console.log(`❌ Errors: ${result.errors.length}`);
-    
-    return result;
 
+    return result;
   } catch (error) {
     const errorMsg = `Database connection or query failed: ${error}`;
     result.errors.push(errorMsg);

@@ -1,5 +1,5 @@
-import mongoose from "mongoose";
-import { UserInterface } from "./types/UserInterface";
+import mongoose from 'mongoose';
+import { UserInterface } from './types/UserInterface';
 
 // User Schema
 const UserSchema = new mongoose.Schema<UserInterface>({
@@ -13,6 +13,6 @@ const UserSchema = new mongoose.Schema<UserInterface>({
   },
 });
 
-const User = mongoose.models.User || mongoose.model<UserInterface>("User", UserSchema);
+const User = mongoose.models.User || mongoose.model<UserInterface>('User', UserSchema);
 
 export { User };
