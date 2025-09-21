@@ -6,6 +6,7 @@ import Footer from "@/components/footer/Footer";
 import SortBy from "@/lib/enums/SortBy";
 import { Metadata } from "next";
 import { getLocale, getTranslations, setRequestLocale } from "next-intl/server";
+import { generateHreflangMetadata } from "@/components/seo/HreflangLinks";
 export const dynamic = 'force-static'
 export const revalidate = 3600; // Cache for 1 hour
 
@@ -14,18 +15,24 @@ export async function generateMetadata() : Promise<Metadata> {
   const desc_t = await getTranslations('PageDescriptions');
 
   const locale = await getLocale();
-    
-    const imagePaths = {
-      en: "/opengraph/en.jpg",
-      ru: "/opengraph/ru.jpg",
-      ro: "/opengraph/ro.jpg",
-    }
-  
-    const imageUrl = imagePaths[locale as keyof typeof imagePaths] || imagePaths.ro;
- 
+
+  const imagePaths = {
+    en: "/opengraph/en.jpg",
+    ru: "/opengraph/ru.jpg",
+    ro: "/opengraph/ro.jpg",
+  }
+
+  const imageUrl = imagePaths[locale as keyof typeof imagePaths] || imagePaths.ro;
+
+  const hreflangMeta = generateHreflangMetadata({
+    pathname: '/catalog',
+    locale: locale as 'ro' | 'ru' | 'en'
+  });
+
   return {
     title: t('catalog'),
     description: desc_t('catalog'),
+    ...hreflangMeta,
     openGraph: {
       type: "website",
       title: t('catalog'),

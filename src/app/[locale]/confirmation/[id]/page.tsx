@@ -2,14 +2,24 @@ import ConfirmationContent from '@/components/confirmation/ConfirmationContent';
 import Footer from '@/components/footer/Footer';
 import Header from '@/components/header/Header';
 import { getQueryClient, HydrateClient, prefetch, trpc } from '@/app/_trpc/server';
-import { getTranslations } from 'next-intl/server';
+import { getLocale, getTranslations } from 'next-intl/server';
+import { generateHreflangMetadata } from '@/components/seo/HreflangLinks';
 
-export async function generateMetadata() {
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
   const t = await getTranslations('PageTitles');
- 
+  const locale = await getLocale();
+  const { id } = await params;
+
+  const hreflangMeta = generateHreflangMetadata({
+    pathname: '/confirmation/[id]',
+    locale: locale as 'ro' | 'ru' | 'en',
+    params: { id }
+  });
+
   return {
     title: t('confirmation'),
     description: '',
+    ...hreflangMeta,
   };
 }
 
