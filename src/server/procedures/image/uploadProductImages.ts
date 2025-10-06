@@ -7,13 +7,13 @@ import { deleteFromBucket } from './deleteObjects/deleteFromBucket';
 import { uploadProductImageRequestSchema } from '@/lib/validation/image/uploadProductImagesRequest';
 import { Product } from '@/models/product/product';
 
-interface UploadProdcutImagesResponse extends ActionResponse {
-  images: string[];
+interface UploadProductImagesResponse extends ActionResponse {
+    images: string[];
 }
 
 export const UploadProductImagesProcedure = protectedProcedure
   .input(uploadProductImageRequestSchema)
-  .mutation(async ({ input }): Promise<UploadProdcutImagesResponse> => {
+  .mutation(async ({ input }): Promise<UploadProductImagesResponse> => {
     try {
       await connectMongo();
 
