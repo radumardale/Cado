@@ -106,7 +106,6 @@ export default function AdminBlogForm({ id }: AdminBlogFormProps) {
                 }
             });
 
-            // Also reset your state variables
             setSelectedImage(data.blog.image || null);
             setInitialSelectedImage(data.blog.image || null);
             setSectionImages(data.blog.section_images || []);
