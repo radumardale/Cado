@@ -1,12 +1,12 @@
 'use client';
 
 import { Link } from '@/i18n/navigation';
-import { ResOrderInterface } from '@/models/order/types/orderInterface';
+import { AggregatedOrderInterface } from '@/models/order/types/orderInterface';
 import { orderStateColors } from '@/models/order/types/orderState';
 import { useTranslations } from 'next-intl';
 
 interface OrdersTableProps {
-  queryOrders: ResOrderInterface[];
+  queryOrders: AggregatedOrderInterface[];
 }
 
 export default function OrdersTable({ queryOrders }: OrdersTableProps) {
@@ -37,7 +37,7 @@ export default function OrdersTable({ queryOrders }: OrdersTableProps) {
         </p>
         <p className='font-manrope font-semibold leading-5'>{orders_t('status')}</p>
       </div>
-      {queryOrders.map((order: ResOrderInterface, index) => {
+      {queryOrders.map((order: AggregatedOrderInterface, index) => {
         return (
           <Link
             href={{ pathname: '/admin/orders/[id]', params: { id: order.custom_id } }}
