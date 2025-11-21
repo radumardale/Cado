@@ -205,30 +205,48 @@ When creating pull requests, follow these formatting rules:
 
 ## Quality Checks Before Commits & PRs
 
-### ⚠️ MANDATORY: Pre-Push Checklist
+### ✅ Automated Pre-Commit Hooks (Husky)
 
-**Claude Code MUST run these checks before pushing commits or creating PRs:**
+**Quality checks now run automatically via Husky pre-commit hooks!**
 
-1. **TypeScript Check** - MUST pass with no errors
+The project uses a **smart tiered strategy** that optimizes for speed while maintaining safety:
 
-   ```bash
-   npm run typecheck
-   ```
+#### Tier 1: Skip Safe Files (Instant ⚡)
+- Documentation only (`docs/**/*.md`, `README.md`)
+- Config files (`.gitignore`, `.prettierrc`, `.env.example`)
+- Commits are instant when only these files change
 
-2. **Build Check** - MUST complete successfully
+#### Tier 2: Fast Incremental Checks (5-15s ⚡⚡)
+- TypeScript type-checking on changed files only (via `tsc-files`)
+- Auto-formatting with Prettier
+- Runs for all code changes
 
-   ```bash
-   npm run build
-   ```
+#### Tier 3: Full Build (30-60s)
+Only triggered when critical paths change:
+- `src/server/` - tRPC procedures and API logic
+- `src/models/` - Mongoose models
+- `src/lib/` - Core utilities
+- `src/app/[locale]/` - Internationalized routing
+- Type definitions (`.d.ts`), build configs (`tsconfig.json`, `next.config.js`)
 
-3. **Only proceed if BOTH checks pass!**
+### How It Works
 
-**If errors are found:**
+**The hook runs automatically on every commit:**
+1. Analyzes which files you're committing
+2. Skips checks entirely for docs/config changes (instant)
+3. Runs incremental TypeScript checks for code changes (fast)
+4. Runs full build only for critical backend/routing changes (thorough)
 
-- Fix all TypeScript errors first
-- Resolve any build issues
-- Re-run both checks
-- Only push/create PR when everything passes
+**If checks fail:**
+- Fix the issues immediately
+- Re-attempt the commit (hook will run again)
+- Only commit when checks pass
+
+**To bypass hooks (emergencies only):**
+```bash
+git commit --no-verify -m "message"
+```
+⚠️ Use sparingly - CI will still catch issues
 
 ### Why This Matters
 
@@ -236,13 +254,16 @@ When creating pull requests, follow these formatting rules:
 - **Build failures** mean the code won't deploy
 - **Early detection** saves time and prevents broken deployments
 - **Clean PRs** are easier to review and merge
+- **Token efficiency** for Claude Code (75-85% savings on commit operations)
 
 ### Claude Code Behavior
 
-When asked to commit/push/create PR, Claude Code should:
+**With Husky hooks active:**
+1. Claude Code can commit directly without manual checks
+2. Husky automatically runs appropriate checks based on changed files
+3. If hooks fail, Claude Code sees the errors and fixes them
+4. Baseline and final verification checks still run (before starting work and before creating PRs)
 
-1. Automatically run `npm run typecheck`
-2. If TypeScript check passes, run `npm run build`
-3. If both pass, proceed with git operations
-4. If either fails, stop and fix the issues first
-5. Inform the user of any issues found and fixed
+**For comprehensive validation (before PRs):**
+- Run full checks manually: `npm run typecheck && npm run build`
+- Ensures everything is ready for code review
