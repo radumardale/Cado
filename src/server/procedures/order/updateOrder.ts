@@ -115,7 +115,7 @@ export const updateOrderProcedure = protectedProcedure
           ...plainOrder.additional_info,
           billing_checkbox: input.additional_info.billing_checkbox,
         },
-      } as ResOrderInterface;
+      } as unknown as ResOrderInterface;
 
       return {
         success: true,
