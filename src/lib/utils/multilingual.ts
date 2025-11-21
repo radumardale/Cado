@@ -4,6 +4,15 @@
  */
 
 /**
+ * Helper function to check if a string is non-empty (after trimming).
+ * @param text - The text to check (can be undefined)
+ * @returns True if text exists and is not empty after trimming
+ */
+function isNonEmptyString(text: string | undefined): boolean {
+  return text !== undefined && text.trim() !== '';
+}
+
+/**
  * Type guard to check if a value is a valid MultilingualString.
  * Validates that all three required language fields are present and are strings.
  *
@@ -123,13 +132,13 @@ export function getLocalizedText(
 ): string {
   const text = multilingualString[locale];
 
-  if (text && text.trim() !== '') {
+  if (isNonEmptyString(text)) {
     return text;
   }
 
   if (fallbackLocale) {
     const fallbackText = multilingualString[fallbackLocale];
-    if (fallbackText && fallbackText.trim() !== '') {
+    if (isNonEmptyString(fallbackText)) {
       return fallbackText;
     }
   }
