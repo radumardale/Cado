@@ -28,7 +28,7 @@ interface HeaderProps {
 }
 
 export default function Header({ category, breadcrumbs = false, productInfo }: HeaderProps) {
-  const locale = useLocale();
+  const locale = useLocale() as LocaleCode;
 
   const getLogoSrc = (locale: string) => {
     switch (locale) {

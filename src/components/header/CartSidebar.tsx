@@ -14,7 +14,7 @@ import { useTranslations } from 'next-intl';
 interface CartSidebarInterface {
   setSidebarOpen: (v: boolean) => void;
   items: CartInterface[];
-  locale: string;
+  locale: LocaleCode;
   setValue: (v: CartInterface[]) => void;
 }
 

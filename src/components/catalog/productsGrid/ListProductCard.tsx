@@ -19,7 +19,7 @@ interface ProductCardInterface {
 export default function ListProductCard({ product }: ProductCardInterface) {
   const t = useTranslations('CatalogPage.ProductsSection.ListProduct');
 
-  const locale = useLocale();
+  const locale = useLocale() as LocaleCode;
   const [value, setValue] = useLocalStorage<CartInterface[]>('cart', []);
   const [activeIndex, setActiveIndex] = useState(-1);
 

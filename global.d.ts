@@ -21,26 +21,26 @@ declare global {
    * Core multilingual type for required text in all supported languages.
    * Used throughout the application for product info, category names, etc.
    *
-   * Supports both named access (obj.ro) and dynamic access (obj[locale]).
+   * For type-safe dynamic access, use LocaleCode type for locale parameters.
+   * For runtime dynamic access with fallback, use getLocalizedText() utility.
    */
   type MultilingualString = {
     ro: string;
     ru: string;
     en: string;
-    [key: string]: string;
   };
 
   /**
    * Optional multilingual type for text that may not be required in all languages.
    * Used for optional product details like material, color descriptions, etc.
    *
-   * Supports both named access (obj.ro) and dynamic access (obj[locale]).
+   * For type-safe dynamic access, use LocaleCode type for locale parameters.
+   * For runtime dynamic access with fallback, use getLocalizedText() utility.
    */
   type OptionalMultilingualString = {
     ro?: string;
     ru?: string;
     en?: string;
-    [key: string]: string | undefined;
   };
 
   /**

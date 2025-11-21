@@ -13,7 +13,7 @@ import { useQuery } from '@tanstack/react-query';
 export default function AdminBlogGrid() {
   const trpc = useTRPC();
   const { data, isLoading } = useQuery(trpc.blog.getAllBlogs.queryOptions());
-  const locale = useLocale();
+  const locale = useLocale() as LocaleCode;
 
   const t = useTranslations('Admin.AdminBlog');
 

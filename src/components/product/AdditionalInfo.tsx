@@ -7,7 +7,7 @@ import styles from './product.module.scss';
 
 interface AdditionalInfoInterface {
   product: ProductInterface;
-  locale: string;
+  locale: LocaleCode;
 }
 
 export default function AdditionalInfo({ product, locale }: AdditionalInfoInterface) {

@@ -24,7 +24,7 @@ export default function ProductCard({
   section = 'RECOMMENDATIONS',
   newLine = false,
 }: ProductCardInterface) {
-  const locale = useLocale();
+  const locale = useLocale() as LocaleCode;
   const router = useRouter();
   const [value, setValue] = useLocalStorage<CartInterface[]>('cart', []);
   const [isImageLoaded, setImageLoaded] = useState(false);

@@ -21,7 +21,7 @@ export default function ConfirmationContent({ id }: ConfirmationContentProps) {
 
   const trpc = useTRPC();
   const { data } = useQuery(trpc.order.getOrderById.queryOptions({ id }));
-  const locale = useLocale();
+  const locale = useLocale() as LocaleCode;
   const paymentMethodsT = useTranslations('Admin.AdminOrders.payment_methods');
   const deliveryRegionsT = useTranslations('CheckoutPage.CheckoutForm.delivery_regions');
   const [, setValue] = useLocalStorage<CartInterface[]>('cart', []);

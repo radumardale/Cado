@@ -23,7 +23,7 @@ interface AdminHeaderProps {
 }
 
 export default function AdminHeader({ page, href, id }: AdminHeaderProps) {
-  const locale = useLocale();
+  const locale = useLocale() as LocaleCode;
   const t = useTranslations('Admin.Sidebar');
   const admin_t = useTranslations('Admin');
 

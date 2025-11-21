@@ -36,7 +36,7 @@ export default function CheckoutCart({
   const [deliveryHourRate, setDeliveryHourRate] = useState(
     deliveryHour ? getDeliveryAdditionalRate(deliveryHour) : null
   );
-  const locale = useLocale();
+  const locale = useLocale() as LocaleCode;
 
   useEffect(() => {
     setDeliveryPrice(deliveryRegion ? getDeliveryPrice(deliveryRegion) : null);

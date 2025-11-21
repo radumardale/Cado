@@ -24,7 +24,7 @@ export default function ProductInfo({ id }: ProductInfoInterface) {
       { staleTime: 10000, refetchOnMount: false, refetchOnWindowFocus: false }
     )
   );
-  const locale = useLocale();
+  const locale = useLocale() as LocaleCode;
   const searchParams = useSearchParams();
   const categoryParam = searchParams.get('category') as Categories | null;
 

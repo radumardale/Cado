@@ -21,8 +21,8 @@ export async function generateMetadata({
   const queryOptions = trpc.blog.getBlogById.queryOptions({ id });
   const blogData = await queryClient.fetchQuery(queryOptions);
 
-  const title = blogData.blog?.title[locale] || 'Blog Post';
-  const description = blogData.blog?.sections[0].content[locale] || '';
+  const title = blogData.blog?.title[locale as LocaleCode] || 'Blog Post';
+  const description = blogData.blog?.sections[0].content[locale as LocaleCode] || '';
   const image = blogData.blog?.image || 'https://your-default-image-url.com/default.jpg';
 
   const hreflangMeta = generateHreflangMetadata({

@@ -13,7 +13,7 @@ interface ProductsTableProps {
 
 export default function ProductsTable({ queryProducts }: ProductsTableProps) {
   const t = useTranslations('ProductPage.stock_state');
-  const locale = useLocale();
+  const locale = useLocale() as LocaleCode;
 
   const products_t = useTranslations('Admin.AdminProducts');
 

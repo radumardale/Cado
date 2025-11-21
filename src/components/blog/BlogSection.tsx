@@ -15,7 +15,7 @@ interface BlogSectionInteface {
 
 export default function BlogSection({ id }: BlogSectionInteface) {
   const trpc = useTRPC();
-  const locale = useLocale();
+  const locale = useLocale() as LocaleCode;
   const t = useTranslations('HomePage.Blog.BlogTags');
   const { data, isLoading } = useQuery(trpc.blog.getBlogById.queryOptions({ id: id }));
 

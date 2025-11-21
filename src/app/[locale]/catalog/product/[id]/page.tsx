@@ -26,8 +26,8 @@ export async function generateMetadata({
   const queryOptions = trpc.products.getProductById.queryOptions({ id });
   const productData = await queryClient.fetchQuery(queryOptions);
 
-  const title = productData.product?.title[locale] || 'Product';
-  const descriptionResponse = productData.product?.long_description?.[locale] || '';
+  const title = productData.product?.title[locale as LocaleCode] || 'Product';
+  const descriptionResponse = productData.product?.long_description?.[locale as LocaleCode] || '';
   const description = htmlToText(descriptionResponse);
 
   const image =
@@ -83,7 +83,7 @@ export default async function Product({
   const breadcrumbSchema = generateProductBreadcrumbSchema(
     baseUrl,
     locale,
-    productData.product?.title[locale] || 'Product',
+    productData.product?.title[locale as LocaleCode] || 'Product',
     id,
     productData.product?.categories?.[0], // Use first category if available
     productData.product?.ocasions?.[0] // Use first ocasion if available

@@ -16,7 +16,7 @@ export default function CartIcon() {
   const [value, setValue] = useLocalStorage<CartInterface[]>('cart', []);
   const [mounted, setMounted] = useState(false);
   const lenis = useLenis();
-  const locale = useLocale();
+  const locale = useLocale() as LocaleCode;
 
   useEffect(() => {
     if (isCartOpen) {

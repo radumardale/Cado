@@ -12,7 +12,7 @@ interface ProductsGridProps {
 }
 
 export default function ProductsGrid({ queryProducts }: ProductsGridProps) {
-  const locale = useLocale();
+  const locale = useLocale() as LocaleCode;
   const router = useRouter();
   const [isImageLoaded, setImageLoaded] = useState(false);
 

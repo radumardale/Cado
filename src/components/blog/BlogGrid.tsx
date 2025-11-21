@@ -11,7 +11,7 @@ import { useQuery } from '@tanstack/react-query';
 export default function BlogGrid() {
   const trpc = useTRPC();
   const { data, isLoading } = useQuery(trpc.blog.getAllBlogs.queryOptions());
-  const locale = useLocale();
+  const locale = useLocale() as LocaleCode;
 
   return (
     <div className='col-span-full lg:col-start-2 lg:col-span-13 grid grid-cols-13 gap-y-8 lg:gap-y-12 gap-x-6 mb-24 lg:mb-42'>

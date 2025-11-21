@@ -14,7 +14,7 @@ export default function AdminRecommendationsCard({
   product,
   setAddProductOpen,
 }: AdminRecommendationsCardInterface) {
-  const locale = useLocale();
+  const locale = useLocale() as LocaleCode;
   const [isImageLoaded, setImageLoaded] = useState(false);
 
   const t = useTranslations('Admin.AdminHomePage');

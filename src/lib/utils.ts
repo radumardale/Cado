@@ -93,7 +93,7 @@ export const addToCart = (
   quantity: number = 1,
   value: CartInterface[],
   setValue: (v: CartInterface[]) => void,
-  locale: string
+  locale: LocaleCode
 ) => {
   // Check if the product already exists in the current cart state
   const existingProductIndex = value.findIndex(item => item.productId === product.custom_id);

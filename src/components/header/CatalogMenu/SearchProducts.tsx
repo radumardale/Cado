@@ -23,7 +23,7 @@ export default function SearchProducts({
   closeMenu,
   recProducts,
 }: SearchProductsProps) {
-  const locale = useLocale();
+  const locale = useLocale() as LocaleCode;
   const router = useRouter();
   const [value, setValue] = useLocalStorage<CartInterface[]>('cart', []);
   const [isImageLoaded, setImageLoaded] = useState(false);

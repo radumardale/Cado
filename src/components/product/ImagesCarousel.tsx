@@ -8,7 +8,7 @@ import { ProductInterface } from '@/models/product/types/productInterface';
 interface ImagesCarouselInterface {
   setCarouselOpen: (v: boolean) => void;
   product: ProductInterface;
-  locale: string;
+  locale: LocaleCode;
   initialActive?: number;
 }
 
