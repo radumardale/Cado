@@ -4,7 +4,7 @@ import mongoose from 'mongoose';
  * Optional multilingual product information text.
  * Uses the global OptionalMultilingualString type to ensure consistency.
  *
- * @deprecated Import this type is no longer needed - use global OptionalMultilingualString instead.
+ * @deprecated Importing this type is no longer needed - use global OptionalMultilingualString instead.
  */
 export type OptionalInfoTexts = OptionalMultilingualString;
 
