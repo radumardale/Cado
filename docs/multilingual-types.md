@@ -17,7 +17,7 @@ type MultilingualString = {
   ro: string;
   ru: string;
   en: string;
-  [key: string]: string; // Allows dynamic locale access
+  // No index signature - ensures type safety
 };
 ```
 
@@ -35,9 +35,9 @@ const productTitle: MultilingualString = {
   en: 'Gift for Her',
 };
 
-// Dynamic access with locale variable
-const locale: string = 'ro';
-console.log(productTitle[locale]); // "Cadou pentru Ea"
+// Type-safe dynamic access with LocaleCode
+const locale: LocaleCode = 'ro';
+console.log(productTitle[locale]); // "Cadou pentru Ea" - Type-safe!
 ```
 
 ### OptionalMultilingualString
@@ -49,7 +49,7 @@ type OptionalMultilingualString = {
   ro?: string;
   ru?: string;
   en?: string;
-  [key: string]: string | undefined;
+  // No index signature - ensures type safety
 };
 ```
 
@@ -302,10 +302,11 @@ const ProductSchema = new mongoose.Schema({
 ### ✅ DO
 
 1. **Use global types** - No need to import `MultilingualString`
-2. **Use type constraints** - Apply `satisfies` to Zod schemas
-3. **Document relationships** - Add comments showing type connections
-4. **Use utility functions** - Leverage helpers for common operations
+2. **Use LocaleCode for type safety** - Always use `LocaleCode` instead of `string` for locale parameters
+3. **Use utility functions** - Leverage helpers like `getLocalizedText()` for runtime safety
+4. **Document relationships** - Add comments showing type connections
 5. **Runtime validation** - Use type guards for untrusted data
+6. **Type constraints (optional)** - Apply `satisfies` to Zod schemas for compile-time validation
 
 ```typescript
 // ✅ Good: Using shared type
@@ -327,7 +328,7 @@ const schema = z.object({
 1. **Don't create inline types** - Use shared types instead
 2. **Don't skip validation** - Always validate untrusted data
 3. **Don't ignore optional types** - Use `OptionalMultilingualString` when appropriate
-4. **Don't forget index signature** - Needed for dynamic locale access
+4. **Don't use index signatures** - They defeat type safety and allow unsafe access
 
 ```typescript
 // ❌ Bad: Inline type definition
@@ -339,12 +340,19 @@ interface Product {
   };
 }
 
-// ❌ Bad: Missing index signature
-type BadMultilingual = {
+// ❌ Bad: Index signature allows unsafe access
+type UnsafeMultilingual = {
   ro: string;
   ru: string;
   en: string;
-  // Missing: [key: string]: string;
+  [key: string]: string; // Allows obj['invalid'] to compile but return undefined at runtime!
+};
+
+// ✅ Good: No index signature - type-safe
+type SafeMultilingual = {
+  ro: string;
+  ru: string;
+  en: string;
 };
 ```
 
@@ -352,9 +360,28 @@ type BadMultilingual = {
 
 ### Dynamic Locale Access
 
+**Type-Safe Approach (Recommended):**
+
 ```typescript
+// ✅ Good: Use LocaleCode type for type safety
+function getTitle(product: Product, locale: LocaleCode): string {
+  return product.title[locale]; // Type-safe - locale is guaranteed to be valid
+}
+
+// ✅ Good: Use getLocalizedText utility for runtime safety with fallback
+import { getLocalizedText } from '@/lib/utils/multilingual';
+
+function getTitleSafe(product: Product, locale: LocaleCode): string {
+  return getLocalizedText(product.title, locale, 'en'); // Fallback to English
+}
+```
+
+**Unsafe Approach (Avoid):**
+
+```typescript
+// ❌ Bad: Using string allows any value, defeats type safety
 function getTitle(product: Product, locale: string): string {
-  return product.title[locale] || product.title.en; // Fallback to English
+  return product.title[locale] || product.title.en; // Compiles but locale could be 'invalid'
 }
 ```
 
