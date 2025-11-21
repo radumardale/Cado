@@ -4,7 +4,7 @@ import { routing } from './routing';
 type Locale = (typeof routing.locales)[number];
 
 function isValidLocale(locale: string): locale is Locale {
-  return routing.locales.includes(locale as Locale);
+  return (routing.locales as readonly string[]).includes(locale);
 }
 
 export default getRequestConfig(async ({ requestLocale }) => {

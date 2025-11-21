@@ -10,7 +10,7 @@ import { TRPCReactProvider } from '../_trpc/client';
 type Locale = (typeof routing.locales)[number];
 
 function isValidLocale(locale: string): locale is Locale {
-  return routing.locales.includes(locale as Locale);
+  return (routing.locales as readonly string[]).includes(locale);
 }
 
 export function generateStaticParams() {

@@ -1,5 +1,5 @@
 import mongoose, { type UpdateQuery } from 'mongoose';
-import { ProductInfoSchema } from './types/productInfo';
+import { ProductInfoSchema, type ProductInfo } from './types/productInfo';
 import { SaleSchema } from './types/productSale';
 import { ProductInterface } from './types/productInterface';
 import { Categories } from '@/lib/enums/Categories';
@@ -105,13 +105,7 @@ ProductSchema.pre<ProductInterface>('save', function (next) {
 });
 
 // Type guard for multilingual title structure
-interface MultilingualTitle {
-  ro: string;
-  ru: string;
-  en: string;
-}
-
-function isMultilingualTitle(value: unknown): value is MultilingualTitle {
+function isMultilingualTitle(value: unknown): value is ProductInfo {
   return (
     value !== null &&
     typeof value === 'object' &&
