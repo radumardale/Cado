@@ -506,8 +506,7 @@ type MultilingualString = {
   ro: string;
   ru: string;
   en: string;
-  fr: string; // Add new language
-  [key: string]: string;
+  fr: string; // Add new language - no index signature needed
 };
 
 type LocaleCode = 'ro' | 'ru' | 'en' | 'fr'; // Add to union
