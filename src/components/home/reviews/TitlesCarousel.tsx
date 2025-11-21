@@ -3,7 +3,13 @@ import { ArrowLeft, ArrowRight } from 'lucide-react';
 import { motion } from 'motion/react';
 import { useLocale } from 'next-intl';
 
-const texts = [
+type ReviewTitle = {
+  ro: [string, string];
+  ru: [string, string];
+  en: [string, string];
+};
+
+const texts: ReviewTitle[] = [
   {
     ro: ['MAIB Moldova', 'Bancă comercială'],
     ru: ['MAIB Moldova', 'Коммерческий банк'],
