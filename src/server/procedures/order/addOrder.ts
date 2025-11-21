@@ -199,7 +199,7 @@ export const addOrderProcedure = protectedProcedure
                   product: {
                     product: {
                       custom_id: string;
-                      title: { ro: string };
+                      title: MultilingualString;
                       price: number;
                       sale?: { active: boolean; sale_price: number };
                     };
