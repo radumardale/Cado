@@ -147,11 +147,12 @@ const PopoverTrigger = React.forwardRef<HTMLElement, TriggerElementProps>(functi
       context.getReferenceProps({
         ref,
         ...props,
-        // Type assertion needed for spreading props from cloned element
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        ...((children as ReactElementWithRef).props as any),
+        // Type assertion for spreading arbitrary props from cloned element
+        // Using Record<string, unknown> provides better type safety than 'any'
+        // while maintaining the flexibility needed for dynamic prop spreading
+        ...((children as ReactElementWithRef).props as Record<string, unknown>),
         'data-state': context.open ? 'open' : 'closed',
-      })
+      } as React.HTMLProps<Element>)
     );
   }
 

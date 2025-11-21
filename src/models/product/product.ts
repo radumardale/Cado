@@ -104,13 +104,34 @@ ProductSchema.pre<ProductInterface>('save', function (next) {
   next();
 });
 
+// Type guard for multilingual title structure
+interface MultilingualTitle {
+  ro: string;
+  ru: string;
+  en: string;
+}
+
+function isMultilingualTitle(value: unknown): value is MultilingualTitle {
+  return (
+    value !== null &&
+    typeof value === 'object' &&
+    'ro' in value &&
+    typeof (value as Record<string, unknown>).ro === 'string' &&
+    'ru' in value &&
+    typeof (value as Record<string, unknown>).ru === 'string' &&
+    'en' in value &&
+    typeof (value as Record<string, unknown>).en === 'string'
+  );
+}
+
 ProductSchema.pre('findOneAndUpdate', function (next) {
   const update = this.getUpdate() as UpdateQuery<ProductInterface>;
 
   if (update && typeof update === 'object' && !Array.isArray(update)) {
     const titleData = 'title' in update ? update.title : update.$set?.title;
 
-    if (titleData) {
+    // Validate that titleData has the expected multilingual structure
+    if (titleData && isMultilingualTitle(titleData)) {
       const normalizedTitle = {
         ro: titleData.ro
           .normalize('NFD')
