@@ -34,7 +34,7 @@ export interface OrderProductInterface {
   title: ProductInfo;
   price: number;
   stock_availability: StockAvailability;
-  sale: ProductSale | undefined;
+  sale?: ProductSale;
   images: string[];
 }
 

@@ -1,14 +1,14 @@
 import { protectedProcedure } from '@/server/trpc';
 import { Client } from '@/models/client/client';
 import { Order } from '@/models/order/order';
-import { OrderInterface } from '@/models/order/types/orderInterface';
+import { ResOrderInterface } from '@/models/order/types/orderInterface';
 import { ActionResponse } from '@/lib/types/ActionResponse';
 import { updateOrderRequestSchema } from '@/lib/validation/order/updateOrderRequest';
 import connectMongo from '@/lib/connect-mongo';
 import { DeliveryMethod } from '@/models/order/types/deliveryMethod';
 
 export interface updateOrderResponse extends ActionResponse {
-  order: OrderInterface | null;
+  order: ResOrderInterface | null;
 }
 
 export const updateOrderProcedure = protectedProcedure
@@ -115,7 +115,7 @@ export const updateOrderProcedure = protectedProcedure
 
       return {
         success: true,
-        order: plainOrder,
+        order: plainOrder as unknown as ResOrderInterface,
       };
     } catch (error) {
       console.error('Error updating order:', error);

@@ -13,7 +13,10 @@ export const getAllBlogsProcedure = publicProcedure.query(
     try {
       await connectMongo();
 
-      const blogs = await Blog.find().sort({ date: -1 }).select('image _id tag title date').lean();
+      const blogs = (await Blog.find()
+        .sort({ date: -1 })
+        .select('image _id tag title date')
+        .lean()) as unknown as OptimizedBlogInterface[];
 
       if (!blogs) {
         return {

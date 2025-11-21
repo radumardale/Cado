@@ -11,7 +11,6 @@ import { useTRPC } from '@/app/_trpc/client';
 import SearchProducts from './CatalogMenu/SearchProducts';
 
 import { useQuery } from '@tanstack/react-query';
-import { ReccProductsI } from '@/models/reccProduct/types/ReccProductsI';
 
 interface MobileMenuInterface {
   setSidebarOpen: (v: boolean) => void;
@@ -175,7 +174,7 @@ export default function MobileMenu({ setSidebarOpen }: MobileMenuInterface) {
         </>
       ) : (
         <SearchProducts
-          recProducts={RecData?.products.map((product: ReccProductsI) => product.product)}
+          recProducts={RecData?.products}
           isLoading={isLoading}
           productsCount={data?.count}
           products={data?.products}

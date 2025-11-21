@@ -12,9 +12,7 @@ interface PCRecommendationsProps {
     | {
         success: boolean;
         error?: string | undefined;
-        products?: {
-          product: ProductInterface;
-        }[];
+        products?: ProductInterface[];
       }
     | undefined;
 }
@@ -31,8 +29,8 @@ export default function PCRecommendations({
       {isLoading || !data?.products ? (
         <LoadingGrid gridLayout={true} length={5} />
       ) : (
-        data?.products.map((product: { product: ProductInterface }, index: number) => (
-          <ProductCard category={null} key={index} product={product.product} />
+        data?.products.map((product: ProductInterface, index: number) => (
+          <ProductCard category={null} key={index} product={product} />
         ))
       )}
     </div>
