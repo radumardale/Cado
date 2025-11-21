@@ -83,9 +83,7 @@ export default function CatalogMenu({ setIsCatalogMenuActive }: CatalogMenuProps
             isLoading={isLoading}
             productsCount={data?.count}
             products={data?.products}
-            recProducts={recProducts.data?.products.map(
-              (product: ReccProductsI) => product.product
-            )}
+            recProducts={recProducts.data?.products}
             searchText={searchText}
             closeMenu={closeMenu}
           />
