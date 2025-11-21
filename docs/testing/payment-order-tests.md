@@ -478,7 +478,7 @@ describe('Component/Feature', () => {
 
 ## Contributors
 
-- Tests written by: Claude Code AI
+- Tests written by: @radumardale
 - Issue created by: @bamse
 - Code review: [Pending]
 
