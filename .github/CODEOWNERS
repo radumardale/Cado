@@ -1,0 +1,32 @@
+# CODEOWNERS - Automatic code review assignment
+# This file defines who owns code in the repository and will be automatically
+# requested for review when PRs are opened.
+
+# Global code owner - all files in the repository
+* @radumardale
+
+# Core application directories
+/src/ @radumardale
+/src/app/ @radumardale
+/src/server/ @radumardale
+/src/models/ @radumardale
+/src/components/ @radumardale
+
+# Configuration and build files
+/package.json @radumardale
+/tsconfig.json @radumardale
+/.prettierrc @radumardale
+/next.config.ts @radumardale
+
+# Documentation
+/docs/ @radumardale
+/README.md @radumardale
+/CONTRIBUTING.md @radumardale
+/LICENSE @radumardale
+/CLAUDE.md @radumardale
+
+# Scripts and automation
+/scripts/ @radumardale
+
+# GitHub workflows and templates
+/.github/ @radumardale
