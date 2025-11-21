@@ -108,7 +108,7 @@ export const updateOrderProcedure = protectedProcedure
       const plainOrder = order.toObject ? order.toObject() : order;
 
       // Convert plainOrder to ResOrderInterface structure
-      const resOrder: ResOrderInterface = {
+      const resOrder = {
         ...plainOrder,
         _id: plainOrder._id.toString(),
         additional_info: {
