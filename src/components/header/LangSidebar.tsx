@@ -30,7 +30,7 @@ interface LangSidebarInterface {
 
 export default function LangSidebar({ setSidebarOpen }: LangSidebarInterface) {
   const [country, setCountry] = useState<CountriesOptionsInterface | null>(null);
-  const locale = useLocale();
+  const locale = useLocale() as LocaleCode;
   const [language, setLanguage] = useState(locale);
 
   const t = useTranslations('LangSidebar');
@@ -100,7 +100,7 @@ export default function LangSidebar({ setSidebarOpen }: LangSidebarInterface) {
             defaultValue={country ? country : 'md'}
             onValueChange={e => {
               setCountry(e as CountriesOptionsInterface);
-              setLanguage(CountriesOptions[e as CountriesOptionsInterface][0]);
+              setLanguage(CountriesOptions[e as CountriesOptionsInterface][0] as LocaleCode);
             }}
           >
             <SelectTrigger className='cursor-pointer flex h-12 max-h-none items-center px-6 gap-2 border border-gray rounded-3xl lg:mr-4 text-base text-black font-manrope font-semibold w-full mb-2'>

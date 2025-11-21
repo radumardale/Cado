@@ -17,7 +17,7 @@ export default function OrdersProductsSummary() {
   const trpc = useTRPC();
 
   const [mounted, setMounted] = useState(false);
-  const locale = useLocale();
+  const locale = useLocale() as LocaleCode;
   const router = useRouter();
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
 

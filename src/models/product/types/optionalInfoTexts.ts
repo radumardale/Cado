@@ -1,10 +1,12 @@
 import mongoose from 'mongoose';
 
-export type OptionalInfoTexts = {
-  ro: string;
-  ru: string;
-  [key: string]: string;
-};
+/**
+ * Optional multilingual product information text.
+ * Uses the global OptionalMultilingualString type to ensure consistency.
+ *
+ * @deprecated Importing this type is no longer needed - use global OptionalMultilingualString instead.
+ */
+export type OptionalInfoTexts = OptionalMultilingualString;
 
 // OptionalInfoTexts Schema
 export const OptionalInfoTextsSchema = new mongoose.Schema<OptionalInfoTexts>(

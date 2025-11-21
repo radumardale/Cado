@@ -4,8 +4,8 @@ import { useState, useEffect, useRef } from 'react';
 import { ChevronDown } from 'lucide-react';
 
 interface Props {
-  language: string;
-  setLanguage: React.Dispatch<React.SetStateAction<string>>;
+  language: LocaleCode;
+  setLanguage: React.Dispatch<React.SetStateAction<LocaleCode>>;
 }
 
 const LangPicker = ({ language, setLanguage }: Props) => {

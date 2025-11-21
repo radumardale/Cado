@@ -21,7 +21,7 @@ export default function AdminRecommnendationsSearch({
   closePopup,
 }: AdminRecommnendationsSearchProps) {
   const trpc = useTRPC();
-  const locale = useLocale();
+  const locale = useLocale() as LocaleCode;
   const closeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const [localProducts, setLocalProducts] = useState<ProductInterface[]>([]);
   const [localCount, setLocalCount] = useState<number>(0);

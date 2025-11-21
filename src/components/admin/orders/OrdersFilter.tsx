@@ -23,7 +23,7 @@ export default function OrdersFilter() {
   const endDate = useOrdersSearchStore(store => store.endDate);
   const setEndDate = useOrdersSearchStore(store => store.setEndDate);
 
-  const locale = useLocale();
+  const locale = useLocale() as LocaleCode;
   let calLocale: Locale;
   switch (locale) {
     case 'ro':

@@ -16,7 +16,7 @@ interface ProductImagesInterface {
 export default function ProductImages({ product }: ProductImagesInterface) {
   const [isCarouselOpen, setCarouselOpen] = useState(false);
   const [imageIndex, setImageIndex] = useState(0);
-  const locale = useLocale();
+  const locale = useLocale() as LocaleCode;
   const lenis = useLenis();
   const swiperRef = useRef<SwiperRef>(null);
   const [isDragOver, setDragOver] = useState(true);

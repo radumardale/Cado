@@ -17,7 +17,7 @@ interface ProductContentInterface {
 
 export default function ProductContent({ product }: ProductContentInterface) {
   const t = useTranslations('ProductPage');
-  const locale = useLocale();
+  const locale = useLocale() as LocaleCode;
   const lenis = useLenis();
   const [productQuantity, setProductQuantity] = useState(1);
   const [value, setValue] = useLocalStorage<CartInterface[]>('cart', []);

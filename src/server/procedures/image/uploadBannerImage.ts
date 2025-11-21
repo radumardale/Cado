@@ -7,12 +7,12 @@ import { deleteFromBucket } from './deleteObjects/deleteFromBucket';
 import { HomeBanner } from '@/models/home_banner/HomeBanner';
 import { uploadBannerImagesRequestSchema } from '@/lib/validation/image/uploadBannerImageRequest';
 
+/**
+ * Response interface for uploading banner images.
+ * Returns the CDN URLs for uploaded images in all languages.
+ */
 interface uploadBannerImageResponse extends ActionResponse {
-  images: {
-    ro: string;
-    ru: string;
-    en: string;
-  };
+  images: MultilingualString;
 }
 
 export const uploadBannerImageProcedure = protectedProcedure

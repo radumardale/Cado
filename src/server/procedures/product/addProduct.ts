@@ -17,8 +17,9 @@ export const addProductProcedure = protectedProcedure
     try {
       await connectMongo();
 
-      // Create normalized_title field manually
-      const normalizedTitle = {
+      // Create normalized_title field manually (MultilingualString)
+      // Removes diacritics and converts to lowercase for search optimization
+      const normalizedTitle: MultilingualString = {
         ro: input.data.title.ro
           .normalize('NFD')
           .replace(/[\u0300-\u036f]/g, '')

@@ -40,7 +40,7 @@ export default function AdminProductImages({
   const { mutate, isSuccess, isPending } = useMutation(
     trpc.products.deleteProduct.mutationOptions()
   );
-  const locale = useLocale();
+  const locale = useLocale() as LocaleCode;
   const router = useRouter();
   const form = useFormContext<UpdateFormValues>();
   const [isMounted, setIsMounted] = useState(false);

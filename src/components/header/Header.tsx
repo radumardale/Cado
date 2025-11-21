@@ -28,9 +28,9 @@ interface HeaderProps {
 }
 
 export default function Header({ category, breadcrumbs = false, productInfo }: HeaderProps) {
-  const locale = useLocale();
+  const locale = useLocale() as LocaleCode;
 
-  const getLogoSrc = (locale: string) => {
+  const getLogoSrc = (locale: LocaleCode) => {
     switch (locale) {
       case 'en':
         return '/logo/CADO-en.svg';

@@ -6,7 +6,7 @@ import { DeliveryMethod } from '@/models/order/types/deliveryMethod';
 // Define the props interface
 interface OrderConfirmationEmailProps {
   order: ResOrderInterface;
-  locale: string;
+  locale: LocaleCode;
   paymentMethodName: string;
   regionName: string;
   baseUrl?: string;

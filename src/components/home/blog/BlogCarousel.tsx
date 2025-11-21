@@ -19,7 +19,7 @@ export default function BlogCarousel() {
   const swiperRef = useRef<SwiperRef>(null);
   const [swiperInstance, setSwiperInstance] = useState<SwiperType | null>(null);
 
-  const locale = useLocale();
+  const locale = useLocale() as LocaleCode;
   const [slidesPerView, setSlidesPerView] = useState(2); // Default to mobile view
   const [isMounted, setIsMounted] = useState(false);
 

@@ -23,16 +23,17 @@ export const ProductContentArr = Object.values(ProductContent).filter(
   value => typeof value === 'string'
 ) as string[];
 
-// Define the translation interface for ProductContent
+/**
+ * Product content translation structure using shared multilingual type.
+ */
 interface ProductContentTranslation {
-  title: {
-    ro: string;
-    ru: string;
-    en: string;
-  };
+  title: MultilingualString;
 }
 
-// Helper function for normalization
+/**
+ * Helper function for text normalization (removes diacritics and converts to lowercase).
+ * Used for search and comparison operations.
+ */
 function normalizeText(text: string): string {
   return text
     .normalize('NFD')
@@ -40,7 +41,10 @@ function normalizeText(text: string): string {
     .toLowerCase();
 }
 
-// Update the translations with normalized titles directly
+/**
+ * Translations for all product content types in ro/ru/en.
+ * All text is pre-normalized for efficient searching.
+ */
 const productContentTranslations: Record<ProductContent, ProductContentTranslation> = {
   [ProductContent.ACCESSORIES_FOR_DRINKS]: {
     title: {

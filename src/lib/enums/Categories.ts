@@ -11,14 +11,16 @@ export const CategoriesArr = Object.values(Categories).filter(
   value => typeof value === 'string'
 ) as string[];
 
+/**
+ * Category translation structure using shared multilingual type.
+ */
 interface CategoryTranslation {
-  title: {
-    ro: string;
-    ru: string;
-    en: string;
-  };
+  title: MultilingualString;
 }
 
+/**
+ * Translations for all product categories in ro/ru/en.
+ */
 export const categoryTranslations: Record<Categories, CategoryTranslation> = {
   [Categories.FOR_HIM]: {
     title: {
