@@ -20,10 +20,10 @@ export const getHomeOcasionProcedure = publicProcedure.query(async (): Promise<g
       success: true,
       homeOcasion: homeOcasion[0],
     };
-  } catch (e: any) {
+  } catch (error) {
     return {
       homeOcasion: null,
-      error: e.message,
+      error: error instanceof Error ? error.message : 'Failed to process request',
       success: true,
     };
   }

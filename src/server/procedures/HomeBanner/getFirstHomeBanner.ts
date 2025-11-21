@@ -20,11 +20,12 @@ export const getFirstHomeBanner = publicProcedure.query(async (): Promise<addHom
       success: true,
       banners: homeBanners,
     };
-  } catch (e: any) {
+  } catch (error) {
+    console.error('Error fetching first home banner:', error);
     return {
       banners: [],
-      error: e.message,
-      success: true,
+      error: error instanceof Error ? error.message : 'Failed to fetch first home banner',
+      success: false,
     };
   }
 });

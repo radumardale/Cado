@@ -67,11 +67,11 @@ export const uploadBannerImageProcedure = protectedProcedure
         success: true,
         images: newImageUrls,
       };
-    } catch (error: any) {
+    } catch (error) {
       return {
         success: false,
         images: { ro: '', ru: '', en: '' },
-        error: error.message || 'Failed to upload images',
+        error: error instanceof Error ? error.message : 'Failed to upload images',
       };
     }
   });

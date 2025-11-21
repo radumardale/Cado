@@ -43,10 +43,10 @@ export const sendContactEmailProcedure = publicProcedure
       return {
         success: true,
       };
-    } catch (error: any) {
+    } catch (error) {
       return {
         success: false,
-        error: error.message || 'Failed to send contact email',
+        error: error instanceof Error ? error.message : 'Failed to send contact email',
       };
     }
   });

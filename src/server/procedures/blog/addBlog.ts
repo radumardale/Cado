@@ -56,11 +56,11 @@ export const createBlogProcedure = protectedProcedure
         blog: newBlog,
         imagesLinks: imagesLinks,
       };
-    } catch (error: any) {
+    } catch (error) {
       console.error('Error creating blog:', error);
       return {
         success: false,
-        error: error.message || 'Failed to create blog',
+        error: error instanceof Error ? error.message : 'Failed to create blog',
         blog: null,
         imagesLinks: [],
       };

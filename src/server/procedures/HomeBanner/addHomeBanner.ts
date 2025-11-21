@@ -57,14 +57,15 @@ export const addHomeBannerProcedure = protectedProcedure
         },
         homeBanner: homeBanner,
       };
-    } catch (e: any) {
+    } catch (error) {
+      console.error('Error adding home banner:', error);
       return {
         imageLinks: {
           ro: '',
           ru: '',
           en: '',
         },
-        error: e.message,
+        error: error instanceof Error ? error.message : 'Failed to add home banner',
         success: false,
         homeBanner: null,
       };

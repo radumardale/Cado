@@ -40,10 +40,10 @@ export const updateHomeOcasionProcedure = protectedProcedure
         success: true,
         homeOcasion,
       };
-    } catch (e: any) {
+    } catch (error) {
       return {
         homeOcasion: null,
-        error: e.message,
+        error: error instanceof Error ? error.message : 'Failed to process request',
         success: false,
       };
     }

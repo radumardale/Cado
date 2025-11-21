@@ -21,10 +21,10 @@ export const getSeasonCatalogProcedure = publicProcedure.query(
         success: true,
         seasonCatalog: catalog[0],
       };
-    } catch (e: any) {
+    } catch (error) {
       return {
         seasonCatalog: null,
-        error: e.message,
+        error: error instanceof Error ? error.message : 'Failed to process request',
         success: true,
       };
     }

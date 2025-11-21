@@ -18,11 +18,11 @@ export const deleteImageProcedure = protectedProcedure
       const res = await selectObjectToDelete(input);
 
       return res;
-    } catch (error: any) {
+    } catch (error) {
       console.error('Error deleting image:', error);
       return {
         success: false,
-        error: error.message,
+        error: error instanceof Error ? error.message : 'Failed to delete image',
       };
     }
   });

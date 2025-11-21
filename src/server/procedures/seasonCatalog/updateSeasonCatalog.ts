@@ -40,10 +40,10 @@ export const updateSeasonCatalogProcedure = publicProcedure
         success: true,
         seasonCatalog,
       };
-    } catch (e: any) {
+    } catch (error) {
       return {
         seasonCatalog: null,
-        error: e.message,
+        error: error instanceof Error ? error.message : 'Failed to process request',
         success: false,
       };
     }

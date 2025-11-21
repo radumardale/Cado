@@ -107,11 +107,11 @@ export const getAllClientsProcedure = protectedProcedure
         nextCursor,
         totalCount,
       };
-    } catch (error: any) {
+    } catch (error) {
       console.error('Error fetching orders:', error);
       return {
         success: false,
-        error: error.message || 'Failed to fetch orders',
+        error: error instanceof Error ? error.message : 'Failed to fetch orders',
         clients: [],
         nextCursor: null,
         totalCount: 0,

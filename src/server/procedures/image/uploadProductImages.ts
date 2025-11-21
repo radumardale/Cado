@@ -44,11 +44,11 @@ export const UploadProductImagesProcedure = protectedProcedure
         success: true,
         images: newImageUrls,
       };
-    } catch (error: any) {
+    } catch (error) {
       return {
         success: false,
         images: [],
-        error: error.message || 'Failed to upload image',
+        error: error instanceof Error ? error.message : 'Failed to upload image',
       };
     }
   });

@@ -62,11 +62,11 @@ export const generateUploadLinks = async ({ id, destination }: GenerateUploadLin
       success: true,
       imageUrl: uploadUrl,
     };
-  } catch (error: any) {
+  } catch (error) {
     return {
       success: false,
       imageUrl: '',
-      error: error.message || 'Failed to upload image',
+      error: error instanceof Error ? error.message : 'Failed to upload image',
     };
   }
 };

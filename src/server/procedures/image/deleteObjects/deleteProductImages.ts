@@ -24,10 +24,11 @@ export const deleteProductImages = async (
     return {
       success: true,
     };
-  } catch (e: any) {
+  } catch (error) {
+    console.error('Error deleting product images:', error);
     return {
-      success: true,
-      error: e,
+      success: false,
+      error: error instanceof Error ? error.message : 'Failed to delete product images',
     };
   }
 };

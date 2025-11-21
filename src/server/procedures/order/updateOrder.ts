@@ -118,11 +118,11 @@ export const updateOrderProcedure = protectedProcedure
         success: true,
         order: plainOrder,
       };
-    } catch (error: any) {
+    } catch (error) {
       console.error('Error updating order:', error);
       return {
         success: false,
-        error: error.message || 'Failed to update order',
+        error: error instanceof Error ? error.message : 'Failed to update order',
         order: null,
       };
     }

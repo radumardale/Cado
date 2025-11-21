@@ -18,10 +18,11 @@ export const deleteBlogImage = async (props: deleteBlogImageProps): Promise<Acti
     return {
       success: true,
     };
-  } catch (e: any) {
+  } catch (error) {
+    console.error('Error deleting blog image:', error);
     return {
       success: false,
-      error: e.message || 'Failed to delete blog image',
+      error: error instanceof Error ? error.message : 'Failed to delete blog image',
     };
   }
 };

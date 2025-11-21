@@ -20,11 +20,12 @@ export const getAllHomeBanners = publicProcedure.query(async (): Promise<addHome
       success: true,
       banners: homeBanners,
     };
-  } catch (e: any) {
+  } catch (error) {
+    console.error('Error fetching all home banners:', error);
     return {
       banners: [],
-      error: e.message,
-      success: true,
+      error: error instanceof Error ? error.message : 'Failed to fetch home banners',
+      success: false,
     };
   }
 });

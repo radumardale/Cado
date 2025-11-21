@@ -95,10 +95,10 @@ export const searchProductProcedure = publicProcedure
         products: results[0].products,
         count: results[0].totalCount.length > 0 ? results[0].totalCount[0].count : 0,
       };
-    } catch (error: any) {
+    } catch (error) {
       return {
         success: false,
-        error: error.message || 'Failed to search products',
+        error: error instanceof Error ? error.message : 'Failed to search products',
         products: [],
         count: 0,
       };
