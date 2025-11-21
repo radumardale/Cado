@@ -228,15 +228,16 @@ After plan approval, switch to normal execution mode for faster, focused impleme
           - Follow internationalized routing patterns in `/src/app/[locale]/`
           - Ensure accessibility standards are maintained
       - Test that the changes work as expected (manual testing or running specific tests)
-      - **MANDATORY: Quality checks before EVERY commit:**
-        ```bash
-        npm run typecheck
-        npm run build
-        ```
-      - If either check fails:
-        - Fix the issues immediately
-        - Re-run both checks
-        - Only proceed to commit when BOTH pass
+      - **Quality checks (automated by Husky pre-commit hook):**
+        - Husky hook automatically runs when you commit:
+          - **Instant** for docs/config only changes
+          - **5-15s** incremental TypeScript checks for code changes
+          - **30-60s** full build for critical path changes (server/models/lib)
+        - If checks fail:
+          - Fix the issues immediately
+          - Re-attempt commit (hook runs again)
+          - Only commits when checks pass
+        - Hook can be bypassed in emergencies: `git commit --no-verify` (not recommended)
       - Create a clear, descriptive commit message following conventional commits format:
         - `feat(scope): add feature description` for new features
         - `fix(scope): fix bug description` for bug fixes
@@ -356,7 +357,7 @@ gh issue comment $ARGUMENTS --body "PR created: {pr-url}"
 ## Important Notes
 
 - **NEVER commit directly to main or develop** - Always work on feature branches per Git Flow
-- **Quality checks are mandatory** - Every commit must pass `npm run typecheck` and `npm run build`
+- **Quality checks are automatic** - Husky pre-commit hooks run appropriate checks based on changed files
 - **Use Plan Mode for analysis and planning** - Extended thinking capabilities are crucial for thorough analysis
 - **Switch to normal mode for implementation** - Once the plan is approved, execution is faster in normal mode
 - **Take your time with analysis** - Understanding the problem thoroughly is more important than speed
