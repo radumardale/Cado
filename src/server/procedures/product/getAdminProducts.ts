@@ -2,13 +2,14 @@
 
 import { protectedProcedure } from '../../trpc';
 import { Product } from '@/models/product/product';
+import { ProductInterface } from '@/models/product/types/productInterface';
 import { ActionResponse } from '@/lib/types/ActionResponse';
 import connectMongo from '@/lib/connect-mongo';
 import SortBy from '@/lib/enums/SortBy';
 import { getAdminProductsRequestSchema } from '@/lib/validation/product/getAdminProducts';
 
 export interface GetProductResponseInterface extends ActionResponse {
-  products: any;
+  products: ProductInterface[];
 }
 
 // trpc server procedure

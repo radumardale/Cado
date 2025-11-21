@@ -3,13 +3,14 @@
 import { protectedProcedure } from '@/server/trpc';
 import { Client } from '@/models/client/client';
 import { Order } from '@/models/order/order';
+import { OrderInterface } from '@/models/order/types/orderInterface';
 import { ActionResponse } from '@/lib/types/ActionResponse';
 import { updateOrderRequestSchema } from '@/lib/validation/order/updateOrderRequest';
 import connectMongo from '@/lib/connect-mongo';
 import { DeliveryMethod } from '@/models/order/types/deliveryMethod';
 
 export interface updateOrderResponse extends ActionResponse {
-  order: any | null;
+  order: OrderInterface | null;
 }
 
 export const updateOrderProcedure = protectedProcedure

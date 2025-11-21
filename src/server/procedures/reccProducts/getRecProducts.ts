@@ -2,11 +2,12 @@
 
 import { publicProcedure } from '../../trpc';
 import { ActionResponse } from '@/lib/types/ActionResponse';
+import { ProductInterface } from '@/models/product/types/productInterface';
 import connectMongo from '@/lib/connect-mongo';
 import { ReccProduct } from '@/models/reccProduct/ReccProduct';
 
 export interface getProductResponseInterface extends ActionResponse {
-  products: any;
+  products: ProductInterface[];
 }
 
 export const getRecProductsProcedure = publicProcedure.query(
@@ -28,7 +29,7 @@ export const getRecProductsProcedure = publicProcedure.query(
         return {
           success: false,
           error: 'This product does not exist',
-          products: null,
+          products: [],
         };
       }
 
@@ -41,7 +42,7 @@ export const getRecProductsProcedure = publicProcedure.query(
       return {
         success: false,
         error: error instanceof Error ? error.message : 'Failed to fetch product',
-        products: null,
+        products: [],
       };
     }
   }

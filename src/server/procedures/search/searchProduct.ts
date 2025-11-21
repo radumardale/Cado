@@ -4,9 +4,10 @@ import { publicProcedure } from '@/server/trpc';
 import { ActionResponse } from '@/lib/types/ActionResponse';
 import { searchProductRequestSchema } from '@/lib/validation/search/searchProductRequest';
 import { Product } from '@/models/product/product';
+import { ProductInterface } from '@/models/product/types/productInterface';
 
 export interface searchProductResponseInterface extends ActionResponse {
-  products: any[] | [];
+  products: ProductInterface[];
   count: number;
 }
 

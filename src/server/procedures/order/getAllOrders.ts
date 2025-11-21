@@ -2,6 +2,7 @@
 
 import { publicProcedure } from '@/server/trpc';
 import { Order } from '@/models/order/order';
+import { OrderInterface } from '@/models/order/types/orderInterface';
 import { ActionResponse } from '@/lib/types/ActionResponse';
 import connectMongo from '@/lib/connect-mongo';
 import { z } from 'zod';
@@ -20,7 +21,7 @@ export const getAdminOrdersRequestSchema = z.object({
 });
 
 export interface getAllOrdersResponseInterface extends ActionResponse {
-  orders: any[];
+  orders: OrderInterface[];
   nextCursor: number | null;
   totalCount: number;
 }
