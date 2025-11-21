@@ -32,11 +32,7 @@ export const MenuOcasionsArr = [
 
 // Define the translation interface for Ocasions
 interface OcasionTranslation {
-  title: {
-    ro: string;
-    ru: string;
-    en: string;
-  };
+  title: MultilingualString;
 }
 
 // Create the translations record for Ocasions
