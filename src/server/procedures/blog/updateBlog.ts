@@ -18,7 +18,10 @@ export const updateBlogProcedure = protectedProcedure
     try {
       await connectMongo();
 
-      const oldBlog = (await Blog.findById(input.id).select('_id sections').lean()) as any;
+      const oldBlog = (await Blog.findById(input.id).select('_id sections').lean()) as unknown as {
+        _id: unknown;
+        sections: unknown[];
+      };
 
       const imagesLinks = [];
 

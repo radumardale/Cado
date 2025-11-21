@@ -54,7 +54,7 @@ export const uploadBannerImageProcedure = protectedProcedure
       }
 
       // Update only the languages that have new images
-      const updateObj: any = {};
+      const updateObj: Record<string, string> = {};
       if (input.newImageKeys.ro) updateObj['images.ro'] = newImageUrls.ro;
       if (input.newImageKeys.ru) updateObj['images.ru'] = newImageUrls.ru;
       if (input.newImageKeys.en) updateObj['images.en'] = newImageUrls.en;

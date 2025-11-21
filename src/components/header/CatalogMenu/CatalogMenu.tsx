@@ -7,7 +7,6 @@ import ViewCategory from './ViewCategory';
 import Image from 'next/image';
 import { useTRPC } from '@/app/_trpc/client';
 import SearchProducts from './SearchProducts';
-import { ReccProductsI } from '@/models/reccProduct/types/ReccProductsI';
 
 import { useQuery } from '@tanstack/react-query';
 

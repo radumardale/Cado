@@ -107,15 +107,19 @@ export const updateOrderProcedure = protectedProcedure
 
       const plainOrder = order.toObject ? order.toObject() : order;
 
-      // Add the billing_checkbox field to the response
-      if (plainOrder.additional_info) {
-        (plainOrder.additional_info as any).billing_checkbox =
-          input.additional_info.billing_checkbox;
-      }
+      // Convert plainOrder to ResOrderInterface structure
+      const resOrder: ResOrderInterface = {
+        ...plainOrder,
+        _id: plainOrder._id.toString(),
+        additional_info: {
+          ...plainOrder.additional_info,
+          billing_checkbox: input.additional_info.billing_checkbox,
+        },
+      } as ResOrderInterface;
 
       return {
         success: true,
-        order: plainOrder as unknown as ResOrderInterface,
+        order: resOrder,
       };
     } catch (error) {
       console.error('Error updating order:', error);

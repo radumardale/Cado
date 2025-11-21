@@ -194,26 +194,34 @@ export const addOrderProcedure = protectedProcedure
               Name: 'CADO Order',
               Description: `Order #${order.custom_id}`,
               Amount: Math.round(input.total_cost * 100),
-              Products: input.products.map((product: any, index: number) => ({
-                GroupName: 'Produse',
-                GroupId: 1,
-                LineNo: index + 1,
-                Code: product.product.custom_id,
-                Barcode: index + 1001,
-                Name: product.product.title.ro,
-                Description: product.product.title.ro,
-                UnitPrice: Math.round(
-                  product.product.sale && product.product.sale.active
-                    ? product.product.sale.sale_price * 100
-                    : product.product.price * 100
-                ),
-                UnitProduct: product.quantity,
-                Amount: Math.round(
-                  (product.product.sale && product.product.sale.active
-                    ? product.product.sale.sale_price * 100
-                    : product.product.price * 100) * product.quantity
-                ),
-              })),
+              Products: input.products.map(
+                (
+                  product: {
+                    product: { custom_id: string; title: { ro: string }; price: number };
+                    quantity: number;
+                  },
+                  index: number
+                ) => ({
+                  GroupName: 'Produse',
+                  GroupId: 1,
+                  LineNo: index + 1,
+                  Code: product.product.custom_id,
+                  Barcode: index + 1001,
+                  Name: product.product.title.ro,
+                  Description: product.product.title.ro,
+                  UnitPrice: Math.round(
+                    product.product.sale && product.product.sale.active
+                      ? product.product.sale.sale_price * 100
+                      : product.product.price * 100
+                  ),
+                  UnitProduct: product.quantity,
+                  Amount: Math.round(
+                    (product.product.sale && product.product.sale.active
+                      ? product.product.sale.sale_price * 100
+                      : product.product.price * 100) * product.quantity
+                  ),
+                })
+              ),
             },
           ],
           MoneyType: null,
