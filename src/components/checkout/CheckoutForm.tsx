@@ -65,7 +65,7 @@ const determineAvailableDeliveryHours = (hour: number): DeliveryHours[] => {
   return sliceIndex === -1 ? [] : (DeliveryHoursArr.slice(sliceIndex) as DeliveryHours[]);
 };
 
-const orderMessages = {
+const orderMessages: Record<string, MultilingualString> = {
   orderSuccess: {
     ro: 'Comanda a fost plasată cu succes!',
     ru: 'Заказ был успешно размещен!',
