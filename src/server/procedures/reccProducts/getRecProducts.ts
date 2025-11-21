@@ -43,10 +43,10 @@ export const getRecProductsProcedure = publicProcedure.query(
         products: products,
       };
     } catch (error) {
-      console.error('Error fetching product:', error);
+      console.error('Error fetching recommended products:', error);
       return {
         success: false,
-        error: error instanceof Error ? error.message : 'Failed to fetch product',
+        error: error instanceof Error ? error.message : 'Failed to fetch recommended products',
         products: [],
       };
     }
