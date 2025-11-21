@@ -1,4 +1,3 @@
-/* eslint-disable  @typescript-eslint/no-explicit-any */
 
 import { protectedProcedure } from '../../trpc';
 import { Product } from '@/models/product/product';

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { Product } from '@/models/product/product';
 import { ProductInterface } from '@/models/product/types/productInterface';

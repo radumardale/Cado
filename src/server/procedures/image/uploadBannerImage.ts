@@ -1,4 +1,3 @@
-/* eslint-disable  @typescript-eslint/no-explicit-any */
 
 import { protectedProcedure } from '../../trpc';
 import { ActionResponse } from '@/lib/types/ActionResponse';

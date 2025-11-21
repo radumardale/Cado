@@ -1,4 +1,3 @@
-/* eslint-disable  @typescript-eslint/no-explicit-any */
 
 import { publicProcedure } from '../../trpc';
 import { z } from 'zod';

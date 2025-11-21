@@ -1,4 +1,3 @@
-/* eslint-disable  @typescript-eslint/no-explicit-any */
 
 import { publicProcedure } from '@/server/trpc';
 import { Blog } from '@/models/blog/blog';

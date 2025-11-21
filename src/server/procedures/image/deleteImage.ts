@@ -1,4 +1,3 @@
-/* eslint-disable  @typescript-eslint/no-explicit-any */
 
 import { ActionResponse } from '@/lib/types/ActionResponse';
 import { deleteImageRequestSchema } from '@/lib/validation/image/deleteImageRequest';

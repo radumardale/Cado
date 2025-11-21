@@ -1,4 +1,3 @@
-/* eslint-disable  @typescript-eslint/no-explicit-any */
 
 import { protectedProcedure } from '@/server/trpc';
 import { Client } from '@/models/client/client';

@@ -1,4 +1,3 @@
-/* eslint-disable  @typescript-eslint/no-explicit-any */
 
 import { Blog } from '@/models/blog/blog';
 import { ActionResponse } from '@/lib/types/ActionResponse';
