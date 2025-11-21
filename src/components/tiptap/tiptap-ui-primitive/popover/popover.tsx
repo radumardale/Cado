@@ -16,6 +16,7 @@ import {
   FloatingPortal,
 } from '@floating-ui/react';
 import '@/components/tiptap/tiptap-ui-primitive/popover/popover.scss';
+import { type ReactElementWithRef } from '@/components/tiptap/types/react-ref-utils';
 
 type PopoverContextValue = ReturnType<typeof usePopover> & {
   setLabelId: (id: string | undefined) => void;
@@ -135,10 +136,8 @@ const PopoverTrigger = React.forwardRef<HTMLElement, TriggerElementProps>(functi
   const context = usePopoverContext();
   const childrenRef = React.isValidElement(children)
     ? parseInt(React.version, 10) >= 19
-      ? // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        (children.props as any).ref
-      : // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        (children as any).ref
+      ? (children as ReactElementWithRef).props?.ref
+      : (children as ReactElementWithRef).ref
     : undefined;
   const ref = useMergeRefs([context.refs.setReference, propRef, childrenRef]);
 
@@ -148,8 +147,9 @@ const PopoverTrigger = React.forwardRef<HTMLElement, TriggerElementProps>(functi
       context.getReferenceProps({
         ref,
         ...props,
+        // Type assertion needed for spreading props from cloned element
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        ...(children.props as any),
+        ...((children as ReactElementWithRef).props as any),
         'data-state': context.open ? 'open' : 'closed',
       })
     );

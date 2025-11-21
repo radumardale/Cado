@@ -1,10 +1,9 @@
 'use client';
-/* eslint-disable  @typescript-eslint/no-explicit-any */
 
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { Input } from '@/components/ui/input';
-import { signIn } from 'next-auth/react';
+import { signIn, type SignInResponse } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { Eye, EyeOff } from 'lucide-react';
 import { useTranslations } from 'next-intl';
@@ -20,13 +19,13 @@ export default function AdminPage() {
   const [displayAdmin, setDisplayAdmin] = useState(true);
 
   const logIn = async () => {
-    const response: any = await signIn('credentials', {
-      username: username,
-      password: password,
+    const response: SignInResponse | undefined = await signIn('credentials', {
+      username,
+      password,
       redirect: false,
     });
 
-    if (response.ok) {
+    if (response?.ok) {
       router.push('/admin');
     }
   };

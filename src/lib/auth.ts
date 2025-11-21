@@ -1,8 +1,7 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { compare } from 'bcrypt';
 import type { GetServerSidePropsContext, NextApiRequest, NextApiResponse } from 'next';
 import CredentialsProvider from 'next-auth/providers/credentials';
-import { getServerSession } from 'next-auth';
+import { getServerSession, type Session } from 'next-auth';
 import { NextAuthOptions } from 'next-auth';
 import { JWT } from 'next-auth/jwt';
 import connectMongo from './connect-mongo';
@@ -58,9 +57,13 @@ export const authOptions: NextAuthOptions = {
       }
       return token;
     },
-    session: async ({ session, token }: { session: any; token: JWT }) => {
-      session.user = token.user;
-      return session;
+    session: async ({ session, token }: { session: Session; token: JWT }) => {
+      // Extend session with user from token
+      // Using type assertion as NextAuth's Session type doesn't include our custom user property
+      return {
+        ...session,
+        user: token.user,
+      } as Session;
     },
   },
 };

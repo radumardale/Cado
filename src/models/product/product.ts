@@ -1,6 +1,4 @@
-/* eslint-disable  @typescript-eslint/no-explicit-any */
-
-import mongoose from 'mongoose';
+import mongoose, { type UpdateQuery } from 'mongoose';
 import { ProductInfoSchema } from './types/productInfo';
 import { SaleSchema } from './types/productSale';
 import { ProductInterface } from './types/productInterface';
@@ -107,30 +105,32 @@ ProductSchema.pre<ProductInterface>('save', function (next) {
 });
 
 ProductSchema.pre('findOneAndUpdate', function (next) {
-  const update = this.getUpdate() as any;
+  const update = this.getUpdate() as UpdateQuery<ProductInterface>;
 
-  if (update?.title || update?.$set?.title) {
-    const titleData = update.title || update.$set.title;
+  if (update && typeof update === 'object' && !Array.isArray(update)) {
+    const titleData = 'title' in update ? update.title : update.$set?.title;
 
-    const normalizedTitle = {
-      ro: titleData.ro
-        .normalize('NFD')
-        .replace(/[\u0300-\u036f]/g, '')
-        .toLowerCase(),
-      ru: titleData.ru
-        .normalize('NFD')
-        .replace(/[\u0300-\u036f]/g, '')
-        .toLowerCase(),
-      en: titleData.en
-        .normalize('NFD')
-        .replace(/[\u0300-\u036f]/g, '')
-        .toLowerCase(),
-    };
+    if (titleData) {
+      const normalizedTitle = {
+        ro: titleData.ro
+          .normalize('NFD')
+          .replace(/[\u0300-\u036f]/g, '')
+          .toLowerCase(),
+        ru: titleData.ru
+          .normalize('NFD')
+          .replace(/[\u0300-\u036f]/g, '')
+          .toLowerCase(),
+        en: titleData.en
+          .normalize('NFD')
+          .replace(/[\u0300-\u036f]/g, '')
+          .toLowerCase(),
+      };
 
-    if (update.$set) {
-      update.$set.normalized_title = normalizedTitle;
-    } else {
-      update.normalized_title = normalizedTitle;
+      if (update.$set) {
+        update.$set.normalized_title = normalizedTitle;
+      } else {
+        update.normalized_title = normalizedTitle;
+      }
     }
   }
 

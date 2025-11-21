@@ -18,6 +18,7 @@ import {
   useRole,
   useTypeahead,
 } from '@floating-ui/react';
+import { type ReactElementWithRef } from '@/components/tiptap/types/react-ref-utils';
 import '@/components/tiptap/tiptap-ui-primitive/dropdown-menu/dropdown-menu.scss';
 import { Separator } from '@/components/tiptap/tiptap-ui-primitive/separator';
 
@@ -146,10 +147,8 @@ export const DropdownMenuTrigger = React.forwardRef<HTMLButtonElement, DropdownM
     const context = useDropdownMenuContext();
     const childrenRef = React.isValidElement(children)
       ? parseInt(React.version, 10) >= 19
-        ? // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          (children as { props: { ref?: React.Ref<any> } }).props.ref
-        : // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          (children as any).ref
+        ? (children as ReactElementWithRef).props?.ref
+        : (children as ReactElementWithRef).ref
       : undefined;
     const ref = useMergeRefs([context.refs.setReference, propRef, childrenRef]);
 
