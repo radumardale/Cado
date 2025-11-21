@@ -1,5 +1,14 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { cn, isEmptyNode, convertFileToBase64, handleImageUpload } from '@/lib/tiptap-utils';
+import {
+  cn,
+  isEmptyNode,
+  convertFileToBase64,
+  handleImageUpload,
+  isMarkInSchema,
+  isNodeInSchema,
+  getActiveMarkAttrs,
+  findNodePosition,
+} from '@/lib/tiptap-utils';
 
 /**
  * TipTap Utility Functions Tests
@@ -7,6 +16,7 @@ import { cn, isEmptyNode, convertFileToBase64, handleImageUpload } from '@/lib/t
  * Tests for TipTap editor utility functions including:
  * - Pure utilities (cn, isEmptyNode, file conversion)
  * - Image upload handling with progress tracking
+ * - Editor-dependent functions (schema validation, mark/node operations)
  */
 
 describe('TipTap Utilities', () => {
@@ -302,6 +312,428 @@ describe('TipTap Utilities', () => {
 
     it('should handle cn with Unicode characters', () => {
       expect(cn('class-你好', 'class-🎉')).toBe('class-你好 class-🎉');
+    });
+  });
+
+  describe('Editor-Dependent Functions', () => {
+    describe('isMarkInSchema()', () => {
+      it('should return false when editor is null', () => {
+        expect(isMarkInSchema('bold', null)).toBe(false);
+      });
+
+      it('should return false when editor has no schema', () => {
+        const editorWithoutSchema = {} as any; // eslint-disable-line @typescript-eslint/no-explicit-any
+
+        expect(isMarkInSchema('bold', editorWithoutSchema)).toBe(false);
+      });
+
+      it('should return true when mark exists in schema', () => {
+        const mockEditor = {
+          schema: {
+            spec: {
+              marks: new Map([
+                ['bold', { name: 'bold' }],
+                ['italic', { name: 'italic' }],
+              ]),
+            },
+          },
+        } as any; // eslint-disable-line @typescript-eslint/no-explicit-any
+
+        expect(isMarkInSchema('bold', mockEditor)).toBe(true);
+      });
+
+      it('should return false when mark does not exist in schema', () => {
+        const mockEditor = {
+          schema: {
+            spec: {
+              marks: new Map([
+                ['bold', { name: 'bold' }],
+                ['italic', { name: 'italic' }],
+              ]),
+            },
+          },
+        } as any; // eslint-disable-line @typescript-eslint/no-explicit-any
+
+        expect(isMarkInSchema('underline', mockEditor)).toBe(false);
+      });
+
+      it('should return true for all registered marks', () => {
+        const mockEditor = {
+          schema: {
+            spec: {
+              marks: new Map([
+                ['bold', {}],
+                ['italic', {}],
+                ['underline', {}],
+                ['strike', {}],
+              ]),
+            },
+          },
+        } as any; // eslint-disable-line @typescript-eslint/no-explicit-any
+
+        expect(isMarkInSchema('bold', mockEditor)).toBe(true);
+        expect(isMarkInSchema('italic', mockEditor)).toBe(true);
+        expect(isMarkInSchema('underline', mockEditor)).toBe(true);
+        expect(isMarkInSchema('strike', mockEditor)).toBe(true);
+      });
+
+      it('should handle empty marks map', () => {
+        const mockEditor = {
+          schema: {
+            spec: {
+              marks: new Map(),
+            },
+          },
+        } as any; // eslint-disable-line @typescript-eslint/no-explicit-any
+
+        expect(isMarkInSchema('bold', mockEditor)).toBe(false);
+      });
+    });
+
+    describe('isNodeInSchema()', () => {
+      it('should return false when editor is null', () => {
+        expect(isNodeInSchema('paragraph', null)).toBe(false);
+      });
+
+      it('should return false when editor has no schema', () => {
+        const editorWithoutSchema = {} as any; // eslint-disable-line @typescript-eslint/no-explicit-any
+
+        expect(isNodeInSchema('paragraph', editorWithoutSchema)).toBe(false);
+      });
+
+      it('should return true when node exists in schema', () => {
+        const mockEditor = {
+          schema: {
+            spec: {
+              nodes: new Map([
+                ['paragraph', { name: 'paragraph' }],
+                ['heading', { name: 'heading' }],
+              ]),
+            },
+          },
+        } as any; // eslint-disable-line @typescript-eslint/no-explicit-any
+
+        expect(isNodeInSchema('paragraph', mockEditor)).toBe(true);
+      });
+
+      it('should return false when node does not exist in schema', () => {
+        const mockEditor = {
+          schema: {
+            spec: {
+              nodes: new Map([
+                ['paragraph', { name: 'paragraph' }],
+                ['heading', { name: 'heading' }],
+              ]),
+            },
+          },
+        } as any; // eslint-disable-line @typescript-eslint/no-explicit-any
+
+        expect(isNodeInSchema('blockquote', mockEditor)).toBe(false);
+      });
+
+      it('should return true for all registered nodes', () => {
+        const mockEditor = {
+          schema: {
+            spec: {
+              nodes: new Map([
+                ['doc', {}],
+                ['paragraph', {}],
+                ['heading', {}],
+                ['codeBlock', {}],
+              ]),
+            },
+          },
+        } as any; // eslint-disable-line @typescript-eslint/no-explicit-any
+
+        expect(isNodeInSchema('doc', mockEditor)).toBe(true);
+        expect(isNodeInSchema('paragraph', mockEditor)).toBe(true);
+        expect(isNodeInSchema('heading', mockEditor)).toBe(true);
+        expect(isNodeInSchema('codeBlock', mockEditor)).toBe(true);
+      });
+
+      it('should handle empty nodes map', () => {
+        const mockEditor = {
+          schema: {
+            spec: {
+              nodes: new Map(),
+            },
+          },
+        } as any; // eslint-disable-line @typescript-eslint/no-explicit-any
+
+        expect(isNodeInSchema('paragraph', mockEditor)).toBe(false);
+      });
+    });
+
+    describe('getActiveMarkAttrs()', () => {
+      it('should return null when editor is null', () => {
+        expect(getActiveMarkAttrs(null, 'bold')).toBeNull();
+      });
+
+      it('should return null when no marks are active', () => {
+        const mockEditor = {
+          state: {
+            storedMarks: null,
+            selection: {
+              $from: {
+                marks: () => [],
+              },
+            },
+          },
+        } as any; // eslint-disable-line @typescript-eslint/no-explicit-any
+
+        expect(getActiveMarkAttrs(mockEditor, 'bold')).toBeNull();
+      });
+
+      it('should return mark attributes when mark is active in storedMarks', () => {
+        const mockAttrs = { href: 'https://example.com', target: '_blank' };
+        const mockEditor = {
+          state: {
+            storedMarks: [
+              {
+                type: { name: 'link' },
+                attrs: mockAttrs,
+              },
+            ],
+            selection: {
+              $from: {
+                marks: () => [],
+              },
+            },
+          },
+        } as any; // eslint-disable-line @typescript-eslint/no-explicit-any
+
+        expect(getActiveMarkAttrs(mockEditor, 'link')).toEqual(mockAttrs);
+      });
+
+      it('should return mark attributes when mark is active in selection', () => {
+        const mockAttrs = { color: '#ff0000' };
+        const mockEditor = {
+          state: {
+            storedMarks: null,
+            selection: {
+              $from: {
+                marks: () => [
+                  {
+                    type: { name: 'textColor' },
+                    attrs: mockAttrs,
+                  },
+                ],
+              },
+            },
+          },
+        } as any; // eslint-disable-line @typescript-eslint/no-explicit-any
+
+        expect(getActiveMarkAttrs(mockEditor, 'textColor')).toEqual(mockAttrs);
+      });
+
+      it('should return null when requested mark is not in active marks', () => {
+        const mockEditor = {
+          state: {
+            storedMarks: null,
+            selection: {
+              $from: {
+                marks: () => [
+                  {
+                    type: { name: 'bold' },
+                    attrs: {},
+                  },
+                  {
+                    type: { name: 'italic' },
+                    attrs: {},
+                  },
+                ],
+              },
+            },
+          },
+        } as any; // eslint-disable-line @typescript-eslint/no-explicit-any
+
+        expect(getActiveMarkAttrs(mockEditor, 'underline')).toBeNull();
+      });
+
+      it('should prioritize storedMarks over selection marks', () => {
+        const storedAttrs = { href: 'https://stored.com' };
+        const selectionAttrs = { href: 'https://selection.com' };
+        const mockEditor = {
+          state: {
+            storedMarks: [
+              {
+                type: { name: 'link' },
+                attrs: storedAttrs,
+              },
+            ],
+            selection: {
+              $from: {
+                marks: () => [
+                  {
+                    type: { name: 'link' },
+                    attrs: selectionAttrs,
+                  },
+                ],
+              },
+            },
+          },
+        } as any; // eslint-disable-line @typescript-eslint/no-explicit-any
+
+        expect(getActiveMarkAttrs(mockEditor, 'link')).toEqual(storedAttrs);
+      });
+
+      it('should handle marks with empty attributes', () => {
+        const mockEditor = {
+          state: {
+            storedMarks: null,
+            selection: {
+              $from: {
+                marks: () => [
+                  {
+                    type: { name: 'bold' },
+                    attrs: {},
+                  },
+                ],
+              },
+            },
+          },
+        } as any; // eslint-disable-line @typescript-eslint/no-explicit-any
+
+        expect(getActiveMarkAttrs(mockEditor, 'bold')).toEqual({});
+      });
+    });
+
+    describe('findNodePosition()', () => {
+      it('should return null when editor is null', () => {
+        expect(findNodePosition({ editor: null })).toBeNull();
+      });
+
+      it('should return null when editor has no state or doc', () => {
+        const editorWithoutState = {} as any; // eslint-disable-line @typescript-eslint/no-explicit-any
+
+        expect(findNodePosition({ editor: editorWithoutState })).toBeNull();
+      });
+
+      it('should return null when neither node nor nodePos is provided', () => {
+        const mockEditor = {
+          state: {
+            doc: {},
+          },
+        } as any; // eslint-disable-line @typescript-eslint/no-explicit-any
+
+        expect(findNodePosition({ editor: mockEditor })).toBeNull();
+      });
+
+      it('should find node at given position', () => {
+        const mockNode = { type: { name: 'paragraph' } };
+        const mockEditor = {
+          state: {
+            doc: {
+              nodeAt: vi.fn().mockReturnValue(mockNode),
+            },
+          },
+        } as any; // eslint-disable-line @typescript-eslint/no-explicit-any
+
+        const result = findNodePosition({ editor: mockEditor, nodePos: 10 });
+
+        expect(result).toEqual({ pos: 10, node: mockNode });
+        expect(mockEditor.state.doc.nodeAt).toHaveBeenCalledWith(10);
+      });
+
+      it('should return null when node not found at position', () => {
+        const mockEditor = {
+          state: {
+            doc: {
+              nodeAt: vi.fn().mockReturnValue(null),
+              descendants: vi.fn(), // Add descendants method even though not used when nodePos is null
+            },
+          },
+        } as any; // eslint-disable-line @typescript-eslint/no-explicit-any
+
+        const result = findNodePosition({ editor: mockEditor, nodePos: 10 });
+
+        expect(result).toBeNull();
+        expect(mockEditor.state.doc.nodeAt).toHaveBeenCalledWith(10);
+      });
+
+      it('should handle position 0', () => {
+        const mockNode = { type: { name: 'doc' } };
+        const mockEditor = {
+          state: {
+            doc: {
+              nodeAt: vi.fn().mockReturnValue(mockNode),
+            },
+          },
+        } as any; // eslint-disable-line @typescript-eslint/no-explicit-any
+
+        const result = findNodePosition({ editor: mockEditor, nodePos: 0 });
+
+        expect(result).toEqual({ pos: 0, node: mockNode });
+        expect(mockEditor.state.doc.nodeAt).toHaveBeenCalledWith(0);
+      });
+
+      it('should search for node in document when only node is provided', () => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const mockNode = { type: { name: 'paragraph' } } as any;
+        const mockEditor = {
+          state: {
+            doc: {
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              descendants: vi.fn((callback: any) => {
+                // Simulate finding the node at position 5
+                callback(mockNode, 5);
+              }),
+            },
+          },
+        } as any; // eslint-disable-line @typescript-eslint/no-explicit-any
+
+        const result = findNodePosition({ editor: mockEditor, node: mockNode });
+
+        expect(result).toEqual({ pos: 5, node: mockNode });
+        expect(mockEditor.state.doc.descendants).toHaveBeenCalled();
+      });
+
+      it('should return null when node not found in document', () => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const searchNode = { type: { name: 'paragraph' } } as any;
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const differentNode = { type: { name: 'heading' } } as any;
+        const mockEditor = {
+          state: {
+            doc: {
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              descendants: vi.fn((callback: any) => {
+                // Simulate traversing nodes but not finding the target
+                callback(differentNode, 0);
+                callback(differentNode, 10);
+              }),
+            },
+          },
+        } as any; // eslint-disable-line @typescript-eslint/no-explicit-any
+
+        const result = findNodePosition({ editor: mockEditor, node: searchNode });
+
+        expect(result).toBeNull();
+      });
+
+      it('should handle errors when checking node at position', () => {
+        const mockEditor = {
+          state: {
+            doc: {
+              nodeAt: vi.fn().mockImplementation(() => {
+                throw new Error('Invalid position');
+              }),
+            },
+          },
+        } as any; // eslint-disable-line @typescript-eslint/no-explicit-any
+
+        const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+        const result = findNodePosition({ editor: mockEditor, nodePos: 999 });
+
+        expect(result).toBeNull();
+        expect(consoleSpy).toHaveBeenCalledWith(
+          'Error checking node at position:',
+          expect.any(Error)
+        );
+
+        consoleSpy.mockRestore();
+      });
     });
   });
 });

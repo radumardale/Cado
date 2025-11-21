@@ -15,7 +15,7 @@ export interface SitemapEntry {
   };
 }
 
-function getBaseUrl(): string {
+export function getBaseUrl(): string {
   let baseUrl: string;
 
   // First check for BASE_URL environment variable
