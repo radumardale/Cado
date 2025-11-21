@@ -50,3 +50,6 @@ notes/
 /db-backup/
 
 .claude/settings.local.json
+
+# Husky
+.husky/_/

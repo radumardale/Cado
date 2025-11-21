@@ -1,0 +1,43 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+# Smart Pre-Commit Hook with Tiered Strategy
+# This hook automatically runs quality checks based on what files changed
+
+STAGED_FILES=$(git diff --cached --name-only --diff-filter=ACM)
+
+echo "🔍 Analyzing staged files..."
+
+# Tier 1: Skip for safe file patterns (instant)
+if echo "$STAGED_FILES" | grep -qE '^(docs/.*\.md|README\.md|\.gitignore|\.prettierrc|\.env\.example|LICENSE)$'; then
+  if ! echo "$STAGED_FILES" | grep -qE '\.(ts|tsx|js|jsx)$'; then
+    echo "✅ Safe files only (docs/config), skipping all checks"
+    exit 0
+  fi
+fi
+
+# Check if any code files changed
+CODE_CHANGED=$(echo "$STAGED_FILES" | grep -E '\.(ts|tsx|js|jsx)$' || true)
+
+if [ -z "$CODE_CHANGED" ]; then
+  echo "✅ No code files changed, skipping checks"
+  exit 0
+fi
+
+# Tier 2: TypeScript checks and formatting for code changes
+echo "⚡ Running TypeScript checks and formatting..."
+npx lint-staged
+npm run typecheck
+
+# Tier 3: Full build only for critical changes (30-60s)
+CRITICAL_CHANGED=$(echo "$STAGED_FILES" | grep -E '(src/server/|src/models/|src/lib/|src/app/\[locale\]/|\.d\.ts$|tsconfig\.json|next\.config)' || true)
+
+if [ -n "$CRITICAL_CHANGED" ]; then
+  echo "🏗️  Critical files changed, running full build..."
+  npm run build
+else
+  echo "✅ Non-critical changes, skipping full build"
+  echo "   (Full build will run in CI)"
+fi
+
+echo "✅ Pre-commit checks passed!"

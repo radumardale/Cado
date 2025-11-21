@@ -461,12 +461,16 @@ You are reviewing comments on a Pull Request. The PR identifier is: $ARGUMENTS
         - If Mongoose models: maintain conventions
         - If UI components: check for reusable components
       - Test the changes manually or run relevant tests
-      - **MANDATORY: Quality checks before commit:**
-        ```bash
-        npm run typecheck
-        npm run build
-        ```
-      - Only commit if both pass
+      - **Quality checks (automated by Husky pre-commit hook):**
+        - Husky hook automatically runs when you commit:
+          - Docs/config only: Skips all checks
+          - Code changes: Runs typecheck + Prettier formatting
+          - Critical paths: Also runs full build (server/models/lib/routing)
+        - If checks fail:
+          - Fix the issues immediately
+          - Re-attempt commit (hook runs again)
+          - Only commits when checks pass
+        - Hook can be bypassed in emergencies: `git commit --no-verify` (not recommended)
       - Create commit message referencing the comment(s):
 
         ```
@@ -675,7 +679,7 @@ While this is a good suggestion, it was outside the scope of issue #{ORIGINAL_IS
 
 - **Context is king** - Always reference original issue and implementation plan when making decisions
 - **Respect the reviewers** - All responses should be professional and appreciative
-- **Quality checks are mandatory** - Every commit must pass typecheck and build before creation
+- **Quality checks are automatic** - Husky pre-commit hooks run appropriate checks based on changed files
 - **Use Plan Mode for evaluation** - Extended thinking helps make better decisions about which comments to address
 - **Scope discipline** - Don't address out-of-scope comments; create follow-up issues instead
 - **Atomic commits when possible** - Each significant comment should get its own commit for traceability
