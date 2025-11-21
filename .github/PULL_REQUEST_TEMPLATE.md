@@ -13,27 +13,34 @@
 ## 📋 Details
 
 ### Approved Issue Reference
+
 **This PR is related to approved issue:** #000
 
 ### What does this PR do?
+
 <!-- Describe the changes -->
 
 ### Why is this change needed?
+
 <!-- Explain the reasoning -->
 
 ### How has this been tested?
+
 <!-- Describe your testing process -->
 
 ## 📸 Screenshots (if applicable)
+
 <!-- Before/after screenshots for UI changes -->
 
 ## 🔒 Legal Acknowledgment
 
 By submitting this PR, I acknowledge:
+
 - I assign all rights, title, and interest in this contribution to the copyright holder
 - I waive any moral rights I may have in this contribution
 - I have the legal right to make this assignment
 - The copyright holder may use, modify, or reject this contribution at their sole discretion
 
 ## 📝 Additional Notes
+
 <!-- Any other information -->

@@ -18,13 +18,14 @@ The test suite currently has **3 passing test files** with 74 tests and **13 ski
 
 ### ✅ Passing Tests (3 files, 74 tests)
 
-| File | Tests | Purpose | Database Needed? |
-|------|-------|---------|------------------|
-| `src/__tests__/routes/robots.test.ts` | 14 | Tests robots.txt generation | ❌ No |
-| `src/lib/seo/hreflang.test.ts` | 45 | Tests hreflang link generation | ❌ No |
-| `src/__tests__/routes/sitemap.test.ts` | 15 | Tests sitemap generation | ❌ No (uses mocks) |
+| File                                   | Tests | Purpose                        | Database Needed?   |
+| -------------------------------------- | ----- | ------------------------------ | ------------------ |
+| `src/__tests__/routes/robots.test.ts`  | 14    | Tests robots.txt generation    | ❌ No              |
+| `src/lib/seo/hreflang.test.ts`         | 45    | Tests hreflang link generation | ❌ No              |
+| `src/__tests__/routes/sitemap.test.ts` | 15    | Tests sitemap generation       | ❌ No (uses mocks) |
 
 **Key Success Factors:**
+
 - ✅ Use `vi.mock()` to mock database models
 - ✅ Test pure functions or configurations
 - ✅ Mock external dependencies (Product, Blog models)
@@ -35,29 +36,32 @@ The test suite currently has **3 passing test files** with 74 tests and **13 ski
 All located in `src/__tests__/actions/` directory:
 
 #### Order Tests (4 files)
-| File | Issue | Real Purpose |
-|------|-------|--------------|
-| `order/updateOrder.test.ts` | All code commented out | Placeholder test |
-| `order/addOrder.test.ts` | ⚠️ **NOT A TEST!** | Domain migration script |
-| `order/deleteOrder.test.ts` | All code commented out | Placeholder test |
-| `order/getAllOrders.test.ts` | All code commented out | Placeholder test |
+
+| File                         | Issue                  | Real Purpose            |
+| ---------------------------- | ---------------------- | ----------------------- |
+| `order/updateOrder.test.ts`  | All code commented out | Placeholder test        |
+| `order/addOrder.test.ts`     | ⚠️ **NOT A TEST!**     | Domain migration script |
+| `order/deleteOrder.test.ts`  | All code commented out | Placeholder test        |
+| `order/getAllOrders.test.ts` | All code commented out | Placeholder test        |
 
 #### Product Tests (5 files)
-| File | Issue | Real Purpose |
-|------|-------|--------------|
-| `product/getProduct.test.ts` | All code commented out | Placeholder test |
-| `product/addProduct.test.ts` | Code exists but requires DB | Database seed script |
-| `product/updateProduct.test.ts` | All code commented out | Placeholder test |
-| `product/deleteProduct.test.ts` | All code commented out | Placeholder test |
-| `product/deleteAllProducts.test.ts` | All code commented out | Placeholder test |
+
+| File                                | Issue                       | Real Purpose         |
+| ----------------------------------- | --------------------------- | -------------------- |
+| `product/getProduct.test.ts`        | All code commented out      | Placeholder test     |
+| `product/addProduct.test.ts`        | Code exists but requires DB | Database seed script |
+| `product/updateProduct.test.ts`     | All code commented out      | Placeholder test     |
+| `product/deleteProduct.test.ts`     | All code commented out      | Placeholder test     |
+| `product/deleteAllProducts.test.ts` | All code commented out      | Placeholder test     |
 
 #### Other Tests (4 files)
-| File | Issue | Real Purpose |
-|------|-------|--------------|
-| `search/searchProduct.test.ts` | All code commented out | Placeholder test |
-| `blog/addBlog.test.ts` | ⚠️ **NOT A TEST!** | Blog post seeding script |
-| `image/uploadImage.test.ts` | Code exists but requires DB+S3 | Image update script |
-| `image/deleteImage.test.ts` | All code commented out | Placeholder test |
+
+| File                           | Issue                          | Real Purpose             |
+| ------------------------------ | ------------------------------ | ------------------------ |
+| `search/searchProduct.test.ts` | All code commented out         | Placeholder test         |
+| `blog/addBlog.test.ts`         | ⚠️ **NOT A TEST!**             | Blog post seeding script |
+| `image/uploadImage.test.ts`    | Code exists but requires DB+S3 | Image update script      |
+| `image/deleteImage.test.ts`    | All code commented out         | Placeholder test         |
 
 ---
 
@@ -109,9 +113,7 @@ function createMockQuery<T>(data: T[]): Partial<Query<unknown, unknown>> {
 
 // ✅ Test with mocked data
 it('should only include in-stock products', async () => {
-  const mockProducts = [
-    { custom_id: 'prod1', updatedAt: new Date() },
-  ];
+  const mockProducts = [{ custom_id: 'prod1', updatedAt: new Date() }];
 
   vi.mocked(Product.find).mockReturnValue(
     createMockQuery(mockProducts) as unknown as ReturnType<typeof Product.find>
@@ -136,12 +138,13 @@ export default defineConfig({
   plugins: [tsconfigPaths(), react()],
   test: {
     environment: 'jsdom',
-    testTimeout: 0,  // ⚠️ Unlimited timeout - risky!
+    testTimeout: 0, // ⚠️ Unlimited timeout - risky!
   },
 });
 ```
 
 **Issues:**
+
 - `testTimeout: 0` means tests can hang forever
 - No global setup/teardown for database mocking
 - Environment variables loaded but no test-specific config
@@ -153,18 +156,21 @@ export default defineConfig({
 ### Option 1: Delete All Skipped Tests ✅ RECOMMENDED
 
 **Rationale:**
+
 - They provide no testing value in current state
 - Two are misnamed data scripts, not tests
 - Would require significant effort to fix properly
 - False sense of test coverage
 
 **Actions:**
+
 1. Delete all 13 files in `src/__tests__/actions/`
 2. Move `addBlog.test.ts` and `addOrder.test.ts` logic to `/scripts/` if needed
 3. Keep the 3 working test files
 4. Update test configuration to set reasonable timeout (30s)
 
 **Outcome:**
+
 - Clean, maintainable test suite
 - All tests pass and are useful
 - No confusion about test status
@@ -174,6 +180,7 @@ export default defineConfig({
 ### Option 2: Fix Tests with Proper Mocking
 
 **Rationale:**
+
 - Provides unit testing for tRPC procedures
 - No database dependency
 - Fast test execution
@@ -181,6 +188,7 @@ export default defineConfig({
 **Effort:** High (2-4 hours per test file)
 
 **Required Work per File:**
+
 1. Mock database models (Product, Order, Blog, etc.)
 2. Mock S3 client for image tests
 3. Mock tRPC context with fake session
@@ -189,6 +197,7 @@ export default defineConfig({
 6. Test error cases
 
 **Example pattern:**
+
 ```typescript
 // Mock models
 vi.mock('@/models/product/product');
@@ -199,19 +208,20 @@ it('should create product', async () => {
   vi.mocked(Product.create).mockResolvedValue(mockProduct);
 
   const result = await caller.products.createProduct({
-    data: productData
+    data: productData,
   });
 
   expect(result.success).toBe(true);
   expect(Product.create).toHaveBeenCalledWith(
     expect.objectContaining({
-      title: productData.title
+      title: productData.title,
     })
   );
 });
 ```
 
 **Outcome:**
+
 - Real unit tests for business logic
 - No database dependency
 - Fast, reliable tests
@@ -221,6 +231,7 @@ it('should create product', async () => {
 ### Option 3: Convert to Integration Tests
 
 **Rationale:**
+
 - Tests real database interactions
 - Catches integration issues
 - More confidence in code
@@ -228,6 +239,7 @@ it('should create product', async () => {
 **Effort:** Very High (1-2 days)
 
 **Required Work:**
+
 1. Set up MongoDB Memory Server or test database
 2. Implement global test setup/teardown
 3. Create database seeding utilities
@@ -236,6 +248,7 @@ it('should create product', async () => {
 6. Update all test files
 
 **Outcome:**
+
 - Full integration test coverage
 - Slower test execution
 - More maintenance overhead
@@ -247,6 +260,7 @@ it('should create product', async () => {
 ### Step-by-Step Plan
 
 #### Phase 1: Cleanup (5 minutes)
+
 1. ✅ Delete 11 placeholder test files with commented code:
    - `order/updateOrder.test.ts`
    - `order/deleteOrder.test.ts`
@@ -268,6 +282,7 @@ it('should create product', async () => {
    - `image/uploadImage.test.ts` - If useful as documentation, move to `/scripts/update-images.ts`
 
 #### Phase 2: Configuration Update (2 minutes)
+
 1. Update `vitest.config.mts`:
    ```typescript
    test: {
@@ -277,6 +292,7 @@ it('should create product', async () => {
    ```
 
 #### Phase 3: Verification (1 minute)
+
 1. Run `npm run test`
 2. Verify all tests pass
 3. Confirm test count: 3 files, 74 tests
@@ -287,13 +303,13 @@ it('should create product', async () => {
 
 ### Current Coverage
 
-| Area | Coverage | Notes |
-|------|----------|-------|
-| SEO utilities | ✅ Excellent | robots.txt, sitemap, hreflang all tested |
-| tRPC procedures | ❌ None | No unit tests for business logic |
-| Database models | ❌ None | No model validation tests |
-| API routes | ❌ None | No integration tests |
-| Components | ❌ None | No React component tests |
+| Area            | Coverage     | Notes                                    |
+| --------------- | ------------ | ---------------------------------------- |
+| SEO utilities   | ✅ Excellent | robots.txt, sitemap, hreflang all tested |
+| tRPC procedures | ❌ None      | No unit tests for business logic         |
+| Database models | ❌ None      | No model validation tests                |
+| API routes      | ❌ None      | No integration tests                     |
+| Components      | ❌ None      | No React component tests                 |
 
 ### Future Testing Priorities
 
@@ -320,16 +336,19 @@ If you want to add tests later, prioritize in this order:
 ## Conclusion
 
 **Current State:**
+
 - 3 well-written tests (74 tests total) ✅
 - 13 non-functional placeholders (2 are data scripts) ❌
 
 **Recommended Action:**
+
 - Delete all 13 skipped test files
 - Extract useful scripts to `/scripts/` directory
 - Update test timeout configuration
 - Keep the 3 working test files
 
 **Result:**
+
 - Clean, maintainable test suite
 - All tests pass and provide value
 - Clear foundation for future test additions
@@ -339,6 +358,7 @@ If you want to add tests later, prioritize in this order:
 ## Appendix: File Inventory
 
 ### Files to Delete
+
 ```
 src/__tests__/actions/order/updateOrder.test.ts
 src/__tests__/actions/order/addOrder.test.ts
@@ -356,6 +376,7 @@ src/__tests__/actions/image/deleteImage.test.ts
 ```
 
 ### Files to Keep
+
 ```
 src/__tests__/routes/robots.test.ts
 src/__tests__/routes/sitemap.test.ts
@@ -363,6 +384,7 @@ src/lib/seo/hreflang.test.ts
 ```
 
 ### Scripts to Create (Optional)
+
 ```
 scripts/update-product-domains.ts (from addOrder.test.ts)
 scripts/seed-blogs.ts (from addBlog.test.ts)

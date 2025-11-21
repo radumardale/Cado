@@ -56,12 +56,13 @@ async function updateProductImageDomains(): Promise<UpdateResult> {
               const updatedContent: Record<string, string> = {};
               let hasContentUpdates = false;
 
-              Object.keys((product as Record<string, unknown>)[field] as Record<string, unknown>).forEach(lang => {
-                const fieldContent = (product as Record<string, Record<string, string>>)[field][lang];
-                if (
-                  typeof fieldContent === 'string' &&
-                  fieldContent.includes(OLD_DOMAIN)
-                ) {
+              Object.keys(
+                (product as Record<string, unknown>)[field] as Record<string, unknown>
+              ).forEach(lang => {
+                const fieldContent = (product as Record<string, Record<string, string>>)[field][
+                  lang
+                ];
+                if (typeof fieldContent === 'string' && fieldContent.includes(OLD_DOMAIN)) {
                   updatedContent[lang] = fieldContent.replace(
                     new RegExp(OLD_DOMAIN, 'g'),
                     NEW_DOMAIN
@@ -78,9 +79,9 @@ async function updateProductImageDomains(): Promise<UpdateResult> {
               }
             } else if (
               typeof (product as Record<string, unknown>)[field] === 'string' &&
-              ((product as Record<string, string>)[field]).includes(OLD_DOMAIN)
+              (product as Record<string, string>)[field].includes(OLD_DOMAIN)
             ) {
-              updates[field] = ((product as Record<string, string>)[field]).replace(
+              updates[field] = (product as Record<string, string>)[field].replace(
                 new RegExp(OLD_DOMAIN, 'g'),
                 NEW_DOMAIN
               );

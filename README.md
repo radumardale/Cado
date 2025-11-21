@@ -250,8 +250,10 @@ npm run format:check
 ### IDE Setup for Format on Save
 
 #### VS Code
+
 1. Install the [Prettier extension](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)
 2. Add to your settings (`.vscode/settings.json` or User Settings):
+
 ```json
 {
   "editor.defaultFormatter": "esbenp.prettier-vscode",
@@ -269,6 +271,7 @@ npm run format:check
 ```
 
 #### WebStorm / IntelliJ IDEA
+
 1. Prettier is built-in (no plugin needed)
 2. Go to **Settings → Languages & Frameworks → JavaScript → Prettier**
 3. Set Prettier package path: `./node_modules/prettier`
@@ -276,20 +279,24 @@ npm run format:check
 5. Configure file patterns: `{**/*,*}.{js,ts,jsx,tsx,json,css,scss,md}`
 
 #### Sublime Text
+
 1. Install [JsPrettier package](https://packagecontrol.io/packages/JsPrettier)
 2. Set `"auto_format_on_save": true` in JsPrettier settings
 
 #### Vim/Neovim
+
 1. Install [vim-prettier plugin](https://github.com/prettier/vim-prettier)
 2. Add to your config: `let g:prettier#autoformat = 1`
 
 #### Cursor
+
 1. Prettier support is built-in
 2. Add to settings: `"editor.formatOnSave": true`
 
 ### Formatting Rules
 
 Our Prettier configuration (`.prettierrc`) enforces:
+
 - ✅ Single quotes for strings
 - ✅ Semicolons always
 - ✅ 2-space indentation
@@ -416,6 +423,7 @@ vercel --prod
 **⚠️ IMPORTANT:** This is a proprietary project with restricted contribution rights.
 
 **Before contributing, you MUST:**
+
 - Read the [CONTRIBUTING.md](CONTRIBUTING.md) file
 - Obtain explicit written approval from the project owner
 - Agree to the Contributor License Agreement (CLA)
@@ -423,6 +431,7 @@ vercel --prod
 **Unauthorized contributions will be rejected.**
 
 For approved contributions:
+
 1. Request permission via email (info@cado.md) or GitHub Issues
 2. Wait for explicit written approval
 3. Create a feature branch from `develop`
@@ -442,6 +451,7 @@ Copyright (c) 2024-present, Cado MD
 This software is proprietary and confidential. While the source code is publicly visible for reference purposes, you may NOT use, copy, modify, distribute, or create derivative works without explicit written permission from the copyright holder.
 
 **Key Points:**
+
 - ✅ Viewing for educational/reference purposes is permitted
 - ❌ Using, copying, or modifying requires written permission
 - ❌ Forking or creating derivative works is prohibited

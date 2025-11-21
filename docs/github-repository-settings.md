@@ -5,6 +5,7 @@ This document provides recommended GitHub repository settings to enforce the con
 ## 🎯 Overview
 
 These settings ensure that:
+
 - You maintain full control over all contributions
 - All changes require your explicit approval
 - Direct commits to protected branches are prevented
@@ -19,6 +20,7 @@ These settings ensure that:
 Navigate to: **Settings → General**
 
 #### Basic Information
+
 - **Visibility:** Public (as desired)
 - **Features:**
   - ✅ Wikis: Disabled (unless needed)
@@ -28,6 +30,7 @@ Navigate to: **Settings → General**
   - ✅ Discussions: Optional
 
 #### Pull Requests
+
 - ✅ **Allow merge commits:** Enabled
 - ✅ **Allow squash merging:** Enabled (recommended)
 - ✅ **Allow rebase merging:** Enabled
@@ -46,6 +49,7 @@ Navigate to: **Settings → Branches → Add branch protection rule**
 **Branch name pattern:** `main`
 
 #### Protect matching branches
+
 - ✅ **Require a pull request before merging**
   - ✅ **Require approvals:** 1 (from you)
   - ✅ **Dismiss stale pull request approvals when new commits are pushed:** Enabled
@@ -79,6 +83,7 @@ Navigate to: **Settings → Branches → Add branch protection rule**
   - This prevents anyone else from pushing directly
 
 #### Rules applied to everyone including administrators
+
 - ✅ **Include administrators:** Enabled (enforce rules on everyone)
 
 ---
@@ -88,6 +93,7 @@ Navigate to: **Settings → Branches → Add branch protection rule**
 **Branch name pattern:** `develop`
 
 Apply the same settings as `main` above, with these modifications:
+
 - **Require approvals:** 1 (from you)
 - **Restrict who can push to matching branches:** Add your username
 - All other settings same as `main`
@@ -129,6 +135,7 @@ Navigate to: **Settings → Collaborators and teams**
 Navigate to: **Settings → Notifications**
 
 Configure alerts for:
+
 - ✅ All pull requests
 - ✅ All issues
 - ✅ All comments on your commits
@@ -142,11 +149,13 @@ Configure alerts for:
 Navigate to: **Settings → Actions → General**
 
 ### Actions permissions
+
 - ✅ **Allow all actions and reusable workflows:** Or restrict as needed
 - ✅ **Require approval for first-time contributors:** Enabled
 - ✅ **Require approval for all outside collaborators:** Enabled
 
 ### Workflow permissions
+
 - ✅ **Read repository contents and packages permissions:** Selected
 - ✅ **Allow GitHub Actions to create and approve pull requests:** Disabled
 
@@ -172,6 +181,7 @@ assignees: ''
 ## 🚨 READ THIS FIRST
 
 Before submitting this request, have you:
+
 - [ ] Read the [CONTRIBUTING.md](../CONTRIBUTING.md) file?
 - [ ] Read the [LICENSE](../LICENSE) file?
 - [ ] Understand that all contributions become property of the copyright holder?
@@ -180,20 +190,25 @@ Before submitting this request, have you:
 ## 📋 Contribution Details
 
 ### What do you want to contribute?
+
 <!-- Describe your proposed contribution in detail -->
 
 ### Why is this contribution needed?
+
 <!-- Explain the problem it solves or the value it adds -->
 
 ### How will you implement it?
+
 <!-- Provide a high-level technical approach -->
 
 ### Estimated scope
+
 <!-- How much work is involved? -->
 
 ## 🔒 Legal Acknowledgment
 
 By submitting this request, I acknowledge:
+
 - [ ] I have read and agree to the Contributor License Agreement (CLA)
 - [ ] I will assign all rights to my contribution to the copyright holder
 - [ ] I understand this contribution requires explicit written approval
@@ -220,33 +235,41 @@ assignees: ''
 ---
 
 ## ⚠️ Note
+
 Submitting a bug report does not grant you permission to fix it. If you wish to contribute a fix, you must submit a separate Contribution Request and receive approval.
 
 ## 🐛 Bug Description
+
 <!-- A clear description of the bug -->
 
 ## 📋 Steps to Reproduce
+
 1. Go to '...'
 2. Click on '...'
 3. Scroll down to '...'
 4. See error
 
 ## ✅ Expected Behavior
+
 <!-- What should happen -->
 
 ## ❌ Actual Behavior
+
 <!-- What actually happens -->
 
 ## 🖥️ Environment
+
 - OS:
 - Browser:
 - Node version:
 - Any other relevant info:
 
 ## 📸 Screenshots
+
 <!-- If applicable -->
 
 ## 📝 Additional Context
+
 <!-- Any other information -->
 ```
 
@@ -264,21 +287,27 @@ assignees: ''
 ---
 
 ## ⚠️ Note
+
 Feature suggestions do not guarantee acceptance or implementation. If you wish to implement this feature yourself, you must submit a separate Contribution Request and receive approval.
 
 ## 🎯 Feature Description
+
 <!-- Clear description of the feature -->
 
 ## 💡 Use Case
+
 <!-- Why is this feature needed? -->
 
 ## 📋 Proposed Solution
+
 <!-- How would you implement this? -->
 
 ## 🔄 Alternatives Considered
+
 <!-- Other approaches you've thought about -->
 
 ## 📸 Mockups/Examples
+
 <!-- If applicable -->
 ```
 
@@ -304,29 +333,36 @@ Feature suggestions do not guarantee acceptance or implementation. If you wish t
 ## 📋 Details
 
 ### Approved Issue Reference
+
 **This PR is related to approved issue:** #000
 
 ### What does this PR do?
+
 <!-- Describe the changes -->
 
 ### Why is this change needed?
+
 <!-- Explain the reasoning -->
 
 ### How has this been tested?
+
 <!-- Describe your testing process -->
 
 ## 📸 Screenshots (if applicable)
+
 <!-- Before/after screenshots for UI changes -->
 
 ## 🔒 Legal Acknowledgment
 
 By submitting this PR, I acknowledge:
+
 - I assign all rights, title, and interest in this contribution to the copyright holder
 - I waive any moral rights I may have in this contribution
 - I have the legal right to make this assignment
 - The copyright holder may use, modify, or reject this contribution at their sole discretion
 
 ## 📝 Additional Notes
+
 <!-- Any other information -->
 ```
 
@@ -353,16 +389,19 @@ If you want to be automatically requested for review on all PRs:
 ## 📊 Recommended GitHub Apps/Integrations
 
 ### 1. **Vercel** (Already integrated)
+
 - Automatic preview deployments for PRs
 - Shows deployment status in PR checks
 
 ### 2. **Dependabot** (Built-in)
+
 - Settings → Security → Dependabot
 - ✅ Enable Dependabot alerts
 - ✅ Enable Dependabot security updates
 - ✅ Enable Dependabot version updates
 
 ### 3. **CodeQL Analysis** (Built-in)
+
 - Settings → Security → Code security and analysis
 - ✅ Enable Dependency graph
 - ✅ Enable Dependabot alerts
@@ -375,6 +414,7 @@ If you want to be automatically requested for review on all PRs:
 Use this checklist to configure your repository:
 
 ### Branch Protection
+
 - [ ] `main` branch protected with required PR reviews
 - [ ] `develop` branch protected (if using Git Flow)
 - [ ] Only you can push to protected branches
@@ -382,26 +422,31 @@ Use this checklist to configure your repository:
 - [ ] Require conversation resolution
 
 ### Access Control
+
 - [ ] No collaborators added (fork-only model), OR
 - [ ] Only trusted collaborators with Read access
 - [ ] You are the only Admin
 
 ### Issue Templates
+
 - [ ] Contribution Request template created
 - [ ] Bug Report template created
 - [ ] Feature Request template created
 
 ### Pull Request
+
 - [ ] PR template created with legal acknowledgments
 - [ ] Auto-merge disabled
 - [ ] Auto-delete head branches enabled
 
 ### Security
+
 - [ ] Dependabot enabled
 - [ ] Code scanning enabled
 - [ ] Security advisories configured
 
 ### Optional
+
 - [ ] CODEOWNERS file created
 - [ ] Required status checks configured (build, typecheck, etc.)
 - [ ] Signed commits required
@@ -421,6 +466,7 @@ Use this checklist to configure your repository:
 ## 📧 Questions?
 
 If you need help configuring these settings, refer to:
+
 - [GitHub Documentation - Branch Protection](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches)
 - [GitHub Documentation - Issue Templates](https://docs.github.com/en/communities/using-templates-to-encourage-useful-issues-and-pull-requests)
 

@@ -24,6 +24,7 @@ Unauthorized contributions will be rejected regardless of quality or usefulness.
 4. **Get Written Confirmation** - Only proceed after receiving explicit "approved" confirmation
 
 **Contact for Permission Requests:**
+
 - Email: info@cado.md
 - GitHub Issues: Use the "Contribution Request" template
 

@@ -22,12 +22,14 @@ type MultilingualString = {
 ```
 
 **Use cases:**
+
 - Product titles and descriptions
 - Category names
 - UI labels that must be translated
 - Any content that requires all languages
 
 **Example:**
+
 ```typescript
 const productTitle: MultilingualString = {
   ro: 'Cadou pentru Ea',
@@ -54,11 +56,13 @@ type OptionalMultilingualString = {
 ```
 
 **Use cases:**
+
 - Optional product details (material, color descriptions)
 - Supplementary information
 - Fields that may be added later
 
 **Example:**
+
 ```typescript
 const material: OptionalMultilingualString = {
   ro: 'Bumbac organic',
@@ -76,6 +80,7 @@ type LocaleCode = 'ro' | 'ru' | 'en';
 ```
 
 **Use cases:**
+
 - Function parameters that need type-safe locale
 - Locale switching logic
 - URL generation with locale prefix
@@ -93,11 +98,13 @@ interface ActionResponse<T = unknown> {
 ```
 
 **Use cases:**
+
 - tRPC procedure responses
 - Server action returns
 - API response standardization
 
 **Example:**
+
 ```typescript
 const response: ActionResponse<Product> = {
   success: true,
@@ -389,14 +396,26 @@ function getTitle(product: Product, locale: string): string {
 
 ```typescript
 const normalizedTitle: MultilingualString = {
-  ro: title.ro.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase(),
-  ru: title.ru.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase(),
-  en: title.en.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase(),
+  ro: title.ro
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase(),
+  ru: title.ru
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase(),
+  en: title.en
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase(),
 };
 
 // Or using utility:
 const normalizedTitle = mapMultilingualString(title, text =>
-  text.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase()
+  text
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
 );
 ```
 
@@ -421,30 +440,36 @@ const form = useForm({
 ### ✅ Migrated to Shared Types (20+ files)
 
 #### Core Types
+
 - `global.d.ts` - Type definitions
 - `src/lib/types/ActionResponse.ts` - Generic response type
 
 #### Models
+
 - `src/models/product/types/productInfo.ts`
 - `src/models/product/types/optionalInfoTexts.ts`
 - `src/models/home_banner/types/HomeBannerInterface.ts`
 - `src/models/blog/types/SectionInterface.ts`
 
 #### Validation
+
 - `src/lib/validation/product/types/productInfo.ts`
 - `src/lib/validation/product/types/optionalInfo.ts`
 - `src/lib/validation/image/uploadBannerImageRequest.ts`
 
 #### Enums
+
 - `src/lib/enums/Categories.ts`
 - `src/lib/enums/ProductContent.ts`
 
 #### Procedures
+
 - `src/server/procedures/product/addProduct.ts`
 - `src/server/procedures/HomeBanner/addHomeBanner.ts`
 - `src/server/procedures/image/uploadBannerImage.ts`
 
 #### Utilities
+
 - `src/lib/utils/multilingual.ts` - Helper functions and type guards
 
 ### 📋 Remaining Migrations
@@ -452,18 +477,22 @@ const form = useForm({
 The following files still use inline multilingual types and can be migrated in future PRs:
 
 #### Server Procedures (~35 files)
+
 - Additional tRPC procedures in `src/server/procedures/`
 
 #### Components (~50 files)
+
 - Admin components
 - Product components
 - Blog components
 - Checkout components
 
 #### Validation Schemas (~15 files)
+
 - Additional Zod schemas in `src/lib/validation/`
 
 #### Other Models (~10 files)
+
 - Additional Mongoose models
 
 **Total remaining:** ~110 files
@@ -501,6 +530,7 @@ describe('Multilingual Utils', () => {
 To add support for a new language (e.g., French):
 
 1. Update core types in `global.d.ts`:
+
 ```typescript
 type MultilingualString = {
   ro: string;

@@ -388,7 +388,8 @@ You are reviewing comments on a Pull Request. The PR identifier is: $ARGUMENTS
 {Explanation with context references}
 
 {Suggest alternatives if applicable}"
-``` - Keep responses professional and constructive: - Acknowledge the feedback - Explain the reasoning clearly with context - Reference original issue/plan when applicable - Suggest alternatives or future work if appropriate - Thank them for the review
+
+````- Keep responses professional and constructive: - Acknowledge the feedback - Explain the reasoning clearly with context - Reference original issue/plan when applicable - Suggest alternatives or future work if appropriate - Thank them for the review
 
     - Example responses with context:
       - **Out of scope (with issue reference):**
@@ -569,7 +570,7 @@ Ready for re-review! I've requested reviews from all previous reviewers.
 - Issue #{XXX}: {Description}
 - Issue #{YYY}: {Description}
   "
-  ```
+````
 
 16. **Request Re-review from Reviewers**
     - Get list of reviewers who commented:
@@ -609,7 +610,9 @@ While this is a good suggestion, it was outside the scope of issue #{ORIGINAL_IS
 - PR where discussed: #{PR_NUMBER}
 - Suggested by: @{reviewer_username}
   "
-  ``` - Link back to these new issues in PR comments - Tag them appropriately (enhancement, tech-debt, etc.)
+  ```- Link back to these new issues in PR comments - Tag them appropriately (enhancement, tech-debt, etc.)
+
+  ```
 
 18. **Final Summary for User**
     - Provide a comprehensive summary to me:

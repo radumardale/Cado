@@ -183,11 +183,8 @@ EOF
 
 [Plan details here]
 EOF
-)"` - Include in the comment: - Brief overview of the approach - Step-by-step implementation plan (each step = one commit) - Testing strategy - Estimated commits needed - Any risks or considerations - Use clear markdown formatting with checkboxes for each step:
-`markdown
-      - [ ] Step 1: Description
-      - [ ] Step 2: Description
-      ` - This creates a record of the planned approach and allows for team visibility
+)"`- Include in the comment: - Brief overview of the approach - Step-by-step implementation plan (each step = one commit) - Testing strategy - Estimated commits needed - Any risks or considerations - Use clear markdown formatting with checkboxes for each step:`markdown - [ ] Step 1: Description - [ ] Step 2: Description
+` - This creates a record of the planned approach and allows for team visibility
 
 12. **Pre-Implementation Quality Baseline**
     - Before starting any code changes, establish a clean baseline:
@@ -339,7 +336,8 @@ EOF
 `     - After PR creation, add PR link to the original GitHub issue:
       `bash
 gh issue comment $ARGUMENTS --body "PR created: {pr-url}"
-``` - Display the PR URL to me
+
+```- Display the PR URL to me
 
 ## Completion
 
@@ -371,3 +369,4 @@ gh issue comment $ARGUMENTS --body "PR created: {pr-url}"
 - **Document your thinking** - Analysis documents and PR descriptions are valuable for the team
 - **All docs go in /docs/** - Never create documentation files elsewhere
 - **PRs target develop** - Not main, unless it's a hotfix (in which case target both)
+```
