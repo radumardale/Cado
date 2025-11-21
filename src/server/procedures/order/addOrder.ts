@@ -197,7 +197,12 @@ export const addOrderProcedure = protectedProcedure
               Products: input.products.map(
                 (
                   product: {
-                    product: { custom_id: string; title: { ro: string }; price: number };
+                    product: {
+                      custom_id: string;
+                      title: { ro: string };
+                      price: number;
+                      sale?: { active: boolean; sale_price: number };
+                    };
                     quantity: number;
                   },
                   index: number
