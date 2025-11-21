@@ -12,7 +12,6 @@ import { generateHreflangMetadata } from '@/components/seo/HreflangLinks';
 
 export const dynamic = 'force-static';
 export const revalidate = 3600;
-// @ts-expect-error ggg
 import { htmlToText } from 'html-to-text';
 
 export async function generateMetadata({

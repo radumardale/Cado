@@ -1,7 +1,5 @@
-/* eslint-disable  @typescript-eslint/no-explicit-any */
-
-import mongoose from 'mongoose';
-import { ProductInfoSchema } from './types/productInfo';
+import mongoose, { type UpdateQuery } from 'mongoose';
+import { ProductInfoSchema, type ProductInfo } from './types/productInfo';
 import { SaleSchema } from './types/productSale';
 import { ProductInterface } from './types/productInterface';
 import { Categories } from '@/lib/enums/Categories';
@@ -106,31 +104,48 @@ ProductSchema.pre<ProductInterface>('save', function (next) {
   next();
 });
 
+// Type guard for multilingual title structure
+function isMultilingualTitle(value: unknown): value is ProductInfo {
+  return (
+    value !== null &&
+    typeof value === 'object' &&
+    'ro' in value &&
+    typeof (value as Record<string, unknown>).ro === 'string' &&
+    'ru' in value &&
+    typeof (value as Record<string, unknown>).ru === 'string' &&
+    'en' in value &&
+    typeof (value as Record<string, unknown>).en === 'string'
+  );
+}
+
 ProductSchema.pre('findOneAndUpdate', function (next) {
-  const update = this.getUpdate() as any;
+  const update = this.getUpdate() as UpdateQuery<ProductInterface>;
 
-  if (update?.title || update?.$set?.title) {
-    const titleData = update.title || update.$set.title;
+  if (update && typeof update === 'object' && !Array.isArray(update)) {
+    const titleData = 'title' in update ? update.title : update.$set?.title;
 
-    const normalizedTitle = {
-      ro: titleData.ro
-        .normalize('NFD')
-        .replace(/[\u0300-\u036f]/g, '')
-        .toLowerCase(),
-      ru: titleData.ru
-        .normalize('NFD')
-        .replace(/[\u0300-\u036f]/g, '')
-        .toLowerCase(),
-      en: titleData.en
-        .normalize('NFD')
-        .replace(/[\u0300-\u036f]/g, '')
-        .toLowerCase(),
-    };
+    // Validate that titleData has the expected multilingual structure
+    if (titleData && isMultilingualTitle(titleData)) {
+      const normalizedTitle = {
+        ro: titleData.ro
+          .normalize('NFD')
+          .replace(/[\u0300-\u036f]/g, '')
+          .toLowerCase(),
+        ru: titleData.ru
+          .normalize('NFD')
+          .replace(/[\u0300-\u036f]/g, '')
+          .toLowerCase(),
+        en: titleData.en
+          .normalize('NFD')
+          .replace(/[\u0300-\u036f]/g, '')
+          .toLowerCase(),
+      };
 
-    if (update.$set) {
-      update.$set.normalized_title = normalizedTitle;
-    } else {
-      update.normalized_title = normalizedTitle;
+      if (update.$set) {
+        update.$set.normalized_title = normalizedTitle;
+      } else {
+        update.normalized_title = normalizedTitle;
+      }
     }
   }
 

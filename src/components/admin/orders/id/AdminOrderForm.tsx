@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 'use client';
 import { useEffect } from 'react';
 import OrdersForm from '../OrdersForm';
@@ -21,8 +19,13 @@ interface AdminOrderFormProps {
   id: string;
 }
 
-function isLegalAddress(address: any): address is { company_name: string; idno: string } {
-  return address && typeof address === 'object' && 'company_name' in address && 'idno' in address;
+function isLegalAddress(address: unknown): address is { company_name: string; idno: string } {
+  return (
+    address !== null &&
+    typeof address === 'object' &&
+    'company_name' in address &&
+    'idno' in address
+  );
 }
 
 export default function AdminOrderForm({ id }: AdminOrderFormProps) {

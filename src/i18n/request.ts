@@ -1,14 +1,18 @@
-/* eslint-disable  @typescript-eslint/no-explicit-any */
-
 import { getRequestConfig } from 'next-intl/server';
 import { routing } from './routing';
+
+type Locale = (typeof routing.locales)[number];
+
+function isValidLocale(locale: string): locale is Locale {
+  return (routing.locales as readonly string[]).includes(locale);
+}
 
 export default getRequestConfig(async ({ requestLocale }) => {
   // This typically corresponds to the `[locale]` segment
   let locale = await requestLocale;
 
   // Ensure that a valid locale is used
-  if (!locale || !routing.locales.includes(locale as any)) {
+  if (!locale || !isValidLocale(locale)) {
     locale = routing.defaultLocale;
   }
 
