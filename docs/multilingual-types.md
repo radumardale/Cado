@@ -507,4 +507,4 @@ type LocaleCode = 'ro' | 'ru' | 'en' | 'fr'; // Add to union
 
 **Last Updated:** 2025-11-21
 **Status:** ✅ Implemented
-**Related PR:** #[PR-NUMBER]
+**Related PR:** #53
