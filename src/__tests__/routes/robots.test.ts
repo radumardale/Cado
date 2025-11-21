@@ -32,7 +32,9 @@ describe('Robots.txt Generation', () => {
     const result = robots();
 
     // Find the rule for all user agents
-    const allAgentsRule = result.rules?.find(rule => rule.userAgent === '*');
+    const allAgentsRule = Array.isArray(result.rules)
+      ? result.rules.find(rule => rule.userAgent === '*')
+      : undefined;
 
     expect(allAgentsRule).toBeDefined();
     expect(allAgentsRule?.allow).toBe('/');
@@ -52,7 +54,9 @@ describe('Robots.txt Generation', () => {
   it('should have specific rules for Googlebot', () => {
     const result = robots();
 
-    const googlebotRule = result.rules?.find(rule => rule.userAgent === 'Googlebot');
+    const googlebotRule = Array.isArray(result.rules)
+      ? result.rules.find(rule => rule.userAgent === 'Googlebot')
+      : undefined;
 
     expect(googlebotRule).toBeDefined();
     expect(googlebotRule?.allow).toBe('/');
@@ -67,7 +71,9 @@ describe('Robots.txt Generation', () => {
   it('should have specific rules for Yandex', () => {
     const result = robots();
 
-    const yandexRule = result.rules?.find(rule => rule.userAgent === 'Yandex');
+    const yandexRule = Array.isArray(result.rules)
+      ? result.rules.find(rule => rule.userAgent === 'Yandex')
+      : undefined;
 
     expect(yandexRule).toBeDefined();
     expect(yandexRule?.allow).toBe('/');
@@ -92,6 +98,8 @@ describe('Robots.txt Generation', () => {
 
   it('should use BASE_URL environment variable when set', () => {
     process.env.BASE_URL = 'https://example.com';
+    // @ts-expect-error - Modifying NODE_ENV for test
+    process.env.NODE_ENV = 'production';
 
     const result = robots();
 
@@ -102,6 +110,7 @@ describe('Robots.txt Generation', () => {
   it('should use production URL when NODE_ENV is production', () => {
     delete process.env.BASE_URL;
     const originalNodeEnv = process.env.NODE_ENV;
+    // @ts-expect-error - Modifying NODE_ENV for test
     process.env.NODE_ENV = 'production';
 
     const result = robots();
@@ -110,6 +119,7 @@ describe('Robots.txt Generation', () => {
     expect(result.host).toBe('https://cado.md');
 
     // Restore NODE_ENV
+    // @ts-expect-error - Modifying NODE_ENV for test
     process.env.NODE_ENV = originalNodeEnv;
   });
 
@@ -117,61 +127,71 @@ describe('Robots.txt Generation', () => {
     const result = robots();
 
     // Should have rules for: *, Googlebot, Yandex
-    expect(result.rules?.length).toBe(3);
+    expect(Array.isArray(result.rules) ? result.rules.length : 0).toBe(3);
   });
 
   it('should allow crawling of root path for all user agents', () => {
     const result = robots();
 
-    result.rules?.forEach(rule => {
-      expect(rule.allow).toBe('/');
-    });
+    if (Array.isArray(result.rules)) {
+      result.rules.forEach(rule => {
+        expect(rule.allow).toBe('/');
+      });
+    }
   });
 
   it('should block checkout flow for all user agents', () => {
     const result = robots();
 
-    result.rules?.forEach(rule => {
-      if (rule.disallow) {
-        expect(rule.disallow).toContain('/checkout/');
-        expect(rule.disallow).toContain('/confirmation/');
-        expect(rule.disallow).toContain('/payment-error/');
-      }
-    });
+    if (Array.isArray(result.rules)) {
+      result.rules.forEach(rule => {
+        if (rule.disallow) {
+          expect(rule.disallow).toContain('/checkout/');
+          expect(rule.disallow).toContain('/confirmation/');
+          expect(rule.disallow).toContain('/payment-error/');
+        }
+      });
+    }
   });
 
   it('should block authentication paths for all user agents', () => {
     const result = robots();
 
-    result.rules?.forEach(rule => {
-      if (rule.disallow) {
-        expect(rule.disallow).toContain('/auth/');
-        expect(rule.disallow).toContain('/admin/');
-      }
-    });
+    if (Array.isArray(result.rules)) {
+      result.rules.forEach(rule => {
+        if (rule.disallow) {
+          expect(rule.disallow).toContain('/auth/');
+          expect(rule.disallow).toContain('/admin/');
+        }
+      });
+    }
   });
 
   it('should not have duplicate paths in disallow lists', () => {
     const result = robots();
 
-    result.rules?.forEach(rule => {
-      if (rule.disallow && Array.isArray(rule.disallow)) {
-        const uniquePaths = new Set(rule.disallow);
-        expect(uniquePaths.size).toBe(rule.disallow.length);
-      }
-    });
+    if (Array.isArray(result.rules)) {
+      result.rules.forEach(rule => {
+        if (rule.disallow && Array.isArray(rule.disallow)) {
+          const uniquePaths = new Set(rule.disallow);
+          expect(uniquePaths.size).toBe(rule.disallow.length);
+        }
+      });
+    }
   });
 
   it('should format URLs consistently with trailing slashes', () => {
     const result = robots();
 
-    result.rules?.forEach(rule => {
-      if (rule.disallow && Array.isArray(rule.disallow)) {
-        rule.disallow.forEach(path => {
-          // All disallowed paths should end with /
-          expect(path.endsWith('/')).toBe(true);
-        });
-      }
-    });
+    if (Array.isArray(result.rules)) {
+      result.rules.forEach(rule => {
+        if (rule.disallow && Array.isArray(rule.disallow)) {
+          rule.disallow.forEach((path: string) => {
+            // All disallowed paths should end with /
+            expect(path.endsWith('/')).toBe(true);
+          });
+        }
+      });
+    }
   });
 });

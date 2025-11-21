@@ -1,12 +1,3 @@
-/* eslint-disable  @typescript-eslint/no-explicit-any */
-
-import { test } from 'vitest';
-
-test.skip('addOrder', async () => {
-  await updateProductImageDomains();
-});
-
-// scripts/updateProductImageDomains.ts
 import { Product } from '@/models/product/product';
 import connectMongo from '@/lib/connect-mongo';
 
@@ -36,16 +27,14 @@ async function updateProductImageDomains(): Promise<UpdateResult> {
     await connectMongo();
     console.log('Connected to MongoDB');
 
-    // Get all products
     const products = await Product.find({}).lean();
     console.log(`Found ${products.length} products to process`);
 
     for (const product of products) {
       try {
-        const updates: any = {};
+        const updates: Record<string, unknown> = {};
         const fieldsUpdated: string[] = [];
 
-        // Update images array
         if (product.images && Array.isArray(product.images)) {
           const updatedImages = product.images.map((image: string, imageIndex: number) => {
             if (image && image.includes(OLD_DOMAIN)) {
@@ -55,47 +44,43 @@ async function updateProductImageDomains(): Promise<UpdateResult> {
             return image;
           });
 
-          // Only update if there were changes
           if (fieldsUpdated.some(field => field.startsWith('images['))) {
             updates.images = updatedImages;
           }
         }
 
-        // Update content fields that might contain images
         const contentFields = ['content', 'long_description', 'short_description'];
         contentFields.forEach(field => {
-          if ((product as any)[field]) {
-            // Handle multilingual content
-            if (typeof (product as any)[field] === 'object') {
-              const updatedContent: any = {};
+          if ((product as Record<string, unknown>)[field]) {
+            if (typeof (product as Record<string, unknown>)[field] === 'object') {
+              const updatedContent: Record<string, string> = {};
               let hasContentUpdates = false;
 
-              Object.keys((product as any)[field]).forEach(lang => {
+              Object.keys((product as Record<string, unknown>)[field] as Record<string, unknown>).forEach(lang => {
+                const fieldContent = (product as Record<string, Record<string, string>>)[field][lang];
                 if (
-                  typeof (product as any)[field][lang] === 'string' &&
-                  (product as any)[field][lang].includes(OLD_DOMAIN)
+                  typeof fieldContent === 'string' &&
+                  fieldContent.includes(OLD_DOMAIN)
                 ) {
-                  updatedContent[lang] = (product as any)[field][lang].replace(
+                  updatedContent[lang] = fieldContent.replace(
                     new RegExp(OLD_DOMAIN, 'g'),
                     NEW_DOMAIN
                   );
                   hasContentUpdates = true;
                   fieldsUpdated.push(`${field}.${lang}`);
                 } else {
-                  updatedContent[lang] = (product as any)[field][lang];
+                  updatedContent[lang] = fieldContent;
                 }
               });
 
               if (hasContentUpdates) {
                 updates[field] = updatedContent;
               }
-            }
-            // Handle string content
-            else if (
-              typeof (product as any)[field] === 'string' &&
-              (product as any)[field].includes(OLD_DOMAIN)
+            } else if (
+              typeof (product as Record<string, unknown>)[field] === 'string' &&
+              ((product as Record<string, string>)[field]).includes(OLD_DOMAIN)
             ) {
-              updates[field] = (product as any)[field].replace(
+              updates[field] = ((product as Record<string, string>)[field]).replace(
                 new RegExp(OLD_DOMAIN, 'g'),
                 NEW_DOMAIN
               );
@@ -104,7 +89,6 @@ async function updateProductImageDomains(): Promise<UpdateResult> {
           }
         });
 
-        // Apply updates if any
         if (Object.keys(updates).length > 0) {
           await Product.findByIdAndUpdate(product._id, updates);
           result.updatedCount++;
@@ -140,3 +124,13 @@ async function updateProductImageDomains(): Promise<UpdateResult> {
     return result;
   }
 }
+
+updateProductImageDomains()
+  .then(result => {
+    console.log('\n✅ Script completed');
+    process.exit(result.success ? 0 : 1);
+  })
+  .catch(error => {
+    console.error('❌ Script failed:', error);
+    process.exit(1);
+  });

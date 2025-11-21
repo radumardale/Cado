@@ -69,6 +69,7 @@ describe('hreflang.ts', () => {
   describe('getBaseUrl()', () => {
     test('should return BASE_URL when set and not "/"', () => {
       process.env.BASE_URL = 'https://example.com';
+      // @ts-expect-error - Modifying NODE_ENV for test
       process.env.NODE_ENV = 'test';
 
       const links = generateHreflangLinks('/', 'ro');
@@ -77,6 +78,7 @@ describe('hreflang.ts', () => {
 
     test('should remove trailing slash from BASE_URL', () => {
       process.env.BASE_URL = 'https://example.com/';
+      // @ts-expect-error - Modifying NODE_ENV for test
       process.env.NODE_ENV = 'test';
 
       const links = generateHreflangLinks('/', 'ro');
@@ -87,6 +89,7 @@ describe('hreflang.ts', () => {
 
     test('should remove multiple trailing slashes from BASE_URL', () => {
       process.env.BASE_URL = 'https://example.com///';
+      // @ts-expect-error - Modifying NODE_ENV for test
       process.env.NODE_ENV = 'test';
 
       const links = generateHreflangLinks('/', 'ro');
@@ -98,6 +101,7 @@ describe('hreflang.ts', () => {
 
     test('should trim whitespace from BASE_URL', () => {
       process.env.BASE_URL = '  https://example.com/  ';
+      // @ts-expect-error - Modifying NODE_ENV for test
       process.env.NODE_ENV = 'test';
 
       const links = generateHreflangLinks('/', 'ro');
@@ -108,6 +112,7 @@ describe('hreflang.ts', () => {
 
     test('should handle BASE_URL with spaces and trailing slash (like in .env.production.local)', () => {
       process.env.BASE_URL = ' https://cado-henna.vercel.app/ ';
+      // @ts-expect-error - Modifying NODE_ENV for test
       process.env.NODE_ENV = 'test';
 
       const links = generateHreflangLinks('/', 'ro');
@@ -119,6 +124,7 @@ describe('hreflang.ts', () => {
 
     test('should ignore BASE_URL when it is "/"', () => {
       process.env.BASE_URL = '/';
+      // @ts-expect-error - Modifying NODE_ENV for test
       process.env.NODE_ENV = 'development';
 
       const links = generateHreflangLinks('/', 'ro');
@@ -127,6 +133,7 @@ describe('hreflang.ts', () => {
 
     test('should return production URL when NODE_ENV is production', () => {
       delete process.env.BASE_URL;
+      // @ts-expect-error - Modifying NODE_ENV for test
       process.env.NODE_ENV = 'production';
 
       const links = generateHreflangLinks('/', 'ro');
@@ -135,6 +142,7 @@ describe('hreflang.ts', () => {
 
     test('should return localhost URL when NODE_ENV is not production', () => {
       delete process.env.BASE_URL;
+      // @ts-expect-error - Modifying NODE_ENV for test
       process.env.NODE_ENV = 'development';
 
       const links = generateHreflangLinks('/', 'ro');
@@ -143,6 +151,7 @@ describe('hreflang.ts', () => {
 
     test('should handle undefined environment variables', () => {
       delete process.env.BASE_URL;
+      // @ts-expect-error - Deleting read-only property for test
       delete process.env.NODE_ENV;
 
       const links = generateHreflangLinks('/', 'ro');
@@ -159,6 +168,7 @@ describe('hreflang.ts', () => {
 
       testCases.forEach(baseUrl => {
         process.env.BASE_URL = baseUrl;
+        // @ts-expect-error - Modifying NODE_ENV for test
         process.env.NODE_ENV = 'test';
 
         const links = generateHreflangLinks('/catalog', 'ro');
@@ -174,6 +184,7 @@ describe('hreflang.ts', () => {
 
   describe('generateHreflangLinks()', () => {
     beforeEach(() => {
+      // @ts-expect-error - Modifying NODE_ENV for test
       process.env.NODE_ENV = 'test';
       process.env.BASE_URL = 'https://test.com';
     });
@@ -500,6 +511,7 @@ describe('hreflang.ts', () => {
 
   describe('generateHreflangLinksWithQuery()', () => {
     beforeEach(() => {
+      // @ts-expect-error - Modifying NODE_ENV for test
       process.env.NODE_ENV = 'test';
       process.env.BASE_URL = 'https://test.com';
     });
@@ -608,6 +620,7 @@ describe('hreflang.ts', () => {
 
   describe('Integration Tests', () => {
     beforeEach(() => {
+      // @ts-expect-error - Modifying NODE_ENV for test
       process.env.NODE_ENV = 'production';
       delete process.env.BASE_URL;
     });
