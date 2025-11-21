@@ -211,17 +211,17 @@ When creating pull requests, follow these formatting rules:
 
 The project uses a **smart tiered strategy** that optimizes for speed while maintaining safety:
 
-#### Tier 1: Skip Safe Files (Instant ⚡)
+#### Tier 1: Skip Safe Files ⚡
 - Documentation only (`docs/**/*.md`, `README.md`)
 - Config files (`.gitignore`, `.prettierrc`, `.env.example`)
-- Commits are instant when only these files change
+- Commits skip all checks when only these files change
 
-#### Tier 2: Fast Incremental Checks (5-15s ⚡⚡)
-- TypeScript type-checking on changed files only (via `tsc-files`)
+#### Tier 2: TypeScript Checks + Formatting ⚡⚡
+- TypeScript type-checking on all files (`npm run typecheck`)
 - Auto-formatting with Prettier
 - Runs for all code changes
 
-#### Tier 3: Full Build (30-60s)
+#### Tier 3: Full Build
 Only triggered when critical paths change:
 - `src/server/` - tRPC procedures and API logic
 - `src/models/` - Mongoose models
@@ -233,9 +233,9 @@ Only triggered when critical paths change:
 
 **The hook runs automatically on every commit:**
 1. Analyzes which files you're committing
-2. Skips checks entirely for docs/config changes (instant)
-3. Runs incremental TypeScript checks for code changes (fast)
-4. Runs full build only for critical backend/routing changes (thorough)
+2. Skips checks entirely for docs/config changes
+3. Runs TypeScript checks + Prettier for code changes
+4. Runs full build only for critical backend/routing changes
 
 **If checks fail:**
 - Fix the issues immediately

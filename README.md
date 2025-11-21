@@ -55,6 +55,7 @@ CADO is a modern e-commerce platform specializing in corporate and personal gift
 - **Testing**: [Vitest](https://vitest.dev/) + React Testing Library
 - **Linting**: ESLint with Next.js config
 - **Code Formatting**: [Prettier](https://prettier.io/) with ESLint integration
+- **Git Hooks**: [Husky](https://typicode.github.io/husky/) for automated pre-commit checks
 - **Dev Server**: Turbopack for fast HMR
 
 ## 📁 Project Structure

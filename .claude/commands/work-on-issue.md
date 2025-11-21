@@ -230,9 +230,9 @@ After plan approval, switch to normal execution mode for faster, focused impleme
       - Test that the changes work as expected (manual testing or running specific tests)
       - **Quality checks (automated by Husky pre-commit hook):**
         - Husky hook automatically runs when you commit:
-          - **Instant** for docs/config only changes
-          - **5-15s** incremental TypeScript checks for code changes
-          - **30-60s** full build for critical path changes (server/models/lib)
+          - Docs/config only: Skips all checks
+          - Code changes: Runs typecheck + Prettier formatting
+          - Critical paths: Also runs full build (server/models/lib/routing)
         - If checks fail:
           - Fix the issues immediately
           - Re-attempt commit (hook runs again)
