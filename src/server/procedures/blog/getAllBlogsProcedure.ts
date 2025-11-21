@@ -1,11 +1,11 @@
 import { publicProcedure } from '@/server/trpc';
 import { Blog } from '@/models/blog/blog';
-import { BlogInterface } from '@/models/blog/types/BlogInterface';
+import { OptimizedBlogInterface } from '@/models/blog/types/BlogInterface';
 import { ActionResponse } from '@/lib/types/ActionResponse';
 import connectMongo from '@/lib/connect-mongo';
 
 export interface getAllBlogsResponseInterface extends ActionResponse {
-  blogs: BlogInterface[] | null;
+  blogs: OptimizedBlogInterface[] | null;
 }
 
 export const getAllBlogsProcedure = publicProcedure.query(

@@ -2,7 +2,7 @@
 import React, { Fragment } from 'react';
 import { useTRPC } from '@/app/_trpc/client';
 import { useLocale, useTranslations } from 'next-intl';
-import { BlogInterface } from '@/models/blog/types/BlogInterface';
+import { OptimizedBlogInterface } from '@/models/blog/types/BlogInterface';
 import BlogSkeleton from '@/components/blog/BlogSkeleton';
 import AdminBlogCard from './AdminBlogCard';
 import { Link } from '@/i18n/navigation';
@@ -39,7 +39,7 @@ export default function AdminBlogGrid() {
             <Plus strokeWidth={1.5} className='size-6' />
             <p>{t('add_blog')}</p>
           </Link>
-          {data.blogs.map((blog: BlogInterface, index: number) => {
+          {data.blogs.map((blog: OptimizedBlogInterface, index: number) => {
             return (
               <Fragment key={index}>
                 <AdminBlogCard
