@@ -8,12 +8,12 @@ import { protectedProcedure } from '@/server/trpc';
 import { DestinationEnum, generateUploadLinks } from '../image/generateUploadLinks';
 import { HomeBannerInterface } from '@/models/home_banner/types/HomeBannerInterface';
 
+/**
+ * Response interface for adding a home banner.
+ * Includes upload links for banner images in all languages.
+ */
 interface addHomeBannerI extends ActionResponse {
-  imageLinks: {
-    ro: string;
-    ru: string;
-    en: string;
-  };
+  imageLinks: MultilingualString;
   homeBanner: HomeBannerInterface | null;
 }
 
