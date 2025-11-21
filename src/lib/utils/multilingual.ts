@@ -26,11 +26,7 @@ export function isMultilingualString(value: unknown): value is MultilingualStrin
 
   const obj = value as Record<string, unknown>;
 
-  return (
-    typeof obj.ro === 'string' &&
-    typeof obj.ru === 'string' &&
-    typeof obj.en === 'string'
-  );
+  return typeof obj.ro === 'string' && typeof obj.ru === 'string' && typeof obj.en === 'string';
 }
 
 /**
@@ -49,9 +45,7 @@ export function isMultilingualString(value: unknown): value is MultilingualStrin
  * }
  * ```
  */
-export function isOptionalMultilingualString(
-  value: unknown
-): value is OptionalMultilingualString {
+export function isOptionalMultilingualString(value: unknown): value is OptionalMultilingualString {
   if (typeof value !== 'object' || value === null) {
     return false;
   }
