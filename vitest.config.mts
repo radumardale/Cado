@@ -12,7 +12,7 @@ export default defineConfig({
   plugins: [tsconfigPaths(), react()],
   test: {
     environment: 'jsdom',
-    testTimeout: 0,
+    testTimeout: 30000,
   },
   resolve: {
     alias: {
