@@ -30,7 +30,7 @@ import { z } from 'zod';
 import { useQuery } from '@tanstack/react-query';
 import { useMutation } from '@tanstack/react-query';
 
-const toastMessages = {
+const toastMessages: Record<string, MultilingualString> = {
   success: {
     ro: 'Ocazie adăugată cu succes!',
     ru: 'Событие успешно добавлено!',

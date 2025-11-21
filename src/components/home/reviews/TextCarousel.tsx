@@ -2,13 +2,7 @@ import { easeInOutCubic } from '@/lib/utils';
 import { motion } from 'motion/react';
 import { useLocale } from 'next-intl';
 
-type ReviewText = {
-  ro: string;
-  ru: string;
-  en: string;
-};
-
-const texts: ReviewText[] = [
+const texts: MultilingualString[] = [
   {
     ro: 'Am comandat cadouri prin CADO de mai multe ori și colaborăm de mulți ani. Cadourile primite de partenerii noștri creează un efect wow, astfel de cadouri nu se mai găsesc nicăieri. Livrare întotdeauna rapidă, iar calitatea este la cel mai înalt nivel.',
     ru: 'Я заказывал подарки через CADO много раз, и мы сотрудничаем много лет. Подарки, полученные нашими партнерами, производят вау-эффект, такие подарки больше нигде не найти. Доставка всегда быстрая, а качество на самом высоком уровне.',

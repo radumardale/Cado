@@ -35,10 +35,10 @@ import { useRouter } from '@/i18n/navigation';
 
 import { useMutation } from '@tanstack/react-query';
 
-const toastMessages = {
-  ro: 'Produsul a fost actualizat cu succes!',
-  ru: 'Товар был успешно обновлен!',
-  en: 'Product has been updated successfully!',
+const toastMessages: MultilingualString = {
+  ro: 'Articolul a fost creat cu succes!',
+  ru: 'Статья была успешно создана!',
+  en: 'Article has been created successfully!',
 };
 
 export default function NewAdminBlogForm() {

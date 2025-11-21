@@ -22,7 +22,7 @@ import { z } from 'zod';
 import { useMutation } from '@tanstack/react-query';
 import { revalidateServerPath } from '@/server/actions/revalidateServerPath';
 
-const toastMessages = {
+const toastMessages: Record<string, MultilingualString> = {
   success: {
     ro: 'Banerul a fost creat cu succes!',
     ru: 'Баннер был успешно создан!',
