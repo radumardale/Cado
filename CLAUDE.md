@@ -129,6 +129,7 @@ Do NOT make direct changes. Create a feature branch first.
    - Features → `develop` (via PR)
    - Release → `main` (via PR from develop)
    - Hotfix → `main` AND `develop` (via PRs)
+   - **Default PR Target**: All pull requests are opened into `develop` unless specified otherwise
 
 ### Claude Code Behavioral Rules
 

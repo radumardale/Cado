@@ -8,7 +8,7 @@
 [![Next.js](https://img.shields.io/badge/Next.js-15.2-black)](https://nextjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue)](https://www.typescriptlang.org/)
 [![React](https://img.shields.io/badge/React-19.0-61dafb)](https://reactjs.org/)
-[![License](https://img.shields.io/badge/license-Private-red)](LICENSE)
+[![License](https://img.shields.io/badge/license-Proprietary-red)](LICENSE)
 
 </div>
 
@@ -413,18 +413,44 @@ vercel --prod
 
 ## 🤝 Contributing
 
-This is a private repository. For contributions:
+**⚠️ IMPORTANT:** This is a proprietary project with restricted contribution rights.
 
-1. Create a feature branch from `main`
-2. Make your changes
-3. Run tests and linting
-4. Submit a pull request
-5. Vercel will automatically create a preview deployment
-6. After review, merge to `main` for automatic production deployment
+**Before contributing, you MUST:**
+- Read the [CONTRIBUTING.md](CONTRIBUTING.md) file
+- Obtain explicit written approval from the project owner
+- Agree to the Contributor License Agreement (CLA)
+
+**Unauthorized contributions will be rejected.**
+
+For approved contributions:
+1. Request permission via email (info@cado.md) or GitHub Issues
+2. Wait for explicit written approval
+3. Create a feature branch from `develop`
+4. Follow code standards and run quality checks
+5. Submit a pull request referencing your approved request
+6. Vercel will automatically create a preview deployment
+7. Code review and final approval at owner's discretion
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for complete details.
 
 ## 📄 License
 
-Private and Confidential - All Rights Reserved
+**Proprietary License - All Rights Reserved**
+
+Copyright (c) 2024-present, Cado MD
+
+This software is proprietary and confidential. While the source code is publicly visible for reference purposes, you may NOT use, copy, modify, distribute, or create derivative works without explicit written permission from the copyright holder.
+
+**Key Points:**
+- ✅ Viewing for educational/reference purposes is permitted
+- ❌ Using, copying, or modifying requires written permission
+- ❌ Forking or creating derivative works is prohibited
+- ❌ Commercial use requires a separate license agreement
+- 🔒 All contributions become property of the copyright holder
+
+See [LICENSE](LICENSE) file for complete terms.
+
+**To request permission:** info@cado.md
 
 ## 📞 Support
 
