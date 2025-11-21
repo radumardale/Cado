@@ -18,8 +18,8 @@ export const updateProductProcedure = protectedProcedure
     try {
       await connectMongo();
 
-      const oldProduct = (await Product.findById(input.id).select('images').lean()) as unknown as {
-        _id: unknown;
+      const oldProduct = (await Product.findById(input.id).select('images').lean()) as {
+        _id: { toString(): string };
         images: string[];
       };
 
