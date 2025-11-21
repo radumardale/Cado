@@ -1,4 +1,3 @@
-
 import { protectedProcedure } from '@/server/trpc';
 import { Client } from '@/models/client/client';
 import { ClientInterface } from '@/models/client/types/clientInterface';

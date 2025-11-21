@@ -30,10 +30,7 @@ export interface NodemailerError extends Error {
  * }
  */
 export function isNodemailerError(error: unknown): error is NodemailerError {
-  return (
-    error instanceof Error &&
-    ('code' in error || 'command' in error || 'response' in error)
-  );
+  return error instanceof Error && ('code' in error || 'command' in error || 'response' in error);
 }
 
 /**

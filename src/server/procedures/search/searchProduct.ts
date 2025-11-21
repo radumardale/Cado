@@ -1,4 +1,3 @@
-
 import { publicProcedure } from '@/server/trpc';
 import { ActionResponse } from '@/lib/types/ActionResponse';
 import { searchProductRequestSchema } from '@/lib/validation/search/searchProductRequest';

@@ -1,4 +1,3 @@
-
 import connectMongo from '@/lib/connect-mongo';
 import { ActionResponse } from '@/lib/types/ActionResponse';
 import { HomeOcasion } from '@/models/homeOcasion/HomeOcasion';

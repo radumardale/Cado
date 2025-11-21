@@ -1,4 +1,3 @@
-
 import { publicProcedure } from '../../trpc';
 import { Product } from '@/models/product/product';
 import { ProductInterface } from '@/models/product/types/productInterface';

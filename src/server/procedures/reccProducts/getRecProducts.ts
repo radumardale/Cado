@@ -1,4 +1,3 @@
-
 import { publicProcedure } from '../../trpc';
 import { ActionResponse } from '@/lib/types/ActionResponse';
 import { ProductInterface } from '@/models/product/types/productInterface';
@@ -35,7 +34,9 @@ export const getRecProductsProcedure = publicProcedure.query(
       // Extract products from ReccProduct documents
       const products = reccProducts
         .map(recc => recc.product as unknown as ProductInterface)
-        .filter((product): product is ProductInterface => product !== null && product !== undefined);
+        .filter(
+          (product): product is ProductInterface => product !== null && product !== undefined
+        );
 
       return {
         success: true,

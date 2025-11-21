@@ -1,4 +1,3 @@
-
 import connectMongo from '@/lib/connect-mongo';
 import { ActionResponse } from '@/lib/types/ActionResponse';
 import { SeasonCatalog } from '@/models/seasonCatalog/SeasonCatalog';

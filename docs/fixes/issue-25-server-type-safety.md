@@ -11,6 +11,7 @@ Complete refactor of server procedures to eliminate `any` types and enforce stri
 Created 4 new utility type files in `/src/server/types/`:
 
 #### `mongoose.ts`
+
 - `AggregationResult<T>` - Base aggregation result type
 - `FacetAggregationResult<T>` - For $facet aggregations
 - `ProductAggregationDocument` - Products with computed fields
@@ -20,6 +21,7 @@ Created 4 new utility type files in `/src/server/types/`:
 - `MinMaxPriceResult` - Price aggregation result
 
 #### `payment.ts`
+
 - `PayNetProduct` - Payment API product structure
 - `PayNetCustomer` - Customer information
 - `PayNetService` - Service structure
@@ -27,11 +29,13 @@ Created 4 new utility type files in `/src/server/types/`:
 - `PayNetResponse` - Payment API response
 
 #### `aws.ts`
+
 - `isS3Error()` - Type guard for S3 errors
 - `S3UploadResult` - Upload result interface
 - `S3DeleteResult` - Delete result interface
 
 #### `email.ts`
+
 - `NodemailerError` - Email error interface
 - `isNodemailerError()` - Type guard
 - `EmailSendResult` - Email send result
@@ -41,12 +45,14 @@ Created 4 new utility type files in `/src/server/types/`:
 **Files affected:** 24 procedures
 
 **Changes:**
+
 - Replaced `catch (e: any)` with `catch (error)`
 - Changed error property from `error.message` to `error instanceof Error ? error.message : 'Fallback message'`
 - Added `console.error()` calls for better debugging
 - Fixed incorrect `success: true` in error cases (found in 2 HomeBanner procedures)
 
 **Before:**
+
 ```typescript
 } catch (e: any) {
   return {
@@ -57,6 +63,7 @@ Created 4 new utility type files in `/src/server/types/`:
 ```
 
 **After:**
+
 ```typescript
 } catch (error) {
   console.error('Context-specific error message:', error);
@@ -72,11 +79,13 @@ Created 4 new utility type files in `/src/server/types/`:
 **Files affected:** 11 procedures
 
 **Changes:**
+
 - Replaced `any` arrays with proper interface arrays
 - Added missing type imports
 - Fixed `null` returns to empty arrays `[]`
 
 #### Product Procedures (5 files)
+
 - `getProducts.ts` - `products: any` → `products: ProductInterface[]`
 - `getAllProducts.ts` - `products: any` → `products: ProductInterface[]`
 - `getSimilarProducts.ts` - `products: any` → `products: ProductInterface[]`
@@ -84,10 +93,12 @@ Created 4 new utility type files in `/src/server/types/`:
 - `getAdminProducts.ts` - `products: any` → `products: ProductInterface[]`
 
 #### Order Procedures (2 files)
+
 - `getAllOrders.ts` - `orders: any[]` → `orders: OrderInterface[]`
 - `updateOrder.ts` - `order: any | null` → `order: OrderInterface | null`
 
 #### Other Procedures (4 files)
+
 - `searchProduct.ts` - `products: any[] | []` → `products: ProductInterface[]`
 - `getAllClients.ts` - `clients: any[]` → `clients: ClientInterface[]`
 - `getAllBlogsProcedure.ts` - `blogs: any` → `blogs: BlogInterface[] | null`
@@ -96,6 +107,7 @@ Created 4 new utility type files in `/src/server/types/`:
 ### 4. Special Fixes
 
 #### ReccProduct Populate Fix
+
 Fixed type mismatch in `getRecProducts.ts` where Mongoose populate returns nested structure:
 
 ```typescript
@@ -108,6 +120,7 @@ const products = reccProducts
 ### 5. ESLint Disable Comments Removal
 
 **Removed all 34 instances of:**
+
 ```typescript
 /* eslint-disable @typescript-eslint/no-explicit-any */
 ```
@@ -117,21 +130,25 @@ All server procedures now enforce strict type checking without suppressions.
 ## Impact Assessment
 
 ### Server-Side (✅ Complete)
+
 - **34 procedure files** refactored
 - **5 commits** in total
 - **Zero server-side type errors**
 - **100% of eslint-disable comments** removed
 
 ### Client-Side (⚠️ Requires Follow-Up)
+
 The stricter server types exposed type mismatches in client components:
 
 #### Affected Areas
+
 1. **Blog Components** - Date serialization (Date vs string)
 2. **Recommendations Components** - Wrapped vs unwrapped product objects
 3. **Orders Components** - Missing `_id` field in aggregation results
 4. **Admin Components** - Various type expectation mismatches
 
 #### Root Causes
+
 - Mongoose lean() returns plain objects (not Mongoose documents)
 - tRPC serializes Date objects to strings
 - Some aggregations don't include all interface fields
@@ -142,12 +159,14 @@ The stricter server types exposed type mismatches in client components:
 ### For Future Procedure Development
 
 1. **Always import proper types:**
+
 ```typescript
 import { ProductInterface } from '@/models/product/types/productInterface';
 import { ActionResponse } from '@/lib/types/ActionResponse';
 ```
 
 2. **Define explicit response interfaces:**
+
 ```typescript
 export interface GetProductResponseInterface extends ActionResponse {
   products: ProductInterface[];
@@ -155,6 +174,7 @@ export interface GetProductResponseInterface extends ActionResponse {
 ```
 
 3. **Use proper error handling:**
+
 ```typescript
 catch (error) {
   console.error('Descriptive error message:', error);
@@ -166,6 +186,7 @@ catch (error) {
 ```
 
 4. **For aggregations, use utility types:**
+
 ```typescript
 import { FacetAggregationResult, ProductQueryResult } from '@/server/types/mongoose';
 
@@ -175,11 +196,13 @@ const results = await Product.aggregate<FacetAggregationResult<ProductQueryResul
 ## Testing Recommendations
 
 ### Server-Side Testing
+
 - ✅ TypeScript compilation passes (`npm run typecheck`)
 - ⚠️ Need runtime testing of all procedures
 - ⚠️ Need to verify aggregation queries return expected shapes
 
 ### Client-Side Testing
+
 - ⚠️ All components using affected procedures need testing
 - ⚠️ tRPC type generation needs verification
 - ⚠️ End-to-end flows need validation
@@ -187,19 +210,23 @@ const results = await Product.aggregate<FacetAggregationResult<ProductQueryResul
 ## Known Issues & Follow-Up Work
 
 ### Client-Side Type Compatibility (Priority: High)
+
 Components expecting old return types need updates:
+
 - Blog grid components - handle string dates
 - Recommendations - unwrap product objects
-- Orders grid - handle missing _id in aggregations
+- Orders grid - handle missing \_id in aggregations
 - Admin forms - type expectation alignment
 
 ### Recommended Approach
+
 1. Update tRPC client hooks to use new types
 2. Fix component props to match new interfaces
 3. Add proper type guards where needed
 4. Test all affected user flows
 
 ### Future Enhancements
+
 - Add Zod output schemas to procedures for runtime validation
 - Implement consistent pagination types
 - Create shared aggregation pipeline helpers

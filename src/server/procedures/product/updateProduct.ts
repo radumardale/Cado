@@ -1,4 +1,3 @@
-
 import { Product } from '@/models/product/product';
 import { ProductInterface } from '@/models/product/types/productInterface';
 import { ActionResponse } from '@/lib/types/ActionResponse';

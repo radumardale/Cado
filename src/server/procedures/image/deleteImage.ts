@@ -1,4 +1,3 @@
-
 import { ActionResponse } from '@/lib/types/ActionResponse';
 import { deleteImageRequestSchema } from '@/lib/validation/image/deleteImageRequest';
 import { protectedProcedure } from '@/server/trpc';
