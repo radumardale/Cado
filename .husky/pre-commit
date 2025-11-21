@@ -24,9 +24,10 @@ if [ -z "$CODE_CHANGED" ]; then
   exit 0
 fi
 
-# Tier 2: Fast incremental checks for code changes (5-15s)
-echo "⚡ Running incremental TypeScript checks and formatting..."
+# Tier 2: TypeScript checks and formatting for code changes
+echo "⚡ Running TypeScript checks and formatting..."
 npx lint-staged
+npm run typecheck
 
 # Tier 3: Full build only for critical changes (30-60s)
 CRITICAL_CHANGED=$(echo "$STAGED_FILES" | grep -E '(src/server/|src/models/|src/lib/|src/app/\[locale\]/|\.d\.ts$|tsconfig\.json|next\.config)' || true)

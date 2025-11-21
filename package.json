@@ -21,9 +21,6 @@
     "prepare": "husky"
   },
   "lint-staged": {
-    "*.{ts,tsx}": [
-      "tsc-files --noEmit"
-    ],
     "*.{js,jsx,ts,tsx}": [
       "prettier --write"
     ]
