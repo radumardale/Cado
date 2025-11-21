@@ -1,25 +1,13 @@
 import mongoose from 'mongoose';
 import { HomeBannerInterface } from './types/HomeBannerInterface';
 import { Ocasions } from '@/lib/enums/Ocasions';
+import { ProductInfoSchema } from '../product/types/productInfo';
 
-// Product Schema
+// HomeBanner Schema
 const HomeBannerSchema = new mongoose.Schema<HomeBannerInterface>({
   images: {
-    ro: {
-      type: String,
-      required: false,
-      default: '',
-    },
-    ru: {
-      type: String,
-      required: false,
-      default: '',
-    },
-    en: {
-      type: String,
-      required: false,
-      default: '',
-    },
+    type: ProductInfoSchema,
+    required: true,
   },
   ocasion: {
     type: String,
