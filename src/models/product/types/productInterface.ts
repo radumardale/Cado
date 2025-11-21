@@ -1,9 +1,9 @@
 import { Categories } from '@/lib/enums/Categories';
-import { ProductInfo } from './productInfo';
-import { ProductSale } from './productSale';
+import { ProductInfo, ProductInfoSchema } from './productInfo';
+import { ProductSale, SaleSchema } from './productSale';
 import { Ocasions } from '@/lib/enums/Ocasions';
 import { ProductContent } from '@/lib/enums/ProductContent';
-import { StockAvailability } from './stockAvailability';
+import { StockAvailability, StockAvailabilitySchema } from './stockAvailability';
 import { Schema } from 'mongoose';
 import { OptionalInfo } from './optionalInfo';
 
@@ -42,11 +42,11 @@ export const OrderProductsSchema = new Schema<OrderProductInterface>(
   {
     _id: { type: String, required: true },
     custom_id: { type: String, required: true },
-    title: { type: Object, required: true },
+    title: { type: ProductInfoSchema, required: true },
     price: { type: Number, required: true },
-    stock_availability: { type: Object, required: true },
-    sale: { type: Object, required: true },
-    images: { type: [String] },
+    stock_availability: { type: StockAvailabilitySchema, required: true },
+    sale: { type: SaleSchema, required: false },
+    images: { type: [String], required: true },
   },
   { _id: false }
 );
