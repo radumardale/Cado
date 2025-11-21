@@ -40,7 +40,7 @@ interface AdminBlogFormProps {
   id: string;
 }
 
-const toastMessages = {
+const toastMessages: MultilingualString = {
   ro: 'Articolul a fost actualizat cu succes!',
   ru: 'Статья была успешно обновлена!',
   en: 'Article has been updated successfully!',

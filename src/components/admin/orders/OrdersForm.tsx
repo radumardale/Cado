@@ -50,7 +50,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { enUS, ro, ru } from 'date-fns/locale';
 import { orderStateColors } from '@/models/order/types/orderState';
 
-const toastMessages = {
+const toastMessages: Record<string, MultilingualString> = {
   success: {
     ro: 'Comanda a fost actualizată cu succes!',
     ru: 'Заказ был успешно обновлён!',

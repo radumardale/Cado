@@ -10,7 +10,7 @@ interface BlogImageUploadProps {
   isLoading?: boolean;
 }
 
-const toastMessages = {
+const toastMessages: Record<string, MultilingualString> = {
   fileTooLarge: {
     ro: 'Imaginea trebuie să fie mai mică de 500MB',
     ru: 'Изображение должно быть меньше 500MБ',

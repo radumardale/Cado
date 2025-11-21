@@ -35,7 +35,7 @@ import { useRouter } from '@/i18n/navigation';
 
 import { useMutation } from '@tanstack/react-query';
 
-const toastMessages = {
+const toastMessages: MultilingualString = {
   ro: 'Produsul a fost actualizat cu succes!',
   ru: 'Товар был успешно обновлен!',
   en: 'Product has been updated successfully!',

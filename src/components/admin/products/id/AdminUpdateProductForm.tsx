@@ -21,7 +21,7 @@ interface AdminProductFormProps {
   id: string;
 }
 
-const toastMessages = {
+const toastMessages: Record<string, MultilingualString> = {
   success: {
     ro: 'Produsul a fost actualizat cu succes!',
     ru: 'Товар был успешно обновлён!',

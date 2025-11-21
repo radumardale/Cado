@@ -21,7 +21,7 @@ import { updateSeasonCatalogRequestSchema } from '@/lib/validation/home/updateSe
 import { Switch } from '@/components/ui/switch';
 import { useLocale, useTranslations } from 'next-intl';
 
-const toastMessages = {
+const toastMessages: Record<string, MultilingualString> = {
   success: {
     ro: 'Catalog sezon modificat cu succes!',
     ru: 'Сезонный каталог успешно обновлён!',
