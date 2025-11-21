@@ -1,10 +1,12 @@
 import mongoose from 'mongoose';
 
-export type ProductInfo = {
-  ro: string;
-  ru: string;
-  [key: string]: string;
-};
+/**
+ * Multilingual product information text.
+ * Uses the global MultilingualString type to ensure consistency.
+ *
+ * @deprecated Import this type is no longer needed - use global MultilingualString instead.
+ */
+export type ProductInfo = MultilingualString;
 
 // ProductInfo Schema
 export const ProductInfoSchema = new mongoose.Schema<ProductInfo>(

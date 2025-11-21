@@ -12,30 +12,36 @@ declare module 'next-intl' {
 
 declare global {
   /**
+   * Type-safe locale code for dynamic locale access.
+   * Ensures only valid locale codes are used when accessing multilingual data.
+   */
+  type LocaleCode = 'ro' | 'ru' | 'en';
+
+  /**
    * Core multilingual type for required text in all supported languages.
    * Used throughout the application for product info, category names, etc.
+   *
+   * Supports both named access (obj.ro) and dynamic access (obj[locale]).
    */
   type MultilingualString = {
     ro: string;
     ru: string;
     en: string;
+    [key: string]: string;
   };
 
   /**
    * Optional multilingual type for text that may not be required in all languages.
    * Used for optional product details like material, color descriptions, etc.
+   *
+   * Supports both named access (obj.ro) and dynamic access (obj[locale]).
    */
   type OptionalMultilingualString = {
     ro?: string;
     ru?: string;
     en?: string;
+    [key: string]: string | undefined;
   };
-
-  /**
-   * Type-safe locale code for dynamic locale access.
-   * Ensures only valid locale codes are used when accessing multilingual data.
-   */
-  type LocaleCode = 'ro' | 'ru' | 'en';
 
   /**
    * Common response type for server actions and tRPC procedures.
