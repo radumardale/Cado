@@ -14,7 +14,7 @@ export const getRecProductsProcedure = publicProcedure.query(
     try {
       await connectMongo();
 
-      const products = await ReccProduct.find()
+      const reccProducts = await ReccProduct.find()
         .populate({
           path: 'product',
           select: '_id title price images custom_id stock_availability sale',
@@ -24,13 +24,18 @@ export const getRecProductsProcedure = publicProcedure.query(
         })
         .lean();
 
-      if (!products) {
+      if (!reccProducts || reccProducts.length === 0) {
         return {
           success: false,
-          error: 'This product does not exist',
+          error: 'No recommended products found',
           products: [],
         };
       }
+
+      // Extract products from ReccProduct documents
+      const products = reccProducts
+        .map(recc => recc.product as unknown as ProductInterface)
+        .filter((product): product is ProductInterface => product !== null && product !== undefined);
 
       return {
         success: true,
