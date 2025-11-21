@@ -1,13 +1,12 @@
-/* eslint-disable  @typescript-eslint/no-explicit-any */
-
 import { publicProcedure } from '../../trpc';
 import { Product } from '@/models/product/product';
+import { ProductInterface } from '@/models/product/types/productInterface';
 import { ActionResponse } from '@/lib/types/ActionResponse';
 import connectMongo from '@/lib/connect-mongo';
 import { getRecProductsRequestSchema } from '@/lib/validation/product/getRecProductsRequest';
 
 export interface getProductResponseInterface extends ActionResponse {
-  products: any;
+  products: ProductInterface[];
 }
 
 export const getSimilarProducts = publicProcedure
@@ -88,7 +87,7 @@ export const getSimilarProducts = publicProcedure
       return {
         success: false,
         error: error instanceof Error ? error.message : 'Failed to fetch similar products',
-        products: null,
+        products: [],
       };
     }
   });

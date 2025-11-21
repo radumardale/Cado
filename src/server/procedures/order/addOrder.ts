@@ -1,5 +1,3 @@
-/* eslint-disable  @typescript-eslint/no-explicit-any */
-
 import { protectedProcedure } from '@/server/trpc';
 import { Client } from '@/models/client/client';
 import { Order } from '@/models/order/order';
@@ -196,26 +194,39 @@ export const addOrderProcedure = protectedProcedure
               Name: 'CADO Order',
               Description: `Order #${order.custom_id}`,
               Amount: Math.round(input.total_cost * 100),
-              Products: input.products.map((product: any, index: number) => ({
-                GroupName: 'Produse',
-                GroupId: 1,
-                LineNo: index + 1,
-                Code: product.product.custom_id,
-                Barcode: index + 1001,
-                Name: product.product.title.ro,
-                Description: product.product.title.ro,
-                UnitPrice: Math.round(
-                  product.product.sale && product.product.sale.active
-                    ? product.product.sale.sale_price * 100
-                    : product.product.price * 100
-                ),
-                UnitProduct: product.quantity,
-                Amount: Math.round(
-                  (product.product.sale && product.product.sale.active
-                    ? product.product.sale.sale_price * 100
-                    : product.product.price * 100) * product.quantity
-                ),
-              })),
+              Products: input.products.map(
+                (
+                  product: {
+                    product: {
+                      custom_id: string;
+                      title: MultilingualString;
+                      price: number;
+                      sale?: { active: boolean; sale_price: number };
+                    };
+                    quantity: number;
+                  },
+                  index: number
+                ) => ({
+                  GroupName: 'Produse',
+                  GroupId: 1,
+                  LineNo: index + 1,
+                  Code: product.product.custom_id,
+                  Barcode: index + 1001,
+                  Name: product.product.title.ro,
+                  Description: product.product.title.ro,
+                  UnitPrice: Math.round(
+                    product.product.sale && product.product.sale.active
+                      ? product.product.sale.sale_price * 100
+                      : product.product.price * 100
+                  ),
+                  UnitProduct: product.quantity,
+                  Amount: Math.round(
+                    (product.product.sale && product.product.sale.active
+                      ? product.product.sale.sale_price * 100
+                      : product.product.price * 100) * product.quantity
+                  ),
+                })
+              ),
             },
           ],
           MoneyType: null,
@@ -276,10 +287,10 @@ export const addOrderProcedure = protectedProcedure
         success: true,
         order: order,
       };
-    } catch (error: any) {
+    } catch (error) {
       return {
         success: false,
-        error: error.message || 'Failed to create order',
+        error: error instanceof Error ? error.message : 'Failed to create order',
       };
     }
   });

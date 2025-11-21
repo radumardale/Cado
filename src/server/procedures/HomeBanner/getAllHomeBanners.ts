@@ -1,5 +1,3 @@
-/* eslint-disable  @typescript-eslint/no-explicit-any */
-
 import connectMongo from '@/lib/connect-mongo';
 import { ActionResponse } from '@/lib/types/ActionResponse';
 import { HomeBanner } from '@/models/home_banner/HomeBanner';
@@ -20,11 +18,12 @@ export const getAllHomeBanners = publicProcedure.query(async (): Promise<addHome
       success: true,
       banners: homeBanners,
     };
-  } catch (e: any) {
+  } catch (error) {
+    console.error('Error fetching all home banners:', error);
     return {
       banners: [],
-      error: e.message,
-      success: true,
+      error: error instanceof Error ? error.message : 'Failed to fetch home banners',
+      success: false,
     };
   }
 });

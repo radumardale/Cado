@@ -1,5 +1,3 @@
-/* eslint-disable  @typescript-eslint/no-explicit-any */
-
 import connectMongo from '@/lib/connect-mongo';
 import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
@@ -62,11 +60,11 @@ export const generateUploadLinks = async ({ id, destination }: GenerateUploadLin
       success: true,
       imageUrl: uploadUrl,
     };
-  } catch (error: any) {
+  } catch (error) {
     return {
       success: false,
       imageUrl: '',
-      error: error.message || 'Failed to upload image',
+      error: error instanceof Error ? error.message : 'Failed to upload image',
     };
   }
 };

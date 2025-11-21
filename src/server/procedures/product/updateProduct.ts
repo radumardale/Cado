@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 import { Product } from '@/models/product/product';
 import { ProductInterface } from '@/models/product/types/productInterface';
 import { ActionResponse } from '@/lib/types/ActionResponse';
@@ -20,7 +18,10 @@ export const updateProductProcedure = protectedProcedure
     try {
       await connectMongo();
 
-      const oldProduct = (await Product.findById(input.id).select('images').lean()) as any;
+      const oldProduct = (await Product.findById(input.id).select('images').lean()) as {
+        _id: { toString(): string };
+        images: string[];
+      };
 
       const imagesLinks = [];
 

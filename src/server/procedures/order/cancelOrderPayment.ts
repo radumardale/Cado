@@ -1,5 +1,3 @@
-/* eslint-disable  @typescript-eslint/no-explicit-any */
-
 import { publicProcedure } from '@/server/trpc';
 import { Order } from '@/models/order/order';
 import { ActionResponse } from '@/lib/types/ActionResponse';
@@ -43,11 +41,11 @@ export const cancelOrderProcedure = publicProcedure
       return {
         success: true,
       };
-    } catch (error: any) {
+    } catch (error) {
       console.error('Error canceling order:', error);
       return {
         success: false,
-        error: error.message || 'Failed to cancel order',
+        error: error instanceof Error ? error.message : 'Failed to cancel order',
       };
     }
   });

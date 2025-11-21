@@ -1,7 +1,6 @@
-/* eslint-disable  @typescript-eslint/no-explicit-any */
-
 import { protectedProcedure } from '@/server/trpc';
 import { Client } from '@/models/client/client';
+import { ClientInterface } from '@/models/client/types/clientInterface';
 import { ActionResponse } from '@/lib/types/ActionResponse';
 import connectMongo from '@/lib/connect-mongo';
 import { z } from 'zod';
@@ -16,7 +15,7 @@ export const getAdminOrdersRequestSchema = z.object({
 });
 
 export interface getAllOrdersResponseInterface extends ActionResponse {
-  clients: any[];
+  clients: ClientInterface[];
   nextCursor: number | null;
   totalCount: number;
 }
@@ -107,11 +106,11 @@ export const getAllClientsProcedure = protectedProcedure
         nextCursor,
         totalCount,
       };
-    } catch (error: any) {
+    } catch (error) {
       console.error('Error fetching orders:', error);
       return {
         success: false,
-        error: error.message || 'Failed to fetch orders',
+        error: error instanceof Error ? error.message : 'Failed to fetch orders',
         clients: [],
         nextCursor: null,
         totalCount: 0,

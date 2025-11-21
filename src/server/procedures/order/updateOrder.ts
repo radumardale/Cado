@@ -1,15 +1,14 @@
-/* eslint-disable  @typescript-eslint/no-explicit-any */
-
 import { protectedProcedure } from '@/server/trpc';
 import { Client } from '@/models/client/client';
 import { Order } from '@/models/order/order';
+import { ResOrderInterface } from '@/models/order/types/orderInterface';
 import { ActionResponse } from '@/lib/types/ActionResponse';
 import { updateOrderRequestSchema } from '@/lib/validation/order/updateOrderRequest';
 import connectMongo from '@/lib/connect-mongo';
 import { DeliveryMethod } from '@/models/order/types/deliveryMethod';
 
 export interface updateOrderResponse extends ActionResponse {
-  order: any | null;
+  order: ResOrderInterface | null;
 }
 
 export const updateOrderProcedure = protectedProcedure
@@ -108,21 +107,25 @@ export const updateOrderProcedure = protectedProcedure
 
       const plainOrder = order.toObject ? order.toObject() : order;
 
-      // Add the billing_checkbox field to the response
-      if (plainOrder.additional_info) {
-        (plainOrder.additional_info as any).billing_checkbox =
-          input.additional_info.billing_checkbox;
-      }
+      // Convert plainOrder to ResOrderInterface structure
+      const resOrder = {
+        ...plainOrder,
+        _id: plainOrder._id.toString(),
+        additional_info: {
+          ...plainOrder.additional_info,
+          billing_checkbox: input.additional_info.billing_checkbox,
+        },
+      } as unknown as ResOrderInterface;
 
       return {
         success: true,
-        order: plainOrder,
+        order: resOrder,
       };
-    } catch (error: any) {
+    } catch (error) {
       console.error('Error updating order:', error);
       return {
         success: false,
-        error: error.message || 'Failed to update order',
+        error: error instanceof Error ? error.message : 'Failed to update order',
         order: null,
       };
     }

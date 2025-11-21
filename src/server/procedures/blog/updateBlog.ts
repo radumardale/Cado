@@ -1,5 +1,3 @@
-/* eslint-disable  @typescript-eslint/no-explicit-any */
-
 import { Blog } from '@/models/blog/blog';
 import { ActionResponse } from '@/lib/types/ActionResponse';
 import { updateBlogRequestSchema } from '@/lib/validation/blog/updateBlogRequest';
@@ -20,7 +18,10 @@ export const updateBlogProcedure = protectedProcedure
     try {
       await connectMongo();
 
-      const oldBlog = (await Blog.findById(input.id).select('_id sections').lean()) as any;
+      const oldBlog = (await Blog.findById(input.id).select('_id sections').lean()) as {
+        _id: { toString(): string };
+        sections: unknown[];
+      };
 
       const imagesLinks = [];
 

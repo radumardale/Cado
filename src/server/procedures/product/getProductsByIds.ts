@@ -1,8 +1,7 @@
-/* eslint-disable  @typescript-eslint/no-explicit-any */
-
 import { publicProcedure } from '../../trpc';
 import { z } from 'zod';
 import { Product } from '@/models/product/product';
+import { ProductInterface } from '@/models/product/types/productInterface';
 import { ActionResponse } from '@/lib/types/ActionResponse';
 import connectMongo from '@/lib/connect-mongo';
 
@@ -13,7 +12,7 @@ export const getProductsByIdsRequestSchema = z.object({
 
 // Define the response interface for TypeScript type checking
 export interface getProductsByIdsResponseInterface extends ActionResponse {
-  products: any;
+  products: ProductInterface[];
 }
 
 export const getProductsByIdsProcedure = publicProcedure

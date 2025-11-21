@@ -55,13 +55,13 @@ export default function RecommendationsContent() {
         {isLoading || !data?.products ? (
           <LoadingGrid gridLayout={true} length={5} />
         ) : (
-          data?.products.map((product: { product: ProductInterface }, index: number) => (
+          data?.products.map((product: ProductInterface, index: number) => (
             <AdminRecommendationsCard
               key={index}
-              product={product.product}
+              product={product}
               setAddProductOpen={() => {
                 setAddProductOpen(true);
-                setReplaceProduct(product.product);
+                setReplaceProduct(product);
               }}
             />
           ))

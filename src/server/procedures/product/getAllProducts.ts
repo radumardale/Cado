@@ -1,12 +1,11 @@
-/* eslint-disable  @typescript-eslint/no-explicit-any */
-
 import { publicProcedure } from '../../trpc';
 import { Product } from '@/models/product/product';
+import { ProductInterface } from '@/models/product/types/productInterface';
 import { ActionResponse } from '@/lib/types/ActionResponse';
 import connectMongo from '@/lib/connect-mongo';
 
 export interface getProductResponseInterface extends ActionResponse {
-  products: any;
+  products: ProductInterface[];
 }
 
 export const getAllProductsProcedure = publicProcedure.query(
@@ -20,7 +19,7 @@ export const getAllProductsProcedure = publicProcedure.query(
         return {
           success: false,
           error: 'This product does not exist',
-          products: null,
+          products: [],
         };
       }
 
@@ -33,7 +32,7 @@ export const getAllProductsProcedure = publicProcedure.query(
       return {
         success: false,
         error: error instanceof Error ? error.message : 'Failed to fetch product',
-        products: null,
+        products: [],
       };
     }
   }

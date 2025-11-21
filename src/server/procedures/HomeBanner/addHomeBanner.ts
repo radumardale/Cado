@@ -1,5 +1,3 @@
-/* eslint-disable  @typescript-eslint/no-explicit-any */
-
 import connectMongo from '@/lib/connect-mongo';
 import { ActionResponse } from '@/lib/types/ActionResponse';
 import { addHomeBannerRequestSchema } from '@/lib/validation/home/addHomeBannerRequest';
@@ -57,14 +55,15 @@ export const addHomeBannerProcedure = protectedProcedure
         },
         homeBanner: homeBanner,
       };
-    } catch (e: any) {
+    } catch (error) {
+      console.error('Error adding home banner:', error);
       return {
         imageLinks: {
           ro: '',
           ru: '',
           en: '',
         },
-        error: e.message,
+        error: error instanceof Error ? error.message : 'Failed to add home banner',
         success: false,
         homeBanner: null,
       };

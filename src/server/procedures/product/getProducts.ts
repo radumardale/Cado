@@ -1,7 +1,6 @@
-/* eslint-disable  @typescript-eslint/no-explicit-any */
-
 import { publicProcedure } from '../../trpc';
 import { Product } from '@/models/product/product';
+import { ProductInterface } from '@/models/product/types/productInterface';
 import { ActionResponse } from '@/lib/types/ActionResponse';
 import connectMongo from '@/lib/connect-mongo';
 import { getAllProductsRequestSchema } from '@/lib/validation/product/getAllProductsRequest';
@@ -9,7 +8,7 @@ import SortBy from '@/lib/enums/SortBy';
 import { ReccProduct } from '@/models/reccProduct/ReccProduct';
 
 export interface GetProductResponseInterface extends ActionResponse {
-  products: any;
+  products: ProductInterface[];
   productsCount: number;
 }
 

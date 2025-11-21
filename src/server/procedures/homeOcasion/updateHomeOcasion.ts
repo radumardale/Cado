@@ -1,5 +1,3 @@
-/* eslint-disable  @typescript-eslint/no-explicit-any */
-
 import connectMongo from '@/lib/connect-mongo';
 import { ActionResponse } from '@/lib/types/ActionResponse';
 import { updateHomeOcasionRequestSchema } from '@/lib/validation/home/updateHomeOcasion';
@@ -40,10 +38,10 @@ export const updateHomeOcasionProcedure = protectedProcedure
         success: true,
         homeOcasion,
       };
-    } catch (e: any) {
+    } catch (error) {
       return {
         homeOcasion: null,
-        error: e.message,
+        error: error instanceof Error ? error.message : 'Failed to process request',
         success: false,
       };
     }

@@ -1,12 +1,11 @@
-/* eslint-disable  @typescript-eslint/no-explicit-any */
-
 import { publicProcedure } from '../../trpc';
 import { ActionResponse } from '@/lib/types/ActionResponse';
+import { ProductInterface } from '@/models/product/types/productInterface';
 import connectMongo from '@/lib/connect-mongo';
 import { ReccProduct } from '@/models/reccProduct/ReccProduct';
 
 export interface getProductResponseInterface extends ActionResponse {
-  products: any;
+  products: ProductInterface[];
 }
 
 export const getRecProductsProcedure = publicProcedure.query(
@@ -14,7 +13,7 @@ export const getRecProductsProcedure = publicProcedure.query(
     try {
       await connectMongo();
 
-      const products = await ReccProduct.find()
+      const reccProducts = await ReccProduct.find()
         .populate({
           path: 'product',
           select: '_id title price images custom_id stock_availability sale',
@@ -24,24 +23,31 @@ export const getRecProductsProcedure = publicProcedure.query(
         })
         .lean();
 
-      if (!products) {
+      if (!reccProducts || reccProducts.length === 0) {
         return {
           success: false,
-          error: 'This product does not exist',
-          products: null,
+          error: 'No recommended products found',
+          products: [],
         };
       }
+
+      // Extract products from ReccProduct documents
+      const products = reccProducts
+        .map(recc => recc.product as unknown as ProductInterface)
+        .filter(
+          (product): product is ProductInterface => product !== null && product !== undefined
+        );
 
       return {
         success: true,
         products: products,
       };
     } catch (error) {
-      console.error('Error fetching product:', error);
+      console.error('Error fetching recommended products:', error);
       return {
         success: false,
-        error: error instanceof Error ? error.message : 'Failed to fetch product',
-        products: null,
+        error: error instanceof Error ? error.message : 'Failed to fetch recommended products',
+        products: [],
       };
     }
   }

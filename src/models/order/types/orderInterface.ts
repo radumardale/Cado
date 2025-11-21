@@ -35,3 +35,18 @@ export interface ResOrderInterface {
   total_cost: number;
   delivery_details: DeliveryDetailsInterface;
 }
+
+/**
+ * Interface for orders returned from MongoDB aggregation pipeline
+ * Aggregation returns plain objects with dates serialized as ISO strings
+ */
+export interface AggregatedOrderInterface
+  extends Omit<OrderInterface, 'createdAt' | 'client' | 'delivery_details'> {
+  _id: string;
+  createdAt: string;
+  client: ClientInterface;
+  delivery_details: Omit<DeliveryDetailsInterface, 'delivery_date'> & {
+    delivery_date?: string;
+  };
+  relevance?: number;
+}

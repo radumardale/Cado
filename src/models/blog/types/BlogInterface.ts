@@ -19,5 +19,5 @@ export interface OptimizedBlogInterface {
   title: ProductInfo;
   image: string;
   tag: BlogTags;
-  date: Date;
+  date: string;
 }

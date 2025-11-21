@@ -1,5 +1,3 @@
-/* eslint-disable  @typescript-eslint/no-explicit-any */
-
 import connectMongo from '@/lib/connect-mongo';
 import { ActionResponse } from '@/lib/types/ActionResponse';
 import { updateSeasonCatalogRequestSchema } from '@/lib/validation/home/updateSeasonCatalogRequest';
@@ -40,10 +38,10 @@ export const updateSeasonCatalogProcedure = publicProcedure
         success: true,
         seasonCatalog,
       };
-    } catch (e: any) {
+    } catch (error) {
       return {
         seasonCatalog: null,
-        error: e.message,
+        error: error instanceof Error ? error.message : 'Failed to process request',
         success: false,
       };
     }

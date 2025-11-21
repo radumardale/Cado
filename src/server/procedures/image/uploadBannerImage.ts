@@ -1,5 +1,3 @@
-/* eslint-disable  @typescript-eslint/no-explicit-any */
-
 import { protectedProcedure } from '../../trpc';
 import { ActionResponse } from '@/lib/types/ActionResponse';
 import connectMongo from '@/lib/connect-mongo';
@@ -56,7 +54,7 @@ export const uploadBannerImageProcedure = protectedProcedure
       }
 
       // Update only the languages that have new images
-      const updateObj: any = {};
+      const updateObj: Record<string, string> = {};
       if (input.newImageKeys.ro) updateObj['images.ro'] = newImageUrls.ro;
       if (input.newImageKeys.ru) updateObj['images.ru'] = newImageUrls.ru;
       if (input.newImageKeys.en) updateObj['images.en'] = newImageUrls.en;
@@ -67,11 +65,11 @@ export const uploadBannerImageProcedure = protectedProcedure
         success: true,
         images: newImageUrls,
       };
-    } catch (error: any) {
+    } catch (error) {
       return {
         success: false,
         images: { ro: '', ru: '', en: '' },
-        error: error.message || 'Failed to upload images',
+        error: error instanceof Error ? error.message : 'Failed to upload images',
       };
     }
   });

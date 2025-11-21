@@ -610,6 +610,7 @@ While this is a good suggestion, it was outside the scope of issue #{ORIGINAL_IS
 - PR where discussed: #{PR_NUMBER}
 - Suggested by: @{reviewer_username}
   "
+
   ```- Link back to these new issues in PR comments - Tag them appropriately (enhancement, tech-debt, etc.)
 
   ```

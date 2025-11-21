@@ -81,9 +81,7 @@ export default function OrdersForm({ orderId }: { orderId: string }) {
           state: MutatedData.order?.state,
           delivery_details: {
             ...MutatedData.order?.delivery_details,
-            delivery_date: MutatedData.order?.delivery_details?.delivery_date
-              ? new Date(MutatedData.order.delivery_details.delivery_date).toISOString()
-              : undefined,
+            delivery_date: MutatedData.order?.delivery_details?.delivery_date || undefined,
           },
         });
 

@@ -1,5 +1,3 @@
-/* eslint-disable  @typescript-eslint/no-explicit-any */
-
 import { Blog } from '@/models/blog/blog';
 import { ActionResponse } from '@/lib/types/ActionResponse';
 import { addBlogRequestSchema } from '@/lib/validation/blog/addBlogRequest';
@@ -56,11 +54,11 @@ export const createBlogProcedure = protectedProcedure
         blog: newBlog,
         imagesLinks: imagesLinks,
       };
-    } catch (error: any) {
+    } catch (error) {
       console.error('Error creating blog:', error);
       return {
         success: false,
-        error: error.message || 'Failed to create blog',
+        error: error instanceof Error ? error.message : 'Failed to create blog',
         blog: null,
         imagesLinks: [],
       };

@@ -1,12 +1,11 @@
-/* eslint-disable  @typescript-eslint/no-explicit-any */
-
 import { publicProcedure } from '@/server/trpc';
 import { ActionResponse } from '@/lib/types/ActionResponse';
 import { searchProductRequestSchema } from '@/lib/validation/search/searchProductRequest';
 import { Product } from '@/models/product/product';
+import { ProductInterface } from '@/models/product/types/productInterface';
 
 export interface searchProductResponseInterface extends ActionResponse {
-  products: any[] | [];
+  products: ProductInterface[];
   count: number;
 }
 
@@ -95,10 +94,10 @@ export const searchProductProcedure = publicProcedure
         products: results[0].products,
         count: results[0].totalCount.length > 0 ? results[0].totalCount[0].count : 0,
       };
-    } catch (error: any) {
+    } catch (error) {
       return {
         success: false,
-        error: error.message || 'Failed to search products',
+        error: error instanceof Error ? error.message : 'Failed to search products',
         products: [],
         count: 0,
       };

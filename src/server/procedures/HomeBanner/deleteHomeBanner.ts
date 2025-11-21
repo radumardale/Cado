@@ -1,5 +1,3 @@
-/* eslint-disable  @typescript-eslint/no-explicit-any */
-
 import connectMongo from '@/lib/connect-mongo';
 import { ActionResponse } from '@/lib/types/ActionResponse';
 import { deleteHomeBannerRequestSchema } from '@/lib/validation/home/updateHomeBannerRequest';
@@ -28,10 +26,11 @@ export const deleteHomeBannerProcedure = protectedProcedure
       return {
         success: true,
       };
-    } catch (e: any) {
+    } catch (error) {
+      console.error('Error deleting home banner:', error);
       return {
-        error: e.message,
-        success: false, // Should be false on error
+        error: error instanceof Error ? error.message : 'Failed to delete home banner',
+        success: false,
       };
     }
   });

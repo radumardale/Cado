@@ -4,7 +4,7 @@ import BlogCard from './BlogCard';
 import { useTRPC } from '@/app/_trpc/client';
 import { useLocale } from 'next-intl';
 import BlogSkeleton from './BlogSkeleton';
-import { BlogInterface } from '@/models/blog/types/BlogInterface';
+import { OptimizedBlogInterface } from '@/models/blog/types/BlogInterface';
 
 import { useQuery } from '@tanstack/react-query';
 
@@ -28,7 +28,7 @@ export default function BlogGrid() {
         </>
       ) : (
         <>
-          {data.blogs.map((blog: BlogInterface, index: number) => {
+          {data.blogs.map((blog: OptimizedBlogInterface, index: number) => {
             return (
               <Fragment key={index}>
                 <BlogCard

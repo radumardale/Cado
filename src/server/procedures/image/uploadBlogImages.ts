@@ -1,5 +1,3 @@
-/* eslint-disable  @typescript-eslint/no-explicit-any */
-
 import { protectedProcedure } from '@/server/trpc';
 import { ActionResponse } from '@/lib/types/ActionResponse';
 import connectMongo from '@/lib/connect-mongo';
@@ -55,12 +53,12 @@ export const UploadBlogImagesProcedure = protectedProcedure
         sectionImages: newSectionImages,
         mainImage: blog.image,
       };
-    } catch (error: any) {
+    } catch (error) {
       return {
         success: false,
         sectionImages: [],
         mainImage: '',
-        error: error.message || 'Failed to upload image',
+        error: error instanceof Error ? error.message : 'Failed to upload image',
       };
     }
   });
