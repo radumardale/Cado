@@ -240,11 +240,14 @@ describe('TipTap Utilities', () => {
 
       const promise = handleImageUpload(mockFile, undefined, abortController.signal);
 
+      // Attach error handler before aborting to prevent unhandled rejection
+      const expectation = expect(promise).rejects.toThrow('Upload cancelled');
+
       // Abort mid-upload
       abortController.abort();
       await vi.runAllTimersAsync();
 
-      await expect(promise).rejects.toThrow('Upload cancelled');
+      await expectation;
     });
 
     it('should work without progress callback', async () => {
