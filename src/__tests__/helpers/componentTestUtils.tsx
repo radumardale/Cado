@@ -30,13 +30,15 @@ export function createMockRouter() {
 
 /**
  * Mock next-intl useTranslations hook
+ * Note: This is a basic mock that returns the full key path.
+ * For actual translations, use renderWithProviders which includes NextIntlClientProvider.
  */
 export function mockUseTranslations() {
   vi.mock('next-intl', async () => {
     const actual = await vi.importActual('next-intl');
     return {
       ...actual,
-      useTranslations: () => (key: string) => key,
+      useTranslations: (namespace: string) => (key: string) => `${namespace}.${key}`,
       useLocale: () => 'en',
     };
   });
@@ -159,6 +161,21 @@ export function createTestMessages(locale: LocaleCode = 'en') {
         on_command: locale === 'ro' ? 'La comandă' : locale === 'ru' ? 'Под заказ' : 'On Order',
         discount: locale === 'ro' ? 'Reducere' : locale === 'ru' ? 'Скидка' : 'Discount',
       },
+    },
+    ProductPage: {
+      stock_state: {
+        IN_STOCK: locale === 'ro' ? 'ÎN STOC' : locale === 'ru' ? 'В НАЛИЧИИ' : 'IN STOCK',
+        ON_COMMAND: locale === 'ro' ? 'LA COMANDĂ' : locale === 'ru' ? 'ПОД ЗАКАЗ' : 'ON ORDER',
+        NOT_IN_STOCK:
+          locale === 'ro' ? 'STOC EPUIZAT' : locale === 'ru' ? 'НЕТ В НАЛИЧИИ' : 'OUT OF STOCK',
+      },
+      add_to_cart:
+        locale === 'ro' ? 'Adaugă în coș' : locale === 'ru' ? 'Добавить в корзину' : 'Add to cart',
+      includes:
+        locale === 'ro' ? 'Cadoul include' : locale === 'ru' ? 'Подарок включает' : 'Gift includes',
+      description: locale === 'ro' ? 'Descriere' : locale === 'ru' ? 'Описание' : 'Description',
+      features:
+        locale === 'ro' ? 'Caracteristici' : locale === 'ru' ? 'Характеристики' : 'Features',
     },
   };
 
