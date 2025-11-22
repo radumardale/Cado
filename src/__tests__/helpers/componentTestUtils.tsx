@@ -1,6 +1,6 @@
 import { render, RenderOptions } from '@testing-library/react';
 import { ReactElement, ReactNode } from 'react';
-import { vi } from 'vitest';
+import { vi, expect } from 'vitest';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { NextIntlClientProvider } from 'next-intl';
 import { CartInterface } from '@/lib/types/CartInterface';
@@ -432,10 +432,115 @@ export function waitForAsync(ms: number = 0): Promise<void> {
  * Re-export common testing utilities
  */
 export * from '@testing-library/react';
-export { vi } from 'vitest';
+export { vi, expect } from 'vitest';
 
 /**
  * Convenience aliases for factory functions
  */
 export const mockProduct = createMockProduct;
 export const mockCartItem = createMockCartItem;
+
+/**
+ * Form Testing Utilities
+ */
+
+/**
+ * Setup portal container for Radix UI components (Select, Popover, Calendar, etc.)
+ * Call this in beforeEach to ensure portals render correctly in tests
+ */
+export function setupPortalContainer() {
+  const portalRoot = document.createElement('div');
+  portalRoot.setAttribute('id', 'portal-root');
+  document.body.appendChild(portalRoot);
+  return () => {
+    document.body.removeChild(portalRoot);
+  };
+}
+
+/**
+ * Render a form field with React Hook Form context
+ * Useful for testing individual form inputs with validation
+ *
+ * Note: Import useForm and FormProvider in your test file, then pass them
+ * or simply use this helper with FormProvider already imported
+ */
+export function renderFormField(
+  ui: ReactElement,
+  options?: {
+    defaultValues?: Record<string, unknown>;
+    mode?: 'onChange' | 'onBlur' | 'onSubmit';
+  }
+) {
+  // Import react-hook-form at runtime to use in wrapper
+  // This is a test utility, so dynamic import is acceptable here
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const { useForm, FormProvider } = require('react-hook-form');
+
+  function Wrapper({ children }: { children: ReactNode }) {
+    const methods = useForm({
+      defaultValues: options?.defaultValues || {},
+      mode: options?.mode || 'onChange',
+    });
+
+    return <FormProvider {...methods}>{children}</FormProvider>;
+  }
+
+  return render(ui, { wrapper: Wrapper });
+}
+
+/**
+ * Simulate keyboard navigation
+ * Useful for testing accessibility of form components
+ */
+export function pressKey(element: Element, key: string, options?: KeyboardEventInit) {
+  element.dispatchEvent(
+    new KeyboardEvent('keydown', {
+      key,
+      bubbles: true,
+      cancelable: true,
+      ...options,
+    })
+  );
+}
+
+/**
+ * Check if element has proper ARIA attributes
+ */
+export function expectAccessibleInput(element: Element) {
+  expect(element).toHaveAttribute('aria-invalid');
+  // Most inputs should have either aria-label or associated label
+  const hasAriaLabel = element.hasAttribute('aria-label');
+  const hasAriaLabelledBy = element.hasAttribute('aria-labelledby');
+  const hasId = element.hasAttribute('id');
+
+  expect(hasAriaLabel || hasAriaLabelledBy || hasId).toBe(true);
+}
+
+/**
+ * Standard external dependency mocks for form component tests
+ * These should be called at the top of each test file (before imports)
+ */
+export const STANDARD_FORM_MOCKS = `
+// Mock next-intl
+vi.mock('next-intl', () => ({
+  useTranslations: () => (key: string) => key,
+  useLocale: () => 'en',
+}));
+
+// Mock next/image
+vi.mock('next/image', () => ({
+  default: ({ src, alt, ...props }: { src: string; alt: string }) => {
+    // eslint-disable-next-line @next/next/no-img-element
+    return <img src={src} alt={alt} {...props} />;
+  },
+}));
+
+// Mock lucide icons (if needed)
+vi.mock('lucide-react', async () => {
+  const actual = await vi.importActual('lucide-react');
+  return {
+    ...actual,
+    // Add specific icon mocks as needed
+  };
+});
+`;
