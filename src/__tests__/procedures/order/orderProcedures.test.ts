@@ -44,13 +44,11 @@ import {
   mockUpdateOrderRequest,
   mockOrderWithHomeDelivery,
   mockClient,
-  mockProduct,
 } from '@/__tests__/helpers/mockFactories';
 import nodemailer from 'nodemailer';
 import { render } from '@react-email/components';
 import { APIClient } from '@/lib/apiCLient';
 import { OrderPaymentMethod } from '@/models/order/types/orderPaymentMethod';
-import { OrderState } from '@/models/order/types/orderState';
 import { DeliveryMethod } from '@/models/order/types/deliveryMethod';
 import SortBy from '@/lib/enums/SortBy';
 
@@ -65,7 +63,7 @@ import SortBy from '@/lib/enums/SortBy';
  */
 
 describe('Order Procedures', () => {
-  let mockTransporter: any;
+  let mockTransporter: { sendMail: ReturnType<typeof vi.fn> };
 
   beforeEach(() => {
     vi.clearAllMocks();
