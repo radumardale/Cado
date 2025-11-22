@@ -13,13 +13,14 @@ const mockSetCartOpen = vi.fn();
 const mockIsOpen = false;
 
 vi.mock('@/states/CartState', () => ({
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  useCartStore: (selector: (state: any) => any) => {
+  useCartStore: <T,>(
+    selector: (state: { isOpen: boolean; setOpen: typeof mockSetCartOpen }) => T
+  ) => {
     const state = {
       isOpen: mockIsOpen,
       setOpen: mockSetCartOpen,
     };
-    return selector ? selector(state) : state;
+    return selector(state);
   },
 }));
 
