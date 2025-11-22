@@ -135,16 +135,23 @@ describe('CheckoutCart', () => {
       );
 
       const buttons = screen.getAllByRole('button');
-      // Find + button (should be one of the buttons with Plus icon)
+      // Find + button by looking for Plus icon (has 2 path elements: horizontal + vertical)
       const plusButton = buttons.find(btn => {
         const svg = btn.querySelector('svg');
-        return svg?.getAttribute('class')?.includes('w-6');
+        const paths = svg?.querySelectorAll('path');
+        // Plus icon has 2 paths, Minus has 1 path
+        return paths && paths.length === 2;
       });
 
-      if (plusButton) {
-        fireEvent.click(plusButton);
-        expect(mockSetValue).toHaveBeenCalled();
-      }
+      expect(plusButton).toBeDefined();
+      fireEvent.click(plusButton!);
+
+      // Verify setValue was called with increased quantity
+      expect(mockSetValue).toHaveBeenCalled();
+      const callWithIncreasedQty = mockSetValue.mock.calls.find(
+        call => Array.isArray(call[0]) && call[0].some((item: CartInterface) => item.quantity === 3)
+      );
+      expect(callWithIncreasedQty).toBeDefined();
     });
 
     it('should decrease quantity when - button is clicked', () => {
@@ -159,19 +166,24 @@ describe('CheckoutCart', () => {
         />
       );
 
-      // Find the minus button (first button with Minus icon)
       const buttons = screen.getAllByRole('button');
-      const minusButton = buttons.find(
-        btn => !(btn as HTMLButtonElement).disabled && btn.querySelector('svg')
-      );
+      // Find - button by looking for Minus icon (has 1 path element)
+      const minusButton = buttons.find(btn => {
+        const svg = btn.querySelector('svg');
+        const paths = svg?.querySelectorAll('path');
+        // Minus icon has 1 path, Plus has 2 paths
+        return paths && paths.length === 1;
+      });
 
-      if (minusButton) {
-        fireEvent.click(minusButton);
-        expect(mockSetValue).toHaveBeenCalled();
-      } else {
-        // If we can't find the button, at least verify the component rendered
-        expect(screen.getByText('Product 1')).toBeInTheDocument();
-      }
+      expect(minusButton).toBeDefined();
+      fireEvent.click(minusButton!);
+
+      // Verify setValue was called with decreased quantity
+      expect(mockSetValue).toHaveBeenCalled();
+      const callWithDecreasedQty = mockSetValue.mock.calls.find(
+        call => Array.isArray(call[0]) && call[0].some((item: CartInterface) => item.quantity === 2)
+      );
+      expect(callWithDecreasedQty).toBeDefined();
     });
 
     it('should disable - button when quantity is 1', () => {
