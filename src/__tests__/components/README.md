@@ -13,7 +13,7 @@ All component test utilities are located in `src/__tests__/helpers/componentTest
 - `renderWithProviders()` - Renders components with all necessary providers (tRPC, next-intl, QueryClient)
 - `createMockProduct()` - Factory for creating mock product data
 - `createMockCartItem()` - Factory for creating mock cart items
-- `mockNextRouter()` - Mocks Next.js navigation hooks
+- `createMockRouter()` - Factory for creating mock Next.js router
 - `mockTRPCQuery()` - Creates mock tRPC query responses
 - `mockTRPCMutation()` - Creates mock tRPC mutations
 

@@ -97,8 +97,9 @@ describe('ProductCard', () => {
       render(<ProductCard product={product} />);
 
       const images = screen.getAllByAltText('Produs');
-      expect(images.length).toBeGreaterThan(0);
+      expect(images).toHaveLength(2);
       expect(images[0]).toHaveAttribute('src', 'https://example.com/image1.jpg');
+      expect(images[1]).toHaveAttribute('src', 'https://example.com/image2.jpg');
     });
 
     it('should render navigation link to product detail page', () => {
@@ -107,7 +108,7 @@ describe('ProductCard', () => {
       render(<ProductCard product={product} />);
 
       const productLinks = screen.getAllByRole('link');
-      expect(productLinks.length).toBeGreaterThan(0);
+      expect(productLinks).toHaveLength(1);
     });
   });
 
