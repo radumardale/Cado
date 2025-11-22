@@ -104,10 +104,27 @@ export function createTestMessages(locale: LocaleCode = 'en') {
     Cart: {
       title: locale === 'ro' ? 'Coș' : locale === 'ru' ? 'Корзина' : 'Cart',
       empty:
-        locale === 'ro' ? 'Coșul este gol' : locale === 'ru' ? 'Корзина пуста' : 'Cart is empty',
+        locale === 'ro'
+          ? 'Coșul tău este gol. Vizitează magazinul pentru inspirație și recomandări personalizate.'
+          : locale === 'ru'
+            ? 'Ваша корзина пуста. Посетите магазин для вдохновения и персональных рекомендаций.'
+            : 'Your cart is empty. Visit the shop for inspiration and personalized recommendations.',
+      back:
+        locale === 'ro'
+          ? 'Înapoi la magazin'
+          : locale === 'ru'
+            ? 'Вернуться в магазин'
+            : 'Back to shop',
       checkout:
         locale === 'ro' ? 'Finalizare comandă' : locale === 'ru' ? 'Оформить заказ' : 'Checkout',
       remove: locale === 'ro' ? 'Șterge' : locale === 'ru' ? 'Удалить' : 'Remove',
+      subtotal: locale === 'ro' ? 'Subtotal' : locale === 'ru' ? 'Промежуточный итог' : 'Subtotal',
+      to_checkout:
+        locale === 'ro'
+          ? 'Continuați la finalizare'
+          : locale === 'ru'
+            ? 'Перейти к оформлению'
+            : 'Proceed to checkout',
     },
     CheckoutPage: {
       CheckoutForm: {
@@ -416,3 +433,9 @@ export function waitForAsync(ms: number = 0): Promise<void> {
  */
 export * from '@testing-library/react';
 export { vi } from 'vitest';
+
+/**
+ * Convenience aliases for factory functions
+ */
+export const mockProduct = createMockProduct;
+export const mockCartItem = createMockCartItem;
