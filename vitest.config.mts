@@ -15,6 +15,25 @@ export default defineConfig({
     testTimeout: 30000,
     setupFiles: ['./src/__tests__/setup.ts'],
     css: false, // Disable CSS processing in tests
+    coverage: {
+      provider: 'v8',
+      reporter: ['text', 'json', 'html', 'lcov'],
+      exclude: [
+        'node_modules/',
+        'src/__tests__/',
+        '*.config.*',
+        '**/types/**',
+        '**/enums/**',
+        '.next/',
+        'dist/',
+      ],
+      thresholds: {
+        lines: 70,
+        functions: 70,
+        branches: 70,
+        statements: 70,
+      },
+    },
   },
   resolve: {
     alias: {
