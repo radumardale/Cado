@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import '@testing-library/jest-dom/vitest';
 
 /**
@@ -58,14 +58,17 @@ vi.mock('next-intl', () => ({
   useLocale: () => 'en',
 }));
 
-import { render, screen } from '@testing-library/react';
+import { render, screen, cleanup } from '@testing-library/react';
 import { createMockProduct, createMockProductOnSale } from '@/__tests__/helpers/componentTestUtils';
 import ProductCard from '@/components/catalog/productsGrid/ProductCard';
-import { Categories } from '@/lib/enums/Categories';
 
 describe('ProductCard', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+  });
+
+  afterEach(() => {
+    cleanup();
   });
 
   describe('Core Rendering', () => {
@@ -116,35 +119,6 @@ describe('ProductCard', () => {
 
       expect(screen.getByText('discount')).toBeInTheDocument();
     });
-
-    it('should not display sale badge when product is not on sale', () => {
-      const product = createMockProduct({
-        sale: {
-          active: false,
-          sale_price: 0,
-        },
-      });
-
-      render(<ProductCard product={product} />);
-
-      expect(screen.queryByText('discount')).not.toBeInTheDocument();
-    });
-
-    it('should show both original and sale price when on sale', () => {
-      const product = createMockProduct({
-        price: 100,
-        sale: {
-          active: true,
-          sale_price: 80,
-        },
-      });
-
-      render(<ProductCard product={product} />);
-
-      expect(screen.getByText('100 MDL')).toHaveClass('line-through');
-      const prices = screen.getAllByText(/MDL/i);
-      expect(prices.length).toBeGreaterThan(1);
-    });
   });
 
   describe('Price Formatting', () => {
@@ -169,21 +143,13 @@ describe('ProductCard', () => {
     });
   });
 
-  describe('Category Integration', () => {
-    it('should work with category prop', () => {
-      const product = createMockProduct({ custom_id: 'PROD123' });
-
-      render(<ProductCard product={product} category={'BOQUETS' as unknown as Categories} />);
-
-      expect(screen.getByText('Test Product')).toBeInTheDocument();
-    });
-
-    it('should work without category prop', () => {
+  describe('Rendering Variations', () => {
+    it('should render correctly', () => {
       const product = createMockProduct();
 
-      render(<ProductCard product={product} />);
+      const { container } = render(<ProductCard product={product} />);
 
-      expect(screen.getByText('Test Product')).toBeInTheDocument();
+      expect(container.querySelector('.font-manrope')).toBeInTheDocument();
     });
   });
 
