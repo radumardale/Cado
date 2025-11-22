@@ -6,11 +6,25 @@ description: Analyze and implement a GitHub issue with comprehensive planning an
 
 Implement a GitHub issue with thorough analysis, planning, and incremental execution.
 
-**Usage:** `/work-issue <issue-number>`
+**Usage:** `/work-issue <issue-number> [additional context]`
+
+**Examples:**
+- `/work-issue 123` - Standard workflow for issue #123
+- `/work-issue 123 Backend API is already done, focus only on UI components`
+- `/work-issue 45 "Database migration complete. Skip schema changes and implement business logic only"`
+- `/work-issue 78 User registration works but email verification is broken - focus on that`
 
 ## Context
 
-You are working on a NextJS project with a GitHub issue that needs to be resolved. The issue number is: $ARGUMENTS
+You are working on a NextJS project with a GitHub issue that needs to be resolved.
+
+**Arguments provided:** `$ARGUMENTS`
+
+The first token is the issue number. Any remaining text is additional context provided by the user about:
+- What's already implemented or partially complete
+- Specific scope or constraints for this work
+- Areas to focus on or avoid
+- Known issues or particular aspects to address
 
 **IMPORTANT:** This command should be executed in **Plan Mode** for the analysis and planning phases. Use your extended thinking capabilities to deeply analyze the issue, codebase implications, and create a comprehensive implementation strategy. Switch to normal mode only after the plan is approved.
 
@@ -54,6 +68,28 @@ You are working on a NextJS project with a GitHub issue that needs to be resolve
    - Wait for confirmation before creating branch
    - After branch creation, verify with `git branch --show-current`
 
+## Parse Arguments
+
+**[Extract Issue Number and User Context]**
+
+Parse `$ARGUMENTS` to extract:
+- **Issue Number**: First token (required)
+- **Additional Context**: Everything after the first token (optional)
+
+Store the additional context if provided. This context will be used to:
+- Focus analysis on specific areas
+- Skip already-completed work
+- Apply mentioned constraints or requirements
+- Prioritize particular aspects of the issue
+
+If context is provided, display it clearly:
+```
+📋 User-Provided Context:
+{additional context text}
+
+This context will inform the analysis and planning phases.
+```
+
 ## Initial Setup
 
 1. **Read Project Context**
@@ -71,6 +107,11 @@ You are working on a NextJS project with a GitHub issue that needs to be resolve
 
 3. **Understand the Requirements**
    - Take your time to carefully analyze the issue description and all comments
+   - **If user provided additional context:** Factor it prominently into your analysis
+     - Respect scope limitations mentioned (e.g., "focus only on UI")
+     - Acknowledge what's already complete to avoid duplicate work
+     - Apply any constraints or specific requirements mentioned
+     - Prioritize areas the user highlighted
    - Use extended thinking to explore multiple interpretations if the requirements are ambiguous
    - Identify the core problem or feature request
    - List any acceptance criteria or success conditions mentioned
@@ -78,9 +119,11 @@ You are working on a NextJS project with a GitHub issue that needs to be resolve
    - Consider what's NOT said but might be important
 
 4. **Codebase Investigation**
+   - **If user context mentions specific areas:** Start investigation there first
    - Search for relevant files, components, or modules related to this issue
    - Review existing implementation if this is a bug fix
    - Check for similar patterns in the codebase if this is a new feature
+   - **If user mentioned work already complete:** Verify it and understand the current state
    - Identify any tests that might be related or need to be updated
    - Look for any configuration files, environment variables, or dependencies that might be involved
    - Review recent changes in related files using `git log` to understand recent context
@@ -118,12 +161,14 @@ You are working on a NextJS project with a GitHub issue that needs to be resolve
 EOF
 )"`
    - Include in the comment:
+     - **User-provided context** (if any) to document the scope/constraints
      - Summary of what you found in the codebase
      - Key files and components involved
      - Relevant context that wasn't in the original issue
      - Technical considerations discovered
      - Any dependencies or related systems affected
      - Edge cases identified
+     - **How the user context influenced the analysis** (if applicable)
    - This serves as documentation for future reference and helps other team members understand the investigation
 
 ## Clarification Phase
@@ -140,6 +185,11 @@ EOF
 
 8. **Create Implementation Plan**
    - Use extended thinking to explore the optimal sequence of changes
+   - **If user provided context:** Adjust plan based on what's mentioned
+     - Skip steps for work already completed
+     - Focus plan on areas user highlighted
+     - Respect scope constraints (e.g., backend-only, UI-only)
+     - Address specific concerns or issues mentioned
    - Break down the work into clear, logical steps
    - Each step should be small enough to be a single commit
    - Order steps to build incrementally (e.g., data model → API → UI → tests)
@@ -183,8 +233,19 @@ EOF
 
 [Plan details here]
 EOF
-)"`- Include in the comment: - Brief overview of the approach - Step-by-step implementation plan (each step = one commit) - Testing strategy - Estimated commits needed - Any risks or considerations - Use clear markdown formatting with checkboxes for each step:`markdown - [ ] Step 1: Description - [ ] Step 2: Description
-` - This creates a record of the planned approach and allows for team visibility
+)"`- Include in the comment:
+     - **User-provided context** (if any) and how it shaped the plan
+     - Brief overview of the approach
+     - Step-by-step implementation plan (each step = one commit)
+     - **Work being skipped** (if user mentioned something is already done)
+     - Testing strategy
+     - Estimated commits needed
+     - Any risks or considerations
+     - Use clear markdown formatting with checkboxes for each step:`markdown
+       - [ ] Step 1: Description
+       - [ ] Step 2: Description
+     `
+    - This creates a record of the planned approach and allows for team visibility
 
 12. **Pre-Implementation Quality Baseline**
     - Before starting any code changes, establish a clean baseline:

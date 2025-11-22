@@ -6,11 +6,28 @@ description: Review PR comments, decide which to address, respond to others, and
 
 Analyze PR comments, categorize them, implement accepted changes, and respond to declined comments.
 
-**Usage:** `/review-pr-comments <pr-number-or-url>`
+**Usage:** `/review-pr-comments <pr-number-or-url> [additional context]`
+
+**Examples:**
+- `/review-pr-comments 45` - Standard workflow for PR #45
+- `/review-pr-comments https://github.com/user/repo/pull/45` - Using full URL
+- `/review-pr-comments 45 Focus only on security and performance comments`
+- `/review-pr-comments 45 "Authentication refactored in PR #120, skip auth-related comments"`
+- `/review-pr-comments 45 No architectural changes allowed, only bug fixes`
+- `/review-pr-comments 45 Style/formatting will be handled separately - skip those`
 
 ## Context
 
-You are reviewing comments on a Pull Request. The PR identifier is: $ARGUMENTS
+You are reviewing comments on a Pull Request.
+
+**Arguments provided:** `$ARGUMENTS`
+
+The first token is the PR number or URL. Any remaining text is additional context provided by the user about:
+- Which types of comments to focus on or skip
+- What work has already been done elsewhere
+- Constraints on what changes are allowed
+- Priorities or special considerations
+- Team decisions or agreements that provide context
 
 **IMPORTANT:** This command should be executed in **Plan Mode** for the analysis and evaluation phases. Use your extended thinking capabilities to carefully evaluate each comment and create a comprehensive implementation strategy. Switch to normal mode only after the plan is approved.
 
@@ -21,6 +38,29 @@ You are reviewing comments on a Pull Request. The PR identifier is: $ARGUMENTS
    - If $ARGUMENTS is just a number, use it directly as the PR number
    - Store as `PR_NUMBER` for use throughout the command
    - Verify the PR exists: `gh pr view $PR_NUMBER`
+
+## Parse Additional Context
+
+**[Extract User-Provided Context]**
+
+After extracting the PR number, parse the remaining `$ARGUMENTS` for additional context:
+- **PR Identifier**: First token (URL or number) - required
+- **Additional Context**: Everything after the first token - optional
+
+Store the additional context if provided. This context will be used to:
+- Filter which types of comments to prioritize or skip
+- Acknowledge work already done in other PRs
+- Apply constraints on what types of changes are allowed
+- Consider team decisions or special circumstances
+- Focus the review on specific areas
+
+If context is provided, display it clearly:
+```
+📋 User-Provided Context:
+{additional context text}
+
+This context will influence comment evaluation and categorization.
+```
 
 ## Initial Setup
 
@@ -138,6 +178,12 @@ You are reviewing comments on a Pull Request. The PR identifier is: $ARGUMENTS
 
 8. **Categorize and Evaluate Comments with Full Context**
    - For each comment, analyze using ALL available context:
+     - **User-provided context (if any):**
+       - Apply any filters mentioned (e.g., "focus on security only")
+       - Respect constraints specified (e.g., "no architectural changes")
+       - Acknowledge work already done elsewhere (e.g., "auth refactored in PR #120")
+       - Consider priorities or team decisions mentioned
+       - Skip comment types user wants to handle separately
      - **Original issue context:**
        - What problem was this PR supposed to solve?
        - What were the original requirements/acceptance criteria?
@@ -203,6 +249,8 @@ You are reviewing comments on a Pull Request. The PR identifier is: $ARGUMENTS
 
       ```markdown
       ## Context Summary
+
+      **User-Provided Context:** {If provided, display it here and explain how it influenced the evaluation}
 
       **Original Issue:** #{ISSUE_NUMBER} - {issue title}
 
@@ -271,6 +319,13 @@ You are reviewing comments on a Pull Request. The PR identifier is: $ARGUMENTS
          - **Reasoning:** Feature addition beyond the original issue scope. Issue #123 was about fixing the user update endpoint, not adding pagination.
          - **Context:** Original issue didn't mention pagination; this would be scope creep.
          - **Response:** "Great suggestion! However, this wasn't part of the original requirements in issue #123. I've created a follow-up issue #XXX to track this improvement."
+
+      7. **[@username] styles.css:34** *(Example with user-provided context)*
+         > "Fix indentation and formatting throughout"
+         - **Classification:** WON'T ADDRESS
+         - **Reasoning:** Per user-provided context: "Style/formatting will be handled separately"
+         - **Context:** User specified these comments should be skipped for this review cycle
+         - **Response:** "Thanks for catching this! Per our plan, style and formatting improvements are being handled in a separate PR to keep this focused on functionality. This will be addressed there."
       ```
 
     - Provide summary statistics:
@@ -278,7 +333,7 @@ You are reviewing comments on a Pull Request. The PR identifier is: $ARGUMENTS
       - Must address: X (Y are from approved plan, Z are new issues)
       - Should address: X
       - Could address: X
-      - Won't address: X (A are out of scope, B contradict plan)
+      - Won't address: X (A are out of scope, B contradict plan, C per user context)
       - Need clarification: X
 
 11. **Request Feedback and Adjustments**
@@ -287,6 +342,7 @@ You are reviewing comments on a Pull Request. The PR identifier is: $ARGUMENTS
 
       ```
       Please review my comment evaluation above. I've used the context from:
+      - User-provided context (if any)
       - Original issue #{ISSUE_NUMBER}
       - Implementation plan (if found)
       - CLAUDE.md conventions
@@ -378,7 +434,7 @@ You are reviewing comments on a Pull Request. The PR identifier is: $ARGUMENTS
 13. **Respond to WON'T ADDRESS Comments**
     - For each comment classified as WON'T ADDRESS:
       - Craft a respectful, clear explanation with proper context
-      - Reference the original issue and/or implementation plan when relevant
+      - Reference user-provided context, original issue, and/or implementation plan when relevant
       - Use GitHub's PR comment reply feature:
         ```bash
         gh api repos/:owner/:repo/pulls/$PR_NUMBER/comments/{comment_id}/replies \
@@ -438,6 +494,16 @@ You are reviewing comments on a Pull Request. The PR identifier is: $ARGUMENTS
         and reviewable, I've created issue #XXX to track this enhancement.
 
         Would you like to review that follow-up PR when ready?
+        ```
+
+      - **Per user-provided context:**
+        ```
+        Thanks for this feedback! As mentioned at the start of this review cycle,
+        we're handling [style/formatting/architectural/etc] changes in a separate
+        effort to keep this PR focused on [functionality/bug fixes/etc].
+
+        This will be addressed in [separate PR/follow-up/etc]. I've noted it for
+        that review cycle.
         ```
 
 14. **Respond to NEED CLARIFICATION Comments**
@@ -521,6 +587,8 @@ You are reviewing comments on a Pull Request. The PR identifier is: $ARGUMENTS
 Thank you all for the thorough review! Here's a comprehensive summary:
 
 ### 📋 Context
+
+**User-Provided Context:** {If provided, display it here and explain how it influenced the review}
 
 **Original Issue:** Closes #{ISSUE_NUMBER} - {issue title}
 **Implementation Plan:** [Link to approved plan in issue]
@@ -626,6 +694,7 @@ While this is a good suggestion, it was outside the scope of issue #{ORIGINAL_IS
       ## PR Comment Review Complete! ✓
 
       **Context:**
+      - User-Provided Context: {If provided, display it here}
       - Original Issue: #{ISSUE_NUMBER}
       - PR: #{PR_NUMBER}
       - Branch: {head-branch-name}
@@ -639,6 +708,7 @@ While this is a good suggestion, it was outside the scope of issue #{ORIGINAL_IS
       - Responded without code changes: {X}
         - Out of scope: {X}
         - Contradicts approved plan: {X}
+        - Per user context: {X}
         - Already addressed: {X}
 
       **Commits Created:**
