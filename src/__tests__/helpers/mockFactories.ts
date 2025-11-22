@@ -336,28 +336,42 @@ export function createMockProducts(count: number, baseOverrides: Partial<typeof 
 export function createMockBlog(
   overrides: Partial<{
     _id: string;
-    custom_id: string;
     title: { ro: string; ru: string; en: string };
-    content: { ro: string; ru: string; en: string };
-    images: string[];
-    createdAt: Date;
+    image: string;
+    tag: string;
+    date: Date;
+    sections: Array<{
+      subtitle: { ro: string; ru: string; en: string };
+      content: { ro: string; ru: string; en: string };
+    }>;
+    section_images: Array<{ image: string }>;
   }> = {}
 ) {
   return {
     _id: '607f1f77bcf86cd799439011',
-    custom_id: 'BLOG001',
     title: {
       ro: 'Blog Post Test',
       ru: 'Тестовый пост',
       en: 'Test Blog Post',
     },
-    content: {
-      ro: '<p>Conținut blog în română</p>',
-      ru: '<p>Содержание блога на русском</p>',
-      en: '<p>Blog content in English</p>',
-    },
-    images: ['https://d3rus23k068yq9.cloudfront.net/BLOG/607f1f77bcf86cd799439011/main.jpg'],
-    createdAt: new Date('2024-01-01'),
+    image: 'https://d3rus23k068yq9.cloudfront.net/BLOG/607f1f77bcf86cd799439011/main.jpg',
+    tag: 'NEWS',
+    date: new Date('2024-01-01'),
+    sections: [
+      {
+        subtitle: {
+          ro: 'Subtitlu',
+          ru: 'Подзаголовок',
+          en: 'Subtitle',
+        },
+        content: {
+          ro: '<p>Conținut blog în română</p>',
+          ru: '<p>Содержание блога на русском</p>',
+          en: '<p>Blog content in English</p>',
+        },
+      },
+    ],
+    section_images: [],
     ...overrides,
   };
 }
@@ -369,12 +383,12 @@ export function createMockBlogs(count: number) {
   return Array.from({ length: count }, (_, i) =>
     createMockBlog({
       _id: `607f1f77bcf86cd79943${String(i).padStart(4, '0')}`,
-      custom_id: `BLOG${String(i + 1).padStart(3, '0')}`,
       title: {
         ro: `Postare Blog ${i + 1}`,
         ru: `Пост блога ${i + 1}`,
         en: `Blog Post ${i + 1}`,
       },
+      tag: i % 2 === 0 ? 'NEWS' : 'RECOMMENDATIONS',
     })
   );
 }
