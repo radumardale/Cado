@@ -14,6 +14,7 @@ export default defineConfig({
     environment: 'jsdom',
     testTimeout: 30000,
     setupFiles: ['./src/__tests__/setup.ts'],
+    css: false, // Disable CSS processing in tests
   },
   resolve: {
     alias: {

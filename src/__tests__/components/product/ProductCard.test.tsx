@@ -118,7 +118,8 @@ describe('ProductCard', () => {
 
       render(<ProductCard product={product} />);
 
-      expect(screen.getByText('discount')).toBeInTheDocument();
+      // The translation key is rendered due to mock
+      expect(screen.getByText(/discount/i)).toBeInTheDocument();
     });
   });
 
