@@ -14,37 +14,18 @@ import { StockState } from '@/lib/enums/StockState';
 
 /**
  * Mock Next.js navigation hooks
+ * Note: Due to Vitest hoisting, this should be called manually in test files
+ * before importing components, not used as a utility function.
  */
-export function mockNextRouter(
-  overrides: Partial<{
-    push: ReturnType<typeof vi.fn>;
-    replace: ReturnType<typeof vi.fn>;
-    prefetch: ReturnType<typeof vi.fn>;
-    back: ReturnType<typeof vi.fn>;
-    forward: ReturnType<typeof vi.fn>;
-    refresh: ReturnType<typeof vi.fn>;
-  }> = {}
-) {
-  const mockRouter = {
+export function createMockRouter() {
+  return {
     push: vi.fn(),
     replace: vi.fn(),
     prefetch: vi.fn(),
     back: vi.fn(),
     forward: vi.fn(),
     refresh: vi.fn(),
-    ...overrides,
   };
-
-  vi.mock('@/i18n/navigation', () => ({
-    useRouter: () => mockRouter,
-    usePathname: () => '/en/catalog',
-    Link: ({ children, ...props }: { children: ReactNode; [key: string]: unknown }) => (
-      <a {...props}>{children}</a>
-    ),
-    redirect: vi.fn(),
-  }));
-
-  return mockRouter;
 }
 
 /**
@@ -95,13 +76,12 @@ export function mockMotion() {
 
 /**
  * Mock localStorage hook from usehooks-ts
+ * Note: Due to Vitest hoisting, this should be set up in individual test files,
+ * not as a utility function.
  */
-export function mockLocalStorage<T>(initialValue: T) {
+export function createLocalStorageMock<T>(initialValue: T) {
   const setValue = vi.fn();
-  vi.mock('usehooks-ts', () => ({
-    useLocalStorage: () => [initialValue, setValue],
-  }));
-  return { setValue };
+  return { value: initialValue, setValue };
 }
 
 /**
