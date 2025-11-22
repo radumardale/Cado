@@ -212,17 +212,21 @@ When creating pull requests, follow these formatting rules:
 The project uses a **smart tiered strategy** that optimizes for speed while maintaining safety:
 
 #### Tier 1: Skip Safe Files ⚡
+
 - Documentation only (`docs/**/*.md`, `README.md`)
 - Config files (`.gitignore`, `.prettierrc`, `.env.example`)
 - Commits skip all checks when only these files change
 
 #### Tier 2: TypeScript Checks + Formatting ⚡⚡
+
 - TypeScript type-checking on all files (`npm run typecheck`)
 - Auto-formatting with Prettier
 - Runs for all code changes
 
 #### Tier 3: Full Build
+
 Only triggered when critical paths change:
+
 - `src/server/` - tRPC procedures and API logic
 - `src/models/` - Mongoose models
 - `src/lib/` - Core utilities
@@ -232,20 +236,24 @@ Only triggered when critical paths change:
 ### How It Works
 
 **The hook runs automatically on every commit:**
+
 1. Analyzes which files you're committing
 2. Skips checks entirely for docs/config changes
 3. Runs TypeScript checks + Prettier for code changes
 4. Runs full build only for critical backend/routing changes
 
 **If checks fail:**
+
 - Fix the issues immediately
 - Re-attempt the commit (hook will run again)
 - Only commit when checks pass
 
 **To bypass hooks (emergencies only):**
+
 ```bash
 git commit --no-verify -m "message"
 ```
+
 ⚠️ Use sparingly - CI will still catch issues
 
 ### Why This Matters
@@ -259,11 +267,13 @@ git commit --no-verify -m "message"
 ### Claude Code Behavior
 
 **With Husky hooks active:**
+
 1. Claude Code can commit directly without manual checks
 2. Husky automatically runs appropriate checks based on changed files
 3. If hooks fail, Claude Code sees the errors and fixes them
 4. Baseline and final verification checks still run (before starting work and before creating PRs)
 
 **For comprehensive validation (before PRs):**
+
 - Run full checks manually: `npm run typecheck && npm run build`
 - Ensures everything is ready for code review

@@ -7,6 +7,7 @@ This project uses [Husky](https://typicode.github.io/husky/) v9 with [lint-stage
 ## Why Husky?
 
 **Benefits:**
+
 - ✅ **Automatic quality enforcement** - Impossible to forget checks
 - ✅ **Fast feedback** - 75-85% faster than manual checks
 - ✅ **Token efficiency** - Saves 60-75% of tokens for Claude Code workflows
@@ -21,15 +22,18 @@ The pre-commit hook uses a 3-tier strategy to optimize performance:
 ### Tier 1: Skip Safe Files (Instant ⚡)
 
 **When it triggers:**
+
 - Only documentation files changed (`docs/**/*.md`, `README.md`)
 - Only config files changed (`.gitignore`, `.prettierrc`, `.env.example`, `LICENSE`)
 - No code files in the commit
 
 **What it does:**
+
 - Skips all checks entirely
 - Commit completes instantly
 
 **Example:**
+
 ```bash
 # Modify documentation
 echo "## New Section" >> docs/guide.md
@@ -41,15 +45,18 @@ git commit -m "docs: add new section"
 ### Tier 2: Fast Incremental Checks (5-15s ⚡⚡)
 
 **When it triggers:**
+
 - Code files changed (`.ts`, `.tsx`, `.js`, `.jsx`)
 - BUT not in critical paths
 
 **What it does:**
+
 - Type-checks **only the changed files** using `tsc-files`
 - Auto-formats staged files with Prettier
 - Skips full Next.js build
 
 **Example:**
+
 ```bash
 # Modify a UI component
 vim src/components/Button.tsx
@@ -61,6 +68,7 @@ git commit -m "feat(ui): update button styles"
 ### Tier 3: Full Build (30-60s)
 
 **When it triggers:**
+
 - Changes to critical paths:
   - `src/server/` - tRPC procedures and API logic
   - `src/models/` - Mongoose database models
@@ -70,10 +78,12 @@ git commit -m "feat(ui): update button styles"
   - `tsconfig.json`, `next.config.js` - Build configuration
 
 **What it does:**
+
 - Runs incremental TypeScript checks (Tier 2)
 - **Also runs full `npm run build`** to verify Next.js builds successfully
 
 **Example:**
+
 ```bash
 # Modify server procedure
 vim src/server/procedures/auth.ts
@@ -112,15 +122,15 @@ fi
 
 The following file patterns trigger **full builds**:
 
-| Pattern | Why It's Critical |
-|---------|-------------------|
-| `src/server/**` | Backend API logic - errors affect all clients |
-| `src/models/**` | Database models - schema errors break data layer |
-| `src/lib/**` | Shared utilities - used across entire app |
-| `src/app/[locale]/**` | Page routing - affects navigation structure |
-| `*.d.ts` | Type definitions - affects entire TypeScript compilation |
-| `tsconfig.json` | TypeScript config - changes compilation behavior |
-| `next.config.js` | Build config - affects production builds |
+| Pattern               | Why It's Critical                                        |
+| --------------------- | -------------------------------------------------------- |
+| `src/server/**`       | Backend API logic - errors affect all clients            |
+| `src/models/**`       | Database models - schema errors break data layer         |
+| `src/lib/**`          | Shared utilities - used across entire app                |
+| `src/app/[locale]/**` | Page routing - affects navigation structure              |
+| `*.d.ts`              | Type definitions - affects entire TypeScript compilation |
+| `tsconfig.json`       | TypeScript config - changes compilation behavior         |
+| `next.config.js`      | Build config - affects production builds                 |
 
 ## lint-staged Configuration
 
@@ -129,21 +139,19 @@ Located in `package.json`:
 ```json
 {
   "lint-staged": {
-    "*.{ts,tsx}": [
-      "tsc-files --noEmit"
-    ],
-    "*.{js,jsx,ts,tsx}": [
-      "prettier --write"
-    ]
+    "*.{ts,tsx}": ["tsc-files --noEmit"],
+    "*.{js,jsx,ts,tsx}": ["prettier --write"]
   }
 }
 ```
 
 **What it does:**
+
 1. `tsc-files --noEmit` - Type-checks only the staged TypeScript files
 2. `prettier --write` - Auto-formats all staged code files
 
 **Why tsc-files instead of tsc?**
+
 - `tsc` type-checks the entire project (~60s)
 - `tsc-files` only checks specified files (~5-10s for small changes)
 - 85-90% faster for incremental changes
@@ -151,11 +159,13 @@ Located in `package.json`:
 ## Bypassing Hooks (Emergencies Only)
 
 **To skip the pre-commit hook:**
+
 ```bash
 git commit --no-verify -m "emergency fix"
 ```
 
 ⚠️ **Use sparingly!** Reasons to bypass:
+
 - Emergency hotfix when hook is failing due to infrastructure issues
 - Temporary work-in-progress commits on a feature branch (but fix before merging!)
 - Known pre-existing issues you're not fixing in this commit
@@ -164,12 +174,12 @@ git commit --no-verify -m "emergency fix"
 
 ## Performance Comparison
 
-| Scenario | Before Husky | With Husky | Improvement |
-|----------|--------------|------------|-------------|
-| **Docs-only commit** | 60s (manual checks) | <1s (skip) | **100%** ⚡ |
-| **Small code change** | 60s (full checks) | 5-10s (incremental) | **85-90%** ⚡⚡ |
-| **Critical path change** | 60s (manual checks) | 30-60s (auto + build) | **0-50%** ⚡ |
-| **Config-only commit** | 60s (manual checks) | <1s (skip) | **100%** ⚡ |
+| Scenario                 | Before Husky        | With Husky            | Improvement     |
+| ------------------------ | ------------------- | --------------------- | --------------- |
+| **Docs-only commit**     | 60s (manual checks) | <1s (skip)            | **100%** ⚡     |
+| **Small code change**    | 60s (full checks)   | 5-10s (incremental)   | **85-90%** ⚡⚡ |
+| **Critical path change** | 60s (manual checks) | 30-60s (auto + build) | **0-50%** ⚡    |
+| **Config-only commit**   | 60s (manual checks) | <1s (skip)            | **100%** ⚡     |
 
 **Average savings: 75-85%** across typical development workflows.
 
@@ -178,6 +188,7 @@ git commit --no-verify -m "emergency fix"
 Husky reduces token consumption for Claude Code workflows:
 
 ### Before Husky (Manual):
+
 ```bash
 # 3 separate Bash calls per commit
 npm run typecheck  # ~500-2000 tokens
@@ -187,6 +198,7 @@ git commit         # ~200-500 tokens
 ```
 
 ### With Husky (Automated):
+
 ```bash
 # 1 Bash call per commit
 git commit  # ~200-500 tokens (Husky runs checks automatically)
@@ -195,11 +207,13 @@ git commit  # ~200-500 tokens (Husky runs checks automatically)
 ```
 
 **Token savings:**
+
 - **Success case (70% of commits):** 80-90% reduction
 - **Failure case (30% of commits):** Similar to before (need to see errors)
 - **Overall average:** 60-75% reduction
 
 **Real-world impact:**
+
 - `/work-on-issue` with 8 commits: Save 8,000-24,000 tokens
 - `/review-pr-comments` with 5 commits: Save 5,000-15,000 tokens
 
@@ -210,6 +224,7 @@ git commit  # ~200-500 tokens (Husky runs checks automatically)
 **Problem:** Commits succeed without running checks.
 
 **Solutions:**
+
 1. Ensure Husky is installed: `npm install` (runs prepare script)
 2. Check hook is executable: `chmod +x .husky/pre-commit`
 3. Verify Git hooks path: `git config core.hooksPath` should show `.husky`
@@ -219,6 +234,7 @@ git commit  # ~200-500 tokens (Husky runs checks automatically)
 **Problem:** Hook always fails even for simple changes.
 
 **Solutions:**
+
 1. Run checks manually to see actual errors:
    ```bash
    npm run typecheck
@@ -235,6 +251,7 @@ git commit  # ~200-500 tokens (Husky runs checks automatically)
 **Problem:** Even small commits take 30-60s.
 
 **Possible causes:**
+
 1. **Critical path false positives** - File pattern matching too broad
    - Check `.husky/pre-commit` CRITICAL_CHANGED regex
    - May need to refine patterns
@@ -252,10 +269,12 @@ git commit  # ~200-500 tokens (Husky runs checks automatically)
 **Problem:** Hook fails with TypeScript errors you didn't introduce.
 
 **Causes:**
+
 - Pre-existing errors in the project
 - Changes to files you're not committing
 
 **Solutions:**
+
 1. Run full typecheck: `npm run typecheck`
 2. If errors are pre-existing:
    - Fix them first (recommended)
@@ -268,11 +287,13 @@ git commit  # ~200-500 tokens (Husky runs checks automatically)
 **Husky hooks are a first line of defense**, not a replacement for CI:
 
 ### Local (Husky)
+
 - Fast incremental checks
 - Immediate feedback
 - Blocks broken commits
 
 ### CI/CD (GitHub Actions, etc.)
+
 - Full comprehensive checks
 - Tests entire codebase
 - Runs on all branches
@@ -313,6 +334,7 @@ Potential optimizations to consider:
 ## Summary
 
 Husky pre-commit hooks provide:
+
 - ✅ Automatic quality enforcement
 - ✅ 75-85% performance improvement over manual checks
 - ✅ 60-75% token savings for Claude Code
