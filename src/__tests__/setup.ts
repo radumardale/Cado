@@ -1,5 +1,6 @@
 import { afterEach, beforeEach, vi } from 'vitest';
 import { defaultTestEnv } from './helpers/testUtils';
+import '@testing-library/jest-dom/vitest';
 
 /**
  * Global test setup for payment and order processing tests
