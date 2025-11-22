@@ -12,6 +12,7 @@ import { CartInterface } from '@/lib/types/CartInterface';
 import { DeliveryRegions } from '@/lib/enums/DeliveryRegions';
 import { DeliveryHours } from '@/lib/enums/DeliveryHours';
 import { ProductInterface } from '@/models/product/types/productInterface';
+import { StockState } from '@/lib/enums/StockState';
 
 describe('CheckoutCart', () => {
   const mockSetValue = vi.fn();
@@ -22,16 +23,14 @@ describe('CheckoutCart', () => {
       custom_id: 'PROD001',
       title: { ro: 'Produs 1', ru: 'Продукт 1', en: 'Product 1' },
       price: 100,
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      stock_availability: { stock: 10, state: 'InStock' as any },
+      stock_availability: { stock: 10, state: StockState.IN_STOCK },
       sale: { active: false, sale_price: 0 },
     }),
     createMockProduct({
       custom_id: 'PROD002',
       title: { ro: 'Produs 2', ru: 'Продукт 2', en: 'Product 2' },
       price: 200,
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      stock_availability: { stock: 5, state: 'InStock' as any },
+      stock_availability: { stock: 5, state: StockState.IN_STOCK },
       sale: { active: true, sale_price: 150 },
     }),
   ];
@@ -398,8 +397,7 @@ describe('CheckoutCart', () => {
         custom_id: 'PROD001',
         title: { ro: 'Produs Românesc', ru: 'Румынский продукт', en: 'Romanian Product' },
         price: 100,
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        stock_availability: { stock: 10, state: 'InStock' as any },
+        stock_availability: { stock: 10, state: StockState.IN_STOCK },
         sale: { active: false, sale_price: 0 },
       });
 
@@ -424,8 +422,7 @@ describe('CheckoutCart', () => {
         custom_id: 'PROD001',
         title: { ro: 'Produs Românesc', ru: 'Русский продукт', en: 'Russian Product' },
         price: 100,
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        stock_availability: { stock: 10, state: 'InStock' as any },
+        stock_availability: { stock: 10, state: StockState.IN_STOCK },
         sale: { active: false, sale_price: 0 },
       });
 
