@@ -233,8 +233,12 @@ describe('CheckoutCart', () => {
       fireEvent.click(removeButtons[0]);
 
       expect(mockSetValue).toHaveBeenCalled();
-      const updatedItems = mockSetValue.mock.calls[0][0];
-      expect(updatedItems).toHaveLength(1);
+      // Find the call where items array has length 1 (one item removed from original 2)
+      const updatedItemsCall = mockSetValue.mock.calls.find(
+        call => Array.isArray(call[0]) && call[0].length === 1
+      );
+      expect(updatedItemsCall).toBeDefined();
+      expect(updatedItemsCall![0]).toHaveLength(1);
     });
   });
 
