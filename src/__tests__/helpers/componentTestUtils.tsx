@@ -71,6 +71,7 @@ export function mockMotion() {
       ),
     },
     AnimatePresence: ({ children }: { children: ReactNode }) => <>{children}</>,
+    cubicBezier: () => [0.65, 0, 0.35, 1], // Mock easing function
   }));
 }
 
