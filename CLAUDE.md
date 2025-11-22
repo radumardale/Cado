@@ -203,6 +203,22 @@ When creating pull requests, follow these formatting rules:
 - **Allowed but don't overuse**: Emojis can enhance readability but should be used sparingly
 - Use them to highlight key sections or important points, not in every sentence
 
+## GitHub Issue Management
+
+### Sub-Issues
+
+When creating multiple related issues (e.g., batches of work, epic breakdowns):
+
+- **Always create proper GitHub sub-issues** with parent-child relationships
+- Use the GraphQL `addSubIssue` mutation via `gh api` CLI (not just task lists)
+- This creates the visual hierarchy in GitHub UI with progress tracking
+- See `/docs/github-sub-issues.md` for detailed technical implementation
+
+**Benefits:**
+- Visual hierarchy in GitHub issue sidebar
+- Automatic progress tracking on parent issues
+- Better project organization and planning visibility
+
 ## Quality Checks Before Commits & PRs
 
 ### ✅ Automated Pre-Commit Hooks (Husky)
