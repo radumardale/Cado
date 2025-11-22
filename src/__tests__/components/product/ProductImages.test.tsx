@@ -137,13 +137,12 @@ describe('ProductImages', () => {
         btn => btn.className.includes('cursor-pointer') && btn.className.includes('aspect-square')
       );
 
-      if (thumbnailButtons.length >= 2) {
-        fireEvent.click(thumbnailButtons[1]);
+      expect(thumbnailButtons.length).toBeGreaterThanOrEqual(2);
+      fireEvent.click(thumbnailButtons[1]);
 
-        // After clicking, counter should update to "2 / 3"
-        // Note: State change might not be immediate in test, but button click is registered
-        expect(thumbnailButtons[1]).toBeInTheDocument();
-      }
+      // After clicking, counter should update to "2 / 3"
+      // Note: State change might not be immediate in test, but button click is registered
+      expect(thumbnailButtons[1]).toBeInTheDocument();
     });
   });
 
