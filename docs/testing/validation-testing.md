@@ -8,15 +8,15 @@ As of Part 2 completion, the validation test suite includes **628 comprehensive 
 
 ### Test Distribution
 
-| Domain | Schemas Tested | Test Count | Status |
-|--------|---------------|------------|--------|
-| **Product** (Part 1) | 8 product + 3 filter schemas | 213 | ✅ Complete |
-| **Order** (Part 1) | 6 type + 3 CRUD schemas | 128 | ✅ Complete |
-| **Blog** (Part 2) | 5 CRUD + 1 type schema | 86 | ✅ Complete |
-| **Image** (Part 2) | 4 upload/delete schemas | 77 | ✅ Complete |
-| **Contact & Home** (Part 2) | 1 contact + 4 home schemas | 84 | ✅ Complete |
-| **Misc** (Part 2) | 3 schemas (login/search/recommendations) | 40 | ✅ Complete |
-| **TOTAL** | **41 validation files** | **628 tests** | ✅ Complete |
+| Domain                      | Schemas Tested                           | Test Count    | Status      |
+| --------------------------- | ---------------------------------------- | ------------- | ----------- |
+| **Product** (Part 1)        | 8 product + 3 filter schemas             | 213           | ✅ Complete |
+| **Order** (Part 1)          | 6 type + 3 CRUD schemas                  | 128           | ✅ Complete |
+| **Blog** (Part 2)           | 5 CRUD + 1 type schema                   | 86            | ✅ Complete |
+| **Image** (Part 2)          | 4 upload/delete schemas                  | 77            | ✅ Complete |
+| **Contact & Home** (Part 2) | 1 contact + 4 home schemas               | 84            | ✅ Complete |
+| **Misc** (Part 2)           | 3 schemas (login/search/recommendations) | 40            | ✅ Complete |
+| **TOTAL**                   | **41 validation files**                  | **628 tests** | ✅ Complete |
 
 ## 🏗️ Test File Organization
 
@@ -48,6 +48,7 @@ src/lib/__tests__/validation/
 ### 1. Valid Input Tests
 
 Every schema tests acceptance of valid data:
+
 - Minimum valid data
 - Complete data with all optional fields
 - Boundary values (min/max lengths, prices)
@@ -68,6 +69,7 @@ describe('Valid Input', () => {
 ### 2. Invalid Input Tests
 
 Tests rejection of malformed or invalid data:
+
 - Missing required fields
 - Wrong data types
 - Values outside constraints
@@ -112,19 +114,19 @@ For `{ro, ru, en}` structure:
 describe('Multilingual Field Validation', () => {
   it('should require all languages', () => {
     expectValidData(schema, {
-      title: { ro: 'RO', ru: 'RU', en: 'EN' }
+      title: { ro: 'RO', ru: 'RU', en: 'EN' },
     });
   });
 
   it('should reject missing language', () => {
     expectInvalidData(schema, {
-      title: { ro: 'RO', en: 'EN' } // Missing ru
+      title: { ro: 'RO', en: 'EN' }, // Missing ru
     });
   });
 
   it('should reject empty strings', () => {
     expectInvalidData(schema, {
-      title: { ro: '', ru: '', en: '' }
+      title: { ro: '', ru: '', en: '' },
     });
   });
 });
@@ -303,7 +305,7 @@ const schema = z.object({
 
 ```typescript
 // Schema definition
-z.string().length(24, 'ID must be exactly 24 characters long')
+z.string().length(24, 'ID must be exactly 24 characters long');
 
 // Usage
 const schema = z.object({
@@ -318,7 +320,7 @@ const schema = z.object({
 ```typescript
 // Schema definition
 const emailRegex = new RegExp('^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,4}$');
-z.string().regex(emailRegex, 'Email is not valid')
+z.string().regex(emailRegex, 'Email is not valid');
 
 // Usage in contact form
 const schema = z.object({
@@ -333,7 +335,7 @@ const schema = z.object({
 ```typescript
 // Schema definition
 import { BlogTags } from '@/lib/enums/BlogTags';
-z.nativeEnum(BlogTags)
+z.nativeEnum(BlogTags);
 
 // Usage
 const schema = z.object({
@@ -347,12 +349,14 @@ const schema = z.object({
 
 ```typescript
 // Schema definition
-const schema = z.object({
-  termsAccepted: z.boolean(),
-}).refine(data => data.termsAccepted === true, {
-  message: 'Must accept terms',
-  path: ['termsAccepted'],
-});
+const schema = z
+  .object({
+    termsAccepted: z.boolean(),
+  })
+  .refine(data => data.termsAccepted === true, {
+    message: 'Must accept terms',
+    path: ['termsAccepted'],
+  });
 ```
 
 **Testing:** Test refinement conditions and error paths.
@@ -361,7 +365,7 @@ const schema = z.object({
 
 ```typescript
 // Schema definition
-z.union([z.nativeEnum(Ocasions), z.literal('DISCOUNTS')])
+z.union([z.nativeEnum(Ocasions), z.literal('DISCOUNTS')]);
 
 // Usage
 const schema = z.object({
@@ -375,13 +379,13 @@ const schema = z.object({
 
 ```typescript
 // Nullable: field can be null but is required
-z.string().nullable()
+z.string().nullable();
 
 // Optional: field can be omitted entirely
-z.string().optional()
+z.string().optional();
 
 // Nullish: field can be null, undefined, or omitted
-z.string().nullish()
+z.string().nullish();
 ```
 
 **Testing:** Verify correct behavior for each.
@@ -424,7 +428,7 @@ const { field, ...withoutField } = validData; // eslint-disable-line
 
 ```typescript
 // If schema has no min constraint:
-z.number() // Allows negative numbers
+z.number(); // Allows negative numbers
 
 // Test accordingly:
 it('should accept negative values (schema allows it)', () => {

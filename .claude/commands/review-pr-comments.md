@@ -9,6 +9,7 @@ Analyze PR comments, categorize them, implement accepted changes, and respond to
 **Usage:** `/review-pr-comments <pr-number-or-url> [additional context]`
 
 **Examples:**
+
 - `/review-pr-comments 45` - Standard workflow for PR #45
 - `/review-pr-comments https://github.com/user/repo/pull/45` - Using full URL
 - `/review-pr-comments 45 Focus only on security and performance comments`
@@ -23,6 +24,7 @@ You are reviewing comments on a Pull Request.
 **Arguments provided:** `$ARGUMENTS`
 
 The first token is the PR number or URL. Any remaining text is additional context provided by the user about:
+
 - Which types of comments to focus on or skip
 - What work has already been done elsewhere
 - Constraints on what changes are allowed
@@ -44,10 +46,12 @@ The first token is the PR number or URL. Any remaining text is additional contex
 **[Extract User-Provided Context]**
 
 After extracting the PR number, parse the remaining `$ARGUMENTS` for additional context:
+
 - **PR Identifier**: First token (URL or number) - required
 - **Additional Context**: Everything after the first token - optional
 
 Store the additional context if provided. This context will be used to:
+
 - Filter which types of comments to prioritize or skip
 - Acknowledge work already done in other PRs
 - Apply constraints on what types of changes are allowed
@@ -55,6 +59,7 @@ Store the additional context if provided. This context will be used to:
 - Focus the review on specific areas
 
 If context is provided, display it clearly:
+
 ```
 📋 User-Provided Context:
 {additional context text}
@@ -314,13 +319,14 @@ This context will influence comment evaluation and categorization.
          - **Response:** "This is outside the scope of issue #123, which focused on fixing the login bug. Per the approved implementation plan [link], we agreed to use React Context to maintain consistency with the existing auth system. We can discuss this architectural change separately."
 
       6. **[@username] api/users.ts:67**
+
          > "We should add pagination here"
          - **Classification:** WON'T ADDRESS
          - **Reasoning:** Feature addition beyond the original issue scope. Issue #123 was about fixing the user update endpoint, not adding pagination.
          - **Context:** Original issue didn't mention pagination; this would be scope creep.
          - **Response:** "Great suggestion! However, this wasn't part of the original requirements in issue #123. I've created a follow-up issue #XXX to track this improvement."
 
-      7. **[@username] styles.css:34** *(Example with user-provided context)*
+      7. **[@username] styles.css:34** _(Example with user-provided context)_
          > "Fix indentation and formatting throughout"
          - **Classification:** WON'T ADDRESS
          - **Reasoning:** Per user-provided context: "Style/formatting will be handled separately"

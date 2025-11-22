@@ -9,6 +9,7 @@ Implement a GitHub issue with thorough analysis, planning, and incremental execu
 **Usage:** `/work-issue <issue-number> [additional context]`
 
 **Examples:**
+
 - `/work-issue 123` - Standard workflow for issue #123
 - `/work-issue 123 Backend API is already done, focus only on UI components`
 - `/work-issue 45 "Database migration complete. Skip schema changes and implement business logic only"`
@@ -21,6 +22,7 @@ You are working on a NextJS project with a GitHub issue that needs to be resolve
 **Arguments provided:** `$ARGUMENTS`
 
 The first token is the issue number. Any remaining text is additional context provided by the user about:
+
 - What's already implemented or partially complete
 - Specific scope or constraints for this work
 - Areas to focus on or avoid
@@ -73,16 +75,19 @@ The first token is the issue number. Any remaining text is additional context pr
 **[Extract Issue Number and User Context]**
 
 Parse `$ARGUMENTS` to extract:
+
 - **Issue Number**: First token (required)
 - **Additional Context**: Everything after the first token (optional)
 
 Store the additional context if provided. This context will be used to:
+
 - Focus analysis on specific areas
 - Skip already-completed work
 - Apply mentioned constraints or requirements
 - Prioritize particular aspects of the issue
 
 If context is provided, display it clearly:
+
 ```
 📋 User-Provided Context:
 {additional context text}
@@ -241,11 +246,8 @@ EOF
      - Testing strategy
      - Estimated commits needed
      - Any risks or considerations
-     - Use clear markdown formatting with checkboxes for each step:`markdown
-       - [ ] Step 1: Description
-       - [ ] Step 2: Description
-     `
-    - This creates a record of the planned approach and allows for team visibility
+     - Use clear markdown formatting with checkboxes for each step:`markdown - [ ] Step 1: Description - [ ] Step 2: Description
+` - This creates a record of the planned approach and allows for team visibility
 
 12. **Pre-Implementation Quality Baseline**
     - Before starting any code changes, establish a clean baseline:

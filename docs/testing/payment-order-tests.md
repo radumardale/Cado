@@ -29,6 +29,7 @@ Successfully implemented comprehensive test suite for the most critical revenue-
 **Location:** `src/__tests__/routes/paynet-callback.test.ts`
 
 #### What's Tested:
+
 - ✅ Successful payment (PAID event)
   - Order state update to `Paid`
   - Paynet ID saved from webhook
@@ -70,6 +71,7 @@ Successfully implemented comprehensive test suite for the most critical revenue-
 **Location:** `src/__tests__/procedures/order/cancelOrderPayment.test.ts`
 
 #### What's Tested:
+
 - ✅ First-time cancellation
   - State change to `TransactionFailed`
   - Product stock restoration via `$inc`
@@ -110,6 +112,7 @@ Successfully implemented comprehensive test suite for the most critical revenue-
 **Location:** `src/__tests__/procedures/order/getOrderById.test.ts`
 
 #### What's Tested:
+
 - ✅ Successful retrieval
   - By MongoDB ObjectId
   - By custom_id (ORD12345)
@@ -154,6 +157,7 @@ Successfully implemented comprehensive test suite for the most critical revenue-
 **Location:** `src/__tests__/lib/utils/addToCart.test.ts`
 
 #### What's Tested:
+
 - ✅ Adding to empty cart
   - New product added
   - Custom quantities
@@ -196,6 +200,7 @@ Successfully implemented comprehensive test suite for the most critical revenue-
 **Location:** `src/__tests__/models/order/order.test.ts`
 
 #### What's Tested:
+
 - ✅ Required fields presence
   - custom_id, products, client, payment_method, delivery_method, total_cost, state
 - ✅ Custom ID format
@@ -203,7 +208,7 @@ Successfully implemented comprehensive test suite for the most critical revenue-
   - Unique across orders
 - ✅ Invoice ID format
   - Numeric value
-  - >= 100000
+  - > = 100000
   - Unique per order
 - ✅ Order states
   - Enum values (NotPaid, Paid, TransactionFailed, Delivered)
@@ -261,16 +266,19 @@ The following procedures require NextAuth session mocking, which proved challeng
 #### Why This Is Blocked
 
 Protected procedures use Next.js `getServerSession()` which requires:
+
 - `next/headers` mocking (headers outside request scope)
 - NextAuth session context
 - Request scope storage
 
 **Attempted Solutions:**
+
 - ✗ Local vi.mock() - modules load before mocks
 - ✗ Global setup.ts mocks - don't prevent real import
 - ✗ Mock `next/headers` directly - still triggers request scope error
 
 **Error:**
+
 ```
 TRPCError: `headers` was called outside a request scope.
 ```
@@ -278,6 +286,7 @@ TRPCError: `headers` was called outside a request scope.
 #### Recommended Solution
 
 Create a separate test suite using:
+
 - **Next.js test utilities** with request context
 - **Integration tests** with real Next.js server
 - **E2E tests** with Playwright/Cypress
@@ -291,6 +300,7 @@ Create a separate test suite using:
 ### Test Utilities (`__tests__/helpers/`)
 
 **mockFactories.ts** - Reusable mock data:
+
 - `mockProduct` / `mockProductOnSale` - Product fixtures
 - `mockClient` - Client data
 - `mockOrderWithHomeDelivery` - Complete order with delivery
@@ -301,12 +311,14 @@ Create a separate test suite using:
 - Request schemas for procedures
 
 **testUtils.ts** - Helper functions:
+
 - `createMockQuery()` - Mongoose query mocking
 - `createMockAggregate()` - Aggregation pipeline mocking
 - `createMockDocument()` - Document with save/toObject methods
 - `defaultTestEnv` - Environment variables for tests
 
 **setup.ts** - Global test configuration:
+
 - Environment variable injection
 - Mock cleanup after each test
 
@@ -315,26 +327,31 @@ Create a separate test suite using:
 ## Running Tests
 
 ### All Tests
+
 ```bash
 npm test
 ```
 
 ### Specific Test File
+
 ```bash
 npm test src/__tests__/routes/paynet-callback.test.ts
 ```
 
 ### With Coverage
+
 ```bash
 npm test -- --coverage
 ```
 
 ### Watch Mode (during development)
+
 ```bash
 npm test -- --watch
 ```
 
 ### Before Committing
+
 ```bash
 npm run typecheck  # TypeScript validation
 npm run build      # Ensure build succeeds
@@ -348,6 +365,7 @@ npm test           # All tests pass
 ### Mocking Strategy
 
 **DO:**
+
 - ✅ Mock external dependencies (database, email, APIs)
 - ✅ Use `createMockDocument()` for Mongoose docs with methods
 - ✅ Test both success and error paths
@@ -356,6 +374,7 @@ npm test           # All tests pass
 - ✅ Clear mocks in `beforeEach()`
 
 **DON'T:**
+
 - ❌ Test implementation details
 - ❌ Mock the code under test
 - ❌ Share mutable state between tests
@@ -405,6 +424,7 @@ describe('Component/Feature', () => {
 **File:** `src/app/paynet-callback/route.ts`
 
 1. **Missing `await` on line 38** - TransactionFailed path doesn't save order
+
    ```typescript
    // CURRENT (BUG):
    if (body.EventType !== 'PAID') {
@@ -419,6 +439,7 @@ describe('Component/Feature', () => {
    ```
 
 2. **Missing Response on line 34** - Early return without response
+
    ```typescript
    // CURRENT (BUG):
    if (!order) return; // Returns undefined
@@ -430,6 +451,7 @@ describe('Component/Feature', () => {
    ```
 
 **Impact:**
+
 - Failed transactions don't persist state
 - Paynet retries don't get proper HTTP response
 
@@ -440,12 +462,14 @@ describe('Component/Feature', () => {
 ## Next Steps
 
 ### Immediate Actions
+
 1. ✅ Merge this test suite (done)
 2. 🔲 Create follow-up issue for protected procedure tests
 3. 🔲 Fix Paynet webhook bugs identified
 4. 🔲 Add integration test suite (separate PR)
 
 ### Future Enhancements
+
 - Add E2E tests with Playwright
 - Add performance tests for critical paths
 - Add load testing for webhook endpoint
@@ -454,6 +478,7 @@ describe('Component/Feature', () => {
 - Add contract tests for Paynet API
 
 ### Monitoring Recommendations
+
 - Monitor Paynet webhook success rate
 - Alert on order state inconsistencies
 - Track email delivery failures
@@ -463,16 +488,16 @@ describe('Component/Feature', () => {
 
 ## Metrics
 
-| Metric | Value |
-|--------|-------|
-| **Total Tests** | 212 |
-| **New Tests** | 139 |
-| **Test Files** | 8 |
-| **Lines of Test Code** | ~2,500 |
-| **Critical Path Coverage** | >80% |
-| **Payment Webhook Coverage** | 100% |
-| **Test Execution Time** | ~1.4s |
-| **All Tests Passing** | ✅ Yes |
+| Metric                       | Value  |
+| ---------------------------- | ------ |
+| **Total Tests**              | 212    |
+| **New Tests**                | 139    |
+| **Test Files**               | 8      |
+| **Lines of Test Code**       | ~2,500 |
+| **Critical Path Coverage**   | >80%   |
+| **Payment Webhook Coverage** | 100%   |
+| **Test Execution Time**      | ~1.4s  |
+| **All Tests Passing**        | ✅ Yes |
 
 ---
 
