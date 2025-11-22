@@ -297,3 +297,166 @@ export const mockUpdateOrderRequest = {
   total_cost: 200,
   state: OrderState.Paid,
 };
+
+/**
+ * Factory functions for creating test data with variations
+ */
+
+/**
+ * Product factory with customizable fields
+ */
+export function createMockProduct(overrides: Partial<typeof mockProduct> = {}) {
+  return {
+    ...mockProduct,
+    ...overrides,
+  };
+}
+
+/**
+ * Create multiple mock products
+ */
+export function createMockProducts(count: number, baseOverrides: Partial<typeof mockProduct> = {}) {
+  return Array.from({ length: count }, (_, i) =>
+    createMockProduct({
+      ...baseOverrides,
+      _id: `507f1f77bcf86cd79943${String(i).padStart(4, '0')}`,
+      custom_id: `PROD${String(i + 1).padStart(3, '0')}`,
+      title: {
+        ro: `Produs ${i + 1}`,
+        ru: `Продукт ${i + 1}`,
+        en: `Product ${i + 1}`,
+      },
+    })
+  );
+}
+
+/**
+ * Blog post factory
+ */
+export function createMockBlog(
+  overrides: Partial<{
+    _id: string;
+    custom_id: string;
+    title: { ro: string; ru: string; en: string };
+    content: { ro: string; ru: string; en: string };
+    images: string[];
+    createdAt: Date;
+  }> = {}
+) {
+  return {
+    _id: '607f1f77bcf86cd799439011',
+    custom_id: 'BLOG001',
+    title: {
+      ro: 'Blog Post Test',
+      ru: 'Тестовый пост',
+      en: 'Test Blog Post',
+    },
+    content: {
+      ro: '<p>Conținut blog în română</p>',
+      ru: '<p>Содержание блога на русском</p>',
+      en: '<p>Blog content in English</p>',
+    },
+    images: ['https://d3rus23k068yq9.cloudfront.net/BLOG/607f1f77bcf86cd799439011/main.jpg'],
+    createdAt: new Date('2024-01-01'),
+    ...overrides,
+  };
+}
+
+/**
+ * Create multiple mock blogs
+ */
+export function createMockBlogs(count: number) {
+  return Array.from({ length: count }, (_, i) =>
+    createMockBlog({
+      _id: `607f1f77bcf86cd79943${String(i).padStart(4, '0')}`,
+      custom_id: `BLOG${String(i + 1).padStart(3, '0')}`,
+      title: {
+        ro: `Postare Blog ${i + 1}`,
+        ru: `Пост блога ${i + 1}`,
+        en: `Blog Post ${i + 1}`,
+      },
+    })
+  );
+}
+
+/**
+ * Home Banner factory
+ */
+export function createMockHomeBanner(
+  overrides: Partial<{
+    _id: string;
+    title: { ro: string; ru: string; en: string };
+    link: { ro: string; ru: string; en: string };
+    images: { desktop: string; mobile: string };
+  }> = {}
+) {
+  return {
+    _id: '707f1f77bcf86cd799439011',
+    title: {
+      ro: 'Banner Test',
+      ru: 'Тестовый баннер',
+      en: 'Test Banner',
+    },
+    link: {
+      ro: '/ro/catalog',
+      ru: '/ru/catalog',
+      en: '/en/catalog',
+    },
+    images: {
+      desktop: 'https://d3rus23k068yq9.cloudfront.net/BANNER/707f/desktop.jpg',
+      mobile: 'https://d3rus23k068yq9.cloudfront.net/BANNER/707f/mobile.jpg',
+    },
+    ...overrides,
+  };
+}
+
+/**
+ * Season Catalog factory
+ */
+export function createMockSeasonCatalog(
+  overrides: Partial<{
+    _id: string;
+    active: boolean;
+    link: { ro: string; ru: string; en: string };
+  }> = {}
+) {
+  return {
+    _id: '807f1f77bcf86cd799439011',
+    active: true,
+    link: {
+      ro: '/ro/catalog',
+      ru: '/ru/catalog',
+      en: '/en/catalog',
+    },
+    ...overrides,
+  };
+}
+
+/**
+ * Home Occasion factory
+ */
+export function createMockHomeOcasion(
+  overrides: Partial<{
+    _id: string;
+    ocasion: string;
+    title: { ro: string; ru: string; en: string };
+  }> = {}
+) {
+  return {
+    _id: '907f1f77bcf86cd799439011',
+    ocasion: 'VALENTINE',
+    title: {
+      ro: 'Ziua Îndrăgostiților',
+      ru: 'День Святого Валентина',
+      en: "Valentine's Day",
+    },
+    ...overrides,
+  };
+}
+
+/**
+ * Image upload link factory
+ */
+export function createMockImageLink(destination: string, id: string, hash: string = 'abc123') {
+  return `https://cadomd.s3.eu-north-1.amazonaws.com/${destination}/${id}/${hash}.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=TESTKEY&X-Amz-Date=20240101T120000Z&X-Amz-Expires=3600&X-Amz-Signature=testsignature&X-Amz-SignedHeaders=host`;
+}
