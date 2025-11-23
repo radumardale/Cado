@@ -5,10 +5,11 @@ import { type ReactNode } from 'react';
 // Navigation mocks organized by concern - must be defined inline due to hoisting constraints
 // For the reasoning, see: https://vitest.dev/api/vi.html#vi-hoisted
 
-// Next.js core navigation (useSearchParams, useRouter, usePathname)
+// Next.js core navigation (useSearchParams, useRouter, usePathname, useParams)
 const nextNav = vi.hoisted(() => {
   const pathname = '/en/product/PROD001';
   const searchParams = new URLSearchParams();
+  let currentLocale: LocaleCode = 'en'; // Track current locale for useParams
 
   return {
     pathname,
@@ -16,6 +17,11 @@ const nextNav = vi.hoisted(() => {
     router: {
       push: vi.fn(),
       replace: vi.fn(),
+    },
+    params: { locale: currentLocale } as { locale: LocaleCode },
+    setLocale: (locale: LocaleCode) => {
+      currentLocale = locale;
+      nextNav.params = { locale };
     },
   };
 });
@@ -47,6 +53,7 @@ vi.mock('next/navigation', () => ({
   useSearchParams: () => nextNav.searchParams,
   useRouter: () => nextNav.router,
   usePathname: () => nextNav.pathname,
+  useParams: () => nextNav.params,
 }));
 
 vi.mock('@/i18n/navigation', () => ({
@@ -57,12 +64,14 @@ vi.mock('@/i18n/navigation', () => ({
   getPathname: i18nNav.getPathname,
 }));
 
-// Mock next-intl
+// Mock next-intl with dynamic useLocale
+const mockUseLocale = vi.hoisted(() => vi.fn(() => 'en'));
+
 vi.mock('next-intl', async () => {
   const actual = await vi.importActual('next-intl');
   return {
     ...actual,
-    useLocale: vi.fn(() => 'en'),
+    useLocale: mockUseLocale,
     useTranslations: vi.fn(() => (key: string) => key),
   };
 });
@@ -91,6 +100,8 @@ describe('ProductInfo', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     nextNav.searchParams.delete('category');
+    nextNav.setLocale('en'); // Reset to English for each test
+    mockUseLocale.mockReturnValue('en' as LocaleCode); // Reset useLocale mock
   });
 
   afterEach(() => {
@@ -383,7 +394,7 @@ describe('ProductInfo', () => {
       expect(document.body.textContent).toContain('Premium timepiece');
     });
 
-    it('should support multilingual product data structure', async () => {
+    it('should handle multilingual product data structure', async () => {
       const queryClient = createTestQueryClient();
 
       // Product with all three languages populated
@@ -418,8 +429,9 @@ describe('ProductInfo', () => {
       const heading = screen.getByRole('heading', { level: 1 });
       expect(heading).toBeInTheDocument();
 
-      // Verify product data is accessible in the DOM
-      expect(document.body.textContent).toContain('Elegant Dress');
+      // Verify English is displayed (default locale in tests)
+      expect(heading).toHaveTextContent('Elegant Dress');
+      expect(document.body.textContent).toContain('Beautiful evening dress');
     });
   });
 });
