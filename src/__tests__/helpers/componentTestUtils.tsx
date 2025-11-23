@@ -1,5 +1,5 @@
-import { render, RenderOptions } from '@testing-library/react';
-import { ReactElement, ReactNode } from 'react';
+import { render, RenderOptions, waitForElementToBeRemoved, screen } from '@testing-library/react';
+import { ReactElement, ReactNode, Suspense } from 'react';
 import { vi, expect } from 'vitest';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { NextIntlClientProvider } from 'next-intl';
@@ -417,6 +417,92 @@ export function renderWithProviders(
   }
 
   return render(ui, { wrapper: Wrapper, ...renderOptions });
+}
+
+/**
+ * Render component with Suspense boundary and all providers
+ *
+ * ⚠️ Most tests should use `renderSuspenseResolved()` instead (simpler API).
+ * Only use this when you need more control (e.g., testing loading states).
+ *
+ * @example
+ * // Basic usage - then use findBy to wait
+ * renderWithSuspense(<ProductInfo id="PROD001" />, { queryClient });
+ * const heading = await screen.findByRole('heading', { level: 1 });
+ *
+ * @see renderSuspenseResolved - **RECOMMENDED** - Async version that auto-waits (use by default)
+ * @see https://react.dev/reference/react/Suspense
+ */
+export function renderWithSuspense(
+  ui: ReactElement,
+  {
+    fallback = <div>Loading...</div>,
+    ...options
+  }: CustomRenderOptions & { fallback?: ReactNode } = {}
+) {
+  return renderWithProviders(<Suspense fallback={fallback}>{ui}</Suspense>, options);
+}
+
+/**
+ * ⭐ **RECOMMENDED** - Render component with Suspense and wait for resolution
+ *
+ * Use this by default for ~95% of component tests. This async helper automatically
+ * waits for the Suspense fallback to disappear, so your component is ready to test
+ * immediately after the `await`.
+ *
+ * @example
+ * // Default usage - simplest API
+ * await renderSuspenseResolved(<ProductInfo id="PROD001" />, { queryClient });
+ *
+ * // Component is ready - test immediately (no findBy needed)
+ * expect(screen.getByRole('heading')).toHaveTextContent('Test Product');
+ * expect(screen.getByAltText('logo')).toBeInTheDocument();
+ *
+ * @throws {Error} If Suspense component does not resolve within timeout (default 3000ms)
+ * @see renderWithSuspense - Alternative for testing loading states or when you need more control
+ * @see https://testing-library.com/docs/dom-testing-library/api-async/#waitforelementtoberemoved
+ */
+export async function renderSuspenseResolved(
+  ui: ReactElement,
+  {
+    fallback = <div>Loading...</div>,
+    fallbackText = 'Loading...',
+    timeout = 3000,
+    ...options
+  }: CustomRenderOptions & {
+    fallback?: ReactNode;
+    fallbackText?: string;
+    timeout?: number;
+  } = {}
+) {
+  // Render with Suspense boundary
+  const result = renderWithSuspense(ui, { fallback, ...options });
+
+  try {
+    // Check if fallback exists before waiting for removal
+    const fallbackElement = screen.queryByText(fallbackText);
+
+    if (fallbackElement) {
+      // Wait for fallback to be removed (component has resolved)
+      await waitForElementToBeRemoved(() => screen.queryByText(fallbackText), {
+        timeout,
+      });
+    }
+    // If fallback doesn't exist, data was already cached - no need to wait
+  } catch (error) {
+    const errorMsg = error instanceof Error ? error.message : String(error);
+    throw new Error(
+      `Suspense component did not resolve within ${timeout}ms.\n` +
+        `Expected fallback "${fallbackText}" to be removed.\n` +
+        `Original error: ${errorMsg}\n\n` +
+        `💡 Tip: Ensure query cache is populated before rendering:\n` +
+        `   queryClient.setQueryData(trpcQueryKey, { data: mockData });\n\n` +
+        `💡 Alternative: Use findBy queries for better error messages:\n` +
+        `   const element = await screen.findByRole('heading', { level: 1 });`
+    );
+  }
+
+  return result;
 }
 
 /**

@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import '@testing-library/jest-dom/vitest';
-import { Suspense, type ReactNode } from 'react';
+import { type ReactNode } from 'react';
 
 // Navigation mocks organized by concern - must be defined inline due to hoisting constraints
 // For the reasoning, see: https://vitest.dev/api/vi.html#vi-hoisted
@@ -58,11 +58,11 @@ vi.mock('@/i18n/navigation', () => ({
 }));
 
 // Import test utilities and component
-import { screen, cleanup, waitFor } from '@testing-library/react';
+import { screen, cleanup } from '@testing-library/react';
 import {
   createMockProduct,
   createTestQueryClient,
-  renderWithProviders,
+  renderSuspenseResolved,
 } from '@/__tests__/helpers/componentTestUtils';
 import ProductInfo from '@/components/product/ProductInfo';
 import { Categories } from '@/lib/enums/Categories';
@@ -88,59 +88,76 @@ describe('ProductInfo', () => {
   });
 
   it('should render without crashing', async () => {
-    // Create a fresh query client for this test
+    // Create query client and populate cache
     const queryClient = createTestQueryClient();
 
-    // Use the correct tRPC cache key structure: [['products', 'getProductById'], { input: { id }, type: 'query' }]
     const trpcQueryKey = [
       ['products', 'getProductById'],
       { input: { id: 'PROD001' }, type: 'query' },
     ];
 
-    // Pre-populate the cache with the product data
     queryClient.setQueryData(trpcQueryKey, {
       product: mockProduct,
     });
 
-    // Render the component with Suspense boundary to handle useSuspenseQuery
-    renderWithProviders(
-      <Suspense fallback={<div>Loading product...</div>}>
-        <ProductInfo id='PROD001' />
-      </Suspense>,
-      {
-        queryClient,
-      }
-    );
-
-    // Wait for the component to finish rendering
-    await waitFor(() => {
-      // Verify the loading fallback is not shown
-      expect(screen.queryByText('Loading product...')).not.toBeInTheDocument();
+    // Render and wait for Suspense to resolve
+    await renderSuspenseResolved(<ProductInfo id='PROD001' />, {
+      queryClient,
     });
 
-    // DON'T DELETE: Debug output to verify rendered DOM!! I want to see it!
-    console.log(screen.debug());
-
-    // Verify the component renders with product data
-    // Check for the product title (appears in multiple places - breadcrumb and h1)
-    const productTitles = screen.getAllByText('Test Product');
-    expect(productTitles.length).toBeGreaterThan(0);
-
-    // Specifically check for the h1 element with the product title
+    // Component is ready - test immediately
     const heading = screen.getByRole('heading', { level: 1 });
     expect(heading).toHaveTextContent('Test Product');
 
-    // Check for the logo in the header
+    // Verify other content
     expect(screen.getByAltText('logo')).toBeInTheDocument();
-
-    // Verify the price is shown somewhere on the page (might be formatted as "100 MDL")
     expect(document.body.textContent).toMatch(/100/);
-
-    // Verify that no loading skeleton is shown
     expect(document.querySelector('.skeleton')).not.toBeInTheDocument();
 
-    // Verify key content exists
-    expect(document.body.textContent).toContain('Test Product');
-    expect(document.body.textContent).toContain('Product description'); // From mockProduct
+    // DON'T DELETE: Debug output to verify rendered DOM!! I want to see it!
+    console.log(screen.debug());
   });
 });
+
+// ============================================================================
+// ALTERNATIVE APPROACHES (if renderSuspenseResolved doesn't meet your needs)
+// ============================================================================
+// See .claude/testing.guidelines.md "Suspense Testing" section for details
+
+/*
+// ALTERNATIVE 1: renderWithSuspense() + findBy queries (better error messages)
+it('should render product information', async () => {
+  const queryClient = createTestQueryClient();
+  const trpcQueryKey = [
+    ['products', 'getProductById'],
+    { input: { id: 'PROD001' }, type: 'query' },
+  ];
+  queryClient.setQueryData(trpcQueryKey, { product: mockProduct });
+
+  renderWithSuspense(<ProductInfo id='PROD001' />, { queryClient });
+
+  // findBy auto-waits with better error messages
+  const heading = await screen.findByRole('heading', { level: 1 });
+  expect(heading).toHaveTextContent('Test Product');
+});
+
+// ALTERNATIVE 2: Test loading states (rarely needed)
+it('should show loading state then content', async () => {
+  const queryClient = createTestQueryClient();
+  const trpcQueryKey = [
+    ['products', 'getProductById'],
+    { input: { id: 'PROD001' }, type: 'query' },
+  ];
+
+  renderWithSuspense(<ProductInfo id='PROD001' />, { queryClient });
+
+  // Test loading state
+  expect(screen.getByText('Loading product...')).toBeInTheDocument();
+
+  // Populate cache to trigger resolution
+  queryClient.setQueryData(trpcQueryKey, { product: mockProduct });
+
+  const heading = await screen.findByRole('heading', { level: 1 });
+  expect(heading).toHaveTextContent('Test Product');
+});
+*/

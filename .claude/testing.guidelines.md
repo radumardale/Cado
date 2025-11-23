@@ -8,7 +8,7 @@
 > - 💡 Suggest updates when we discover new approaches during development
 > - 🔄 Help keep these guidelines aligned with actual working code
 >
-> **Last Updated:** 2025-01-23
+> **Last Updated:** 2025-01-23 (Added Suspense testing helpers)
 
 ## Quick Start
 
@@ -17,10 +17,10 @@
    - `vitest-nav-mocks` → Navigation mocking setup
 
 2. **Essential patterns:**
-   - Use `renderWithProviders()` for rendering components
+   - Use `renderSuspenseResolved()` for components with `useSuspenseQuery` ⭐ **RECOMMENDED**
    - Use `createMockProduct()` and other factories for test data
    - Pre-populate cache with `queryClient.setQueryData()` for tRPC data
-   - Wrap components using `useSuspenseQuery` in `<Suspense>` boundaries
+   - See "Suspense Testing" section for alternative approaches if needed
 
 3. **Start from template:**
    - Use `.claude/templates/component.test.tsx` as your starting point
@@ -57,6 +57,8 @@
 
 **Rendering Functions:**
 - `renderWithProviders(ui, options)` - Main render function with all providers (QueryClient, TRPCProvider, NextIntlClientProvider)
+- `renderWithSuspense(ui, options)` - ⭐ Wraps component in Suspense boundary + all providers
+- `renderSuspenseResolved(ui, options)` - ⭐ **Async** - Wraps in Suspense + waits for resolution (least boilerplate)
 - `renderFormField(ui, options)` - For testing form inputs with React Hook Form
 
 **Setup Functions:**
@@ -144,11 +146,11 @@ vi.mock('@/i18n/navigation', () => ({
 // ============================================================================
 // IMPORTS (After mocks)
 // ============================================================================
-import { screen, cleanup, waitFor } from '@testing-library/react';
+import { screen, cleanup } from '@testing-library/react';
 import {
   createMockProduct,
   createTestQueryClient,
-  renderWithProviders,
+  renderSuspenseResolved, // ⭐ NEW: Async helper that auto-waits
 } from '@/__tests__/helpers/componentTestUtils';
 import ProductInfo from '@/components/product/ProductInfo';
 
@@ -172,17 +174,14 @@ describe('ProductInfo', () => {
       { product: mockProduct }
     );
 
-    renderWithProviders(
-      <Suspense fallback={<div>Loading...</div>}>
-        <ProductInfo id='PROD001' />
-      </Suspense>,
-      { queryClient }
-    );
-
-    await waitFor(() => {
-      expect(screen.queryByText('Loading...')).not.toBeInTheDocument();
+    // ⭐ NEW: Render with async helper - waits automatically for Suspense
+    await renderSuspenseResolved(<ProductInfo id='PROD001' />, {
+      fallback: <div>Loading...</div>,
+      fallbackText: 'Loading...',
+      queryClient,
     });
 
+    // Component is ready - test immediately (no manual waitFor needed)
     expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('Test Product');
     expect(screen.getByAltText('logo')).toBeInTheDocument();
   });
@@ -320,7 +319,10 @@ describe('Header', () => {
    // ❌ BAD - Will throw error!
    renderWithProviders(<ProductInfo id='PROD001' />, { queryClient });
 
-   // ✅ GOOD - Wrap in Suspense
+   // ✅ GOOD - Use async helper (recommended for most tests)
+   await renderSuspenseResolved(<ProductInfo id='PROD001' />, { queryClient });
+
+   // ✅ ALSO GOOD - Manual Suspense wrapper
    renderWithProviders(
      <Suspense fallback={<div>Loading...</div>}>
        <ProductInfo id='PROD001' />
@@ -406,6 +408,120 @@ queryClient.setQueryData(trpcQueryKey, { product: mockProduct });
 [['order', 'getOrders'], { input: undefined, type: 'query' }]
 ```
 
+## Suspense Testing
+
+### The Problem
+
+Components using `useSuspenseQuery` require a Suspense boundary. Without proper handling, tests become cluttered with boilerplate:
+
+```typescript
+// Old approach - lots of boilerplate
+renderWithProviders(
+  <Suspense fallback={<div>Loading...</div>}>
+    <ProductInfo id='PROD001' />
+  </Suspense>,
+  { queryClient }
+);
+
+await waitFor(() => {
+  expect(screen.queryByText('Loading...')).not.toBeInTheDocument();
+});
+
+// Finally test the actual component
+expect(screen.getByRole('heading')).toHaveTextContent('Test Product');
+```
+
+### ⭐ The Solution: `renderSuspenseResolved()` (Default/Recommended)
+
+**Use this by default for ~95% of your component tests.** It provides the simplest API with automatic Suspense handling.
+
+```typescript
+import { renderSuspenseResolved } from '@/__tests__/helpers/componentTestUtils';
+
+it('should render product information', async () => {
+  const queryClient = createTestQueryClient();
+  queryClient.setQueryData(trpcQueryKey, { product: mockProduct });
+
+  // Render and wait - component is ready after this line
+  await renderSuspenseResolved(<ProductInfo id='PROD001' />, { queryClient });
+
+  // Test immediately - no manual waitFor needed
+  expect(screen.getByRole('heading')).toHaveTextContent('Test Product');
+  expect(screen.getByAltText('logo')).toBeInTheDocument();
+});
+```
+
+**Why use this approach:**
+- ✅ **"Just works"** - Simplest API, least boilerplate
+- ✅ Automatic waiting - no manual `waitFor` or `findBy`
+- ✅ Component is ready immediately after `await`
+- ✅ Covers 95% of test scenarios
+
+**When NOT to use:**
+- ❌ Need to test loading states (use Alternative 2)
+- ❌ Want explicit `findBy` error messages (use Alternative 1)
+
+---
+
+### Alternative Approaches
+
+Only use these if `renderSuspenseResolved()` doesn't meet your specific needs.
+
+#### Alternative 1: `renderWithSuspense()` + `findBy` Queries
+
+**Use when:** You want better error messages from `findBy` queries.
+
+```typescript
+renderWithSuspense(<ProductInfo id='PROD001' />, { queryClient });
+
+// findBy provides detailed error messages on timeout
+const heading = await screen.findByRole('heading', { level: 1 });
+expect(heading).toHaveTextContent('Test Product');
+```
+
+**Trade-offs:**
+- ✅ Better error messages than `renderSuspenseResolved()`
+- ⚠️ Slightly more verbose
+
+---
+
+#### Alternative 2: Test Loading States
+
+**Use when:** You need to verify loading states (rare).
+
+```typescript
+renderWithSuspense(<ProductInfo id='PROD001' />, { queryClient });
+
+// Test loading state
+expect(screen.getByText('Loading...')).toBeInTheDocument();
+
+// Populate cache to trigger resolution
+queryClient.setQueryData(trpcQueryKey, { product: mockProduct });
+
+const heading = await screen.findByRole('heading', { level: 1 });
+expect(heading).toHaveTextContent('Test Product');
+```
+
+**Trade-offs:**
+- ✅ Can test loading states
+- ❌ More complex setup
+
+---
+
+### Quick Reference
+
+| Scenario | Use This |
+|----------|----------|
+| **Default (95% of tests)** | ⭐ `renderSuspenseResolved()` |
+| Need better error messages | `renderWithSuspense()` + `findBy` |
+| Need to test loading states (rare) | `renderWithSuspense()` + manual |
+
+### Live Examples
+
+- **Primary example:** `/src/__tests__/components/product/ProductInfo.test.tsx` (uses `renderSuspenseResolved()`)
+- **Template:** `.claude/templates/component.test.tsx` (copy-paste ready)
+- **Alternative approaches:** See commented examples at bottom of ProductInfo.test.tsx
+
 ## Debugging Tips
 
 ### See Rendered Output
@@ -437,6 +553,16 @@ expect(document.body.textContent).toMatch(/100 MDL/);
 
 ### Verify Suspense Resolved
 
+**Option 1: Use helper (recommended)**
+```typescript
+// Automatically waits for Suspense to resolve
+await renderSuspenseResolved(<ProductInfo id='PROD001' />, { queryClient });
+
+// Component is ready - test immediately
+expect(screen.getByRole('heading')).toHaveTextContent('Test Product');
+```
+
+**Option 2: Manual waiting**
 ```typescript
 await waitFor(() => {
   expect(screen.queryByText('Loading...')).not.toBeInTheDocument();

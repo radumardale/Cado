@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import '@testing-library/jest-dom/vitest';
-import { Suspense, type ReactNode } from 'react';
+import { type ReactNode } from 'react';
 
 // ============================================================================
 // NAVIGATION MOCKS - Must be defined BEFORE imports due to vi.hoisted()
@@ -64,12 +64,12 @@ vi.mock('@/i18n/navigation', () => ({
 // ============================================================================
 // TEST UTILITIES AND COMPONENT IMPORTS
 // ============================================================================
-import { screen, cleanup, waitFor } from '@testing-library/react';
+import { screen, cleanup } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {
   createMockProduct,
   createTestQueryClient,
-  renderWithProviders,
+  renderSuspenseResolved,
 } from '@/__tests__/helpers/componentTestUtils';
 
 // TODO: Import your component here
@@ -122,10 +122,9 @@ describe('YourComponent', () => {
   // Basic Rendering Test
   // --------------------------------------------------------------------------
   it('should render without crashing', async () => {
-    // 1️⃣ Create a fresh query client for this test
+    // Create query client and populate cache
     const queryClient = createTestQueryClient();
 
-    // 2️⃣ Set up tRPC cache with mock data
     // TODO: Replace with your actual tRPC procedure
     // Format: [['routerName', 'procedureName'], { input: { params }, type: 'query' }]
     const trpcQueryKey = [
@@ -133,40 +132,30 @@ describe('YourComponent', () => {
       { input: { id: 'PROD001' }, type: 'query' },
     ];
 
-    // Pre-populate the cache with the mock data
     queryClient.setQueryData(trpcQueryKey, {
       product: mockProduct,
     });
 
-    // 3️⃣ Render the component with providers
-    // ⚠️ Wrap in Suspense if component uses useSuspenseQuery
-    renderWithProviders(
-      <Suspense fallback={<div>Loading...</div>}>
-        {/* TODO: Replace with your component */}
-        {/* <YourComponent id="PROD001" /> */}
-      </Suspense>,
+    // Render and wait for Suspense to resolve
+    await renderSuspenseResolved(
+      /* TODO: Replace with your component */
+      /* <YourComponent id="PROD001" /> */
+      <div>Your Component Here</div>,
       {
         queryClient,
       }
     );
 
-    // 4️⃣ Wait for component to finish rendering (no loading fallback)
-    await waitFor(() => {
-      expect(screen.queryByText('Loading...')).not.toBeInTheDocument();
-    });
-
-    // 5️⃣ Debug output (remove after test works)
-    // console.log(screen.debug());
-
-    // 6️⃣ Assertions - Test user-visible behavior
+    // Component is ready - test immediately
     // TODO: Replace with your component's actual content
     // const heading = screen.getByRole('heading', { level: 1 });
     // expect(heading).toHaveTextContent('Test Product');
 
-    // Example: Check for specific text
-    // expect(screen.getByText('Test Product')).toBeInTheDocument();
+    // Debug output (remove after test works)
+    // console.log(screen.debug());
 
-    // Example: Check for elements by role
+    // Example assertions:
+    // expect(screen.getByText('Test Product')).toBeInTheDocument();
     // expect(screen.getByRole('button', { name: /add to cart/i })).toBeInTheDocument();
   });
 
@@ -177,25 +166,18 @@ describe('YourComponent', () => {
     // Setup user event
     const user = userEvent.setup();
 
-    // Create query client and set up cache (same as above)
+    // Create query client and set up cache
     const queryClient = createTestQueryClient();
     // TODO: Set up cache as needed
 
-    // Render component
-    renderWithProviders(
-      <Suspense fallback={<div>Loading...</div>}>
-        {/* TODO: Replace with your component */}
-        {/* <YourComponent id="PROD001" /> */}
-      </Suspense>,
+    // Render and wait for component to be ready
+    await renderSuspenseResolved(
+      /* TODO: Replace with your component */
+      <div>Your Component Here</div>,
       {
         queryClient,
       }
     );
-
-    // Wait for render
-    await waitFor(() => {
-      expect(screen.queryByText('Loading...')).not.toBeInTheDocument();
-    });
 
     // TODO: Interact with the component
     // Example: Click a button
@@ -220,21 +202,14 @@ describe('YourComponent', () => {
     const queryClient = createTestQueryClient();
     // TODO: Set up cache as needed
 
-    // Render component
-    renderWithProviders(
-      <Suspense fallback={<div>Loading...</div>}>
-        {/* TODO: Replace with your component */}
-        {/* <YourComponent id="PROD001" /> */}
-      </Suspense>,
+    // Render and wait for component to be ready
+    await renderSuspenseResolved(
+      /* TODO: Replace with your component */
+      <div>Your Component Here</div>,
       {
         queryClient,
       }
     );
-
-    // Wait for render
-    await waitFor(() => {
-      expect(screen.queryByText('Loading...')).not.toBeInTheDocument();
-    });
 
     // TODO: Click a link
     // const link = screen.getByRole('link', { name: /view details/i });
@@ -254,21 +229,14 @@ describe('YourComponent', () => {
     const queryClient = createTestQueryClient();
     // TODO: Set up cache as needed
 
-    // Render component
-    renderWithProviders(
-      <Suspense fallback={<div>Loading...</div>}>
-        {/* TODO: Replace with your component */}
-        {/* <YourComponent id="PROD001" /> */}
-      </Suspense>,
+    // Render and wait for component to be ready
+    await renderSuspenseResolved(
+      /* TODO: Replace with your component */
+      <div>Your Component Here</div>,
       {
         queryClient,
       }
     );
-
-    // Wait for render
-    await waitFor(() => {
-      expect(screen.queryByText('Loading...')).not.toBeInTheDocument();
-    });
 
     // TODO: Fill out form
     // const input = screen.getByRole('textbox', { name: /quantity/i });
@@ -279,10 +247,9 @@ describe('YourComponent', () => {
     // const submitButton = screen.getByRole('button', { name: /submit/i });
     // await user.click(submitButton);
 
-    // TODO: Assert result
-    // await waitFor(() => {
-    //   expect(screen.getByText('Success!')).toBeInTheDocument();
-    // });
+    // TODO: Assert result (use findBy for async updates)
+    // const successMessage = await screen.findByText('Success!');
+    // expect(successMessage).toBeInTheDocument();
   });
 
   // --------------------------------------------------------------------------
@@ -301,21 +268,14 @@ describe('YourComponent', () => {
     //   product: { ...mockProduct, inStock: false },
     // });
 
-    // Render component
-    renderWithProviders(
-      <Suspense fallback={<div>Loading...</div>}>
-        {/* TODO: Replace with your component */}
-        {/* <YourComponent id="PROD001" /> */}
-      </Suspense>,
+    // Render and wait for component to be ready
+    await renderSuspenseResolved(
+      /* TODO: Replace with your component */
+      <div>Your Component Here</div>,
       {
         queryClient,
       }
     );
-
-    // Wait for render
-    await waitFor(() => {
-      expect(screen.queryByText('Loading...')).not.toBeInTheDocument();
-    });
 
     // TODO: Assert conditional content
     // expect(screen.getByText('Out of stock')).toBeInTheDocument();
@@ -336,12 +296,25 @@ describe('YourComponent', () => {
 6. Write assertions that test user-visible behavior
 
 🔑 Key Points:
-- Navigation mocks MUST be inline (before imports)
-- Use renderWithProviders() not render()
-- Wrap useSuspenseQuery components in <Suspense>
+- Navigation mocks MUST be inline (before imports) - use vi.hoisted()
+- ⭐ Use renderSuspenseResolved() by default (simplest, works for 95% of tests)
 - Pre-populate cache with queryClient.setQueryData()
 - Test behavior, not implementation details
 - Use factory functions for mock data
+
+⚡ Default Testing Pattern:
+
+await renderSuspenseResolved(<Component />, { queryClient });
+// Component is ready - test immediately
+expect(screen.getByRole('heading')).toHaveTextContent('Expected');
+
+🔧 Alternative Approaches (if needed):
+
+See .claude/testing.guidelines.md "Suspense Testing" section for:
+- renderWithSuspense() + findBy (better error messages)
+- Testing loading states (rarely needed)
+
+See ProductInfo.test.tsx for commented examples of alternatives.
 
 💡 VS Code Snippets:
 - vitest-imports - Common test imports
@@ -353,5 +326,4 @@ describe('YourComponent', () => {
 - Testing guidelines: .claude/testing.guidelines.md
 - Test utilities: src/__tests__/helpers/componentTestUtils.tsx
 - Working example: src/__tests__/components/product/ProductInfo.test.tsx
-- Research doc: docs/testing/navigation-mocking-research.md
 */
