@@ -55,7 +55,7 @@ describe('ProductContent', () => {
 
       renderWithProviders(<ProductContent product={product} />, { locale: 'en' });
 
-      expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('Test Product');
+      expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(product.title.en);
     });
 
     it('should render product title with multilingual support', () => {
@@ -105,7 +105,7 @@ describe('ProductContent', () => {
 
       renderWithProviders(<ProductContent product={product} />);
 
-      expect(screen.getByText('150 MDL')).toBeInTheDocument();
+      expect(screen.getByText(`${product.price} MDL`)).toBeInTheDocument();
       expect(screen.queryByText(/line-through/)).not.toBeInTheDocument();
     });
 
@@ -115,12 +115,12 @@ describe('ProductContent', () => {
       renderWithProviders(<ProductContent product={product} />);
 
       // Original price should be visible and crossed out
-      const originalPrice = screen.getByText('100 MDL', { selector: '.line-through' });
+      const originalPrice = screen.getByText(`${product.price} MDL`, { selector: '.line-through' });
       expect(originalPrice).toBeInTheDocument();
       expect(originalPrice).toHaveClass('line-through');
 
       // Sale price should be visible
-      expect(screen.getByText('80 MDL')).toBeInTheDocument();
+      expect(screen.getByText(`${product.sale?.sale_price} MDL`)).toBeInTheDocument();
     });
 
     it('should format price with thousand separators', () => {

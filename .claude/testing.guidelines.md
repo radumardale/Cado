@@ -8,7 +8,7 @@
 > - 💡 Suggest updates when we discover new approaches during development
 > - 🔄 Help keep these guidelines aligned with actual working code
 >
-> **Last Updated:** 2025-01-23 (Added Suspense testing helpers)
+> **Last Updated:** 2025-01-23 (Added Suspense testing helpers, mock reference anti-pattern)
 
 ## Quick Start
 
@@ -331,13 +331,46 @@ describe('Header', () => {
    );
    ```
 
+6. **Don't duplicate mock values in assertions (hardcoded strings)**
+   ```typescript
+   // ❌ BAD - Brittle! Breaks if mock changes
+   const mockProduct = createMockProduct({
+     title: { ro: 'Produs', ru: 'Продукт', en: 'Test Product' },
+     price: 100,
+   });
+   expect(screen.getByText('Test Product')).toBeInTheDocument(); // Hardcoded duplicate!
+   expect(screen.getByText('100 MDL')).toBeInTheDocument(); // Hardcoded duplicate!
+
+   // ✅ GOOD - References mock object (single source of truth)
+   const mockProduct = createMockProduct({
+     title: { ro: 'Produs', ru: 'Продукт', en: 'Test Product' },
+     price: 100,
+   });
+   expect(screen.getByText(mockProduct.title.en)).toBeInTheDocument();
+   expect(screen.getByText(`${mockProduct.price} MDL`)).toBeInTheDocument();
+
+   // ✅ ALSO GOOD - Using default mock values
+   const mockProduct = createMockProduct(); // Uses factory defaults
+   expect(screen.getByText(mockProduct.title.en)).toBeInTheDocument();
+   expect(screen.getByText(`${mockProduct.price} MDL`)).toBeInTheDocument();
+   ```
+
+   **Why this matters:**
+   - ✅ Change mock once, all tests adapt automatically
+   - ✅ Clear relationship between test data and assertions
+   - ✅ Tests validate behavior, not implementation details
+   - ✅ No false failures when mock data changes
+   - ❌ Hardcoded duplicates create maintenance burden
+   - ❌ Tests fail when component works correctly
+
 ### ✅ ALWAYS Do These
 
 1. **Use VS Code snippets** - Type `vitest-nav-mocks` + Tab for navigation mocks
 2. **Pre-populate cache** - Use `queryClient.setQueryData()`, don't mock queries
 3. **Use factories** - `createMockProduct()` not inline objects with 30+ fields
-4. **Test user behavior** - What users see and interact with, not implementation
-5. **Clean up properly** - Always `afterEach(cleanup)` to prevent test pollution
+4. **Reference mock properties** - Use `mockProduct.title.en` not hardcoded `'Test Product'`
+5. **Test user behavior** - What users see and interact with, not implementation
+6. **Clean up properly** - Always `afterEach(cleanup)` to prevent test pollution
 
 ## Navigation Mocking
 
@@ -612,6 +645,55 @@ We explored 6 different approaches to reduce navigation mock boilerplate:
 6. ❌ Helper functions - can't import into `vi.hoisted()`
 
 **Conclusion:** The inline pattern is optimal despite verbosity. See `/docs/testing/navigation-mocking-research.md` for full analysis.
+
+### Hardcoded Mock Value Duplicates
+
+**Problem:** Tests duplicated mock values in assertions using hardcoded strings, creating brittle tests that failed when mock data changed.
+
+**Example from ProductInfo.test.tsx:**
+```typescript
+// Mock defines values
+const mockProduct = createMockProduct({
+  custom_id: 'PROD001',
+  title: { ro: 'Produs', ru: 'Продукт', en: 'Test Product' },
+  price: 100,
+});
+
+// ❌ Before: Assertions duplicated these values
+expect(heading).toHaveTextContent('Test Product'); // Brittle!
+expect(screen.getByText('100 MDL')).toBeInTheDocument(); // Brittle!
+renderSuspenseResolved(<ProductInfo id='PROD001' />, { queryClient }); // Brittle!
+
+// ✅ After: Assertions reference mock properties
+expect(heading).toHaveTextContent(mockProduct.title.en);
+expect(screen.getByText(`${mockProduct.price} MDL`)).toBeInTheDocument();
+renderSuspenseResolved(<ProductInfo id={mockProduct.custom_id} />, { queryClient });
+```
+
+**Why this was a problem:**
+- 📛 **Single source of truth violation** - Same data existed in two places (mock + assertion)
+- 📛 **False failures** - Tests failed when mock changed, even though component worked correctly
+- 📛 **Maintenance burden** - Had to update multiple locations when changing test data
+- 📛 **Cognitive load** - Developers had to remember to sync hardcoded values with mocks
+
+**The fix:**
+- Always reference mock object properties: `mockProduct.title.en` not `'Test Product'`
+- Use template literals for dynamic values: `` `${mockProduct.price} MDL` ``
+- Pass mock properties to components: `id={mockProduct.custom_id}` not `id='PROD001'`
+
+**Impact:**
+- ✅ Tests now adapt automatically when mock data changes
+- ✅ Clear relationship between test data and assertions
+- ✅ Fewer false failures
+- ✅ Better test maintainability
+
+**Files fixed:**
+- `src/__tests__/components/product/ProductInfo.test.tsx`
+- `src/__tests__/components/product/ProductContent.test.tsx`
+- `src/__tests__/components/product/ProductCard.test.tsx`
+- `src/__tests__/components/navigation/Header.test.tsx`
+
+**Lesson:** Mock data should be the **single source of truth**. Never duplicate values in assertions.
 
 ## When to Write Different Test Types
 

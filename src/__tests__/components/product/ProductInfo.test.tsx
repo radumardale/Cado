@@ -93,7 +93,7 @@ describe('ProductInfo', () => {
 
     const trpcQueryKey = [
       ['products', 'getProductById'],
-      { input: { id: 'PROD001' }, type: 'query' },
+      { input: { id: mockProduct.custom_id }, type: 'query' },
     ];
 
     queryClient.setQueryData(trpcQueryKey, {
@@ -101,17 +101,17 @@ describe('ProductInfo', () => {
     });
 
     // Render and wait for Suspense to resolve
-    await renderSuspenseResolved(<ProductInfo id='PROD001' />, {
+    await renderSuspenseResolved(<ProductInfo id={mockProduct.custom_id} />, {
       queryClient,
     });
 
     // Component is ready - test immediately
     const heading = screen.getByRole('heading', { level: 1 });
-    expect(heading).toHaveTextContent('Test Product');
+    expect(heading).toHaveTextContent(mockProduct.title.en);
 
     // Verify other content
     expect(screen.getByAltText('logo')).toBeInTheDocument();
-    expect(document.body.textContent).toMatch(/100/);
+    expect(document.body.textContent).toMatch(new RegExp(mockProduct.price.toString()));
     expect(document.querySelector('.skeleton')).not.toBeInTheDocument();
 
     // DON'T DELETE: Debug output to verify rendered DOM!! I want to see it!
