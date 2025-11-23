@@ -1,32 +1,60 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import '@testing-library/jest-dom/vitest';
-import { Suspense } from 'react';
+import { Suspense, type ReactNode } from 'react';
 
-// Mock next/navigation
-const mockSearchParams = new URLSearchParams();
+// Navigation mocks organized by concern - must be defined inline due to hoisting constraints
+// For the reasoning, see: https://vitest.dev/api/vi.html#vi-hoisted
+
+// Next.js core navigation (useSearchParams, useRouter, usePathname)
+const nextNav = vi.hoisted(() => {
+  const pathname = '/en/product/PROD001';
+  const searchParams = new URLSearchParams();
+
+  return {
+    pathname,
+    searchParams,
+    router: {
+      push: vi.fn(),
+      replace: vi.fn(),
+    },
+  };
+});
+
+// Internationalized navigation (next-intl wrapper)
+const i18nNav = vi.hoisted(() => {
+  const pathname = '/en/product/PROD001';
+
+  return {
+    pathname,
+    router: {
+      push: vi.fn(),
+      replace: vi.fn(),
+      prefetch: vi.fn(),
+      back: vi.fn(),
+      forward: vi.fn(),
+      refresh: vi.fn(),
+    },
+    Link: ({ children, ...props }: { children: ReactNode; [key: string]: unknown }) => (
+      <a {...props}>{children}</a>
+    ),
+    redirect: vi.fn(),
+    getPathname: vi.fn(() => pathname),
+  };
+});
+
+// Setup mocks BEFORE other imports
 vi.mock('next/navigation', () => ({
-  useSearchParams: () => mockSearchParams,
-  useRouter: () => ({
-    push: vi.fn(),
-    replace: vi.fn(),
-  }),
-  usePathname: () => '/en/product/PROD001',
+  useSearchParams: () => nextNav.searchParams,
+  useRouter: () => nextNav.router,
+  usePathname: () => nextNav.pathname,
 }));
 
-// Mock the i18n navigation module which is what the components actually import
 vi.mock('@/i18n/navigation', () => ({
-  useRouter: () => ({
-    push: vi.fn(),
-    replace: vi.fn(),
-    prefetch: vi.fn(),
-    back: vi.fn(),
-    forward: vi.fn(),
-    refresh: vi.fn(),
-  }),
-  usePathname: () => '/en/product/PROD001',
-  Link: ({ children, ...props }: any) => <a {...props}>{children}</a>,
-  redirect: vi.fn(),
-  getPathname: vi.fn(() => '/en/product/PROD001'),
+  useRouter: () => i18nNav.router,
+  usePathname: () => i18nNav.pathname,
+  Link: i18nNav.Link,
+  redirect: i18nNav.redirect,
+  getPathname: i18nNav.getPathname,
 }));
 
 // Import test utilities and component
@@ -52,7 +80,7 @@ describe('ProductInfo', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-    mockSearchParams.delete('category');
+    nextNav.searchParams.delete('category');
   });
 
   afterEach(() => {
@@ -90,6 +118,7 @@ describe('ProductInfo', () => {
       expect(screen.queryByText('Loading product...')).not.toBeInTheDocument();
     });
 
+    // DON'T DELETE: Debug output to verify rendered DOM!! I want to see it!
     console.log(screen.debug());
 
     // Verify the component renders with product data
@@ -110,11 +139,7 @@ describe('ProductInfo', () => {
     // Verify that no loading skeleton is shown
     expect(document.querySelector('.skeleton')).not.toBeInTheDocument();
 
-    // Verify the main product sections are rendered
-    const productImagesSection = document.querySelector('[data-testid="product-images"]');
-    const productContentSection = document.querySelector('[data-testid="product-content"]');
-
-    // Even if data-testid isn't set, we can verify key content exists
+    // Verify key content exists
     expect(document.body.textContent).toContain('Test Product');
     expect(document.body.textContent).toContain('Product description'); // From mockProduct
   });

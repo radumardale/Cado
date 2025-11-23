@@ -32,6 +32,105 @@ export function createMockRouter() {
 }
 
 /**
+ * Navigation Mock Pattern Guide for vi.hoisted()
+ *
+ * ⚠️ IMPORTANT: Navigation mocks MUST be defined inline in your test files.
+ * Due to Vitest's hoisting mechanism, you CANNOT import helper functions.
+ * You MUST copy this pattern inline in each test file that needs navigation mocking.
+ *
+ * ## Why inline is required:
+ * Vitest's `vi.hoisted()` executes BEFORE all imports are evaluated.
+ * Imported functions are not yet available when vi.hoisted() runs.
+ * See: https://vitest.dev/api/vi.html#vi-hoisted
+ *
+ * ## Pattern to copy:
+ *
+ * @example
+ * // ✅ RECOMMENDED: Separate hoisted blocks by concern (better organization)
+ * import { vi } from 'vitest';
+ * import { Suspense, type ReactNode } from 'react';
+ *
+ * // Next.js core navigation (useSearchParams, useRouter, usePathname)
+ * const nextNav = vi.hoisted(() => {
+ *   const pathname = '/en/product/PROD001'; // ← Customize this
+ *   const searchParams = new URLSearchParams();
+ *
+ *   return {
+ *     pathname,
+ *     searchParams,
+ *     router: {
+ *       push: vi.fn(),
+ *       replace: vi.fn(),
+ *     },
+ *   };
+ * });
+ *
+ * // Internationalized navigation (next-intl wrapper)
+ * const i18nNav = vi.hoisted(() => {
+ *   const pathname = '/en/product/PROD001';
+ *
+ *   return {
+ *     pathname,
+ *     router: {
+ *       push: vi.fn(),
+ *       replace: vi.fn(),
+ *       prefetch: vi.fn(),
+ *       back: vi.fn(),
+ *       forward: vi.fn(),
+ *       refresh: vi.fn(),
+ *     },
+ *     Link: ({ children, ...props }: { children: ReactNode; [key: string]: unknown }) => (
+ *       <a {...props}>{children}</a>
+ *     ),
+ *     redirect: vi.fn(),
+ *     getPathname: vi.fn(() => pathname),
+ *   };
+ * });
+ *
+ * // Setup mocks BEFORE other imports
+ * vi.mock('next/navigation', () => ({
+ *   useSearchParams: () => nextNav.searchParams,
+ *   useRouter: () => nextNav.router,
+ *   usePathname: () => nextNav.pathname,
+ * }));
+ *
+ * vi.mock('@/i18n/navigation', () => ({
+ *   useRouter: () => i18nNav.router,
+ *   usePathname: () => i18nNav.pathname,
+ *   Link: i18nNav.Link,
+ *   redirect: i18nNav.redirect,
+ *   getPathname: i18nNav.getPathname,
+ * }));
+ *
+ * // NOW import components
+ * import { screen } from '@testing-library/react';
+ * import ProductInfo from '@/components/product/ProductInfo';
+ *
+ * describe('ProductInfo', () => {
+ *   beforeEach(() => {
+ *     vi.clearAllMocks();
+ *     nextNav.searchParams.delete('category');
+ *   });
+ *   // ... tests
+ * });
+ *
+ * @example
+ * // Different pathname examples:
+ * const pathname = '/en/product/PROD001';  // Product page
+ * const pathname = '/en/checkout';         // Checkout page
+ * const pathname = '/en';                  // Home page
+ *
+ * // With search params:
+ * const searchParams = new URLSearchParams('category=FOR_HER&page=2');
+ *
+ * ## Quick Start:
+ * Use the VS Code snippet for fastest setup:
+ * - Type: vitest-nav-mocks
+ * - Press: Tab
+ * - Customize the pathname as needed
+ */
+
+/**
  * Mock next-intl useTranslations hook
  * Note: This is a basic mock that returns the full key path.
  * For actual translations, use renderWithProviders which includes NextIntlClientProvider.
