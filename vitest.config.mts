@@ -15,6 +15,12 @@ export default defineConfig({
     testTimeout: 30000,
     setupFiles: ['./src/__tests__/setup.ts'],
     css: false, // Disable CSS processing in tests
+    exclude: [
+      '**/node_modules/**',
+      '**/dist/**',
+      '**/.{idea,git,cache,output,temp}/**',
+      '.claude/**',
+    ],
     coverage: {
       provider: 'v8',
       reporter: ['text', 'json', 'html', 'lcov'],
@@ -27,6 +33,7 @@ export default defineConfig({
         '.next/',
         'dist/',
         '.claude/',
+        'scripts/',
         '**/*.d.ts',
       ],
       thresholds: {
