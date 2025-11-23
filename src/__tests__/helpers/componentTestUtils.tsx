@@ -60,21 +60,21 @@ export function mockNextImage() {
  * Mock Motion components to render as static divs for testing
  */
 export function mockMotion() {
-  vi.mock('motion/react', () => ({
-    motion: {
-      div: ({ children, ...props }: { children: ReactNode; [key: string]: unknown }) => (
-        <div {...props}>{children}</div>
-      ),
-      button: ({ children, ...props }: { children: ReactNode; [key: string]: unknown }) => (
-        <button {...props}>{children}</button>
-      ),
-      span: ({ children, ...props }: { children: ReactNode; [key: string]: unknown }) => (
-        <span {...props}>{children}</span>
-      ),
-    },
-    AnimatePresence: ({ children }: { children: ReactNode }) => <>{children}</>,
-    cubicBezier: () => [0.65, 0, 0.35, 1], // Mock easing function
-  }));
+  // vi.mock('motion/react', () => ({
+  //   motion: {
+  //     div: ({ children, ...props }: { children: ReactNode; [key: string]: unknown }) => (
+  //       <div {...props}>{children}</div>
+  //     ),
+  //     button: ({ children, ...props }: { children: ReactNode; [key: string]: unknown }) => (
+  //       <button {...props}>{children}</button>
+  //     ),
+  //     span: ({ children, ...props }: { children: ReactNode; [key: string]: unknown }) => (
+  //       <span {...props}>{children}</span>
+  //     ),
+  //   },
+  //   AnimatePresence: ({ children }: { children: ReactNode }) => <>{children}</>,
+  //   cubicBezier: () => [0.65, 0, 0.35, 1], // Mock easing function
+  // }));
 }
 
 /**
@@ -330,6 +330,19 @@ export function createMockProduct(overrides: Partial<ProductInterface> = {}): Pr
       ru: 'Описание продукта',
       en: 'Product description',
     },
+    long_description: {
+      ro: 'Descriere lungă a produsului',
+      ru: 'Длинное описание продукта',
+      en: 'Long product description',
+    },
+    product_content: [
+      {
+        ro: '<p>Conținut produs</p>',
+        ru: '<p>Содержимое продукта</p>',
+        en: '<p>Product content</p>',
+      },
+    ],
+    ocasions: [],
     price: 100,
     stock_availability: {
       state: StockState.IN_STOCK,
