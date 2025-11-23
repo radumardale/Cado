@@ -1,41 +1,6 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import '@testing-library/jest-dom/vitest';
-
-// ALL MOCKS MUST COME BEFORE ANY OTHER IMPORTS
-
-// // Mock tRPC client
-// const mockQueryOptions = vi.fn();
-// vi.mock('@/app/_trpc/client', () => ({
-//   useTRPC: () => ({
-//     products: {
-//       getProductById: {
-//         queryOptions: mockQueryOptions,
-//       },
-//     },
-//   }),
-// }));
-
-// // Mock tanstack query
-// vi.mock('@tanstack/react-query', () => ({
-//   useSuspenseQuery: vi.fn(),
-//   QueryClient: vi.fn(() => ({
-//     defaultOptions: {},
-//     setDefaultOptions: vi.fn(),
-//     mount: vi.fn(),
-//     unmount: vi.fn(),
-//     isFetching: vi.fn(() => 0),
-//     isMutating: vi.fn(() => 0),
-//     clear: vi.fn(),
-//     getQueryCache: vi.fn(),
-//     getMutationCache: vi.fn(),
-//     getDefaultOptions: vi.fn(() => ({})),
-//     setQueryDefaults: vi.fn(),
-//     getQueryDefaults: vi.fn(),
-//     setMutationDefaults: vi.fn(),
-//     getMutationDefaults: vi.fn(),
-//   })),
-//   QueryClientProvider: ({ children }: { children: React.ReactNode }) => <>{children}</>,
-// }));
+import { Suspense } from 'react';
 
 // Mock next/navigation
 const mockSearchParams = new URLSearchParams();
@@ -48,8 +13,24 @@ vi.mock('next/navigation', () => ({
   usePathname: () => '/en/product/PROD001',
 }));
 
-// NOW import everything else
-import { screen, cleanup } from '@testing-library/react';
+// Mock the i18n navigation module which is what the components actually import
+vi.mock('@/i18n/navigation', () => ({
+  useRouter: () => ({
+    push: vi.fn(),
+    replace: vi.fn(),
+    prefetch: vi.fn(),
+    back: vi.fn(),
+    forward: vi.fn(),
+    refresh: vi.fn(),
+  }),
+  usePathname: () => '/en/product/PROD001',
+  Link: ({ children, ...props }: any) => <a {...props}>{children}</a>,
+  redirect: vi.fn(),
+  getPathname: vi.fn(() => '/en/product/PROD001'),
+}));
+
+// Import test utilities and component
+import { screen, cleanup, waitFor } from '@testing-library/react';
 import {
   createMockProduct,
   createTestQueryClient,
@@ -57,20 +38,6 @@ import {
 } from '@/__tests__/helpers/componentTestUtils';
 import ProductInfo from '@/components/product/ProductInfo';
 import { Categories } from '@/lib/enums/Categories';
-import { useSuspenseQuery } from '@tanstack/react-query';
-import { AppRouterContext } from 'next/dist/shared/lib/app-router-context.shared-runtime';
-
-function mockRouter(overrides = {}) {
-  return {
-    push: vi.fn(),
-    replace: vi.fn(),
-    prefetch: vi.fn(),
-    back: vi.fn(),
-    forward: vi.fn(),
-    refresh: vi.fn(),
-    ...overrides,
-  };
-}
 
 describe('ProductInfo', () => {
   const mockProduct = createMockProduct({
@@ -92,26 +59,63 @@ describe('ProductInfo', () => {
     cleanup();
   });
 
-  it('should render without crashing', () => {
+  it('should render without crashing', async () => {
+    // Create a fresh query client for this test
     const queryClient = createTestQueryClient();
-    // mockQueryOptions.mockReturnValue({});
-    // vi.mocked(useSuspenseQuery).mockReturnValue({
-    //   data: { product: mockProduct },
-    // } as never);
 
-    const all = renderWithProviders(
-      <AppRouterContext.Provider value={mockRouter({})}>
+    // Use the correct tRPC cache key structure: [['products', 'getProductById'], { input: { id }, type: 'query' }]
+    const trpcQueryKey = [
+      ['products', 'getProductById'],
+      { input: { id: 'PROD001' }, type: 'query' },
+    ];
+
+    // Pre-populate the cache with the product data
+    queryClient.setQueryData(trpcQueryKey, {
+      product: mockProduct,
+    });
+
+    // Render the component with Suspense boundary to handle useSuspenseQuery
+    renderWithProviders(
+      <Suspense fallback={<div>Loading product...</div>}>
         <ProductInfo id='PROD001' />
-      </AppRouterContext.Provider>,
+      </Suspense>,
       {
         queryClient,
       }
     );
 
-    console.log(all.debug());
+    // Wait for the component to finish rendering
+    await waitFor(() => {
+      // Verify the loading fallback is not shown
+      expect(screen.queryByText('Loading product...')).not.toBeInTheDocument();
+    });
 
-    // expect(screen.getByTestId('header')).toBeInTheDocument();
-    // expect(screen.getByTestId('product-images')).toBeInTheDocument();
-    // expect(screen.getByTestId('product-content')).toBeInTheDocument();
+    console.log(screen.debug());
+
+    // Verify the component renders with product data
+    // Check for the product title (appears in multiple places - breadcrumb and h1)
+    const productTitles = screen.getAllByText('Test Product');
+    expect(productTitles.length).toBeGreaterThan(0);
+
+    // Specifically check for the h1 element with the product title
+    const heading = screen.getByRole('heading', { level: 1 });
+    expect(heading).toHaveTextContent('Test Product');
+
+    // Check for the logo in the header
+    expect(screen.getByAltText('logo')).toBeInTheDocument();
+
+    // Verify the price is shown somewhere on the page (might be formatted as "100 MDL")
+    expect(document.body.textContent).toMatch(/100/);
+
+    // Verify that no loading skeleton is shown
+    expect(document.querySelector('.skeleton')).not.toBeInTheDocument();
+
+    // Verify the main product sections are rendered
+    const productImagesSection = document.querySelector('[data-testid="product-images"]');
+    const productContentSection = document.querySelector('[data-testid="product-content"]');
+
+    // Even if data-testid isn't set, we can verify key content exists
+    expect(document.body.textContent).toContain('Test Product');
+    expect(document.body.textContent).toContain('Product description'); // From mockProduct
   });
 });

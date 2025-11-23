@@ -6,6 +6,9 @@ import { NextIntlClientProvider } from 'next-intl';
 import { CartInterface } from '@/lib/types/CartInterface';
 import { ProductInterface } from '@/models/product/types/productInterface';
 import { StockState } from '@/lib/enums/StockState';
+import { TRPCProvider } from '@/app/_trpc/client';
+import { createTRPCClient, httpBatchLink } from '@trpc/client';
+import type { AppRouter } from '@/server';
 
 /**
  * Component testing utilities for React components
@@ -217,6 +220,19 @@ export function createTestQueryClient() {
 }
 
 /**
+ * Create a test tRPC client that doesn't make real network requests
+ */
+export function createTestTRPCClient() {
+  return createTRPCClient<AppRouter>({
+    links: [
+      httpBatchLink({
+        url: 'http://localhost:3000/api/trpc', // Doesn't matter - we won't make actual requests
+      }),
+    ],
+  });
+}
+
+/**
  * Wrapper component that provides all necessary context providers
  */
 interface AllProvidersProps {
@@ -224,6 +240,8 @@ interface AllProvidersProps {
   locale?: LocaleCode;
   messages?: Record<string, string> | Record<string, Record<string, string>>;
   queryClient?: QueryClient;
+  trpcClient?: ReturnType<typeof createTestTRPCClient>;
+  includeTRPC?: boolean;
 }
 
 export function AllProviders({
@@ -231,18 +249,34 @@ export function AllProviders({
   locale = 'en',
   messages,
   queryClient,
+  trpcClient,
+  includeTRPC = true,
 }: AllProvidersProps) {
   const testMessages = (messages || createTestMessages(locale)) as Record<
     string,
     string | Record<string, string>
   >;
   const testQueryClient = queryClient || createTestQueryClient();
+  const testTRPCClient = trpcClient || createTestTRPCClient();
+
+  // If includeTRPC is false, just render without TRPCProvider for backward compatibility
+  if (!includeTRPC) {
+    return (
+      <QueryClientProvider client={testQueryClient}>
+        <NextIntlClientProvider locale={locale} messages={testMessages}>
+          {children}
+        </NextIntlClientProvider>
+      </QueryClientProvider>
+    );
+  }
 
   return (
     <QueryClientProvider client={testQueryClient}>
-      <NextIntlClientProvider locale={locale} messages={testMessages}>
-        {children}
-      </NextIntlClientProvider>
+      <TRPCProvider trpcClient={testTRPCClient} queryClient={testQueryClient}>
+        <NextIntlClientProvider locale={locale} messages={testMessages}>
+          {children}
+        </NextIntlClientProvider>
+      </TRPCProvider>
     </QueryClientProvider>
   );
 }
@@ -254,15 +288,30 @@ interface CustomRenderOptions extends Omit<RenderOptions, 'wrapper'> {
   locale?: LocaleCode;
   messages?: Record<string, string> | Record<string, Record<string, string>>;
   queryClient?: QueryClient;
+  trpcClient?: ReturnType<typeof createTestTRPCClient>;
+  includeTRPC?: boolean;
 }
 
 export function renderWithProviders(
   ui: ReactElement,
-  { locale = 'en', messages, queryClient, ...renderOptions }: CustomRenderOptions = {}
+  {
+    locale = 'en',
+    messages,
+    queryClient,
+    trpcClient,
+    includeTRPC = true,
+    ...renderOptions
+  }: CustomRenderOptions = {}
 ) {
   function Wrapper({ children }: { children: ReactNode }) {
     return (
-      <AllProviders locale={locale} messages={messages} queryClient={queryClient}>
+      <AllProviders
+        locale={locale}
+        messages={messages}
+        queryClient={queryClient}
+        trpcClient={trpcClient}
+        includeTRPC={includeTRPC}
+      >
         {children}
       </AllProviders>
     );
