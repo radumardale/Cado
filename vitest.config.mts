@@ -26,6 +26,8 @@ export default defineConfig({
         '**/enums/**',
         '.next/',
         'dist/',
+        '.claude/',
+        '**/*.d.ts',
       ],
       thresholds: {
         lines: 70,
