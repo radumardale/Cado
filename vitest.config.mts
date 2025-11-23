@@ -34,6 +34,7 @@ export default defineConfig({
         'dist/',
         '.claude/',
         'scripts/',
+        'src/components/tiptap/',
         '**/*.d.ts',
       ],
       thresholds: {
