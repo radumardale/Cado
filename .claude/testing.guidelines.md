@@ -54,6 +54,7 @@
 - `createTestMessages(locale)` - i18n messages for all locales
 - `createTestQueryClient()` - Fresh QueryClient for each test
 - `createTestTRPCClient()` - tRPC client (for advanced cases)
+- `setTRPCQueryData(queryClient, config)` - Pre-populate tRPC cache (optional helper)
 
 **Rendering Functions:**
 - `renderWithProviders(ui, options)` - Main render function with all providers (QueryClient, TRPCProvider, NextIntlClientProvider)
@@ -421,6 +422,31 @@ const trpcQueryKey = [
 
 queryClient.setQueryData(trpcQueryKey, { product: mockProduct });
 ```
+
+**Alternative: Using the `setTRPCQueryData` helper**
+
+A helper function is available for convenience, though the manual approach above is recommended for most cases:
+
+```typescript
+import { setTRPCQueryData } from '@/__tests__/helpers/componentTestUtils';
+
+setTRPCQueryData(queryClient, {
+  router: 'products',
+  procedure: 'getProductById',
+  input: { id: mockProduct.custom_id },
+  data: { product: mockProduct },
+});
+```
+
+**When to use the helper:**
+- When you have multiple tRPC cache setups in a single test
+- When you prefer named parameters for clarity
+- As you build up more tests using this pattern (3+ files)
+
+**When to use the manual approach:**
+- For simple, one-off cache setups (recommended)
+- When you want explicit control over the query key structure
+- To keep tests more explicit and self-documenting
 
 ### Common Procedures
 

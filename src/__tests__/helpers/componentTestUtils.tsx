@@ -332,6 +332,67 @@ export function createTestTRPCClient() {
 }
 
 /**
+ * Pre-populate tRPC query cache for testing
+ *
+ * Helper function to set up tRPC query data in the QueryClient cache.
+ * This is useful for testing components that use `useSuspenseQuery` or `useQuery`
+ * from tRPC without making actual network requests.
+ *
+ * **Note:** This helper is available for convenience but not required.
+ * You can also manually construct the query key and call `queryClient.setQueryData()` directly.
+ *
+ * @template T - The type of data being cached
+ * @param queryClient - The QueryClient instance (from createTestQueryClient())
+ * @param config - Configuration object
+ * @param config.router - tRPC router name (e.g., 'products', 'order', 'cart')
+ * @param config.procedure - tRPC procedure name (e.g., 'getProductById', 'getProducts')
+ * @param config.input - Input parameters for the procedure (optional)
+ * @param config.data - The mock data to cache
+ *
+ * @example
+ * ```typescript
+ * // Single product by ID
+ * setTRPCQueryData(queryClient, {
+ *   router: 'products',
+ *   procedure: 'getProductById',
+ *   input: { id: mockProduct.custom_id },
+ *   data: { product: mockProduct },
+ * });
+ *
+ * // Product list (no input needed)
+ * setTRPCQueryData(queryClient, {
+ *   router: 'products',
+ *   procedure: 'getProducts',
+ *   input: {},
+ *   data: { products: [mockProduct1, mockProduct2] },
+ * });
+ *
+ * // Cart (undefined input)
+ * setTRPCQueryData(queryClient, {
+ *   router: 'cart',
+ *   procedure: 'getCart',
+ *   data: { cart: mockCartItems },
+ * });
+ * ```
+ */
+export function setTRPCQueryData<T>(
+  queryClient: QueryClient,
+  config: {
+    router: string;
+    procedure: string;
+    input?: Record<string, unknown> | undefined;
+    data: T;
+  }
+): void {
+  const trpcQueryKey = [
+    [config.router, config.procedure],
+    { input: config.input, type: 'query' as const },
+  ];
+
+  queryClient.setQueryData(trpcQueryKey, config.data);
+}
+
+/**
  * Wrapper component that provides all necessary context providers
  */
 interface AllProvidersProps {
