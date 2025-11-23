@@ -40,6 +40,11 @@ import {
   createTestQueryClient,
 } from '@/__tests__/helpers/componentTestUtils';
 
+// Import real translation files for meaningful multilingual testing
+import enMessages from '../../../../messages/en.json';
+import roMessages from '../../../../messages/ro.json';
+import ruMessages from '../../../../messages/ru.json';
+
 // Testing with real child components for integration testing
 // Following testing-expert principle: "Integration over Isolation"
 // No child component mocks - testing how components actually work together
@@ -221,48 +226,53 @@ describe('MobileMenu', () => {
     });
   });
 
-  describe('Logo Link', () => {
-    it('should have logo link to home', () => {
-      renderWithProviders(<MobileMenu setSidebarOpen={setSidebarOpenMock} />, { queryClient });
-
-      const logoLink = screen.getByAltText('logo').closest('a');
-      // Mocked Link renders href as-is without locale prefix
-      expect(logoLink).toHaveAttribute('href', '/');
-    });
-  });
-
   describe('Multilingual Support', () => {
-    it('should render in Romanian locale', () => {
-      renderWithProviders(<MobileMenu setSidebarOpen={setSidebarOpenMock} />, {
-        locale: 'ro',
-        queryClient,
-      });
-
-      const logoLink = screen.getByAltText('logo').closest('a');
-      // Mocked Link renders href without locale processing
-      expect(logoLink).toHaveAttribute('href', '/');
-    });
-
-    it('should render in Russian locale', () => {
-      renderWithProviders(<MobileMenu setSidebarOpen={setSidebarOpenMock} />, {
-        locale: 'ru',
-        queryClient,
-      });
-
-      const logoLink = screen.getByAltText('logo').closest('a');
-      // Mocked Link renders href without locale processing
-      expect(logoLink).toHaveAttribute('href', '/');
-    });
-
-    it('should render in English locale', () => {
+    it('should display English translations', () => {
       renderWithProviders(<MobileMenu setSidebarOpen={setSidebarOpenMock} />, {
         locale: 'en',
         queryClient,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        messages: enMessages as any,
       });
 
-      const logoLink = screen.getByAltText('logo').closest('a');
-      // Mocked Link renders href without locale processing
-      expect(logoLink).toHaveAttribute('href', '/');
+      // Test actual English text that users will see
+      expect(screen.getByText(enMessages.NavBar.home)).toBeInTheDocument();
+      expect(screen.getByText(enMessages.NavBar.catalog)).toBeInTheDocument();
+      expect(screen.getByText(enMessages.NavBar.about)).toBeInTheDocument();
+      expect(screen.getByText(enMessages.Tags.FOR_HER.title)).toBeInTheDocument();
+      expect(screen.getByText(enMessages.Tags.ALL_PRODUCTS.title)).toBeInTheDocument();
+    });
+
+    it('should display Romanian translations', () => {
+      renderWithProviders(<MobileMenu setSidebarOpen={setSidebarOpenMock} />, {
+        locale: 'ro',
+        queryClient,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        messages: roMessages as any,
+      });
+
+      // Test actual Romanian text that users will see
+      expect(screen.getByText(roMessages.NavBar.home)).toBeInTheDocument(); // "Acasă"
+      expect(screen.getByText(roMessages.NavBar.catalog)).toBeInTheDocument(); // "Catalog"
+      expect(screen.getByText(roMessages.NavBar.about)).toBeInTheDocument(); // "Despre Noi"
+      expect(screen.getByText(roMessages.Tags.FOR_HER.title)).toBeInTheDocument(); // "Pentru Ea"
+      expect(screen.getByText(roMessages.Tags.ALL_PRODUCTS.title)).toBeInTheDocument(); // "Toate produsele"
+    });
+
+    it('should display Russian translations', () => {
+      renderWithProviders(<MobileMenu setSidebarOpen={setSidebarOpenMock} />, {
+        locale: 'ru',
+        queryClient,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        messages: ruMessages as any,
+      });
+
+      // Test actual Russian text that users will see
+      expect(screen.getByText(ruMessages.NavBar.home)).toBeInTheDocument(); // "Главная"
+      expect(screen.getByText(ruMessages.NavBar.catalog)).toBeInTheDocument(); // "Каталог"
+      expect(screen.getByText(ruMessages.NavBar.about)).toBeInTheDocument(); // "О нас"
+      expect(screen.getByText(ruMessages.Tags.FOR_HER.title)).toBeInTheDocument(); // "Для неё"
+      expect(screen.getByText(ruMessages.Tags.ALL_PRODUCTS.title)).toBeInTheDocument(); // "Все товары"
     });
   });
 });

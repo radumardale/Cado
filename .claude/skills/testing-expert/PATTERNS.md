@@ -11,9 +11,10 @@
 2. [Navigation Mocking](#navigation-mocking)
 3. [tRPC Data Mocking](#trpc-data-mocking)
 4. [Suspense Testing](#suspense-testing)
-5. [Debugging Techniques](#debugging-techniques)
-6. [Anti-Patterns](#anti-patterns-we-discovered)
-7. [Additional Resources](#additional-resources)
+5. [Multilingual Testing](#multilingual-testing-patterns)
+6. [Debugging Techniques](#debugging-techniques)
+7. [Anti-Patterns](#anti-patterns-we-discovered)
+8. [Additional Resources](#additional-resources)
 
 ---
 
@@ -306,37 +307,46 @@ tRPC uses a specific nested array structure for cache keys:
 ```typescript
 const trpcQueryKey = [
   ['routerName', 'procedureName'],
-  { input: { /* params */ }, type: 'query' }
+  {
+    input: {
+      /* params */
+    },
+    type: 'query',
+  },
 ];
 ```
 
 ### Common Procedures
 
 **Products:**
+
 ```typescript
 // Get single product
-[['products', 'getProductById'], { input: { id: 'PROD001' }, type: 'query' }]
-
-// Get all products
-[['products', 'getProducts'], { input: {}, type: 'query' }]
-
-// Get products by category
-[['products', 'getProductsByCategory'], { input: { category: 'FOR_HER' }, type: 'query' }]
+[['products', 'getProductById'], { input: { id: 'PROD001' }, type: 'query' }][
+  // Get all products
+  (['products', 'getProducts'], { input: {}, type: 'query' })
+][
+  // Get products by category
+  (['products', 'getProductsByCategory'], { input: { category: 'FOR_HER' }, type: 'query' })
+];
 ```
 
 **Cart:**
+
 ```typescript
-[['cart', 'getCart'], { input: undefined, type: 'query' }]
+[['cart', 'getCart'], { input: undefined, type: 'query' }];
 ```
 
 **Orders:**
+
 ```typescript
-[['order', 'getOrders'], { input: undefined, type: 'query' }]
+[['order', 'getOrders'], { input: undefined, type: 'query' }];
 ```
 
 ### Example Usage
 
 **Manual approach (recommended):**
+
 ```typescript
 const queryClient = createTestQueryClient();
 const mockProduct = createMockProduct({ custom_id: 'PROD001' });
@@ -348,6 +358,7 @@ queryClient.setQueryData(
 ```
 
 **Alternative: Using the helper:**
+
 ```typescript
 import { setTRPCQueryData } from '@/__tests__/helpers/componentTestUtils';
 
@@ -360,11 +371,13 @@ setTRPCQueryData(queryClient, {
 ```
 
 **When to use the helper:**
+
 - Multiple tRPC cache setups in a single test
 - Prefer named parameters for clarity
 - Building up patterns (3+ files using this)
 
 **When to use manual approach:**
+
 - Simple, one-off cache setups (recommended)
 - Want explicit control over query key structure
 - Keep tests more explicit and self-documenting
@@ -415,12 +428,14 @@ it('should render product information', async () => {
 ```
 
 **Why use this approach:**
+
 - ✅ **"Just works"** - Simplest API, least boilerplate
 - ✅ Automatic waiting - no manual `waitFor` or `findBy`
 - ✅ Component is ready immediately after `await`
 - ✅ Covers 99% of test scenarios
 
 **When NOT to use:**
+
 - ❌ Need to test loading states (use Alternative 2)
 - ❌ Want explicit `findBy` error messages (use Alternative 1)
 
@@ -443,6 +458,7 @@ expect(heading).toHaveTextContent('Test Product');
 ```
 
 **Trade-offs:**
+
 - ✅ Better error messages than `renderSuspenseResolved()`
 - ⚠️ Slightly more verbose
 
@@ -466,6 +482,7 @@ expect(heading).toHaveTextContent('Test Product');
 ```
 
 **Trade-offs:**
+
 - ✅ Can test loading states
 - ❌ More complex setup
 
@@ -473,11 +490,307 @@ expect(heading).toHaveTextContent('Test Product');
 
 ### Quick Reference
 
-| Scenario | Use This |
-|----------|----------|
-| **Default (99% of tests)** | ⭐ `renderSuspenseResolved()` |
-| Need better error messages | `renderWithSuspense()` + `findBy` |
-| Need to test loading states (rare) | `renderWithSuspense()` + manual |
+| Scenario                           | Use This                          |
+| ---------------------------------- | --------------------------------- |
+| **Default (99% of tests)**         | ⭐ `renderSuspenseResolved()`     |
+| Need better error messages         | `renderWithSuspense()` + `findBy` |
+| Need to test loading states (rare) | `renderWithSuspense()` + manual   |
+
+---
+
+## Multilingual Testing Patterns
+
+### Overview
+
+Testing multilingual components requires a careful balance between thorough coverage and meaningful assertions. This section provides patterns for testing i18n functionality without falling into the "technical debt disguised as coverage" trap.
+
+**Core Principle:** Test what users see (translations), not routing infrastructure (URL prefixes).
+
+---
+
+### Pattern: Real Translation Testing
+
+**Use case:** Testing components that display translated text in multiple locales
+
+**Implementation:**
+
+```typescript
+import { describe, it, expect, beforeEach } from 'vitest';
+import { screen } from '@testing-library/react';
+import {
+  renderWithProviders,
+  createTestQueryClient,
+} from '@/__tests__/helpers/componentTestUtils';
+
+// Import actual translation files
+import enMessages from '../../../messages/en.json';
+import roMessages from '../../../messages/ro.json';
+import ruMessages from '../../../messages/ru.json';
+
+import MobileMenu from '@/components/header/MobileMenu';
+
+describe('MobileMenu - Multilingual Support', () => {
+  let queryClient: ReturnType<typeof createTestQueryClient>;
+
+  beforeEach(() => {
+    queryClient = createTestQueryClient();
+  });
+
+  it('should display English translations', () => {
+    renderWithProviders(<MobileMenu setSidebarOpen={vi.fn()} />, {
+      locale: 'en',
+      queryClient,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      messages: enMessages as any, // Type cast for complex nested structures
+    });
+
+    // Test actual English text that users will see
+    expect(screen.getByText(enMessages.NavBar.home)).toBeInTheDocument(); // "Home"
+    expect(screen.getByText(enMessages.NavBar.catalog)).toBeInTheDocument(); // "Catalog"
+    expect(screen.getByText(enMessages.Tags.FOR_HER.title)).toBeInTheDocument(); // "For Her"
+    expect(screen.getByText(enMessages.Tags.ALL_PRODUCTS.title)).toBeInTheDocument(); // "All Products"
+  });
+
+  it('should display Romanian translations', () => {
+    renderWithProviders(<MobileMenu setSidebarOpen={vi.fn()} />, {
+      locale: 'ro',
+      queryClient,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      messages: roMessages as any,
+    });
+
+    // Test actual Romanian text that users will see
+    expect(screen.getByText(roMessages.NavBar.home)).toBeInTheDocument(); // "Acasă"
+    expect(screen.getByText(roMessages.NavBar.catalog)).toBeInTheDocument(); // "Catalog"
+    expect(screen.getByText(roMessages.Tags.FOR_HER.title)).toBeInTheDocument(); // "Pentru Ea"
+    expect(screen.getByText(roMessages.Tags.ALL_PRODUCTS.title)).toBeInTheDocument(); // "Toate produsele"
+  });
+
+  it('should display Russian translations', () => {
+    renderWithProviders(<MobileMenu setSidebarOpen={vi.fn()} />, {
+      locale: 'ru',
+      queryClient,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      messages: ruMessages as any,
+    });
+
+    // Test actual Russian text that users will see
+    expect(screen.getByText(ruMessages.NavBar.home)).toBeInTheDocument(); // "Главная"
+    expect(screen.getByText(ruMessages.NavBar.catalog)).toBeInTheDocument(); // "Каталог"
+    expect(screen.getByText(ruMessages.Tags.FOR_HER.title)).toBeInTheDocument(); // "Для неё"
+    expect(screen.getByText(ruMessages.Tags.ALL_PRODUCTS.title)).toBeInTheDocument(); // "Все товары"
+  });
+});
+```
+
+**What this tests:**
+
+- ✅ Component renders without errors in each locale
+- ✅ Actual translated text appears correctly
+- ✅ Translation keys resolve (won't crash on missing keys)
+- ✅ Real user-facing behavior
+
+**What this catches:**
+
+- Missing translation keys
+- Typos in translation key paths
+- Translation file structure changes
+- Component crashes with specific locales
+
+---
+
+### Anti-Pattern: Fake Multilingual Coverage
+
+**The Problem:**
+
+```typescript
+// ❌ BAD - All three tests are identical and meaningless!
+describe('Multilingual Support', () => {
+  it('should render in English locale', () => {
+    renderWithProviders(<MobileMenu setSidebarOpen={vi.fn()} />, {
+      locale: 'en',
+      queryClient
+    });
+
+    const logoLink = screen.getByAltText('logo').closest('a');
+    expect(logoLink).toHaveAttribute('href', '/'); // Same assertion
+  });
+
+  it('should render in Romanian locale', () => {
+    renderWithProviders(<MobileMenu setSidebarOpen={vi.fn()} />, {
+      locale: 'ro',
+      queryClient
+    });
+
+    const logoLink = screen.getByAltText('logo').closest('a');
+    expect(logoLink).toHaveAttribute('href', '/'); // Identical! What's the point?
+  });
+
+  it('should render in Russian locale', () => {
+    renderWithProviders(<MobileMenu setSidebarOpen={vi.fn()} />, {
+      locale: 'ru',
+      queryClient
+    });
+
+    const logoLink = screen.getByAltText('logo').closest('a');
+    expect(logoLink).toHaveAttribute('href', '/'); // Meaningless duplication
+  });
+});
+```
+
+**Why this is "Technical Debt Disguised as Coverage":**
+
+1. **Identical Assertions** - All three tests assert `href='/'` regardless of locale
+2. **False Confidence** - Looks like 3 locale tests, but they're actually 1 test copy-pasted 3 times
+3. **Zero Value** - Doesn't catch any real i18n bugs (missing translations, wrong locale data, etc.)
+4. **Maintenance Burden** - 3x the code to maintain with 0x the benefit
+5. **Misleading Metrics** - Shows high test coverage but provides no actual safety
+
+**What should have been done instead:**
+
+- Delete 2 of the 3 tests (they're duplicates)
+- OR test actual translations like the pattern above
+- OR combine into a single smoke test if only checking "doesn't crash"
+
+---
+
+### Testing Boundaries: Component vs E2E
+
+Understanding what to test at each level prevents duplication and fake coverage.
+
+#### Component-Level Testing (Vitest + RTL)
+
+**✅ Test these concerns:**
+
+| Concern                        | Example                                            |
+| ------------------------------ | -------------------------------------------------- |
+| **Translation display**        | Romanian "Acasă" appears instead of English "Home" |
+| **Locale-specific formatting** | Dates: "23.01.2025" (ro) vs "1/23/2025" (en)       |
+| **Component rendering**        | No crashes when switching locales                  |
+| **Translation key resolution** | No "NavBar.home" literal text (missing key)        |
+
+**Code example:**
+
+```typescript
+it('should display locale-specific date formatting', () => {
+  const testDate = new Date('2025-01-23');
+
+  // Romanian locale
+  renderWithProviders(<EventCard date={testDate} />, {
+    locale: 'ro',
+    messages: roMessages
+  });
+  expect(screen.getByText('23.01.2025')).toBeInTheDocument();
+
+  cleanup();
+
+  // English locale
+  renderWithProviders(<EventCard date={testDate} />, {
+    locale: 'en',
+    messages: enMessages
+  });
+  expect(screen.getByText('1/23/2025')).toBeInTheDocument();
+});
+```
+
+#### E2E Testing (Playwright - Future)
+
+**✅ Test these concerns:**
+
+| Concern                        | Why E2E?                                               |
+| ------------------------------ | ------------------------------------------------------ |
+| **URL locale prefixes**        | `/en/catalog` vs `/ro/catalog` - requires real routing |
+| **Locale switching**           | Clicking language switcher changes entire site         |
+| **Locale persistence**         | Navigating pages maintains selected locale             |
+| **Browser language detection** | Auto-detect user's browser language                    |
+| **Full user flows**            | Register account → Browse → Checkout in Romanian       |
+
+**These require:**
+
+- Real Next.js routing
+- Real next-intl middleware
+- Full application context
+- Browser environment
+
+**Don't try to test these at component level** - you'll end up reimplementing next-intl logic in mocks, which is brittle and provides false confidence.
+
+---
+
+### Navigation Mock Strategy
+
+When testing components with i18n navigation, keep mocks simple.
+
+**✅ GOOD - Simple Mock:**
+
+```typescript
+const i18nNav = vi.hoisted(() => ({
+  pathname: '/en',
+  router: { push: vi.fn(), replace: vi.fn() },
+  Link: ({ children, ...props }: { children: ReactNode; [key: string]: unknown }) => (
+    <a {...props}>{children}</a>
+  ),
+}));
+
+vi.mock('@/i18n/navigation', () => ({
+  usePathname: () => i18nNav.pathname,
+  useRouter: () => i18nNav.router,
+  Link: i18nNav.Link,
+}));
+```
+
+**Why this works:**
+
+- Provides navigation functionality for components
+- Doesn't try to replicate next-intl's locale logic
+- Simple to understand and maintain
+- Lets you focus on testing translations, not routing
+
+**❌ BAD - Reimplementing next-intl:**
+
+```typescript
+// Don't do this!
+const Link = ({ href, locale, ...props }) => {
+  // Trying to replicate next-intl's complex logic
+  const processedHref = typeof href === 'string'
+    ? `/${locale}${href}`
+    : `/${locale}${href.pathname}${href.query ? '?' + new URLSearchParams(href.query) : ''}`;
+
+  return <a href={processedHref} {...props}>{children}</a>;
+};
+```
+
+**Why this is bad:**
+
+- You're testing your mock implementation, not real behavior
+- next-intl's actual logic is more complex (domain prefixes, middleware, etc.)
+- Brittle - breaks when next-intl updates
+- False confidence - tests pass but real app might be broken
+
+**Trust the library:** next-intl is already tested. We test **our** translations appear correctly with **their** routing.
+
+---
+
+### Quick Reference
+
+**DO at component level:**
+
+- ✅ Import real translation JSON files
+- ✅ Test actual translated text appears
+- ✅ Verify no crashes with different locales
+- ✅ Test locale-specific formatting if applicable
+
+**DON'T at component level:**
+
+- ❌ Test URL locale prefixes (`/en/`, `/ro/`)
+- ❌ Test locale switching flows (belongs in E2E)
+- ❌ Reimplement next-intl logic in mocks
+- ❌ Write identical tests for each locale (fake coverage)
+
+**Files demonstrating this pattern:**
+
+- `src/__tests__/components/navigation/MobileMenu.test.tsx` - Real translation testing
+- Before refactor: Had 4 meaningless tests
+- After refactor: 3 meaningful tests checking actual Romanian/Russian/English text
 
 ---
 
@@ -513,6 +826,7 @@ expect(document.body.textContent).toMatch(/100 MDL/);
 ### Verify Suspense Resolved
 
 **Option 1: Use helper (recommended)**
+
 ```typescript
 // Automatically waits for Suspense to resolve
 await renderSuspenseResolved(<ProductInfo id='PROD001' />, { queryClient });
@@ -522,6 +836,7 @@ expect(screen.getByRole('heading')).toHaveTextContent('Test Product');
 ```
 
 **Option 2: Manual waiting**
+
 ```typescript
 await waitFor(() => {
   expect(screen.queryByText('Loading...')).not.toBeInTheDocument();
@@ -546,6 +861,7 @@ expect(nextNav.searchParams.get('category')).toBe('FOR_HER');
 ### The Journey (What We Learned)
 
 **Before (develop branch):** 147 lines of over-mocking
+
 - Mocked Header, ProductImages, ProductContent, SimilarProducts, Skeleton
 - Mocked `useSuspenseQuery` directly
 - Manually mocked QueryClient
@@ -554,6 +870,7 @@ expect(nextNav.searchParams.get('category')).toBe('FOR_HER');
 - **Result:** Brittle, low-value tests that broke on refactoring
 
 **After (current branch):** 88 lines of integration testing
+
 - Real child components render
 - Pre-populated QueryClient cache with proper tRPC structure
 - Suspense boundaries for async rendering
@@ -605,23 +922,27 @@ renderSuspenseResolved(<ProductInfo id={mockProduct.custom_id} />, { queryClient
 ```
 
 **Why this was a problem:**
+
 - 📛 **Single source of truth violation** - Same data existed in two places (mock + assertion)
 - 📛 **False failures** - Tests failed when mock changed, even though component worked correctly
 - 📛 **Maintenance burden** - Had to update multiple locations when changing test data
 - 📛 **Cognitive load** - Developers had to remember to sync hardcoded values with mocks
 
 **The fix:**
+
 - Always reference mock object properties: `mockProduct.title.en` not `'Test Product'`
 - Use template literals for dynamic values: `` `${mockProduct.price} MDL` ``
 - Pass mock properties to components: `id={mockProduct.custom_id}` not `id='PROD001'`
 
 **Impact:**
+
 - ✅ Tests now adapt automatically when mock data changes
 - ✅ Clear relationship between test data and assertions
 - ✅ Fewer false failures
 - ✅ Better test maintainability
 
 **Files fixed:**
+
 - `src/__tests__/components/product/ProductInfo.test.tsx`
 - `src/__tests__/components/product/ProductContent.test.tsx`
 - `src/__tests__/components/product/ProductCard.test.tsx`
@@ -634,15 +955,18 @@ renderSuspenseResolved(<ProductInfo id={mockProduct.custom_id} />, { queryClient
 ## Additional Resources
 
 ### Documentation
+
 - **Navigation mocking research:** `/docs/testing/navigation-mocking-research.md` - Complete analysis of 6 approaches and why inline pattern is optimal
 - **Testing strategy proposal:** GitHub Issue #103 - Recommendation to shift from unit tests to E2E tests
 
 ### Code Resources
+
 - **VS Code snippets:** `.vscode/vitest-navigation-mocks.code-snippets` - Auto-insert patterns
 - **Test utilities:** `src/__tests__/helpers/componentTestUtils.tsx` - All available helpers
 - **Template:** `.claude/templates/component.test.tsx` - Copy-paste starting point
 
 ### Live Examples
+
 - **Integration test:** `src/__tests__/components/product/ProductInfo.test.tsx` - Navigation mocking + tRPC + Suspense
 - **UI component test:** `src/__tests__/components/ui/form/switch.test.tsx` - Minimal mocking
 - **Form test:** `src/__tests__/components/checkout/CheckoutForm.test.tsx` - Complex form testing
