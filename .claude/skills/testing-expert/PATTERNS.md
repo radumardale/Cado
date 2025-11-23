@@ -1,80 +1,21 @@
-# Component Testing Guidelines
+# Testing Patterns Library
 
-> 📝 **Living Document**
-> These guidelines evolve as we discover better patterns and practices.
->
-> **Claude's Role:**
-> - ⚠️ Alert when patterns in this document are outdated or incorrect
-> - 💡 Suggest updates when we discover new approaches during development
-> - 🔄 Help keep these guidelines aligned with actual working code
->
-> **Last Updated:** 2025-01-23 (Added Suspense testing helpers, mock reference anti-pattern)
+> Referenced from SKILL.md - Full implementation examples and detailed patterns
 
-## Quick Start
+## Table of Contents
 
-1. **Use VS Code snippets:**
-   - `vitest-imports` → Import statements
-   - `vitest-nav-mocks` → Navigation mocking setup
+1. [Common Patterns](#common-patterns)
+   - [Pattern 1: Component with tRPC Data](#pattern-1-component-with-trpc-data-most-common)
+   - [Pattern 2: UI Component](#pattern-2-ui-component-minimal-mocking)
+   - [Pattern 3: Isolated Child Mocking](#pattern-3-component-with-isolated-child-mocking)
+2. [Navigation Mocking](#navigation-mocking)
+3. [tRPC Data Mocking](#trpc-data-mocking)
+4. [Suspense Testing](#suspense-testing)
+5. [Debugging Techniques](#debugging-techniques)
+6. [Anti-Patterns](#anti-patterns-we-discovered)
+7. [Additional Resources](#additional-resources)
 
-2. **Essential patterns:**
-   - Use `renderSuspenseResolved()` for components with `useSuspenseQuery` ⭐ **RECOMMENDED**
-   - Use `createMockProduct()` and other factories for test data
-   - Pre-populate cache with `queryClient.setQueryData()` for tRPC data
-   - See "Suspense Testing" section for alternative approaches if needed
-
-3. **Start from template:**
-   - Use `.claude/templates/component.test.tsx` as your starting point
-
-## Testing Philosophy
-
-### The Golden Rules
-
-- ✅ **Integration over Isolation** - Test components with their real dependencies
-- ✅ **Mock at the Boundary** - Only mock external APIs, navigation, and external libraries
-- ✅ **User Behavior over Implementation** - Test what users see, not how code works internally
-- ✅ **Real Providers Always** - Use actual tRPC, QueryClient, NextIntl providers in tests
-
-### What We Learned (The Hard Way)
-
-- **50 lines of navigation mocks is unavoidable** - This is a Vitest architectural constraint
-- **Can't import helpers into `vi.hoisted()`** - Navigation mocks must be inline
-- **Over-mocking child components = brittle tests** - Mock only what you must
-- **Testing tRPC call parameters = testing implementation** - Test user-visible behavior instead
-
-## Available Utilities
-
-### From `@/__tests__/helpers/componentTestUtils`
-
-**Factory Functions:**
-- `createMockProduct(overrides)` - Product with sensible defaults
-- `createMockProductOnSale(salePrice)` - Product with active sale
-- `createMockProductOutOfStock()` - Out of stock product
-- `createMockProducts(count)` - Array of products
-- `createMockCartItem(productId, quantity)` - Cart item
-- `createTestMessages(locale)` - i18n messages for all locales
-- `createTestQueryClient()` - Fresh QueryClient for each test
-- `createTestTRPCClient()` - tRPC client (for advanced cases)
-- `setTRPCQueryData(queryClient, config)` - Pre-populate tRPC cache (optional helper)
-
-**Rendering Functions:**
-- `renderWithProviders(ui, options)` - Main render function with all providers (QueryClient, TRPCProvider, NextIntlClientProvider)
-- `renderWithSuspense(ui, options)` - ⭐ Wraps component in Suspense boundary + all providers
-- `renderSuspenseResolved(ui, options)` - ⭐ **Async** - Wraps in Suspense + waits for resolution (least boilerplate)
-- `renderFormField(ui, options)` - For testing form inputs with React Hook Form
-
-**Setup Functions:**
-- `setupPortalContainer()` - For Radix UI portals (Select, Calendar, Popover) - call in `beforeEach`
-- `mockIntersectionObserver()` - For lazy loading tests
-- `mockMatchMedia(matches)` - For responsive component tests
-- `mockNextImage()` - Mock Next.js Image to avoid layout warnings
-- `mockUseTranslations()` - Basic next-intl mock (returns full key path)
-
-**Form Testing:**
-- `pressKey(element, key, options)` - Simulate keyboard navigation
-- `expectAccessibleInput(element)` - Check ARIA attributes
-
-**Utilities:**
-- `waitForAsync(ms)` - Wait for async operations
+---
 
 ## Common Patterns
 
@@ -189,6 +130,8 @@ describe('ProductInfo', () => {
 });
 ```
 
+---
+
 ### Pattern 2: UI Component (Minimal Mocking)
 
 **Use case:** Testing Radix UI components, buttons, forms without navigation
@@ -230,6 +173,8 @@ describe('Switch Component', () => {
 });
 ```
 
+---
+
 ### Pattern 3: Component with Isolated Child Mocking
 
 **Use case:** Testing a container component's logic without child complexity
@@ -260,118 +205,7 @@ describe('Header', () => {
 });
 ```
 
-## Critical Rules
-
-### ❌ NEVER Do These
-
-1. **Don't mock child components you're testing**
-   ```typescript
-   // ❌ BAD - You just broke what you're testing!
-   vi.mock('@/components/product/ProductContent');
-   vi.mock('@/components/product/ProductImages');
-   render(<ProductInfo />); // Testing nothing real now
-
-   // ✅ GOOD - Test with real child components
-   renderWithProviders(<ProductInfo id='PROD001' />, { queryClient });
-   expect(screen.getByRole('heading')).toHaveTextContent('Test Product');
-   ```
-
-2. **Don't mock tRPC or React Query hooks directly**
-   ```typescript
-   // ❌ BAD - Breaks the entire testing model
-   vi.mock('@tanstack/react-query', () => ({
-     useSuspenseQuery: vi.fn().mockReturnValue({ data: mockData })
-   }));
-
-   // ✅ GOOD - Pre-populate the cache
-   const queryClient = createTestQueryClient();
-   queryClient.setQueryData(trpcQueryKey, { product: mockProduct });
-   renderWithProviders(<ProductInfo />, { queryClient });
-   ```
-
-3. **Don't test implementation details**
-   ```typescript
-   // ❌ BAD - Testing how it works, not what it does
-   expect(mockTRPC.getProductById).toHaveBeenCalledWith(
-     { id: 'PROD001' },
-     { staleTime: 10000 }
-   );
-
-   // ✅ GOOD - Test user-visible behavior
-   expect(screen.getByRole('heading')).toHaveTextContent('Test Product');
-   expect(document.body.textContent).toContain('100 MDL');
-   ```
-
-4. **Don't import helpers into `vi.hoisted()` blocks**
-   ```typescript
-   // ❌ BAD - WILL FAIL with "Cannot access before initialization"
-   import { createMockRouter } from '@/__tests__/helpers/componentTestUtils';
-   const mocks = vi.hoisted(() => createMockRouter('/en'));
-
-   // ✅ GOOD - Use VS Code snippet or copy pattern inline
-   const mocks = vi.hoisted(() => ({
-     pathname: '/en',
-     router: { push: vi.fn(), replace: vi.fn() },
-   }));
-   ```
-
-5. **Don't forget Suspense boundaries for `useSuspenseQuery` components**
-   ```typescript
-   // ❌ BAD - Will throw error!
-   renderWithProviders(<ProductInfo id='PROD001' />, { queryClient });
-
-   // ✅ GOOD - Use async helper (recommended for most tests)
-   await renderSuspenseResolved(<ProductInfo id='PROD001' />, { queryClient });
-
-   // ✅ ALSO GOOD - Manual Suspense wrapper
-   renderWithProviders(
-     <Suspense fallback={<div>Loading...</div>}>
-       <ProductInfo id='PROD001' />
-     </Suspense>,
-     { queryClient }
-   );
-   ```
-
-6. **Don't duplicate mock values in assertions (hardcoded strings)**
-   ```typescript
-   // ❌ BAD - Brittle! Breaks if mock changes
-   const mockProduct = createMockProduct({
-     title: { ro: 'Produs', ru: 'Продукт', en: 'Test Product' },
-     price: 100,
-   });
-   expect(screen.getByText('Test Product')).toBeInTheDocument(); // Hardcoded duplicate!
-   expect(screen.getByText('100 MDL')).toBeInTheDocument(); // Hardcoded duplicate!
-
-   // ✅ GOOD - References mock object (single source of truth)
-   const mockProduct = createMockProduct({
-     title: { ro: 'Produs', ru: 'Продукт', en: 'Test Product' },
-     price: 100,
-   });
-   expect(screen.getByText(mockProduct.title.en)).toBeInTheDocument();
-   expect(screen.getByText(`${mockProduct.price} MDL`)).toBeInTheDocument();
-
-   // ✅ ALSO GOOD - Using default mock values
-   const mockProduct = createMockProduct(); // Uses factory defaults
-   expect(screen.getByText(mockProduct.title.en)).toBeInTheDocument();
-   expect(screen.getByText(`${mockProduct.price} MDL`)).toBeInTheDocument();
-   ```
-
-   **Why this matters:**
-   - ✅ Change mock once, all tests adapt automatically
-   - ✅ Clear relationship between test data and assertions
-   - ✅ Tests validate behavior, not implementation details
-   - ✅ No false failures when mock data changes
-   - ❌ Hardcoded duplicates create maintenance burden
-   - ❌ Tests fail when component works correctly
-
-### ✅ ALWAYS Do These
-
-1. **Use VS Code snippets** - Type `vitest-nav-mocks` + Tab for navigation mocks
-2. **Pre-populate cache** - Use `queryClient.setQueryData()`, don't mock queries
-3. **Use factories** - `createMockProduct()` not inline objects with 30+ fields
-4. **Reference mock properties** - Use `mockProduct.title.en` not hardcoded `'Test Product'`
-5. **Test user behavior** - What users see and interact with, not implementation
-6. **Clean up properly** - Always `afterEach(cleanup)` to prevent test pollution
+---
 
 ## Navigation Mocking
 
@@ -392,12 +226,76 @@ Type the snippet trigger and press Tab to auto-insert the complete pattern.
 - **You MUST copy the pattern inline** in each test file
 - See: https://vitest.dev/api/vi.html#vi-hoisted
 
-### Complete Pattern Available In
+### Complete Pattern (Copy-Paste Ready)
 
-- **VS Code snippet** (fastest): `.vscode/vitest-navigation-mocks.code-snippets`
-- **Template documentation**: `componentTestUtils.tsx` lines 35-131
-- **Live example**: `ProductInfo.test.tsx`
-- **Research doc**: `/docs/testing/navigation-mocking-research.md`
+```typescript
+// Next.js core navigation (useSearchParams, useRouter, usePathname)
+const nextNav = vi.hoisted(() => {
+  const pathname = '/en/product/PROD001'; // ← Customize this
+  const searchParams = new URLSearchParams();
+
+  return {
+    pathname,
+    searchParams,
+    router: {
+      push: vi.fn(),
+      replace: vi.fn(),
+    },
+  };
+});
+
+// Internationalized navigation (next-intl wrapper)
+const i18nNav = vi.hoisted(() => {
+  const pathname = '/en/product/PROD001'; // ← Customize this
+
+  return {
+    pathname,
+    router: {
+      push: vi.fn(),
+      replace: vi.fn(),
+      prefetch: vi.fn(),
+      back: vi.fn(),
+      forward: vi.fn(),
+      refresh: vi.fn(),
+    },
+    Link: ({ children, ...props }: { children: ReactNode; [key: string]: unknown }) => (
+      <a {...props}>{children}</a>
+    ),
+    redirect: vi.fn(),
+    getPathname: vi.fn(() => pathname),
+  };
+});
+
+// Setup mocks BEFORE other imports
+vi.mock('next/navigation', () => ({
+  useSearchParams: () => nextNav.searchParams,
+  useRouter: () => nextNav.router,
+  usePathname: () => nextNav.pathname,
+}));
+
+vi.mock('@/i18n/navigation', () => ({
+  useRouter: () => i18nNav.router,
+  usePathname: () => i18nNav.pathname,
+  Link: i18nNav.Link,
+  redirect: i18nNav.redirect,
+  getPathname: i18nNav.getPathname,
+}));
+```
+
+### Why We Can't Simplify This
+
+We explored 6 different approaches to reduce navigation mock boilerplate:
+
+1. ❌ Setup files - can't customize per test
+2. ❌ `__mocks__` folders - still need `vi.mock()` calls
+3. ❌ Single navigation library - `useSearchParams` not available in `@/i18n/navigation`
+4. ❌ `vi.mock()` inside `vi.hoisted()` - not the intended pattern
+5. ❌ Global state in setup files - execution order problem
+6. ❌ Helper functions - can't import into `vi.hoisted()`
+
+**Conclusion:** The inline pattern is optimal despite verbosity. See `/docs/testing/navigation-mocking-research.md` for full analysis.
+
+---
 
 ## tRPC Data Mocking
 
@@ -412,48 +310,17 @@ const trpcQueryKey = [
 ];
 ```
 
-**Example:**
-
-```typescript
-const trpcQueryKey = [
-  ['products', 'getProductById'],
-  { input: { id: 'PROD001' }, type: 'query' }
-];
-
-queryClient.setQueryData(trpcQueryKey, { product: mockProduct });
-```
-
-**Alternative: Using the `setTRPCQueryData` helper**
-
-A helper function is available for convenience, though the manual approach above is recommended for most cases:
-
-```typescript
-import { setTRPCQueryData } from '@/__tests__/helpers/componentTestUtils';
-
-setTRPCQueryData(queryClient, {
-  router: 'products',
-  procedure: 'getProductById',
-  input: { id: mockProduct.custom_id },
-  data: { product: mockProduct },
-});
-```
-
-**When to use the helper:**
-- When you have multiple tRPC cache setups in a single test
-- When you prefer named parameters for clarity
-- As you build up more tests using this pattern (3+ files)
-
-**When to use the manual approach:**
-- For simple, one-off cache setups (recommended)
-- When you want explicit control over the query key structure
-- To keep tests more explicit and self-documenting
-
 ### Common Procedures
 
 **Products:**
 ```typescript
+// Get single product
 [['products', 'getProductById'], { input: { id: 'PROD001' }, type: 'query' }]
+
+// Get all products
 [['products', 'getProducts'], { input: {}, type: 'query' }]
+
+// Get products by category
 [['products', 'getProductsByCategory'], { input: { category: 'FOR_HER' }, type: 'query' }]
 ```
 
@@ -466,6 +333,43 @@ setTRPCQueryData(queryClient, {
 ```typescript
 [['order', 'getOrders'], { input: undefined, type: 'query' }]
 ```
+
+### Example Usage
+
+**Manual approach (recommended):**
+```typescript
+const queryClient = createTestQueryClient();
+const mockProduct = createMockProduct({ custom_id: 'PROD001' });
+
+queryClient.setQueryData(
+  [['products', 'getProductById'], { input: { id: 'PROD001' }, type: 'query' }],
+  { product: mockProduct }
+);
+```
+
+**Alternative: Using the helper:**
+```typescript
+import { setTRPCQueryData } from '@/__tests__/helpers/componentTestUtils';
+
+setTRPCQueryData(queryClient, {
+  router: 'products',
+  procedure: 'getProductById',
+  input: { id: mockProduct.custom_id },
+  data: { product: mockProduct },
+});
+```
+
+**When to use the helper:**
+- Multiple tRPC cache setups in a single test
+- Prefer named parameters for clarity
+- Building up patterns (3+ files using this)
+
+**When to use manual approach:**
+- Simple, one-off cache setups (recommended)
+- Want explicit control over query key structure
+- Keep tests more explicit and self-documenting
+
+---
 
 ## Suspense Testing
 
@@ -492,7 +396,7 @@ expect(screen.getByRole('heading')).toHaveTextContent('Test Product');
 
 ### ⭐ The Solution: `renderSuspenseResolved()` (Default/Recommended)
 
-**Use this by default for ~95% of your component tests.** It provides the simplest API with automatic Suspense handling.
+**Use this by default for ~99% of your component tests.** It provides the simplest API with automatic Suspense handling.
 
 ```typescript
 import { renderSuspenseResolved } from '@/__tests__/helpers/componentTestUtils';
@@ -514,7 +418,7 @@ it('should render product information', async () => {
 - ✅ **"Just works"** - Simplest API, least boilerplate
 - ✅ Automatic waiting - no manual `waitFor` or `findBy`
 - ✅ Component is ready immediately after `await`
-- ✅ Covers 95% of test scenarios
+- ✅ Covers 99% of test scenarios
 
 **When NOT to use:**
 - ❌ Need to test loading states (use Alternative 2)
@@ -571,17 +475,13 @@ expect(heading).toHaveTextContent('Test Product');
 
 | Scenario | Use This |
 |----------|----------|
-| **Default (95% of tests)** | ⭐ `renderSuspenseResolved()` |
+| **Default (99% of tests)** | ⭐ `renderSuspenseResolved()` |
 | Need better error messages | `renderWithSuspense()` + `findBy` |
 | Need to test loading states (rare) | `renderWithSuspense()` + manual |
 
-### Live Examples
+---
 
-- **Primary example:** `/src/__tests__/components/product/ProductInfo.test.tsx` (uses `renderSuspenseResolved()`)
-- **Template:** `.claude/templates/component.test.tsx` (copy-paste ready)
-- **Alternative approaches:** See commented examples at bottom of ProductInfo.test.tsx
-
-## Debugging Tips
+## Debugging Techniques
 
 ### See Rendered Output
 
@@ -639,6 +539,8 @@ expect(nextNav.router.push).toHaveBeenCalledTimes(1);
 expect(nextNav.searchParams.get('category')).toBe('FOR_HER');
 ```
 
+---
+
 ## Anti-Patterns We Discovered
 
 ### The Journey (What We Learned)
@@ -660,9 +562,12 @@ expect(nextNav.searchParams.get('category')).toBe('FOR_HER');
 
 **Lesson:** More mocks ≠ better tests. Integration > Isolation.
 
+---
+
 ### The 50-Line Navigation Reality
 
 We explored 6 different approaches to reduce navigation mock boilerplate:
+
 1. ❌ Setup files - can't customize per test
 2. ❌ `__mocks__` folders - still need `vi.mock()` calls
 3. ❌ Single navigation library - `useSearchParams` not available in `@/i18n/navigation`
@@ -672,11 +577,14 @@ We explored 6 different approaches to reduce navigation mock boilerplate:
 
 **Conclusion:** The inline pattern is optimal despite verbosity. See `/docs/testing/navigation-mocking-research.md` for full analysis.
 
+---
+
 ### Hardcoded Mock Value Duplicates
 
 **Problem:** Tests duplicated mock values in assertions using hardcoded strings, creating brittle tests that failed when mock data changed.
 
 **Example from ProductInfo.test.tsx:**
+
 ```typescript
 // Mock defines values
 const mockProduct = createMockProduct({
@@ -721,29 +629,7 @@ renderSuspenseResolved(<ProductInfo id={mockProduct.custom_id} />, { queryClient
 
 **Lesson:** Mock data should be the **single source of truth**. Never duplicate values in assertions.
 
-## When to Write Different Test Types
-
-### Component Tests (Current Focus)
-
-**When:** Testing React components in isolation or with real dependencies
-**What:** User interactions, rendering, state changes, integration with providers
-**Tools:** Vitest + React Testing Library + `renderWithProviders()`
-**Example:** Testing that ProductInfo displays product data correctly
-
-### E2E Tests (Recommended - See Issue #103)
-
-**When:** Testing complete user flows through the application
-**What:** Full application behavior, navigation, data persistence
-**Tools:** Playwright (proposed)
-**Why:** Less mocking, more confidence, catches integration bugs
-**Example:** User adds product to cart, proceeds to checkout, completes purchase
-
-### Unit Tests
-
-**When:** Testing pure functions, utilities, helpers
-**What:** Calculations, transformations, business logic
-**Tools:** Vitest only (no React, no providers)
-**Example:** Testing a price calculation function
+---
 
 ## Additional Resources
 
@@ -763,4 +649,4 @@ renderSuspenseResolved(<ProductInfo id={mockProduct.custom_id} />, { queryClient
 
 ---
 
-**Remember:** These guidelines are not dogma. When you discover a better approach, update this document!
+**Remember:** These patterns are not dogma. When you discover a better approach, update this document!

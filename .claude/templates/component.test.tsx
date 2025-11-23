@@ -323,7 +323,8 @@ See ProductInfo.test.tsx for commented examples of alternatives.
 - vitest-nav-mocks-i18n - i18n navigation only
 
 📚 Resources:
-- Testing guidelines: .claude/testing.guidelines.md
+- Testing guidelines: .claude/skills/testing-expert/SKILL.md
+- Detailed patterns: .claude/skills/testing-expert/PATTERNS.md
 - Test utilities: src/__tests__/helpers/componentTestUtils.tsx
 - Working example: src/__tests__/components/product/ProductInfo.test.tsx
 */
