@@ -12,7 +12,8 @@ import LinksMenu from '@/components/LinksMenu';
 import { HydrateClient, prefetch, trpc } from '../_trpc/server';
 import { Metadata } from 'next';
 import { generateHreflangMetadata } from '@/components/seo/HreflangLinks';
-export const dynamic = 'force-static';
+
+export const revalidate = 300;
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations('PageTitles');

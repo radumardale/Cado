@@ -194,43 +194,14 @@ export const addOrderProcedure = protectedProcedure
               Name: 'CADO Order',
               Description: `Order #${order.custom_id}`,
               Amount: Math.round(input.total_cost * 100),
-              Products: input.products.map(
-                (
-                  product: {
-                    product: {
-                      custom_id: string;
-                      title: MultilingualString;
-                      price: number;
-                      sale?: { active: boolean; sale_price: number };
-                    };
-                    quantity: number;
-                  },
-                  index: number
-                ) => ({
-                  GroupName: 'Produse',
-                  GroupId: 1,
-                  LineNo: index + 1,
-                  Code: product.product.custom_id,
-                  Barcode: index + 1001,
-                  Name: product.product.title.ro,
-                  Description: product.product.title.ro,
-                  UnitPrice: Math.round(
-                    product.product.sale && product.product.sale.active
-                      ? product.product.sale.sale_price * 100
-                      : product.product.price * 100
-                  ),
-                  UnitProduct: product.quantity,
-                  Amount: Math.round(
-                    (product.product.sale && product.product.sale.active
-                      ? product.product.sale.sale_price * 100
-                      : product.product.price * 100) * product.quantity
-                  ),
-                })
-              ),
+              Products: [],
             },
           ],
           MoneyType: null,
         };
+
+        console.log('Services: \n', requestBody.Services[0]);
+        console.log('Products: \n', requestBody.Services[0].Products);
 
         const response = await APIClient.makeAuthenticatedRequest(
           `${process.env.API_BASE_URL}/api/Payments/Send`,
@@ -240,6 +211,8 @@ export const addOrderProcedure = protectedProcedure
           }
         );
         const data = await response.json();
+
+        console.log('Data: \n', data);
 
         return {
           success: true,
