@@ -12,14 +12,10 @@ import {
   renderWithProviders,
   createMockProduct,
   mockNextImage,
-  mockMotion,
 } from '../../helpers/componentTestUtils';
 
 // Mock Next.js Image component
 mockNextImage();
-
-// Mock Motion components
-mockMotion();
 
 // Mock Lenis scroll library
 vi.mock('lenis/react', () => ({

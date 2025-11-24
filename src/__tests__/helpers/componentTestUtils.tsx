@@ -159,27 +159,6 @@ export function mockNextImage() {
 }
 
 /**
- * Mock Motion components to render as static divs for testing
- */
-export function mockMotion() {
-  // vi.mock('motion/react', () => ({
-  //   motion: {
-  //     div: ({ children, ...props }: { children: ReactNode; [key: string]: unknown }) => (
-  //       <div {...props}>{children}</div>
-  //     ),
-  //     button: ({ children, ...props }: { children: ReactNode; [key: string]: unknown }) => (
-  //       <button {...props}>{children}</button>
-  //     ),
-  //     span: ({ children, ...props }: { children: ReactNode; [key: string]: unknown }) => (
-  //       <span {...props}>{children}</span>
-  //     ),
-  //   },
-  //   AnimatePresence: ({ children }: { children: ReactNode }) => <>{children}</>,
-  //   cubicBezier: () => [0.65, 0, 0.35, 1], // Mock easing function
-  // }));
-}
-
-/**
  * Mock localStorage hook from usehooks-ts
  * Note: Due to Vitest hoisting, this should be set up in individual test files,
  * not as a utility function.
