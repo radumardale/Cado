@@ -84,8 +84,8 @@ describe('ProductCard', () => {
 
       render(<ProductCard product={product} />);
 
-      expect(screen.getByText('Test Product')).toBeInTheDocument();
-      expect(screen.getByText('100 MDL')).toBeInTheDocument();
+      expect(screen.getByText(product.title.en)).toBeInTheDocument();
+      expect(screen.getByText(`${product.price} MDL`)).toBeInTheDocument();
     });
 
     it('should render product images', () => {
@@ -96,10 +96,10 @@ describe('ProductCard', () => {
 
       render(<ProductCard product={product} />);
 
-      const images = screen.getAllByAltText('Produs');
+      const images = screen.getAllByAltText(product.title.ro);
       expect(images).toHaveLength(2);
-      expect(images[0]).toHaveAttribute('src', 'https://example.com/image1.jpg');
-      expect(images[1]).toHaveAttribute('src', 'https://example.com/image2.jpg');
+      expect(images[0]).toHaveAttribute('src', product.images[0]);
+      expect(images[1]).toHaveAttribute('src', product.images[1]);
     });
 
     it('should render navigation link to product detail page', () => {
@@ -178,7 +178,7 @@ describe('ProductCard', () => {
 
       render(<ProductCard product={product} />);
 
-      expect(screen.getByText('Test Product')).toBeInTheDocument();
+      expect(screen.getByText(product.title.en)).toBeInTheDocument();
     });
   });
 });

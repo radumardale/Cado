@@ -173,7 +173,7 @@ describe('Header', () => {
       renderWithProviders(<Header breadcrumbs={true} productInfo={productInfo} />);
 
       const breadcrumbs = screen.getByTestId('breadcrumbs');
-      expect(breadcrumbs).toHaveTextContent('Test Product');
+      expect(breadcrumbs).toHaveTextContent(productInfo.title);
     });
   });
 

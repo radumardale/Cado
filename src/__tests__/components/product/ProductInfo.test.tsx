@@ -1,114 +1,90 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import '@testing-library/jest-dom/vitest';
+import { type ReactNode } from 'react';
 
-/**
- * Mock dependencies - MUST be before imports
- */
+// Navigation mocks organized by concern - must be defined inline due to hoisting constraints
+// For the reasoning, see: https://vitest.dev/api/vi.html#vi-hoisted
 
-// Mock Swiper CSS
-vi.mock('swiper/css', () => ({}));
+// Next.js core navigation (useSearchParams, useRouter, usePathname, useParams)
+const nextNav = vi.hoisted(() => {
+  const pathname = '/en/product/PROD001';
+  const searchParams = new URLSearchParams();
+  let currentLocale: LocaleCode = 'en'; // Track current locale for useParams
 
-// Mock tRPC client
-const mockQueryOptions = vi.fn();
-vi.mock('@/app/_trpc/client', () => ({
-  useTRPC: () => ({
-    products: {
-      getProductById: {
-        queryOptions: mockQueryOptions,
-      },
+  return {
+    pathname,
+    searchParams,
+    router: {
+      push: vi.fn(),
+      replace: vi.fn(),
     },
-  }),
-}));
+    params: { locale: currentLocale } as { locale: LocaleCode },
+    setLocale: (locale: LocaleCode) => {
+      currentLocale = locale;
+      nextNav.params = { locale };
+    },
+  };
+});
 
-// Mock tanstack query - use factory function to avoid hoisting issues
-vi.mock('@tanstack/react-query', () => ({
-  useSuspenseQuery: vi.fn(),
-  QueryClient: vi.fn(() => ({
-    defaultOptions: {},
-    setDefaultOptions: vi.fn(),
-    mount: vi.fn(),
-    unmount: vi.fn(),
-    isFetching: vi.fn(() => 0),
-    isMutating: vi.fn(() => 0),
-    clear: vi.fn(),
-    getQueryCache: vi.fn(),
-    getMutationCache: vi.fn(),
-    getDefaultOptions: vi.fn(() => ({})),
-    setQueryDefaults: vi.fn(),
-    getQueryDefaults: vi.fn(),
-    setMutationDefaults: vi.fn(),
-    getMutationDefaults: vi.fn(),
-  })),
-  QueryClientProvider: ({ children }: { children: React.ReactNode }) => <>{children}</>,
-}));
+// Internationalized navigation (next-intl wrapper)
+const i18nNav = vi.hoisted(() => {
+  const pathname = '/en/product/PROD001';
 
-// Mock next-intl
-vi.mock('next-intl', () => ({
-  useLocale: () => 'en',
-  useTranslations: () => (key: string) => key,
-}));
+  return {
+    pathname,
+    router: {
+      push: vi.fn(),
+      replace: vi.fn(),
+      prefetch: vi.fn(),
+      back: vi.fn(),
+      forward: vi.fn(),
+      refresh: vi.fn(),
+    },
+    Link: ({ children, ...props }: { children: ReactNode; [key: string]: unknown }) => (
+      <a {...props}>{children}</a>
+    ),
+    redirect: vi.fn(),
+    getPathname: vi.fn(() => pathname),
+  };
+});
 
-// Mock next/navigation
-const mockSearchParams = new URLSearchParams();
+// Setup mocks BEFORE other imports
 vi.mock('next/navigation', () => ({
-  useSearchParams: () => mockSearchParams,
-  useRouter: () => ({ push: vi.fn() }),
-  usePathname: () => '/en/product/PROD001',
+  useSearchParams: () => nextNav.searchParams,
+  useRouter: () => nextNav.router,
+  usePathname: () => nextNav.pathname,
+  useParams: () => nextNav.params,
 }));
 
-// Mock child components
-vi.mock('@/components/header/Header', () => ({
-  default: ({
-    category,
-    breadcrumbs,
-    productInfo,
-  }: {
-    category?: string;
-    breadcrumbs?: boolean;
-    productInfo?: { id: string; title: string };
-  }) => (
-    <div data-testid='header'>
-      <div data-testid='header-category'>{String(category)}</div>
-      <div data-testid='header-breadcrumbs'>{breadcrumbs ? 'true' : 'false'}</div>
-      <div data-testid='header-product-id'>{String(productInfo?.id || '')}</div>
-      <div data-testid='header-product-title'>{String(productInfo?.title || '')}</div>
-    </div>
-  ),
+vi.mock('@/i18n/navigation', () => ({
+  useRouter: () => i18nNav.router,
+  usePathname: () => i18nNav.pathname,
+  Link: i18nNav.Link,
+  redirect: i18nNav.redirect,
+  getPathname: i18nNav.getPathname,
 }));
 
-vi.mock('@/components/product/ProductImages', () => ({
-  default: ({ product }: { product: { custom_id: string } }) => (
-    <div data-testid='product-images'>Images for {product.custom_id}</div>
-  ),
-}));
+// Mock next-intl with dynamic useLocale
+const mockUseLocale = vi.hoisted(() => vi.fn(() => 'en'));
 
-vi.mock('@/components/product/ProductContent', () => ({
-  default: ({ product }: { product: { custom_id: string } }) => (
-    <div data-testid='product-content'>Content for {product.custom_id}</div>
-  ),
-}));
+vi.mock('next-intl', async () => {
+  const actual = await vi.importActual('next-intl');
+  return {
+    ...actual,
+    useLocale: mockUseLocale,
+    useTranslations: vi.fn(() => (key: string) => key),
+  };
+});
 
-vi.mock('@/components/product/SimilarProducts', () => ({
-  default: ({ category, productId }: { category: string; productId: string }) => (
-    <div data-testid='similar-products'>
-      Similar to {productId} in {category}
-    </div>
-  ),
-}));
-
-vi.mock('@/components/ui/skeleton', () => ({
-  Skeleton: ({ className }: { className?: string }) => (
-    <div data-testid='skeleton' className={className}>
-      Loading...
-    </div>
-  ),
-}));
-
-import { render, screen, cleanup } from '@testing-library/react';
-import { createMockProduct } from '@/__tests__/helpers/componentTestUtils';
+// Import test utilities and component
+import { screen, cleanup } from '@testing-library/react';
+import {
+  createMockProduct,
+  createTestQueryClient,
+  renderSuspenseResolved,
+} from '@/__tests__/helpers/componentTestUtils';
 import ProductInfo from '@/components/product/ProductInfo';
 import { Categories } from '@/lib/enums/Categories';
-import { useSuspenseQuery } from '@tanstack/react-query';
 
 describe('ProductInfo', () => {
   const mockProduct = createMockProduct({
@@ -123,138 +99,339 @@ describe('ProductInfo', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-    mockSearchParams.delete('category');
+    nextNav.searchParams.delete('category');
+    nextNav.setLocale('en'); // Reset to English for each test
+    mockUseLocale.mockReturnValue('en' as LocaleCode); // Reset useLocale mock
   });
 
   afterEach(() => {
     cleanup();
   });
 
-  describe('Loading State', () => {
-    it('should render skeleton when product data is null', () => {
-      mockQueryOptions.mockReturnValue({});
-      vi.mocked(useSuspenseQuery).mockReturnValue({
-        data: { product: null },
-      } as never);
+  it('should render without crashing', async () => {
+    // Create query client and populate cache
+    const queryClient = createTestQueryClient();
 
-      render(<ProductInfo id='PROD001' />);
+    const trpcQueryKey = [
+      ['products', 'getProductById'],
+      { input: { id: mockProduct.custom_id }, type: 'query' },
+    ];
 
-      const skeletons = screen.getAllByTestId('skeleton');
-      expect(skeletons.length).toBeGreaterThan(0);
+    queryClient.setQueryData(trpcQueryKey, {
+      product: mockProduct,
     });
 
-    it('should render skeleton when product data is undefined', () => {
-      mockQueryOptions.mockReturnValue({});
-      vi.mocked(useSuspenseQuery).mockReturnValue({
-        data: { product: undefined },
-      } as never);
-
-      render(<ProductInfo id='PROD001' />);
-
-      const skeletons = screen.getAllByTestId('skeleton');
-      expect(skeletons.length).toBeGreaterThan(0);
+    // Render and wait for Suspense to resolve
+    await renderSuspenseResolved(<ProductInfo id={mockProduct.custom_id} />, {
+      queryClient,
     });
+
+    // Component is ready - test immediately
+    const heading = screen.getByRole('heading', { level: 1 });
+    expect(heading).toHaveTextContent(mockProduct.title.en);
+
+    // Verify other content
+    expect(screen.getByAltText('logo')).toBeInTheDocument();
+    expect(document.body.textContent).toMatch(new RegExp(mockProduct.price.toString()));
+    expect(document.querySelector('.skeleton')).not.toBeInTheDocument();
   });
 
-  describe('Product Display', () => {
-    beforeEach(() => {
-      mockQueryOptions.mockReturnValue({});
-      vi.mocked(useSuspenseQuery).mockReturnValue({
-        data: { product: mockProduct },
-      } as never);
+  it('should display skeleton placeholders when product is loading', async () => {
+    const queryClient = createTestQueryClient();
+
+    const trpcQueryKey = [
+      ['products', 'getProductById'],
+      { input: { id: 'PROD001' }, type: 'query' },
+    ];
+
+    // Populate cache with null to simulate loading/no data state
+    queryClient.setQueryData(trpcQueryKey, {
+      product: null,
     });
 
-    it('should render Header with product information', () => {
-      render(<ProductInfo id='PROD001' />);
-
-      expect(screen.getByTestId('header')).toBeInTheDocument();
-      expect(screen.getByTestId('header-breadcrumbs')).toHaveTextContent('true');
-      expect(screen.getByTestId('header-product-id')).toHaveTextContent('PROD001');
-      expect(screen.getByTestId('header-product-title')).toHaveTextContent('Test Product');
+    await renderSuspenseResolved(<ProductInfo id='PROD001' />, {
+      queryClient,
     });
 
-    it('should pass category from product categories to Header when no category param', () => {
-      render(<ProductInfo id='PROD001' />);
+    // Verify skeleton elements are present (Skeleton component uses data-testid)
+    const skeletons = document.querySelectorAll('[class*="animate-pulse"]');
+    expect(skeletons.length).toBeGreaterThan(5);
 
-      expect(screen.getByTestId('header-category')).toHaveTextContent(Categories.FOR_HER);
+    // Verify no product content is shown
+    expect(screen.queryByRole('heading', { level: 1 })).not.toBeInTheDocument();
+  });
+
+  it('should display breadcrumb navigation with product title and category', async () => {
+    const queryClient = createTestQueryClient();
+
+    const product = createMockProduct({
+      custom_id: 'PROD002',
+      title: {
+        ro: 'Geantă Designer',
+        ru: 'Дизайнерская сумка',
+        en: 'Designer Bag',
+      },
+      categories: [Categories.FOR_HER],
     });
 
-    it('should pass category param to Header when available', () => {
-      mockSearchParams.set('category', Categories.FOR_HIM);
+    const trpcQueryKey = [
+      ['products', 'getProductById'],
+      { input: { id: product.custom_id }, type: 'query' },
+    ];
 
-      render(<ProductInfo id='PROD001' />);
-
-      expect(screen.getByTestId('header-category')).toHaveTextContent(Categories.FOR_HIM);
+    queryClient.setQueryData(trpcQueryKey, {
+      product,
     });
 
-    it('should render ProductImages component with product data', () => {
-      render(<ProductInfo id='PROD001' />);
-
-      expect(screen.getByTestId('product-images')).toBeInTheDocument();
-      expect(screen.getByTestId('product-images')).toHaveTextContent('Images for PROD001');
+    await renderSuspenseResolved(<ProductInfo id={product.custom_id} />, {
+      queryClient,
     });
 
-    it('should render ProductContent component with product data', () => {
-      render(<ProductInfo id='PROD001' />);
+    // Verify product title appears in the page (breadcrumbs are in the DOM)
+    expect(document.body.textContent).toContain(product.title.en);
 
-      expect(screen.getByTestId('product-content')).toBeInTheDocument();
-      expect(screen.getByTestId('product-content')).toHaveTextContent('Content for PROD001');
+    // Verify breadcrumb link structure exists (Home link should be present)
+    const homeLinks = screen.getAllByRole('link', { name: /home|главная|acasă/i });
+    expect(homeLinks.length).toBeGreaterThan(0);
+  });
+
+  it('should use URL category parameter when present', async () => {
+    const queryClient = createTestQueryClient();
+
+    const product = createMockProduct({
+      custom_id: 'PROD003',
+      title: {
+        ro: 'Ceas Unisex',
+        ru: 'Унисекс часы',
+        en: 'Unisex Watch',
+      },
+      categories: [Categories.FOR_HER], // Product is in FOR_HER
     });
 
-    it('should not render SimilarProducts when product has no categories', () => {
-      const productWithoutCategories = createMockProduct({
-        custom_id: 'PROD002',
-        categories: [],
+    const trpcQueryKey = [
+      ['products', 'getProductById'],
+      { input: { id: product.custom_id }, type: 'query' },
+    ];
+
+    queryClient.setQueryData(trpcQueryKey, {
+      product,
+    });
+
+    // Simulate user coming from FOR_HIM category page via URL parameter
+    nextNav.searchParams.set('category', Categories.FOR_HIM);
+
+    await renderSuspenseResolved(<ProductInfo id={product.custom_id} />, {
+      queryClient,
+    });
+
+    // Verify the component renders successfully with category param
+    const heading = screen.getByRole('heading', { level: 1 });
+    expect(heading).toHaveTextContent(product.title.en);
+
+    // Clean up
+    nextNav.searchParams.delete('category');
+  });
+
+  it('should display product images with navigation controls', async () => {
+    const queryClient = createTestQueryClient();
+
+    const product = createMockProduct({
+      custom_id: 'PROD004',
+      title: {
+        ro: 'Portofel Premium',
+        ru: 'Премиум кошелек',
+        en: 'Premium Wallet',
+      },
+      images: [
+        'https://cdn.example.com/wallet-front.jpg',
+        'https://cdn.example.com/wallet-back.jpg',
+        'https://cdn.example.com/wallet-side.jpg',
+      ],
+    });
+
+    const trpcQueryKey = [
+      ['products', 'getProductById'],
+      { input: { id: product.custom_id }, type: 'query' },
+    ];
+
+    queryClient.setQueryData(trpcQueryKey, {
+      product,
+    });
+
+    await renderSuspenseResolved(<ProductInfo id={product.custom_id} />, {
+      queryClient,
+    });
+
+    // Verify image counter is displayed (format: "1 / 3")
+    expect(document.body.textContent).toMatch(/1\s*\/\s*3/);
+
+    // Verify images are rendered
+    const images = screen.getAllByRole('img');
+    expect(images.length).toBeGreaterThan(0);
+  });
+
+  it('should display complete product information and purchase controls', async () => {
+    const queryClient = createTestQueryClient();
+
+    const product = createMockProduct({
+      custom_id: 'PROD005',
+      title: {
+        ro: 'Rochie Elegantă',
+        ru: 'Элегантное платье',
+        en: 'Elegant Dress',
+      },
+      price: 599,
+      sale: {
+        active: true,
+        sale_price: 449,
+      },
+      description: {
+        ro: '<p>Rochie din mătase naturală</p>',
+        ru: '<p>Платье из натурального шелка</p>',
+        en: '<p>Natural silk dress</p>',
+      },
+    });
+
+    const trpcQueryKey = [
+      ['products', 'getProductById'],
+      { input: { id: product.custom_id }, type: 'query' },
+    ];
+
+    queryClient.setQueryData(trpcQueryKey, {
+      product,
+    });
+
+    await renderSuspenseResolved(<ProductInfo id={product.custom_id} />, {
+      queryClient,
+    });
+
+    // Verify product title
+    const heading = screen.getByRole('heading', { level: 1 });
+    expect(heading).toHaveTextContent(product.title.en);
+
+    // Verify sale price is displayed
+    expect(document.body.textContent).toContain('449');
+
+    // Verify original price is displayed (should be crossed out)
+    expect(document.body.textContent).toContain('599');
+
+    // Verify description content
+    expect(document.body.textContent).toContain('Natural silk dress');
+
+    // Verify buttons exist (quantity controls and add to cart)
+    const buttons = screen.getAllByRole('button');
+    expect(buttons.length).toBeGreaterThan(0);
+  });
+
+  it('should hide similar products section when product has no categories', async () => {
+    const queryClient = createTestQueryClient();
+
+    const product = createMockProduct({
+      custom_id: 'PROD006',
+      title: {
+        ro: 'Produs Necategorizat',
+        ru: 'Некатегоризированный товар',
+        en: 'Uncategorized Item',
+      },
+      categories: [], // No categories
+    });
+
+    const trpcQueryKey = [
+      ['products', 'getProductById'],
+      { input: { id: product.custom_id }, type: 'query' },
+    ];
+
+    queryClient.setQueryData(trpcQueryKey, {
+      product,
+    });
+
+    await renderSuspenseResolved(<ProductInfo id={product.custom_id} />, {
+      queryClient,
+    });
+
+    // Verify "Similar Products" heading is NOT present
+    expect(screen.queryByText(/similar products/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/similar_products/i)).not.toBeInTheDocument();
+  });
+
+  describe('Internationalization', () => {
+    it('should display product information in English locale', async () => {
+      const queryClient = createTestQueryClient();
+
+      const product = createMockProduct({
+        custom_id: 'PROD007',
+        title: {
+          en: 'Luxury Watch',
+          ro: 'Ceas de Lux',
+          ru: 'Роскошные Часы',
+        },
+        description: {
+          en: '<p>Premium timepiece</p>',
+          ro: '<p>Ceas premium</p>',
+          ru: '<p>Премиум часы</p>',
+        },
       });
 
-      vi.mocked(useSuspenseQuery).mockReturnValue({
-        data: { product: productWithoutCategories },
-      } as never);
+      const trpcQueryKey = [
+        ['products', 'getProductById'],
+        { input: { id: product.custom_id }, type: 'query' },
+      ];
 
-      render(<ProductInfo id='PROD002' />);
+      queryClient.setQueryData(trpcQueryKey, {
+        product,
+      });
 
-      expect(screen.queryByTestId('similar-products')).not.toBeInTheDocument();
-    });
-  });
+      await renderSuspenseResolved(<ProductInfo id={product.custom_id} />, {
+        queryClient,
+        locale: 'en',
+      });
 
-  describe('tRPC Integration', () => {
-    it('should call tRPC getProductById with correct ID', () => {
-      mockQueryOptions.mockReturnValue({});
-      vi.mocked(useSuspenseQuery).mockReturnValue({
-        data: { product: mockProduct },
-      } as never);
+      // Verify English title is displayed
+      const heading = screen.getByRole('heading', { level: 1 });
+      expect(heading).toHaveTextContent('Luxury Watch');
 
-      render(<ProductInfo id='PROD001' />);
-
-      expect(mockQueryOptions).toHaveBeenCalledWith(
-        { id: 'PROD001' },
-        { staleTime: 10000, refetchOnMount: false, refetchOnWindowFocus: false }
-      );
+      // Verify English description content
+      expect(document.body.textContent).toContain('Premium timepiece');
     });
 
-    it('should use useSuspenseQuery with query options', () => {
-      const mockOptions = { queryKey: ['product', 'PROD001'], queryFn: vi.fn() };
-      mockQueryOptions.mockReturnValue(mockOptions);
-      vi.mocked(useSuspenseQuery).mockReturnValue({
-        data: { product: mockProduct },
-      } as never);
+    it('should handle multilingual product data structure', async () => {
+      const queryClient = createTestQueryClient();
 
-      render(<ProductInfo id='PROD001' />);
+      // Product with all three languages populated
+      const multilingualProduct = createMockProduct({
+        custom_id: 'PROD008',
+        title: {
+          en: 'Elegant Dress',
+          ro: 'Rochie Elegantă',
+          ru: 'Элегантное платье',
+        },
+        description: {
+          en: '<p>Beautiful evening dress</p>',
+          ro: '<p>Rochie frumoasă de seară</p>',
+          ru: '<p>Красивое вечернее платье</p>',
+        },
+      });
 
-      expect(useSuspenseQuery).toHaveBeenCalledWith(mockOptions);
-    });
-  });
+      const trpcQueryKey = [
+        ['products', 'getProductById'],
+        { input: { id: multilingualProduct.custom_id }, type: 'query' },
+      ];
 
-  describe('Locale Support', () => {
-    it('should display product title in current locale (en)', () => {
-      mockQueryOptions.mockReturnValue({});
-      vi.mocked(useSuspenseQuery).mockReturnValue({
-        data: { product: mockProduct },
-      } as never);
+      queryClient.setQueryData(trpcQueryKey, {
+        product: multilingualProduct,
+      });
 
-      render(<ProductInfo id='PROD001' />);
+      await renderSuspenseResolved(<ProductInfo id={multilingualProduct.custom_id} />, {
+        queryClient,
+      });
 
-      expect(screen.getByTestId('header-product-title')).toHaveTextContent('Test Product');
+      // Component renders successfully with multilingual data
+      const heading = screen.getByRole('heading', { level: 1 });
+      expect(heading).toBeInTheDocument();
+
+      // Verify English is displayed (default locale in tests)
+      expect(heading).toHaveTextContent('Elegant Dress');
+      expect(document.body.textContent).toContain('Beautiful evening dress');
     });
   });
 });

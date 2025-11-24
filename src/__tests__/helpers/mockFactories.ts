@@ -344,7 +344,7 @@ export function createMockBlog(
       subtitle: { ro: string; ru: string; en: string };
       content: { ro: string; ru: string; en: string };
     }>;
-    section_images: Array<{ image: string }>;
+    section_images: Array<{ image: string; index: number }>;
   }> = {}
 ) {
   return {

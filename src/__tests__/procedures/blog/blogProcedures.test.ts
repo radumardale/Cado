@@ -804,7 +804,10 @@ describe('Blog Procedures', () => {
               },
             },
           ],
-          section_images: [{ image: 'image1.jpg' }, { image: 'image2.jpg' }],
+          section_images: [
+            { image: 'image1.jpg', index: 0 },
+            { image: 'image2.jpg', index: 1 },
+          ],
         }),
       });
 

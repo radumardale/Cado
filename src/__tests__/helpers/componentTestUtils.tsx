@@ -1,11 +1,14 @@
-import { render, RenderOptions } from '@testing-library/react';
-import { ReactElement, ReactNode } from 'react';
+import { render, RenderOptions, waitForElementToBeRemoved, screen } from '@testing-library/react';
+import { ReactElement, ReactNode, Suspense } from 'react';
 import { vi, expect } from 'vitest';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { NextIntlClientProvider } from 'next-intl';
 import { CartInterface } from '@/lib/types/CartInterface';
 import { ProductInterface } from '@/models/product/types/productInterface';
 import { StockState } from '@/lib/enums/StockState';
+import { TRPCProvider } from '@/app/_trpc/client';
+import { createTRPCClient, httpBatchLink } from '@trpc/client';
+import type { AppRouter } from '@/server';
 
 /**
  * Component testing utilities for React components
@@ -27,6 +30,105 @@ export function createMockRouter() {
     refresh: vi.fn(),
   };
 }
+
+/**
+ * Navigation Mock Pattern Guide for vi.hoisted()
+ *
+ * ⚠️ IMPORTANT: Navigation mocks MUST be defined inline in your test files.
+ * Due to Vitest's hoisting mechanism, you CANNOT import helper functions.
+ * You MUST copy this pattern inline in each test file that needs navigation mocking.
+ *
+ * ## Why inline is required:
+ * Vitest's `vi.hoisted()` executes BEFORE all imports are evaluated.
+ * Imported functions are not yet available when vi.hoisted() runs.
+ * See: https://vitest.dev/api/vi.html#vi-hoisted
+ *
+ * ## Pattern to copy:
+ *
+ * @example
+ * // ✅ RECOMMENDED: Separate hoisted blocks by concern (better organization)
+ * import { vi } from 'vitest';
+ * import { Suspense, type ReactNode } from 'react';
+ *
+ * // Next.js core navigation (useSearchParams, useRouter, usePathname)
+ * const nextNav = vi.hoisted(() => {
+ *   const pathname = '/en/product/PROD001'; // ← Customize this
+ *   const searchParams = new URLSearchParams();
+ *
+ *   return {
+ *     pathname,
+ *     searchParams,
+ *     router: {
+ *       push: vi.fn(),
+ *       replace: vi.fn(),
+ *     },
+ *   };
+ * });
+ *
+ * // Internationalized navigation (next-intl wrapper)
+ * const i18nNav = vi.hoisted(() => {
+ *   const pathname = '/en/product/PROD001';
+ *
+ *   return {
+ *     pathname,
+ *     router: {
+ *       push: vi.fn(),
+ *       replace: vi.fn(),
+ *       prefetch: vi.fn(),
+ *       back: vi.fn(),
+ *       forward: vi.fn(),
+ *       refresh: vi.fn(),
+ *     },
+ *     Link: ({ children, ...props }: { children: ReactNode; [key: string]: unknown }) => (
+ *       <a {...props}>{children}</a>
+ *     ),
+ *     redirect: vi.fn(),
+ *     getPathname: vi.fn(() => pathname),
+ *   };
+ * });
+ *
+ * // Setup mocks BEFORE other imports
+ * vi.mock('next/navigation', () => ({
+ *   useSearchParams: () => nextNav.searchParams,
+ *   useRouter: () => nextNav.router,
+ *   usePathname: () => nextNav.pathname,
+ * }));
+ *
+ * vi.mock('@/i18n/navigation', () => ({
+ *   useRouter: () => i18nNav.router,
+ *   usePathname: () => i18nNav.pathname,
+ *   Link: i18nNav.Link,
+ *   redirect: i18nNav.redirect,
+ *   getPathname: i18nNav.getPathname,
+ * }));
+ *
+ * // NOW import components
+ * import { screen } from '@testing-library/react';
+ * import ProductInfo from '@/components/product/ProductInfo';
+ *
+ * describe('ProductInfo', () => {
+ *   beforeEach(() => {
+ *     vi.clearAllMocks();
+ *     nextNav.searchParams.delete('category');
+ *   });
+ *   // ... tests
+ * });
+ *
+ * @example
+ * // Different pathname examples:
+ * const pathname = '/en/product/PROD001';  // Product page
+ * const pathname = '/en/checkout';         // Checkout page
+ * const pathname = '/en';                  // Home page
+ *
+ * // With search params:
+ * const searchParams = new URLSearchParams('category=FOR_HER&page=2');
+ *
+ * ## Quick Start:
+ * Use the VS Code snippet for fastest setup:
+ * - Type: vitest-nav-mocks
+ * - Press: Tab
+ * - Customize the pathname as needed
+ */
 
 /**
  * Mock next-intl useTranslations hook
@@ -53,27 +155,6 @@ export function mockNextImage() {
       // eslint-disable-next-line @next/next/no-img-element
       return <img src={src} alt={alt} {...props} />;
     },
-  }));
-}
-
-/**
- * Mock Motion components to render as static divs for testing
- */
-export function mockMotion() {
-  vi.mock('motion/react', () => ({
-    motion: {
-      div: ({ children, ...props }: { children: ReactNode; [key: string]: unknown }) => (
-        <div {...props}>{children}</div>
-      ),
-      button: ({ children, ...props }: { children: ReactNode; [key: string]: unknown }) => (
-        <button {...props}>{children}</button>
-      ),
-      span: ({ children, ...props }: { children: ReactNode; [key: string]: unknown }) => (
-        <span {...props}>{children}</span>
-      ),
-    },
-    AnimatePresence: ({ children }: { children: ReactNode }) => <>{children}</>,
-    cubicBezier: () => [0.65, 0, 0.35, 1], // Mock easing function
   }));
 }
 
@@ -217,6 +298,80 @@ export function createTestQueryClient() {
 }
 
 /**
+ * Create a test tRPC client that doesn't make real network requests
+ */
+export function createTestTRPCClient() {
+  return createTRPCClient<AppRouter>({
+    links: [
+      httpBatchLink({
+        url: 'http://localhost:3000/api/trpc', // Doesn't matter - we won't make actual requests
+      }),
+    ],
+  });
+}
+
+/**
+ * Pre-populate tRPC query cache for testing
+ *
+ * Helper function to set up tRPC query data in the QueryClient cache.
+ * This is useful for testing components that use `useSuspenseQuery` or `useQuery`
+ * from tRPC without making actual network requests.
+ *
+ * **Note:** This helper is available for convenience but not required.
+ * You can also manually construct the query key and call `queryClient.setQueryData()` directly.
+ *
+ * @template T - The type of data being cached
+ * @param queryClient - The QueryClient instance (from createTestQueryClient())
+ * @param config - Configuration object
+ * @param config.router - tRPC router name (e.g., 'products', 'order', 'cart')
+ * @param config.procedure - tRPC procedure name (e.g., 'getProductById', 'getProducts')
+ * @param config.input - Input parameters for the procedure (optional)
+ * @param config.data - The mock data to cache
+ *
+ * @example
+ * ```typescript
+ * // Single product by ID
+ * setTRPCQueryData(queryClient, {
+ *   router: 'products',
+ *   procedure: 'getProductById',
+ *   input: { id: mockProduct.custom_id },
+ *   data: { product: mockProduct },
+ * });
+ *
+ * // Product list (no input needed)
+ * setTRPCQueryData(queryClient, {
+ *   router: 'products',
+ *   procedure: 'getProducts',
+ *   input: {},
+ *   data: { products: [mockProduct1, mockProduct2] },
+ * });
+ *
+ * // Cart (undefined input)
+ * setTRPCQueryData(queryClient, {
+ *   router: 'cart',
+ *   procedure: 'getCart',
+ *   data: { cart: mockCartItems },
+ * });
+ * ```
+ */
+export function setTRPCQueryData<T>(
+  queryClient: QueryClient,
+  config: {
+    router: string;
+    procedure: string;
+    input?: Record<string, unknown> | undefined;
+    data: T;
+  }
+): void {
+  const trpcQueryKey = [
+    [config.router, config.procedure],
+    { input: config.input, type: 'query' as const },
+  ];
+
+  queryClient.setQueryData(trpcQueryKey, config.data);
+}
+
+/**
  * Wrapper component that provides all necessary context providers
  */
 interface AllProvidersProps {
@@ -224,6 +379,8 @@ interface AllProvidersProps {
   locale?: LocaleCode;
   messages?: Record<string, string> | Record<string, Record<string, string>>;
   queryClient?: QueryClient;
+  trpcClient?: ReturnType<typeof createTestTRPCClient>;
+  includeTRPC?: boolean;
 }
 
 export function AllProviders({
@@ -231,18 +388,34 @@ export function AllProviders({
   locale = 'en',
   messages,
   queryClient,
+  trpcClient,
+  includeTRPC = true,
 }: AllProvidersProps) {
   const testMessages = (messages || createTestMessages(locale)) as Record<
     string,
     string | Record<string, string>
   >;
   const testQueryClient = queryClient || createTestQueryClient();
+  const testTRPCClient = trpcClient || createTestTRPCClient();
+
+  // If includeTRPC is false, just render without TRPCProvider for backward compatibility
+  if (!includeTRPC) {
+    return (
+      <QueryClientProvider client={testQueryClient}>
+        <NextIntlClientProvider locale={locale} messages={testMessages}>
+          {children}
+        </NextIntlClientProvider>
+      </QueryClientProvider>
+    );
+  }
 
   return (
     <QueryClientProvider client={testQueryClient}>
-      <NextIntlClientProvider locale={locale} messages={testMessages}>
-        {children}
-      </NextIntlClientProvider>
+      <TRPCProvider trpcClient={testTRPCClient} queryClient={testQueryClient}>
+        <NextIntlClientProvider locale={locale} messages={testMessages}>
+          {children}
+        </NextIntlClientProvider>
+      </TRPCProvider>
     </QueryClientProvider>
   );
 }
@@ -254,21 +427,122 @@ interface CustomRenderOptions extends Omit<RenderOptions, 'wrapper'> {
   locale?: LocaleCode;
   messages?: Record<string, string> | Record<string, Record<string, string>>;
   queryClient?: QueryClient;
+  trpcClient?: ReturnType<typeof createTestTRPCClient>;
+  includeTRPC?: boolean;
 }
 
 export function renderWithProviders(
   ui: ReactElement,
-  { locale = 'en', messages, queryClient, ...renderOptions }: CustomRenderOptions = {}
+  {
+    locale = 'en',
+    messages,
+    queryClient,
+    trpcClient,
+    includeTRPC = true,
+    ...renderOptions
+  }: CustomRenderOptions = {}
 ) {
   function Wrapper({ children }: { children: ReactNode }) {
     return (
-      <AllProviders locale={locale} messages={messages} queryClient={queryClient}>
+      <AllProviders
+        locale={locale}
+        messages={messages}
+        queryClient={queryClient}
+        trpcClient={trpcClient}
+        includeTRPC={includeTRPC}
+      >
         {children}
       </AllProviders>
     );
   }
 
   return render(ui, { wrapper: Wrapper, ...renderOptions });
+}
+
+/**
+ * Render component with Suspense boundary and all providers
+ *
+ * ⚠️ Most tests should use `renderSuspenseResolved()` instead (simpler API).
+ * Only use this when you need more control (e.g., testing loading states).
+ *
+ * @example
+ * // Basic usage - then use findBy to wait
+ * renderWithSuspense(<ProductInfo id="PROD001" />, { queryClient });
+ * const heading = await screen.findByRole('heading', { level: 1 });
+ *
+ * @see renderSuspenseResolved - **RECOMMENDED** - Async version that auto-waits (use by default)
+ * @see https://react.dev/reference/react/Suspense
+ */
+export function renderWithSuspense(
+  ui: ReactElement,
+  {
+    fallback = <div>Loading...</div>,
+    ...options
+  }: CustomRenderOptions & { fallback?: ReactNode } = {}
+) {
+  return renderWithProviders(<Suspense fallback={fallback}>{ui}</Suspense>, options);
+}
+
+/**
+ * ⭐ **RECOMMENDED** - Render component with Suspense and wait for resolution
+ *
+ * Use this by default for ~95% of component tests. This async helper automatically
+ * waits for the Suspense fallback to disappear, so your component is ready to test
+ * immediately after the `await`.
+ *
+ * @example
+ * // Default usage - simplest API
+ * await renderSuspenseResolved(<ProductInfo id="PROD001" />, { queryClient });
+ *
+ * // Component is ready - test immediately (no findBy needed)
+ * expect(screen.getByRole('heading')).toHaveTextContent('Test Product');
+ * expect(screen.getByAltText('logo')).toBeInTheDocument();
+ *
+ * @throws {Error} If Suspense component does not resolve within timeout (default 3000ms)
+ * @see renderWithSuspense - Alternative for testing loading states or when you need more control
+ * @see https://testing-library.com/docs/dom-testing-library/api-async/#waitforelementtoberemoved
+ */
+export async function renderSuspenseResolved(
+  ui: ReactElement,
+  {
+    fallback = <div>Loading...</div>,
+    fallbackText = 'Loading...',
+    timeout = 3000,
+    ...options
+  }: CustomRenderOptions & {
+    fallback?: ReactNode;
+    fallbackText?: string;
+    timeout?: number;
+  } = {}
+) {
+  // Render with Suspense boundary
+  const result = renderWithSuspense(ui, { fallback, ...options });
+
+  try {
+    // Check if fallback exists before waiting for removal
+    const fallbackElement = screen.queryByText(fallbackText);
+
+    if (fallbackElement) {
+      // Wait for fallback to be removed (component has resolved)
+      await waitForElementToBeRemoved(() => screen.queryByText(fallbackText), {
+        timeout,
+      });
+    }
+    // If fallback doesn't exist, data was already cached - no need to wait
+  } catch (error) {
+    const errorMsg = error instanceof Error ? error.message : String(error);
+    throw new Error(
+      `Suspense component did not resolve within ${timeout}ms.\n` +
+        `Expected fallback "${fallbackText}" to be removed.\n` +
+        `Original error: ${errorMsg}\n\n` +
+        `💡 Tip: Ensure query cache is populated before rendering:\n` +
+        `   queryClient.setQueryData(trpcQueryKey, { data: mockData });\n\n` +
+        `💡 Alternative: Use findBy queries for better error messages:\n` +
+        `   const element = await screen.findByRole('heading', { level: 1 });`
+    );
+  }
+
+  return result;
 }
 
 /**
@@ -330,6 +604,19 @@ export function createMockProduct(overrides: Partial<ProductInterface> = {}): Pr
       ru: 'Описание продукта',
       en: 'Product description',
     },
+    long_description: {
+      ro: 'Descriere lungă a produsului',
+      ru: 'Длинное описание продукта',
+      en: 'Long product description',
+    },
+    product_content: [
+      {
+        ro: '<p>Conținut produs</p>',
+        ru: '<p>Содержимое продукта</p>',
+        en: '<p>Product content</p>',
+      },
+    ],
+    ocasions: [],
     price: 100,
     stock_availability: {
       state: StockState.IN_STOCK,
