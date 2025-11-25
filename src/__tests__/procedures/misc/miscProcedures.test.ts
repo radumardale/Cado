@@ -300,7 +300,7 @@ describe('Miscellaneous Procedures', () => {
 
       const emailData = mockSendMail.mock.calls[0][0];
       expect(emailData.from).toBe('feedback@example.com');
-      expect(emailData.to).toBe('contact@example.com');
+      expect(emailData.to).toBe('test@example.com');
       expect(emailData.subject).toBe('Contact Form: GIFT_ASSITANCE');
       expect(emailData.html).toContain('Jane Smith');
       expect(emailData.html).toContain('jane@example.com');
