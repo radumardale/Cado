@@ -139,7 +139,7 @@ export const addOrderProcedure = protectedProcedure
 
       const adminEmailData = {
         from: process.env.FROM_EMAIL_ADDRESS,
-        to: process.env.CONTACT_EMAIL_ADDRESS,
+        to: process.env.EMAIL_ADDRESS,
         subject: `New Order #${order.custom_id}`,
         html: adminEmailHtml,
       };

@@ -22,7 +22,7 @@ export const sendContactEmailProcedure = publicProcedure
 
       const emailData = {
         from: process.env.FEEDBACK_EMAIL_ADDRESS,
-        to: process.env.CONTACT_EMAIL_ADDRESS,
+        to: process.env.EMAIL_ADDRESS,
         subject: `Contact Form: ${input.subject}`,
         html: `
         <h2>New Contact Form Submission</h2>
