@@ -1,6 +1,13 @@
 import mongoose from 'mongoose';
 
-const cached: { connection?: typeof mongoose; promise?: Promise<typeof mongoose> } = {};
+declare global {
+  // eslint-disable-next-line no-var
+  var _mongooseCache: { connection?: typeof mongoose; promise?: Promise<typeof mongoose> };
+}
+
+// Use global to survive Next.js hot reloads in dev and module re-instantiation in serverless
+const cached = global._mongooseCache ?? (global._mongooseCache = {});
+
 async function connectMongo() {
   const MONGO_URI = process.env.MONGO_URI;
   if (!MONGO_URI) {
@@ -10,10 +17,11 @@ async function connectMongo() {
     return cached.connection;
   }
   if (!cached.promise) {
-    const opts = {
+    cached.promise = mongoose.connect(MONGO_URI, {
       bufferCommands: false,
-    };
-    cached.promise = mongoose.connect(MONGO_URI, opts);
+      // Keep pool small for serverless: total connections = instances × maxPoolSize
+      maxPoolSize: 5,
+    });
   }
   try {
     cached.connection = await cached.promise;
@@ -23,4 +31,5 @@ async function connectMongo() {
   }
   return cached.connection;
 }
+
 export default connectMongo;
