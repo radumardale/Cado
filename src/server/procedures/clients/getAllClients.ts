@@ -5,6 +5,7 @@ import { ActionResponse } from '@/lib/types/ActionResponse';
 import connectMongo from '@/lib/connect-mongo';
 import { z } from 'zod';
 import SortBy from '@/lib/enums/SortBy';
+import { stripDiacritics } from '@/lib/utils/text';
 
 // Define the request schema
 export const getAdminOrdersRequestSchema = z.object({
@@ -29,12 +30,7 @@ export const getAllClientsProcedure = protectedProcedure
       const limit = input.limit ?? 10;
       const { cursor } = input;
 
-      const normalizedSearch = input.searchQuery
-        ? input.searchQuery
-            .normalize('NFD')
-            .replace(/[\u0300-\u036f]/g, '')
-            .toLowerCase()
-        : null;
+      const normalizedSearch = input.searchQuery ? stripDiacritics(input.searchQuery) : null;
 
       const tokenizedNormalizedSearch = normalizedSearch
         ? normalizedSearch.split('+').filter(word => word.length > 1)

@@ -1,11 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import {
-  cn,
-  getTagColor,
-  checkboxUpdateUrlParams,
-  updateCategoriesParams,
-  resetUrlParams,
-} from '@/lib/utils';
+import { cn, getTagColor, checkboxUpdateUrlParams, resetUrlParams } from '@/lib/utils';
 import { BlogTags } from '@/lib/enums/BlogTags';
 import { Categories } from '@/lib/enums/Categories';
 import type { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
@@ -228,96 +222,6 @@ describe('URL Parameter Manipulation Functions', () => {
     });
   });
 
-  describe('updateCategoriesParams()', () => {
-    it('should add single category', () => {
-      const searchParams = new URLSearchParams();
-
-      updateCategoriesParams([Categories.FOR_HER], searchParams, mockRouter);
-
-      expect(mockRouter.push).toHaveBeenCalledWith('/test/path?category=FOR_HER', {
-        scroll: false,
-      });
-    });
-
-    it('should add multiple categories', () => {
-      const searchParams = new URLSearchParams();
-
-      updateCategoriesParams(
-        [Categories.FOR_HER, Categories.FOR_HIM, Categories.ACCESSORIES],
-        searchParams,
-        mockRouter
-      );
-
-      const pushMock = mockRouter.push as ReturnType<typeof vi.fn>;
-      const callArg = pushMock.mock.calls[0][0];
-      expect(callArg).toContain('category=FOR_HER');
-      expect(callArg).toContain('category=FOR_HIM');
-      expect(callArg).toContain('category=ACCESSORIES');
-    });
-
-    it('should replace existing categories', () => {
-      const searchParams = new URLSearchParams('category=OLD_CAT&other=value');
-
-      updateCategoriesParams([Categories.FOR_HER], searchParams, mockRouter);
-
-      const pushMock = mockRouter.push as ReturnType<typeof vi.fn>;
-      const callArg = pushMock.mock.calls[0][0];
-      expect(callArg).toContain('category=FOR_HER');
-      expect(callArg).not.toContain('OLD_CAT');
-      expect(callArg).toContain('other=value');
-    });
-
-    it('should preserve other parameters', () => {
-      const searchParams = new URLSearchParams('sort=price&filter=active');
-
-      updateCategoriesParams([Categories.FOR_HER], searchParams, mockRouter);
-
-      const pushMock = mockRouter.push as ReturnType<typeof vi.fn>;
-      const callArg = pushMock.mock.calls[0][0];
-      expect(callArg).toContain('sort=price');
-      expect(callArg).toContain('filter=active');
-    });
-
-    it('should handle empty categories array', () => {
-      const searchParams = new URLSearchParams('category=FOR_HER&other=value');
-
-      updateCategoriesParams([], searchParams, mockRouter);
-
-      const pushMock = mockRouter.push as ReturnType<typeof vi.fn>;
-      const callArg = pushMock.mock.calls[0][0];
-      expect(callArg).not.toContain('category');
-      expect(callArg).toContain('other=value');
-    });
-
-    it('should generate clean URL path without query when no params', () => {
-      const searchParams = new URLSearchParams();
-
-      updateCategoriesParams([], searchParams, mockRouter);
-
-      expect(mockRouter.push).toHaveBeenCalledWith('/test/path', { scroll: false });
-    });
-
-    it('should handle all category types', () => {
-      const allCategories = [
-        Categories.FOR_HER,
-        Categories.FOR_HIM,
-        Categories.FOR_KIDS,
-        Categories.ACCESSORIES,
-        Categories.FLOWERS_AND_BALLOONS,
-        Categories.GIFT_SET,
-      ];
-
-      const searchParams = new URLSearchParams();
-      updateCategoriesParams(allCategories, searchParams, mockRouter);
-
-      const pushMock = mockRouter.push as ReturnType<typeof vi.fn>;
-      const callArg = pushMock.mock.calls[0][0];
-      allCategories.forEach(cat => {
-        expect(callArg).toContain(`category=${cat}`);
-      });
-    });
-  });
-
   describe('resetUrlParams()', () => {
     beforeEach(() => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -446,11 +350,10 @@ describe('URL Parameter Manipulation Functions', () => {
     it('should handle multiple category values correctly', () => {
       const searchParams = new URLSearchParams();
 
-      updateCategoriesParams(
-        [Categories.FOR_HER, Categories.ACCESSORIES],
-        searchParams,
-        mockRouter
-      );
+      checkboxUpdateUrlParams('category', searchParams, mockRouter, [
+        Categories.FOR_HER,
+        Categories.ACCESSORIES,
+      ]);
 
       expect(mockRouter.push).toHaveBeenCalled();
     });

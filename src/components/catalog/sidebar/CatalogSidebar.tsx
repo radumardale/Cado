@@ -8,12 +8,7 @@ import ActiveFilters from './ActiveFilters';
 import { AnimatePresence, LayoutGroup } from 'motion/react';
 import { Categories } from '@/lib/enums/Categories';
 import { useCallback } from 'react';
-import {
-  checkboxUpdateUrlParams,
-  easeInOutCubic,
-  resetUrlParams,
-  updateCategoriesParams,
-} from '@/lib/utils';
+import { checkboxUpdateUrlParams, easeInOutCubic, resetUrlParams } from '@/lib/utils';
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 import { motion } from 'motion/react';
 import { Plus } from 'lucide-react';
@@ -134,10 +129,11 @@ export default function CatalogSidebar({
                 router: AppRouterInstance
               ) => {
                 categoriesState.setCategory(value === categoriesState.category ? null : value);
-                updateCategoriesParams(
-                  value === categoriesState.category ? [] : [value],
+                checkboxUpdateUrlParams(
+                  'category',
                   searchParams,
-                  router
+                  router,
+                  value === categoriesState.category ? [] : [value]
                 );
               }}
               ocasions={ocasionsState.ocasions}

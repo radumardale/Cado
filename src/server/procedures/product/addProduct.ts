@@ -5,6 +5,8 @@ import { ProductInterface } from '@/models/product/types/productInterface';
 import { protectedProcedure } from '@/server/trpc';
 import connectMongo from '@/lib/connect-mongo';
 import { DestinationEnum, generateUploadLinks } from '../image/generateUploadLinks';
+import { mapMultilingualString } from '@/lib/utils/multilingual';
+import { stripDiacritics } from '@/lib/utils/text';
 
 export interface addProductResponseInterface extends ActionResponse {
   product: ProductInterface | null;
@@ -17,22 +19,8 @@ export const addProductProcedure = protectedProcedure
     try {
       await connectMongo();
 
-      // Create normalized_title field manually (MultilingualString)
       // Removes diacritics and converts to lowercase for search optimization
-      const normalizedTitle: MultilingualString = {
-        ro: input.data.title.ro
-          .normalize('NFD')
-          .replace(/[\u0300-\u036f]/g, '')
-          .toLowerCase(),
-        ru: input.data.title.ru
-          .normalize('NFD')
-          .replace(/[\u0300-\u036f]/g, '')
-          .toLowerCase(),
-        en: input.data.title.en
-          .normalize('NFD')
-          .replace(/[\u0300-\u036f]/g, '')
-          .toLowerCase(),
-      };
+      const normalizedTitle = mapMultilingualString(input.data.title, stripDiacritics);
 
       // Include normalized_title when creating product
       const product = await Product.create({

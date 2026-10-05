@@ -8,7 +8,7 @@ import ActiveFilters from './ActiveFilters';
 import { AnimatePresence, LayoutGroup } from 'motion/react';
 import { Categories } from '@/lib/enums/Categories';
 import { useCallback } from 'react';
-import { checkboxUpdateUrlParams, resetUrlParams, updateCategoriesParams } from '@/lib/utils';
+import { checkboxUpdateUrlParams, resetUrlParams } from '@/lib/utils';
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 import { useCatalogStore } from '@/states/CatalogState';
 import { useTranslations } from 'next-intl';
@@ -98,10 +98,11 @@ export default function PcCatalogSidebar({
                 router: AppRouterInstance
               ) => {
                 categoriesState.setCategory(value === categoriesState.category ? null : value);
-                updateCategoriesParams(
-                  value === categoriesState.category ? [] : [value],
+                checkboxUpdateUrlParams(
+                  'category',
                   searchParams,
-                  router
+                  router,
+                  value === categoriesState.category ? [] : [value]
                 );
               }}
               keywords={keywordsState.keywords}

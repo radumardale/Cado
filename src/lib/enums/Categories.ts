@@ -1,3 +1,5 @@
+import { findEnumByText } from './findEnumByText';
+
 export enum Categories {
   FOR_HER = 'FOR_HER',
   FOR_HIM = 'FOR_HIM',
@@ -67,48 +69,5 @@ export const categoryTranslations: Record<Categories, CategoryTranslation> = {
 };
 
 export function findCategoriesByText(input: string): Categories[] {
-  if (!input?.trim() || input.length < 1) return Object.values(Categories);
-
-  const normalizedInput = input
-    .trim()
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .toLowerCase();
-  const matches: Categories[] = [];
-
-  // Check if input is already a Categories enum value
-  if (Object.values(Categories).includes(normalizedInput.toUpperCase() as Categories)) {
-    matches.push(normalizedInput.toUpperCase() as Categories);
-  }
-
-  // Check against all translations
-  for (const [category, translations] of Object.entries(categoryTranslations)) {
-    // Check all languages
-    for (const language of ['ro', 'ru', 'en'] as const) {
-      if (translations.title[language].toLowerCase() === normalizedInput) {
-        // Ensure we don't add duplicates
-        if (!matches.includes(category as Categories)) {
-          matches.push(category as Categories);
-        }
-      }
-    }
-  }
-
-  // If no exact matches, try fuzzy matching for partial matches
-  if (matches.length === 0) {
-    for (const [category, translations] of Object.entries(categoryTranslations)) {
-      for (const language of ['ro', 'ru', 'en'] as const) {
-        const title = translations.title[language].toLowerCase();
-
-        // Check if input contains the category name or vice versa
-        if (title.includes(normalizedInput) || normalizedInput.includes(title)) {
-          if (!matches.includes(category as Categories)) {
-            matches.push(category as Categories);
-          }
-        }
-      }
-    }
-  }
-
-  return matches;
+  return findEnumByText(input, Object.values(Categories), categoryTranslations);
 }
