@@ -13,4 +13,8 @@
     min-height: 1.5em !important;
     display: block !important;
   }
+
+  p:not(:first-child) {
+    margin-top: 1rem !important;
+  }
 }
