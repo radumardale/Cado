@@ -1,5 +1,5 @@
 import { Categories } from '@/lib/enums/Categories';
-import { updateCategoriesParams } from '@/lib/utils';
+import { checkboxUpdateUrlParams } from '@/lib/utils';
 import { useTranslations } from 'next-intl';
 import { useRouter, useSearchParams } from 'next/navigation';
 
@@ -21,7 +21,7 @@ export default function CategoriesGrid({ category, setCategory }: CategoriesProp
     setCategory(newCategory);
 
     // Update URL params
-    updateCategoriesParams(newCategory ? [newCategory] : [], searchParams, router);
+    checkboxUpdateUrlParams('category', searchParams, router, newCategory ? [newCategory] : []);
   };
 
   return (

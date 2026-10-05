@@ -8,6 +8,8 @@ import { ProductContent } from '@/lib/enums/ProductContent';
 import { nanoid } from 'nanoid';
 import { StockAvailabilitySchema } from './types/stockAvailability';
 import { OptionalInfoSchema } from './types/optionalInfo';
+import { mapMultilingualString } from '@/lib/utils/multilingual';
+import { stripDiacritics } from '@/lib/utils/text';
 
 // Product Schema
 const ProductSchema = new mongoose.Schema<ProductInterface>(
@@ -87,20 +89,7 @@ const ProductSchema = new mongoose.Schema<ProductInterface>(
 );
 
 ProductSchema.pre<ProductInterface>('save', function (next) {
-  this.normalized_title = {
-    ro: this.title.ro
-      .normalize('NFD')
-      .replace(/[\u0300-\u036f]/g, '')
-      .toLowerCase(),
-    ru: this.title.ru
-      .normalize('NFD')
-      .replace(/[\u0300-\u036f]/g, '')
-      .toLowerCase(),
-    en: this.title.en
-      .normalize('NFD')
-      .replace(/[\u0300-\u036f]/g, '')
-      .toLowerCase(),
-  };
+  this.normalized_title = mapMultilingualString(this.title, stripDiacritics);
   next();
 });
 
@@ -126,20 +115,7 @@ ProductSchema.pre('findOneAndUpdate', function (next) {
 
     // Validate that titleData has the expected multilingual structure
     if (titleData && isMultilingualTitle(titleData)) {
-      const normalizedTitle = {
-        ro: titleData.ro
-          .normalize('NFD')
-          .replace(/[\u0300-\u036f]/g, '')
-          .toLowerCase(),
-        ru: titleData.ru
-          .normalize('NFD')
-          .replace(/[\u0300-\u036f]/g, '')
-          .toLowerCase(),
-        en: titleData.en
-          .normalize('NFD')
-          .replace(/[\u0300-\u036f]/g, '')
-          .toLowerCase(),
-      };
+      const normalizedTitle = mapMultilingualString(titleData, stripDiacritics);
 
       if (update.$set) {
         update.$set.normalized_title = normalizedTitle;

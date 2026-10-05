@@ -47,7 +47,7 @@ import {
 } from '@/__tests__/helpers/mockFactories';
 import nodemailer from 'nodemailer';
 import { render } from '@react-email/components';
-import { APIClient } from '@/lib/apiCLient';
+import { makeAuthenticatedRequest } from '@/lib/apiCLient';
 import { OrderPaymentMethod } from '@/models/order/types/orderPaymentMethod';
 import { DeliveryMethod } from '@/models/order/types/deliveryMethod';
 import SortBy from '@/lib/enums/SortBy';
@@ -223,7 +223,7 @@ describe('Order Procedures', () => {
         }),
       };
 
-      vi.mocked(APIClient.makeAuthenticatedRequest).mockResolvedValue(mockPaynetResponse as never);
+      vi.mocked(makeAuthenticatedRequest).mockResolvedValue(mockPaynetResponse as never);
 
       const result = await addOrderProcedure({
         getRawInput: async () => paynetInput,
@@ -236,7 +236,7 @@ describe('Order Procedures', () => {
       expect(result.success).toBe(true);
       expect(result.paymentForm).toBeDefined();
       expect(result.paymentForm?.fields.operation).toBe('PAY-123456');
-      expect(APIClient.makeAuthenticatedRequest).toHaveBeenCalled();
+      expect(makeAuthenticatedRequest).toHaveBeenCalled();
     });
 
     it('should send customer email for cash orders', async () => {

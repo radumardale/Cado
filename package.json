@@ -74,7 +74,6 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "date-fns": "^3.6.0",
-    "diacritic-regex": "^1.2.0",
     "html-to-text": "^9.0.5",
     "leaflet": "^1.9.4",
     "lenis": "^1.2.3",

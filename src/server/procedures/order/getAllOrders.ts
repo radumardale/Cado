@@ -6,6 +6,7 @@ import connectMongo from '@/lib/connect-mongo';
 import { z } from 'zod';
 import { OrderState } from '@/models/order/types/orderState';
 import SortBy from '@/lib/enums/SortBy';
+import { stripDiacritics } from '@/lib/utils/text';
 
 // Define the request schema
 export const getAdminOrdersRequestSchema = z.object({
@@ -34,12 +35,7 @@ export const getAllOrdersProcedure = publicProcedure
       const { cursor } = input;
 
       // Normalize search query
-      const normalizedSearch = input.searchQuery
-        ? input.searchQuery
-            .normalize('NFD')
-            .replace(/[\u0300-\u036f]/g, '')
-            .toLowerCase()
-        : null;
+      const normalizedSearch = input.searchQuery ? stripDiacritics(input.searchQuery) : null;
 
       // Tokenize search query
       const tokenizedNormalizedSearch = normalizedSearch

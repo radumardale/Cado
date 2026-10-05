@@ -3,6 +3,7 @@ import { ActionResponse } from '@/lib/types/ActionResponse';
 import { searchProductRequestSchema } from '@/lib/validation/search/searchProductRequest';
 import { Product } from '@/models/product/product';
 import { ProductInterface } from '@/models/product/types/productInterface';
+import { stripDiacritics } from '@/lib/utils/text';
 
 export interface searchProductResponseInterface extends ActionResponse {
   products: ProductInterface[];
@@ -12,10 +13,7 @@ export interface searchProductResponseInterface extends ActionResponse {
 export const searchProductProcedure = publicProcedure
   .input(searchProductRequestSchema)
   .query(async ({ input }): Promise<searchProductResponseInterface> => {
-    const normalizedSearch = input.title
-      .normalize('NFD')
-      .replace(/[\u0300-\u036f]/g, '')
-      .toLowerCase();
+    const normalizedSearch = stripDiacritics(input.title);
 
     const tokenizedNormalizedSearch = normalizedSearch.split(/\s+/).filter(word => word.length > 1);
 

@@ -6,6 +6,7 @@ import connectMongo from '@/lib/connect-mongo';
 import { getAllProductsRequestSchema } from '@/lib/validation/product/getAllProductsRequest';
 import SortBy from '@/lib/enums/SortBy';
 import { ReccProduct } from '@/models/reccProduct/ReccProduct';
+import { stripDiacritics } from '@/lib/utils/text';
 
 export interface GetProductResponseInterface extends ActionResponse {
   products: ProductInterface[];
@@ -22,12 +23,7 @@ export const getProductsProcedure = publicProcedure
       const limit = input.limit ?? 10;
       const { cursor } = input;
 
-      const normalizedSearch = input.title
-        ? input.title
-            .normalize('NFD')
-            .replace(/[\u0300-\u036f]/g, '')
-            .toLowerCase()
-        : null;
+      const normalizedSearch = input.title ? stripDiacritics(input.title) : null;
 
       const tokenizedNormalizedSearch = normalizedSearch
         ? normalizedSearch.split('+').filter(word => word.length > 1)

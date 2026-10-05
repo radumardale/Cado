@@ -1,3 +1,5 @@
+import { findEnumByText } from './findEnumByText';
+
 export enum ProductContent {
   ACCESSORIES_FOR_DRINKS = 'ACCESSORIES_FOR_DRINKS',
   ACCESSORIES_FOR_TEA_COFFEE = 'ACCESSORIES_FOR_TEA_COFFEE',
@@ -31,193 +33,137 @@ interface ProductContentTranslation {
 }
 
 /**
- * Helper function for text normalization (removes diacritics and converts to lowercase).
- * Used for search and comparison operations.
- */
-function normalizeText(text: string): string {
-  return text
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .toLowerCase();
-}
-
-/**
  * Translations for all product content types in ro/ru/en.
- * All text is pre-normalized for efficient searching.
  */
 const productContentTranslations: Record<ProductContent, ProductContentTranslation> = {
   [ProductContent.ACCESSORIES_FOR_DRINKS]: {
     title: {
-      ro: normalizeText('Accesorii pentru băuturi'),
-      ru: normalizeText('Аксессуары для напитков'),
-      en: normalizeText('Accessories for drinks'),
+      ro: 'Accesorii pentru băuturi',
+      ru: 'Аксессуары для напитков',
+      en: 'Accessories for drinks',
     },
   },
   [ProductContent.ACCESSORIES_FOR_TEA_COFFEE]: {
     title: {
-      ro: normalizeText('Accesorii pentru ceai/cafea'),
-      ru: normalizeText('Аксессуары для чая/кофе'),
-      en: normalizeText('Accessories for tea/coffee'),
+      ro: 'Accesorii pentru ceai/cafea',
+      ru: 'Аксессуары для чая/кофе',
+      en: 'Accessories for tea/coffee',
     },
   },
   [ProductContent.FOR_OFFICE]: {
     title: {
-      ro: normalizeText('Pentru birou'),
-      ru: normalizeText('Для офиса'),
-      en: normalizeText('For office'),
+      ro: 'Pentru birou',
+      ru: 'Для офиса',
+      en: 'For office',
     },
   },
   [ProductContent.FOR_HOME]: {
     title: {
-      ro: normalizeText('Pentru casă'),
-      ru: normalizeText('Для дома'),
-      en: normalizeText('For home'),
+      ro: 'Pentru casă',
+      ru: 'Для дома',
+      en: 'For home',
     },
   },
   [ProductContent.GAMES]: {
     title: {
-      ro: normalizeText('Jocuri'),
-      ru: normalizeText('Игры'),
-      en: normalizeText('Games'),
+      ro: 'Jocuri',
+      ru: 'Игры',
+      en: 'Games',
     },
   },
   [ProductContent.TOYS]: {
     title: {
-      ro: normalizeText('Jucării'),
-      ru: normalizeText('Игрушки'),
-      en: normalizeText('Toys'),
+      ro: 'Jucării',
+      ru: 'Игрушки',
+      en: 'Toys',
     },
   },
   [ProductContent.STATIONERY_ITEMS]: {
     title: {
-      ro: normalizeText('Articole de papetărie'),
-      ru: normalizeText('Канцелярские товары'),
-      en: normalizeText('Stationery items'),
+      ro: 'Articole de papetărie',
+      ru: 'Канцелярские товары',
+      en: 'Stationery items',
     },
   },
   [ProductContent.COFFEE_TEA]: {
     title: {
-      ro: normalizeText('Cafea/ceai'),
-      ru: normalizeText('Кофе/чай'),
-      en: normalizeText('Coffee/tea'),
+      ro: 'Cafea/ceai',
+      ru: 'Кофе/чай',
+      en: 'Coffee/tea',
     },
   },
   [ProductContent.MUG_THERMOS_BOTTLE_FOR_WATER]: {
     title: {
-      ro: normalizeText('Cană/cană termos/sticlă pentru apă'),
-      ru: normalizeText('Кружка/термос/бутылка для воды'),
-      en: normalizeText('Mug/thermos/bottle for water'),
+      ro: 'Cană/cană termos/sticlă pentru apă',
+      ru: 'Кружка/термос/бутылка для воды',
+      en: 'Mug/thermos/bottle for water',
     },
   },
   [ProductContent.HONEY_JAM_CARAMEL_PEANUT_BUTTER]: {
     title: {
-      ro: normalizeText('Miere/dulceață/caramelă/pastă de arahide'),
-      ru: normalizeText('Мёд/джем/карамель/арахисовая паста'),
-      en: normalizeText('Honey/jam/caramel/peanut butter'),
+      ro: 'Miere/dulceață/caramelă/pastă de arahide',
+      ru: 'Мёд/джем/карамель/арахисовая паста',
+      en: 'Honey/jam/caramel/peanut butter',
     },
   },
   [ProductContent.NUTS_DRY_FRUITS_SPICES]: {
     title: {
-      ro: normalizeText('Nuci/fructe uscate/condimente'),
-      ru: normalizeText('Орехи/сухофрукты/специи'),
-      en: normalizeText('Nuts/dry fruits/spices'),
+      ro: 'Nuci/fructe uscate/condimente',
+      ru: 'Орехи/сухофрукты/специи',
+      en: 'Nuts/dry fruits/spices',
     },
   },
   [ProductContent.CHOCOLATE_BISCUITS_CANDY]: {
     title: {
-      ro: normalizeText('Ciocolată/biscuiți/bomboane'),
-      ru: normalizeText('Шоколад/печенье/конфеты'),
-      en: normalizeText('Chocolate/biscuits/candy'),
+      ro: 'Ciocolată/biscuiți/bomboane',
+      ru: 'Шоколад/печенье/конфеты',
+      en: 'Chocolate/biscuits/candy',
     },
   },
   [ProductContent.PACKAGING_CRAFT_BOX]: {
     title: {
-      ro: normalizeText('Ambalaj - cutie craft'),
-      ru: normalizeText('Упаковка - крафт коробка'),
-      en: normalizeText('Packaging - craft box'),
+      ro: 'Ambalaj - cutie craft',
+      ru: 'Упаковка - крафт коробка',
+      en: 'Packaging - craft box',
     },
   },
   [ProductContent.PACKAGING_CARDBOARD_BOX_DESIGN]: {
     title: {
-      ro: normalizeText('Ambalaj - cutie din carton caserat/design'),
-      ru: normalizeText('Упаковка - дизайнерская картонная коробка'),
-      en: normalizeText('Packaging - cardboard box design'),
+      ro: 'Ambalaj - cutie din carton caserat/design',
+      ru: 'Упаковка - дизайнерская картонная коробка',
+      en: 'Packaging - cardboard box design',
     },
   },
   [ProductContent.PACKAGING_WOODEN]: {
     title: {
-      ro: normalizeText('Ambalaj - din lemn'),
-      ru: normalizeText('Упаковка - деревянная'),
-      en: normalizeText('Packaging - wooden'),
+      ro: 'Ambalaj - din lemn',
+      ru: 'Упаковка - деревянная',
+      en: 'Packaging - wooden',
     },
   },
   [ProductContent.PACKAGING_CUSTOM_BAG]: {
     title: {
-      ro: normalizeText('Ambalaj - pungă personalizată'),
-      ru: normalizeText('Упаковка - индивидуальный пакет'),
-      en: normalizeText('Packaging - custom bag'),
+      ro: 'Ambalaj - pungă personalizată',
+      ru: 'Упаковка - индивидуальный пакет',
+      en: 'Packaging - custom bag',
     },
   },
   [ProductContent.PACKAGING_CUSTOM_DESIGN]: {
     title: {
-      ro: normalizeText('Ambalaj - design individual'),
-      ru: normalizeText('Упаковка - индивидуальный дизайн'),
-      en: normalizeText('Packaging - custom design'),
+      ro: 'Ambalaj - design individual',
+      ru: 'Упаковка - индивидуальный дизайн',
+      en: 'Packaging - custom design',
     },
   },
   [ProductContent.GOURMET_ACCESSORIES]: {
     title: {
-      ro: normalizeText('Accesorii gastronomice'),
-      ru: normalizeText('Гастрономические аксессуары'),
-      en: normalizeText('Gourmet Accessories'),
+      ro: 'Accesorii gastronomice',
+      ru: 'Гастрономические аксессуары',
+      en: 'Gourmet Accessories',
     },
   },
 };
 
 export function findProductContentByText(input: string): ProductContent[] {
-  if (!input?.trim() || input.length < 1) return Object.values(ProductContent);
-
-  const normalizedInput = input
-    .trim()
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .toLowerCase();
-  const matches: ProductContent[] = [];
-
-  // Check if input is already a ProductContent enum value
-  const enumValue = normalizedInput.toUpperCase().replace(/ /g, '_');
-  if (Object.values(ProductContent).includes(enumValue as ProductContent)) {
-    matches.push(enumValue as ProductContent);
-  }
-
-  // Check against all translations
-  for (const [content, translations] of Object.entries(productContentTranslations)) {
-    // Check all languages
-    for (const language of ['ro', 'ru', 'en'] as const) {
-      if (translations.title[language].toLowerCase() === normalizedInput) {
-        // Ensure we don't add duplicates
-        if (!matches.includes(content as ProductContent)) {
-          matches.push(content as ProductContent);
-        }
-      }
-    }
-  }
-
-  // If no exact matches, try fuzzy matching for partial matches
-  if (matches.length === 0) {
-    for (const [content, translations] of Object.entries(productContentTranslations)) {
-      for (const language of ['ro', 'ru', 'en'] as const) {
-        const title = translations.title[language].toLowerCase();
-
-        // Check if input contains the product content name or vice versa
-        if (title.includes(normalizedInput) || normalizedInput.includes(title)) {
-          if (!matches.includes(content as ProductContent)) {
-            matches.push(content as ProductContent);
-          }
-        }
-      }
-    }
-  }
-
-  return matches;
+  return findEnumByText(input, Object.values(ProductContent), productContentTranslations);
 }

@@ -3,7 +3,6 @@ import { cubicBezier } from 'motion/react';
 import { twMerge } from 'tailwind-merge';
 import { BlogTags } from './enums/BlogTags';
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
-import { Categories } from './enums/Categories';
 import { ProductInterface } from '@/models/product/types/productInterface';
 import { CartInterface } from './types/CartInterface';
 import { toast } from '@/components/ui/productToast';
@@ -40,27 +39,6 @@ export const checkboxUpdateUrlParams = (
   // Add each selected value as a separate parameter
   newValues.forEach(value => {
     params.append(urlParamName, value);
-  });
-
-  // Update the URL without refreshing the page
-  const newUrl = window.location.pathname + (params.toString() ? `?${params.toString()}` : '');
-  router.push(newUrl, { scroll: false });
-};
-
-export const updateCategoriesParams = (
-  newCategories: Categories[],
-  searchParams: URLSearchParams,
-  router: AppRouterInstance
-) => {
-  // Create a new URLSearchParams object from the current params
-  const params = new URLSearchParams(searchParams.toString());
-
-  // Remove existing category params
-  params.delete('category');
-
-  // Add each selected category as a separate parameter
-  newCategories.forEach(category => {
-    params.append('category', category);
   });
 
   // Update the URL without refreshing the page

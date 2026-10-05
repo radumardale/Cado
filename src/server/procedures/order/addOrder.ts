@@ -9,7 +9,7 @@ import { DeliveryMethod } from '@/models/order/types/deliveryMethod';
 import nodemailer from 'nodemailer';
 import { render } from '@react-email/components';
 import OrderConfirmation from '@/components/emails/OrderConfirmation';
-import { APIClient } from '@/lib/apiCLient';
+import { makeAuthenticatedRequest } from '@/lib/apiCLient';
 import { OrderPaymentMethod } from '@/models/order/types/orderPaymentMethod';
 import { Product } from '@/models/product/product';
 
@@ -203,7 +203,7 @@ export const addOrderProcedure = protectedProcedure
         console.log('Services: \n', requestBody.Services[0]);
         console.log('Products: \n', requestBody.Services[0].Products);
 
-        const response = await APIClient.makeAuthenticatedRequest(
+        const response = await makeAuthenticatedRequest(
           `${process.env.API_BASE_URL}/api/Payments/Send`,
           {
             method: 'POST',

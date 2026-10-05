@@ -5,6 +5,7 @@ import { ActionResponse } from '@/lib/types/ActionResponse';
 import connectMongo from '@/lib/connect-mongo';
 import SortBy from '@/lib/enums/SortBy';
 import { getAdminProductsRequestSchema } from '@/lib/validation/product/getAdminProducts';
+import { stripDiacritics } from '@/lib/utils/text';
 
 export interface GetProductResponseInterface extends ActionResponse {
   products: ProductInterface[];
@@ -20,12 +21,7 @@ export const getAdminProductsProcedure = protectedProcedure
       const limit = input.limit ?? 10;
       const { cursor } = input;
 
-      const normalizedSearch = input.title
-        ? input.title
-            .normalize('NFD')
-            .replace(/[\u0300-\u036f]/g, '')
-            .toLowerCase()
-        : null;
+      const normalizedSearch = input.title ? stripDiacritics(input.title) : null;
 
       const tokenizedNormalizedSearch = normalizedSearch
         ? normalizedSearch.split('+').filter(word => word.length > 1)
